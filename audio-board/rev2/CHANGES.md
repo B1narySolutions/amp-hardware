@@ -172,8 +172,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   If it does, raise R40/R41.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **TEST_PLAN check 3B.4:** the low-end corner is ≈ 12.6 Hz, not 9 Hz.
-- **Layout:** outline, stackup, ICs and connectors are placed (see "Board outline and placement" below). Place the passives,
-  Q1, Q4, FB1 and the test points (parked to the right of the board), then route.
+- **Layout:** every part is placed (see "Board outline and placement" and "Passive placement" below). Next is routing.
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
 ## Layout decisions
@@ -227,10 +226,35 @@ Coordinates below are from the board's top-left corner.
 | J6, J7 (breakouts) | 5.08 mm outside each Daisy row, rotated 180° | Each pin lines up with the Daisy pin on the same net (J6 pin n = A1 pin 21 − n, J7 pin n = A1 pin 20 + n). J6 ("PINS_RIGHT") ends up on the left |
 | U1 (TLV9064) | Between the input jacks and Daisy pins 16–19 | Short input and output paths for all four buffers |
 | U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
-| J3 (power board), J4 (display) | Rear right, next to each other | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. J3 is near Daisy VIN (pin 39) |
-| J8 (internal line out) | Right side, above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
+| J3 (power board), J4 (display) | J3 at the rear right, J4 on the right edge below it | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. J3 is near Daisy VIN (pin 39). J4 moved down 8 mm to make room for the control parts under J3 |
+| J8 (internal line out) | Right side, just above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
 
 L2 and L3 each have one GND zone covering the board, inset 0.5 mm from the edge.
+
+### Passive placement (2026-10-25)
+All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and
+the front jacks. Power, the display and the power board controls stay in the rear-right quarter.
+
+- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face the Daisy. It moved down 1 mm to leave a row for parts
+  and labels between it and the Daisy.
+- **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → R5 → U1 pin 3 is one row about 15 mm long, with no
+  node longer than 7 mm. Route it all on L1 with no vias, and keep other signals off L1 next to it.
+- **AUX input:** R40/R41, R38, C31 and C32 form a block left of J6. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
+  the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
+- **Headphone and speaker filters:** R2/C2/C5/R6 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3
+  to the right of pin 8. Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
+- **Decoupling:** C8 is right under U1 pin 4 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within
+  3 mm of their pins. U2 is rotated so its inputs face C12/C13, the charge pump faces away from J5, and OUTR drops straight to J5's ring.
+  OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
+- **VREF:** R7, R8 and C7 sit below U1, near the middle of the VREF loads (R5, R6, R17, R29, R39). C7 holds the node at low
+  impedance, so the VREF trace can run on L4.
+- **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF), C9 (10 µF) and C17 (100 nF) sit at Q1's output.
+- **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34 sits above pin 7.
+  The Daisy-side parts (C28, C29, R30, C27, R36) sit next to their J7 pins.
+- **Display:** R43, R44, FB1 and C30 sit next to J4.
+- **Test points:** TP5 (VREF) and TP9 (+5 V) are at the front centre. TP10 (`HP_EN`) is by U2, and TP11 (`HP_DETECT_SW`) is by J5.
+- **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
+  The schematic's MPN fields for C12/C13 are hidden on the board.
 
 ### U2 exposed-pad vias (2026-10-25)
 - **Changed:** U2's footprint is now `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm` (was the `_ThermalVias` variant).
