@@ -149,7 +149,8 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
 - Drive `PWR_HOLD` (pin 27) high early in boot. On a `PWR_BTN` (pin 26, active low) press while running, fade out, mute,
   save settings, then drive `PWR_HOLD` low.
-- Drive `SPK_EN` (pin 28) high to enable the speaker amp, low when headphones are in. Drive `HP_EN` (pin 33) high
+- Drive `SPK_EN` (pin 28) high to enable the speaker amp, low when headphones are in. At power-on, wait about 0.5 s after audio
+  starts before raising it, so C26 and the speaker amp's input caps settle and don't pop the speaker. Drive `HP_EN` (pin 33) high
   to run the headphone amp, after the first audio callback has started. Initialise both as low outputs.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.

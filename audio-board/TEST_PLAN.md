@@ -179,6 +179,24 @@ Flash a small bring-up program (libDaisy or Arduino/DaisyDuino) over USB that:
 | 6.3 | Turn every pot end-to-end 20× | No intermittent signal, tabs and solder joints hold |
 | 6.4 | Light flex/tap test on the board and Daisy | No crackle or resets (would point to a cracked joint or loose socket pin) |
 
+## Stage 7 — Pops, hiss and mute (rev 2)
+
+Rev 2 only. Needs the product firmware (volume ramps, headphone detect, `PWR_HOLD` shutdown, `SPK_EN` delay) and an
+audio interface on the laptop. Record J5 (into a 32 Ω load or EarPods) and J2 into the interface, and look at each
+recording for spikes. Pass means no audible click and no spike more than ~10 dB above the recording's noise floor.
+On the bench, pull J3.8 (`SPK_MUTE`) up to 3.3 V with 10k so it can be probed without the power board.
+
+| # | Check | Expect |
+|---|---|---|
+| 7.1 | Power-on pop: record J5 and J2, then power the board | No click on either output. Headphones come on only after audio starts (`HP_EN`, TP10, goes high after boot) |
+| 7.2 | Speaker enable delay: scope `+5V` (TP_5V) and `SPK_EN` (J7.8) at power-on | `SPK_EN` goes high ≥ 0.5 s after `+5V`, so C26 and the speaker amp's caps settle first |
+| 7.3 | Power-off pop: record J5 and J2, press the power button for a clean shutdown | Audio fades out, then silence. No click when `PWR_HOLD` drops |
+| 7.4 | Hard power cut: record J5 and J2, unplug J3 while playing | Note the result. A small click is acceptable here, a loud bang is not |
+| 7.5 | Headphone plug-in and removal while playing a 1 kHz tone | J2 ramps down when a plug goes into J5 and back up when it's removed. No click on either output. `SPK_EN` follows |
+| 7.6 | Watchdog mute: debug build that stops the audio callback on a USB serial command | TP10 (`HP_EN`) and `SPK_MUTE` both go to the muted state within ~10–20 ms. The Daisy resets and boots back into silence |
+| 7.7 | Hiss with EarPods: J1 unplugged, firmware volume at a quiet listening level, then at max | No hiss audible at a normal listening level. If it is, tie U2 G0 to GND (−6 dB) and repeat 7.7 and 7.8 |
+| 7.8 | Maximum level: full-scale 1 kHz into a 32 Ω load on J5 | ≈ 1.1 Vrms per channel without clipping (record the clip point). Listening check with ATH-M40x-class headphones: loud enough with margin |
+
 ## Fault-finding hints
 
 | Symptom | Look at first |
@@ -211,6 +229,7 @@ Tested by: __________  Firmware commit: __________
 | 4 Power-up with Daisy | | I = ____ mA, 3V3_A = ____ V, 3V3_D = ____ V |
 | 5 Firmware functional | | |
 | 6 Soak & robustness | | |
+| 7 Pops, hiss and mute | | SPK_EN delay = ____ s, mute time = ____ ms, HP max = ____ Vrms |
 
 Rework performed:
 
