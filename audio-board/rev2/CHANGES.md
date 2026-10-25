@@ -11,12 +11,13 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Why:** with RV1 at mid travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole
   (see `studies/signal-path-response`). Tone and input trim move to the touchscreen.
 
-### Master volume encoder
-- **Added:** SW1, an EC11E-footprint rotary encoder with push switch (push = mute).
-  Each line has a 10k pull-up, 10k series resistor and 10nF capacitor (R18–R23, C19–C21).
-- **Daisy pins:** `ENC_A` = pin 22 (was VOLUME_POT), `ENC_B` = pin 23 (was TONE_POT),
-  `ENC_SW` = pin 24 (was A2). These pins are also renamed on the J7 breakout.
-- **Why:** a relative encoder never disagrees with the touchscreen, unlike an absolute pot.
+### Master volume encoder (added, then removed)
+- **Removed (2026-10-25):** SW1 (EC11E rotary encoder with push switch), R18–R23 and C19–C21. The reference designators are
+  left unused rather than renumbered.
+- **Daisy pins:** pins 22, 23 and 24 (ADC_0–ADC_2) are now unused and only go to the J7 breakout, labelled `A0`, `A1`, `A2`
+  (were `ENC_A`, `ENC_B`, `ENC_SW`, and before that VOLUME_POT, TONE_POT, A2).
+- **Why:** the master volume encoder, if there is one, goes on the touchscreen / ESP32 side, which sends volume changes over the display UART.
+  No volume control remains on this board.
 
 ### Output mute watchdog
 - **Added:** U3 (SN74LVC1G123 retriggerable one-shot), R24–R26, C22, C23 and TP10 (`TP_WD_OK`).
@@ -135,7 +136,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   Its maximum output is a fixed ~1.1 Vrms (22 mW into 32 Ω) regardless of supply, which also limits how loud the headphones can get.
 
 ## Firmware changes these require
-- Read the encoder on pins 22/23/24 instead of the volume/tone ADCs. Ramp volume changes and use push to mute.
+- Take volume and mute from the display over the UART instead of the volume/tone ADCs. Ramp volume changes.
 - Toggle `AUDIO_ALIVE` (pin 33) once per audio callback. Initialise it as a low output.
 - Send the speaker mix to output 2 and headphones to output 1. Read `HP_DETECT` (pin 34):
   **low = headphones in** (J5's normally-open switch closes to GND). Debounce it in firmware. Ramp the speaker down and shut its amp off when headphones are in.
@@ -152,7 +153,6 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Check the J5 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
 - **Confirm the U3 timeout:** check tw ≈ K·Rext·Cext against the SN74LVC1G123 datasheet, then measure on the board.
   The target is ~10 ms, comfortably longer than the 2 ms edge period.
-- **Choose an encoder part number** that fits the EC11E footprint (Alps EC11E or Bourns PEC11R with switch).
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio. Record it here so the firmware can convert the reading to volts.
