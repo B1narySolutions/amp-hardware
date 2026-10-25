@@ -1,0 +1,28 @@
+(version 1)
+
+# Min / default (opt) / max for tracks and vias. Board Setup holds the absolute minimums and the
+# net class widths; these rules add the upper limits. See "Design rules" in CHANGES.md.
+
+(rule "Signal track width"
+	(condition "A.Type == 'Track' && A.NetClass == 'Default' && A.NetName != 'GND'")
+	(constraint track_width (min 0.2mm) (opt 0.2mm) (max 0.5mm)))
+
+(rule "GND track width"
+	(condition "A.Type == 'Track' && A.NetName == 'GND'")
+	(constraint track_width (min 0.2mm) (opt 0.5mm) (max 2mm)))
+
+# 0.3 mm min lets power tracks land on U2's 0.25 mm pads at 0.5 mm pitch.
+(rule "Power track width"
+	(condition "A.Type == 'Track' && A.NetClass == 'Power'")
+	(constraint track_width (min 0.3mm) (opt 1mm) (max 2mm)))
+
+# Only the two via sizes in the presets: 0.6/0.3 and 0.8/0.4.
+(rule "Via size"
+	(condition "A.Type == 'Via'")
+	(constraint via_diameter (min 0.6mm) (max 0.8mm))
+	(constraint hole_size (min 0.3mm) (max 0.4mm)))
+
+(rule "Power via size"
+	(condition "A.Type == 'Via' && A.NetClass == 'Power'")
+	(constraint via_diameter (min 0.6mm) (opt 0.8mm) (max 0.8mm))
+	(constraint hole_size (min 0.3mm) (opt 0.4mm) (max 0.4mm)))

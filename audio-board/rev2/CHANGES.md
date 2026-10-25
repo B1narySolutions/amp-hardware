@@ -126,7 +126,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 
 ### Headphone amp: TPA6111A2 → TPA6132A2 (DirectPath)
 - **Changed:** U2 is now a TI **TPA6132A2RTE** ([datasheet](https://www.ti.com/lit/ds/symlink/tpa6132a2.pdf), WQFN-16 3 × 3 mm with exposed pad,
-  footprint `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm_ThermalVias`). An internal charge pump gives it a negative rail,
+  footprint `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm`). An internal charge pump gives it a negative rail,
   so its outputs sit at 0 V and drive J5 directly.
 - **Removed:** C14/C15 (470µF output caps), R13–R16, R9–R12 (gain resistors, now internal), C16 (bypass), Q2 and R27.
 - **Added:** C33 (2.2µF, VDD decoupling), C34 (2.2µF, HPVDD), C35 (1µF, charge-pump flying cap), C36 (2.2µF, HPVSS), all 0805 X5R or better.
@@ -174,8 +174,6 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **TEST_PLAN check 3B.4:** the low-end corner is ≈ 12.6 Hz, not 9 Hz.
 - **Layout:** outline, stackup, ICs and connectors are placed (see "Board outline and placement" below). Place the passives,
   Q1, Q4, FB1 and the test points (parked to the right of the board), then route.
-- **U2 thermal vias:** the stock WQFN-16 footprint uses 0.2 mm drills, below the board's 0.3 mm minimum hole, so DRC flags 4 errors.
-  Either confirm JLC's 4-layer price for 0.2 mm holes and lower the rule, or switch to the footprint without thermal vias and add 0.3 mm vias by hand.
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
 ## Layout decisions
@@ -216,7 +214,7 @@ refer to Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PC
   - Route U2's SGND (pin 15) straight to J5's sleeve, and put vias under U2's exposed pad down to L2.
 - **Why 1.6 mm:** the 1/4" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
 - **No controlled impedance.** `USB_D+`/`USB_D−` only reach the J6/J7 breakout, and the Daisy module handles USB itself.
-  The existing rules (0.6/0.3 mm vias, 0.2 mm track and clearance) are within JLC's 4-layer limits.
+  The rules (0.6/0.3 mm vias, 0.2 mm track and clearance) are within JLC's 4-layer limits. See "Design rules" below.
 
 ### Board outline and placement (2026-10-25)
 90 × 80 mm, 2 mm corner radius, four M3 holes (non-plated, 4 mm in from the edges). The front panel is the bottom edge (y = 80 mm).
@@ -233,3 +231,33 @@ Coordinates below are from the board's top-left corner.
 | J8 (internal line out) | Right side, above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
 
 L2 and L3 each have one GND zone covering the board, inset 0.5 mm from the edge.
+
+### U2 exposed-pad vias (2026-10-25)
+- **Changed:** U2's footprint is now `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm` (was the `_ThermalVias` variant).
+  Four 0.6/0.3 mm GND vias sit in the exposed pad at ±0.4 mm from its centre, under the four paste windows.
+- **Why:** the `_ThermalVias` footprint drills 0.2 mm holes, below the board's 0.3 mm minimum. U2 dissipates only tens of mW,
+  so the vias are there to ground the pad to L2/L3, not for heat, and 0.3 mm holes do that within the standard rules.
+- **Watch:** the vias are open, so they wick some solder from the pad during reflow. Check for voids or a floating part (TEST_PLAN 0.3).
+  If it is a problem, ask JLC to tent or plug the vias from the bottom.
+- **Moving U2:** the vias are board items, not part of the footprint. Move them with U2.
+
+### Design rules (2026-10-25)
+Board Setup (`seed3-carrier.kicad_pro`) holds the absolute minimums and net class defaults. `seed3-carrier.kicad_dru` adds the
+per-class ranges, including the maximums. All values are within JLC's standard 4-layer limits.
+
+| Item | Min | Default | Max |
+|---|---|---|---|
+| Signal track (Default class, not GND) | 0.2 mm | 0.2 mm | 0.5 mm |
+| GND track | 0.2 mm | 0.5 mm | 2 mm |
+| Power track (`Power` class) | 0.3 mm | 1 mm | 2 mm |
+| Via, Default class | 0.6 / 0.3 mm | 0.6 / 0.3 mm | 0.8 / 0.4 mm |
+| Via, `Power` class | 0.6 / 0.3 mm | 0.8 / 0.4 mm | 0.8 / 0.4 mm |
+| Clearance (both classes) | 0.2 mm | | |
+| Copper to board edge | 0.5 mm | | |
+| Hole to hole, hole clearance | 0.25 mm | | |
+| Via annular ring | 0.15 mm | | |
+
+- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V`, `/3V3_A`, `/3V3_D`. GND stays in Default and mostly drops straight to L2/L3 through vias.
+- **Power min is 0.3 mm, not 1 mm,** so power tracks can neck down onto U2's 0.25 mm pads at 0.5 mm pitch. Keep them at 1 mm everywhere else.
+- **Presets:** tracks 0.2, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
+- **Was:** the minimum track width was 0.3 mm while the Default class used 0.2 mm, so every default track failed DRC. The minimum is now 0.2 mm.
