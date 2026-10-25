@@ -172,7 +172,11 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   If it does, raise R40/R41.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **TEST_PLAN check 3B.4:** the low-end corner is ≈ 12.6 Hz, not 9 Hz.
-- **Layout:** fresh board on the stackup below. Set it in Board Setup → Board Stackup before placing parts.
+- **Layout:** outline, stackup, ICs and connectors are placed (see "Board outline and placement" below). Place the passives,
+  Q1, Q4, FB1 and the test points (parked to the right of the board), then route.
+- **U2 thermal vias:** the stock WQFN-16 footprint uses 0.2 mm drills, below the board's 0.3 mm minimum hole, so DRC flags 4 errors.
+  Either confirm JLC's 4-layer price for 0.2 mm holes and lower the rule, or switch to the footprint without thermal vias and add 0.3 mm vias by hand.
+- **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
 ## Layout decisions
 
@@ -213,3 +217,19 @@ refer to Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PC
 - **Why 1.6 mm:** the 1/4" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
 - **No controlled impedance.** `USB_D+`/`USB_D−` only reach the J6/J7 breakout, and the Daisy module handles USB itself.
   The existing rules (0.6/0.3 mm vias, 0.2 mm track and clearance) are within JLC's 4-layer limits.
+
+### Board outline and placement (2026-10-25)
+90 × 80 mm, 2 mm corner radius, four M3 holes (non-plated, 4 mm in from the edges). The front panel is the bottom edge (y = 80 mm).
+Coordinates below are from the board's top-left corner.
+
+| Part | Position | Why |
+|---|---|---|
+| J1 (guitar in), J9 (AUX), J5 (headphones), J2 (line out) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
+| A1 (Daisy) | Centre, USB end 2 mm from the rear edge | USB stays reachable for flashing. Audio pins 16–20 end up at the front, next to U1 |
+| J6, J7 (breakouts) | 5.08 mm outside each Daisy row, rotated 180° | Each pin lines up with the Daisy pin on the same net (J6 pin n = A1 pin 21 − n, J7 pin n = A1 pin 20 + n). J6 ("PINS_RIGHT") ends up on the left |
+| U1 (TLV9064) | Between the input jacks and Daisy pins 16–19 | Short input and output paths for all four buffers |
+| U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
+| J3 (power board), J4 (display) | Rear right, next to each other | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. J3 is near Daisy VIN (pin 39) |
+| J8 (internal line out) | Right side, above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
+
+L2 and L3 each have one GND zone covering the board, inset 0.5 mm from the edge.
