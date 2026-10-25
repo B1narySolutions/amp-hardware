@@ -19,16 +19,21 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Why:** the master volume encoder, if there is one, goes on the touchscreen / ESP32 side, which sends volume changes over the display UART.
   No volume control remains on this board.
 
-### Output mute watchdog
-- **Added:** U3 (SN74LVC1G123 retriggerable one-shot), R24–R26, C22, C23 and TP10 (`TP_WD_OK`).
-- **How it works:** the firmware toggles `AUDIO_ALIVE` (Daisy pin 33, was D26) once per audio callback.
-  Each rising edge retriggers U3, whose Q output (`WD_OK`) stays high. `WD_OK` drives U2's active-high EN pin directly
-  and Q3's gate for the speaker mute (see the power board connector). If the edges stop for ~10 ms (R24 × C22), `WD_OK` falls
-  and both amps mute.
-- **Also muted when:** the Daisy is absent, booting, in DFU, or hung. R25 holds the trigger input low and R26 holds `WD_OK` low.
+### Output mute (STM32 internal watchdog)
+- **Now:** `HP_EN` (Daisy pin 33, was `AUDIO_ALIVE`, and before that D26) drives U2's active-high EN pin directly.
+  R26 (100k) pulls it low. TP10 is renamed `TP_HP_EN`. The speaker mute is Q4 alone (see the power board connector).
+- **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs on its
+  own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
+  Daisy is absent, booting or in DFU, its pins float: R26 holds `HP_EN` low (U2 off) and R37 holds `SPK_EN` low (speaker amp muted).
+- **Removed (2026-10-25):** U3 (SN74LVC1G123 retriggerable one-shot), R24, R25, C22, C23 and Q3. The reference designators are
+  left unused rather than renumbered. In the first version of this section, the firmware toggled `AUDIO_ALIVE` once per callback,
+  and U3's Q output (`WD_OK`) stayed high while the edges kept coming. It drove U2's EN and Q3's gate in series with Q4.
+- **Trade-off:** U3 watched the audio edges directly, outside the STM32. The IWDG is inside the chip, so the mute depends on the
+  firmware feeding it only from the audio callback. Never feed it from the main loop.
 - **Superseded:** this section first used Q2 (2N7002) and R27 to drive the TPA6111A2's active-high SHUTDOWN pin through `AMP_SHUTDOWN`.
   The TPA6132A2 swap (below) removed them.
-- **Why:** a hung Daisy can loop its last audio buffer at full level. Mute must not depend on the software that has failed.
+- **Why:** a hung Daisy can loop its last audio buffer at full level, so both amps must mute when audio stops.
+  The IWDG covers that with 7 fewer parts.
 
 ### Speaker feed from AUDIO_OUT_2, headphone detect in firmware
 - **Removed:** the tip-switch line out. J5's TN contact no longer drives `LINE_SEND`, and TN and RN are both no-connects.
@@ -65,9 +70,10 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   | 7 | `PWR_HOLD_CONN` | Carrier → power board | 27 (`PWR_HOLD`, was A5) | High keeps the power on. R33 (1k) series, R34 (100k) pull-down so it is low while the Daisy is absent or booting |
   | 8 | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`, was A6) | Open drain speaker-amp mute (see below) |
 
-- **Added:** `SPK_MUTE` gate. Q3 and Q4 (2N7002) are in series from `SPK_MUTE` to GND. Q3's gate is `WD_OK` (U3 Q, the watchdog
-  signal that also enables U2). Q4's gate is `SPK_EN` with R37 (100k) pull-down. `SPK_MUTE` is pulled low (speaker on) only
-  when the watchdog is running **and** the firmware enables the speaker. The headphone amp (U2) follows the watchdog only.
+- **Added:** `SPK_MUTE` gate. Q4 (2N7002) pulls `SPK_MUTE` to GND. Its gate is `SPK_EN` with R37 (100k) pull-down, so
+  `SPK_MUTE` is pulled low (speaker on) only while the firmware drives `SPK_EN` high. During a watchdog reset the pin floats and
+  the speaker amp mutes. The headphone amp (U2) has its own enable, `HP_EN`.
+  (Q3 was in series with Q4, gated by the old `WD_OK` watchdog signal. It was removed on 2026-10-25, see "Output mute".)
 - **Added:** FB1 (ferrite bead, 1206) and C30 (47µF, 1210) between `+5V` and J4 pin 4, which is now `DISPLAY_5V`.
   They keep the display's current pulses (ESP32 Wi-Fi, backlight PWM) off the rail that feeds the analog circuits.
 - **Power board requirements:** nothing above 3.3 V on pins 5–7. Switch the `BATT_SENSE` divider off with the 5 V output
@@ -127,7 +133,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   HPVDD and HPVSS are generated inside U2. They get caps only (and PWR_FLAGs for ERC), never an external supply.
 - **Wiring:** single-ended inputs per the datasheet (INL+/INR+ to GND). `HP_SOURCE` → C12/C13 (4.7µF, kept) → INL−/INR−.
   With the 19.8k internal input resistance that is a 1.7 Hz high-pass, and there is no output cap, so bass is flat down to a few Hz.
-  Gain is 0 dB (G0 to +5V, G1 to GND), inverting as before. EN (active high) is `WD_OK` directly.
+  Gain is 0 dB (G0 to +5V, G1 to GND), inverting as before. EN (active high) is `HP_EN` directly (was `WD_OK`).
 - **New symbol:** `seed3-carrier:TPA6132A2RTE` in `seed3-carrier.kicad_sym`. It is the stock KiCad symbol with the pins rearranged:
   grounded pins on the bottom, charge-pump and output pins on the right, supplies on top.
 - **Layout:** route SGND (pin 15) straight to the J5 sleeve pin, as the datasheet requires, and keep C35/C36 tight to pins 8, 9 and 11.
@@ -137,28 +143,28 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 
 ## Firmware changes these require
 - Take volume and mute from the display over the UART instead of the volume/tone ADCs. Ramp volume changes.
-- Toggle `AUDIO_ALIVE` (pin 33) once per audio callback. Initialise it as a low output.
+- Start the STM32 independent watchdog (IWDG) early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
 - Send the speaker mix to output 2 and headphones to output 1. Read `HP_DETECT` (pin 34):
   **low = headphones in** (J5's normally-open switch closes to GND). Debounce it in firmware. Ramp the speaker down and shut its amp off when headphones are in.
-- Add an output clamp or limiter and NaN/Inf guard at the end of the chain. Enable the STM32 internal watchdog.
+- Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
 - Drive `PWR_HOLD` (pin 27) high early in boot. On a `PWR_BTN` (pin 26, active low) press while running, fade out, mute,
   save settings, then drive `PWR_HOLD` low.
-- Drive `SPK_EN` (pin 28) high to enable the speaker amp, low when headphones are in. The headphone amp needs no pin of its own:
-  it runs whenever the watchdog sees `AUDIO_ALIVE` pulses.
+- Drive `SPK_EN` (pin 28) high to enable the speaker amp, low when headphones are in. Drive `HP_EN` (pin 33) high
+  to run the headphone amp, after the first audio callback has started. Initialise both as low outputs.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.
   It goes to both outputs, so backing tracks play through the speaker and the headphones.
 
 ## Open items
 - **Check the J5 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
-- **Confirm the U3 timeout:** check tw ≈ K·Rext·Cext against the SN74LVC1G123 datasheet, then measure on the board.
+- **Test the watchdog mute:** stall the audio callback in a debug build. Check on TP10 (`TP_HP_EN`) and `SPK_MUTE` that both amps mute within ~10 ms.
   The target is ~10 ms, comfortably longer than the 2 ms edge period.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio. Record it here so the firmware can convert the reading to volts.
 - **Display current:** check the display's datasheet. If it draws well over 1 A, feed it from the power board instead of J4.
 - **J3 orientation:** vertical (B8B-XH-A) is drawn. Switch to the right-angle S8B-XH-A if the cable has to leave along the board.
-- **2N7002 gate drive:** Q3 and Q4 are driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
+- **2N7002 gate drive:** Q4 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** U2's gain is fixed at 0 dB by G0/G1. If `HP_SOURCE` at full scale clips U2's ~1.1 Vrms output, tie G0 to GND for −6 dB
   (or limit it in firmware).
 - **AUX input level:** measure a phone and a laptop at full volume through J9 and check that the Daisy input doesn't clip.
