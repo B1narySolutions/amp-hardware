@@ -1,0 +1,4 @@
+(sym_lib_table
+ (version 7)
+ (lib (name "seed3-carrier") (type "KiCad") (uri "${KIPRJMOD}/../seed3-carrier.kicad_sym") (options "") (descr "Carrier-specific package variants"))
+)
