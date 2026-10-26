@@ -29,6 +29,8 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
   stop with it, so its DAC powers down and both outputs go silent. R37 holds the speaker amp off whenever the Daisy is absent, booting or reset.
 - **R26 removed, U2's EN tied to `+5V`.** The headphone amp has no hardware mute. The codec does the muting, as it does for J2.
   Driving EN from the Daisy would need a level translator, because the Daisy can run from USB while `+5V` is off.
+- **R45/R46 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`).** On USB alone, `+5V` and U2's rails are off, and pin 18's audio would
+  reach U2's inputs through C12/C13. The firmware keeps the outputs silent while `5V_SENSE` is low.
 - **R43 is 10k** (was 1k), to limit current into an unpowered display while the Daisy runs from USB.
 - **Display: FB1 and C30 added** to keep the display's current pulses off the analog rail, and **R43/R44 added** in series with the UART
   against miswiring and hot-plugging.

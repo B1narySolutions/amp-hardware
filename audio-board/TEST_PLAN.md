@@ -24,6 +24,7 @@ the log at the end (one copy per board serial).
 | Headphone amp | U2 (TPA6132A2), C12/C13, C33–C36 | DirectPath stereo amp, 0 dB inverting (mono source on both channels), outputs at 0 V straight to J5 (`HP_L` tip, `HP_R` ring). EN tied to `+5V`: U2 is on whenever `+5V` is up |
 | Headphone detect | J5.5/J5.6, TP11 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 34, wired directly; STM32 internal pull-up, enabled by the firmware). **Low = headphones in.** Probe at **TP11** (`TP_HP_DET`) |
 | Speaker / line send | R28, C24, R4 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass (R28/C24, no buffer) → `LINE_OUT` on J2 (¼" external) and J8 (internal, to the speaker amp) |
+| `+5V` sense | R45, R46 (100k/100k) | `+5V` divided to ≈ 2.5 V → `5V_SENSE` (Daisy pin 22, ADC_0). The firmware keeps both outputs silent while it reads low (USB alone) |
 | Display | J4, R43, R44 | GND / `UART_TX_CONN` / `UART_RX_CONN` / `DISPLAY_5V`; series resistors to Daisy USART1 (R43 10k on TX, R44 1k on RX) |
 | Daisy | A1 + two 1×20 sockets | Plug-in module. R37 holds `SPK_EN` low (speaker muted) while it is absent, booting or reset. The firmware feeds the STM32 IWDG only from the audio callback; a reset stops the codec's clocks, which silences J5 and J2 |
 
@@ -36,7 +37,7 @@ the log at the end (one copy per board serial).
 - J3: 1–2 `5V_IN`, 3–4 GND, 5 `BATT_SENSE_CONN`, 6 `PWR_BTN_CONN`, 7 `PWR_HOLD_CONN`, 8 `SPK_MUTE`
 - J5 / J9 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J9's 5/6 not connected)
 - A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`,
-  19 `AUDIO_OUT_2`, 20 GND, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`, 28 `SPK_EN`, 34 `HP_DETECT`,
+  19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`, 28 `SPK_EN`, 34 `HP_DETECT`,
   39 `+5V`, 40 GND. All other Daisy pins are not connected on the carrier. Probe the sockets while the Daisy is out. With it fitted
   they are covered, so the checks name a carrier part on the same net instead
 
@@ -95,6 +96,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.19 | J3.7 → A1.27; J3.7 → GND | ≈ 1 kΩ (R33); ≈ 100 kΩ (R34) | `PWR_HOLD` network |
 | 1.20 | A1.28 (`SPK_EN`) → GND; J3.8 → GND | ≈ 100 kΩ (R37); open (Q4 off) | R37 missing; Q4 shorted or swapped with Q1 |
 | 1.21 | J4.2 → A1.14; J4.3 → A1.15 | ≈ 10 kΩ (R43), ≈ 1 kΩ (R44) | UART series resistors |
+| 1.21a | A1.22 (`5V_SENSE`) → GND | Below 100 kΩ (R46, with R45 through the `+5V` loads); not ≈ 0 Ω | R45/R46 missing or shorted |
 | 1.22 | Daisy socket (A1) adjacent pins | Spot-check no shorts between neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge — **5 V into 3V3_D would damage the Daisy** |
 
 ## Stage 2 — First power-up, Daisy **removed**
@@ -112,7 +114,7 @@ U2's EN is tied to `+5V`, so U2 turns on with the supply.
 | 2.6 | U2 charge pump | HPVDD (C34) positive and HPVSS (C36) roughly equal and negative; record both. ≈ 0 V on either = charge-pump fault (C35, pins 8/9/11) |
 | 2.7 | J5 tip and ring (DC) | Within ±5 mV of 0 V (DirectPath, no output caps) |
 | 2.8 | J2 tip / J8.1 (DC) | ≈ 0 V (R4 to GND) |
-| 2.9 | J4.4 (`DISPLAY_5V`) and A1.39 | +5 V; J4.1 and A1.40 are GND |
+| 2.9 | J4.4 (`DISPLAY_5V`) and A1.39 | +5 V; J4.1 and A1.40 are GND. A1.22 (`5V_SENSE`) ≈ 2.5 V (R45/R46) |
 | 2.10 | J3.8 (`SPK_MUTE`) with 10k pull-up to 3.3 V | ≈ 3.3 V (Q4 off = speaker muted while the Daisy is absent) |
 | 2.11 | Thermal | Nothing warm to the touch after 2 min, U2 included |
 | 2.12 | **Reverse polarity** — swap leads on J3, limit 50 mA, apply 5 V | ≈ 0 mA drawn, `+5V` stays at 0 V. Restore correct polarity and repeat 2.2 to confirm nothing was damaged |
@@ -199,7 +201,8 @@ Flash a small bring-up program (libDaisy or Arduino/DaisyDuino) over USB that:
 - passes audio input 1 to outputs 1 and 2, mixes input 2 (AUX) into both, and logs peak levels,
 - drives `PWR_HOLD` high at boot,
 - lets `SPK_EN` be toggled from USB serial,
-- prints `HP_DETECT`, `PWR_BTN` and the `BATT_SENSE` ADC reading over USB serial,
+- prints `HP_DETECT`, `PWR_BTN` and the `BATT_SENSE` and `5V_SENSE` ADC readings over USB serial,
+- keeps both outputs at digital silence while `5V_SENSE` reads low,
 - echoes bytes on USART1 (J4) and sends a heartbeat string every second.
 
 Keep the 10k pull-up from J3.8 to 3.3 V unless the power board is connected.
@@ -220,9 +223,10 @@ Keep the 10k pull-up from J3.8 to 3.3 V unless the power board is connected.
 | 5.12 | `BATT_SENSE`: known voltage (e.g. 1.65 V) on J3.5 | ADC reading matches within a few % |
 | 5.13 | UART on J4 with a 3.3 V USB-serial adapter (adapter TX → J4.3, RX → J4.2, GND → J4.1) | Heartbeat received; echo works. **Before connecting the real display**, confirm its TX idles at ≤ 3.3 V |
 | 5.14 | Display on J4 | Powers from J4.4 (`DISPLAY_5V`), shows data from the Daisy. Scope `+5V` at C18 with Wi-Fi/backlight active: ripple much lower than at J4.4 (FB1/C30) |
-| 5.15 | Back-power from USB: J3 supply **off**, display unplugged, Daisy on USB, `PWR_HOLD` and `SPK_EN` driven high | `+5V` (C18 `+`) ≈ 0 V. Record it |
+| 5.15 | USB alone: J3 supply **off**, display unplugged, Daisy on USB, 1 kHz into J1, `PWR_HOLD` and `SPK_EN` driven high | `+5V` (C18 `+`) ≈ 0 V and `5V_SENSE` prints ≈ 0 V. A1.18 (`AUDIO_OUT_1`, on top of the module) and C2 carry no signal: the firmware keeps the outputs silent. Then power J3: `5V_SENSE` prints ≈ 2.5 V and the tone returns on J5 without a click. Record all of it |
 | 5.16 | Output DC with the codec running: firmware outputs digital silence, nothing plugged into J2/J8. Measure DC at A1.18 and A1.19 (on top of the module) and at J2 tip (`LINE_OUT`). Then hold RESET (clocks stop, codec powers down) and release, watching J2 tip on the scope | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled on the module. More than a few tens of mV at A1.19 or J2: fit a 10 µF series cap after R28 (see DESIGN.md "Speaker / line send"). Record any step or pop on J2 at reset and release |
 | 5.17 | AUX level with the Daisy fitted: 1 kHz, 1 Vpp into J9, same signal on tip and ring, then tip only with ring grounded. Scope A1.17 (on top of the module) and read the firmware's input-2 peak | Tip and ring: 0.44–0.55 Vpp (−7.0 to −5.5 dB, the Daisy's input at 4–6 kΩ). Tip only: ≈ 0.22–0.27 Vpp. Record both. Much lower means the module input is lower than 4 kΩ: lower R40/R41 (see DESIGN.md "AUX input") |
+| 5.18 | `+5V` transitions on USB: Daisy on USB, J3 powered, display connected, full-scale 1 kHz to J5 (32 Ω load). Scope `+5V` (C18 `+`), HPVDD (C34), HPVSS (C36) and U2's INL− (C12, U2 side). Remove J3 power, then restore it. Repeat with the display unplugged | Power off: INL− goes silent before HPVDD/HPVSS collapse, or stays outside HPVSS − 0.3 V … HPVDD + 0.3 V for no more than a few ms. Record the time. Power on: audio returns ≥ 10 ms after HPVDD/HPVSS settle, with no click on J5 |
 
 ## Stage 6 — Soak and robustness
 

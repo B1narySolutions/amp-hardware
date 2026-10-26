@@ -154,6 +154,19 @@ Daisy output that is high then pushes current into an unpowered part on the carr
   slightly through the display. That only leaks a little current to the power board. It would matter if anything back-powered `+5V` hard.
 - **Display UART:** Daisy TX idles high into an unpowered display. R43 (10k) limits that current to ≈ 0.27 mA. See "Display connector (J4)".
 - **`PWR_HOLD`** goes to the power board through R33 (1k). The power board has to tolerate 3.3 V on that pin while it is off.
+- **Headphone input (`5V_SENSE`):** C12/C13 pass pin 18's audio straight to U2's inputs, which are rated only from HPVSS − 0.3 V to
+  HPVDD + 0.3 V (TPA6132A2 datasheet, section 6.1). U2's charge pump makes both rails, so with `+5V` off they sit at 0 V and the
+  inputs may only see ±0.3 V. Full scale is ±1.4 V. R2 limits the current into U2's protection diodes to ≈ 0.3 mA, but that is still
+  outside the rating. So the firmware has to know whether `+5V` is up: R45/R46 (100k/100k) divide `+5V` to ≈ 2.5 V on `5V_SENSE`
+  (Daisy pin 22, ADC_0). While it reads low, the firmware keeps both outputs at digital silence (see "Firmware requirements").
+  - **Why not `BATT_SENSE`:** a bench supply on J3 gives it no reading, so it can't tell whether `+5V` is up.
+  - **Why 100k/100k:** 2.5 V is well inside the ADC range and the divider draws 25 µA. The Daisy's VIN is `+5V`, so whenever `+5V` is
+    up the Daisy is powered too, and the divider can't back-power it. With `+5V` off, R46 holds the pin at 0 V.
+  - **No filter cap:** the source impedance is 50k, so the firmware uses a long ADC sample time instead of a cap like C28.
+  - With `+5V` up, U2's charge pump is always running (EN is tied to `+5V`), so its input rating is met whenever it is powered.
+  - **Limit: a fast power loss.** The firmware reacts within one or two audio blocks plus the codec's output delay, a few ms. If `+5V`
+    and U2's rails collapse faster than that (J3 pulled while the display draws hundreds of mA), the last few ms of audio still reach
+    U2's unpowered inputs, limited to ≈ 0.3 mA by R2. TEST_PLAN 5.18 measures this.
 
 ## Connectors
 
@@ -198,7 +211,7 @@ cable is miswired (TX to TX) or hot-plugged, and add a little ESD margin.
 - **R44 stays 1k.** The display only drives it while the carrier is powered, and then the Daisy is powered too.
 
 ### Daisy pins
-Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
+Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
 28 `SPK_EN`, 34 `HP_DETECT`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
@@ -216,6 +229,14 @@ USB stays on the Daisy's own connector.
   low when headphones are in.
 - Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18 does from boot.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
+- Read `5V_SENSE` (pin 22, ADC_0) with the longest ADC sample time (its source impedance is 50k). It reads ≈ 2.4–2.5 V with `+5V`
+  at 4.85–5.0 V.
+  - **Before starting audio:** require it above 2.35 V (`+5V` ≥ 4.7 V) for at least 10 ms. U2's start-up time is 5 ms (TPA6132A2
+    datasheet, section 6.6), so its charge pump has settled by then. Then ramp the outputs up.
+  - **While running:** sample it from the audio callback on every block (ADC on DMA, so the callback only reads the last value). Below
+    2.2 V (`+5V` < 4.4 V, still well above U2's 2.3 V minimum) write silence from that block on. Hold the outputs silent until the
+    start-up condition above is met again. The thresholds give 0.15 V of hysteresis.
+  - This applies on USB alone on the bench too.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.
   It goes to both outputs.
 
@@ -240,6 +261,9 @@ USB stays on the Daisy's own connector.
   Stage 5 with the Daisy in and record the corner.
 - **Headphone noise while the Daisy boots:** U2 is always on (EN tied to `+5V`). Check TEST_PLAN 7.1 and 7.6 for clicks on J5 at
   power-up, reset and DFU entry. If they are loud, the fallback is to drive EN from the Daisy through a level translator again (git history has it).
+- **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J3 power is removed and restored with USB
+  connected and audio playing. Record how long the input stays outside HPVSS − 0.3 V … HPVDD + 0.3 V. If it is more than a few ms at
+  full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
 - **Layout:** every part is placed. Next is routing.
 - **Line-out level:** with no buffer, R28 is the output impedance. Check on the bench that the speaker amp and an interface see enough
   level. If not, lower R28 (1k with C24 at 3.3 nF keeps the corner near 48 kHz).
@@ -319,6 +343,8 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
 - **VREF:** R7, R8 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. C18 and C17 sit at Q1's output.
 - **U2 EN:** pin 13 sits next to VDD (pin 14). Join them with a short trace at the pads.
+- **`5V_SENSE`:** R45 and R46 stand side by side to the right of C18, between Q1 and R28. R45's top pad is `+5V`, R46's top pad is
+  GND, and their bottom pads form `5V_SENSE`. Route it to Daisy pin 22 (rear row, next to pin 21). It is a DC level, so the route isn't critical.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34
   sits above pin 7. C28 and C29 sit just below them. Their nets reach Daisy pins 25–28, 33 and 34 under the Daisy.
 - **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass
@@ -390,7 +416,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (8 h
 |---|---|---|---|---|
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R44 | Basic | 1.9M |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
-| C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R34 R37 R38 | Basic | 1.0M |
+| C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R34 R37 R38 R45 R46 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 R43 | Basic | 2.5M |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
