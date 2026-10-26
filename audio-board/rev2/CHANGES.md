@@ -25,11 +25,10 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
 ## Power and control
 - **J3: 2-pin 5 V header → 8-pin JST-XH to the power board.** One connector for power, the power button, `PWR_HOLD`, battery sense and
   the speaker mute. Adds R32–R35, C28, C29, Q4 and R37. Q1 still provides reverse-polarity protection.
-- **Output mute on the STM32's independent watchdog.** R26 and R37 hold both amps off whenever the Daisy is absent, booting or reset,
-  and the IWDG resets it if the audio callback stops.
-- **U4 (TXU0101 level translator) between `HP_EN` and U2's EN, with C37/C38.** The Daisy can run from USB while `+5V` is off. U4's
-  output goes high-impedance when either supply is off, so EN stays within its VDD + 0.3 V rating. R26 now pulls U2's EN (`U2_EN`) low.
-  Daisy pin 38 (`3V3_D`) now feeds U4's VCCA.
+- **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
+  stop with it, so its DAC powers down and both outputs go silent. R37 holds the speaker amp off whenever the Daisy is absent, booting or reset.
+- **R26 removed, U2's EN tied to `+5V`.** The headphone amp has no hardware mute. The codec does the muting, as it does for J2.
+  Driving EN from the Daisy would need a level translator, because the Daisy can run from USB while `+5V` is off.
 - **R43 is 10k** (was 1k), to limit current into an unpowered display while the Daisy runs from USB.
 - **Display: FB1 and C30 added** to keep the display's current pulses off the analog rail, and **R43/R44 added** in series with the UART
   against miswiring and hot-plugging.
@@ -42,4 +41,4 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
 
 ## Unused reference designators
 These designators are unused on rev 2. Removed parts keep their numbers unused rather than being renumbered: C4–C6, C9–C11, C14–C16,
-C19–C23, C27, J6, J7, Q2, Q3, R5, R6, R9–R16, R18–R25, R27, R30, R31, R36, R42, RV1–RV3, SW1, TP1–TP10, U3.
+C19–C23, C27, J6, J7, Q2, Q3, R5, R6, R9–R16, R18–R27, R30, R31, R36, R42, RV1–RV3, SW1, TP1–TP10, U3.

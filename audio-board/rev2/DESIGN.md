@@ -70,7 +70,7 @@ U2 (TPA6132A2RTE) drives J5 (`HP_L` tip, `HP_R` ring) directly.
   output is a fixed ~1.1 Vrms (22 mW into 32 Ω) regardless of supply, which also limits how loud the headphones can get.
   VDD is rated 2.3–5.5 V, so it runs from `+5V`.
 - **U2 wiring:** single-ended inputs per the datasheet (INL+/INR+ to GND; the mono source drives both channels). Gain is 0 dB
-  (G0 to `+5V`, G1 to GND), inverting. EN (active high) is `U2_EN`, driven from `HP_EN` by U4 (see "Output mute"). C33 (2.2 µF, VDD), C34 (2.2 µF, HPVDD),
+  (G0 to `+5V`, G1 to GND), inverting. EN (active high) is tied to `+5V`, so U2 is on whenever `+5V` is up (see "Output mute"). C33 (2.2 µF, VDD), C34 (2.2 µF, HPVDD),
   C35 (1 µF, charge-pump flying cap) and C36 (2.2 µF, HPVSS), all 0805 X5R or better. HPVDD and HPVSS are generated inside U2:
   they get caps only (and PWR_FLAGs for ERC), never an external supply.
 - **Symbol:** `seed3-carrier:TPA6132A2RTE` in `seed3-carrier.kicad_sym` is the stock KiCad symbol with the pins rearranged:
@@ -109,22 +109,16 @@ J2 (¼", external) and J8 (internal, to the speaker amp).
   Most class D amps have a bridged output, so neither speaker wire may be grounded.
 
 ### Output mute (STM32 watchdog)
-A hung Daisy can loop its last audio buffer at full level, so both amps must mute when audio stops.
-- `HP_EN` (Daisy pin 33) drives U2's EN through U4, a TXU0101 single-bit level translator: A from `HP_EN`, VCCA and OE from the
-  Daisy's `3V3_D` (pin 38), VCCB from `+5V`, BY to `U2_EN`. C37 (100 nF) decouples VCCA and C38 (100 nF) decouples VCCB.
-  R26 (100k) pulls `U2_EN` low.
-- **Why U4:** the Daisy and U2 are on different supplies (see "Running from USB alone"). U4's output can only swing to VCCB, which is
-  U2's own VDD, so EN can't exceed its VDD + 0.3 V rating. If either supply is off, U4's output goes high-impedance (TI's "VCC isolation"
-  and Ioff features) and R26 holds EN low. U4's A input has a 5 MΩ internal pull-down, so a floating Daisy pin reads low.
-  The datasheet specifies the Ioff and VCC isolation behaviour, so both power-up orders are covered.
+A hung Daisy can loop its last audio buffer at full level, so every output must go silent when audio stops.
+- **Headphones: no hardware mute.** U2's EN is tied to `+5V`. The codec mutes the headphones (see "The codec mutes"), the same way
+  it mutes J2. U2's own click-and-pop suppression covers its power-up and power-down.
 - `SPK_EN` (Daisy pin 28) drives Q4's gate, with R37 (100k) pull-down. Q4 (2N7002) pulls `SPK_MUTE` (J3.8) to GND, which means
   speaker on. The power board pulls `SPK_MUTE` up, which means muted.
 - **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs on its
   own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
-  Daisy is booting or in DFU, its pins float: U4's internal pull-down holds its output low (U2 off) and R37 holds `SPK_EN` low (speaker amp
-  muted). With the Daisy absent, U4 has no VCCA, its output goes high-impedance, and R26 holds `U2_EN` low.
-- **The codec mutes too.** The STM32 clocks the TAC5242, and the TAC5242 powers down its DAC by itself when its audio clocks stop
-  (TAC5242 datasheet, section 7.4.1). An IWDG reset therefore also silences pins 18/19, including J2, which has no amp to mute.
+  Daisy is booting or in DFU, its pins float, and R37 holds `SPK_EN` low (speaker amp muted).
+- **The codec mutes.** The STM32 clocks the TAC5242, and the TAC5242 powers down its DAC by itself when its audio clocks stop
+  (TAC5242 datasheet, section 7.4.1). An IWDG reset therefore silences pins 18/19, and with them J5 and J2, which have no amp mute.
   This doesn't help while the clocks keep running, such as a DMA looping a stale buffer with the CPU hung, which is why the IWDG has
   to reset the chip. The datasheet doesn't say whether the power-down clicks; TEST_PLAN 5.16 records it.
 - **Why Q4 instead of driving `SPK_MUTE` from the Daisy pin:** the power board can pull `SPK_MUTE` up to any voltage, and an unpowered
@@ -132,13 +126,17 @@ A hung Daisy can loop its last audio buffer at full level, so both amps must mut
 - **Trade-off:** an external retriggerable one-shot watching an audio-callback toggle would watch the audio from outside the STM32.
   The IWDG is inside the chip, so the mute depends on the firmware feeding it only from the audio callback. Never feed it from the main loop.
   The IWDG does the job with 7 fewer parts.
+- **Why U2's EN isn't driven from the Daisy:** the Daisy can run from USB while `+5V` (U2's VDD) is off (see "Running from USB alone"),
+  and EN is rated to VDD + 0.3 V. A Daisy pin on EN would need a level translator with supply isolation, its two decoupling caps and a
+  pull-down. The codec's power-down already covers a hung Daisy. The cost: U2 is on whenever `+5V` is, so anything on pin 18 while the
+  Daisy boots reaches the headphones (TEST_PLAN 7.1 records it), and U2 draws its few mA quiescent while only the speaker is in use.
 
 ## Power
 
 `5V_IN` arrives on J3 pins 1–2 and goes through Q1 (AO3401A P-FET, reverse-polarity protection) onto `+5V`. `+5V` feeds Daisy VIN
 (pin 39), U1, U2, `VREF`, and the display through FB1.
 - **Why Q1 with a keyed connector:** the JST-XH key stops the plug going in backwards, but not a hand-crimped harness with 5 V and GND
-  swapped, or swapped clip leads on a bench supply (TEST_PLAN 2.16 tests this). The Seed3's VIN is reverse-protected on the module, but
+  swapped, or swapped clip leads on a bench supply (TEST_PLAN 2.12 tests this). The Seed3's VIN is reverse-protected on the module, but
   U1, U2 and the display are not. Q1 drops about 50 mV at 1 A.
 - **Mirrored harness:** with this pinout, a harness wired end-to-end mirrored puts the power board's signals on `5V_IN`/GND and 5 V/GND
   onto pins 5–8. Q1 can't catch that. The keying and a careful look at the first harness do. R33 limits the current into the Daisy pin if it happens.
@@ -152,9 +150,6 @@ A hung Daisy can loop its last audio buffer at full level, so both amps must mut
 The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear to drive the
 VIN pin. With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
 Daisy output that is high then pushes current into an unpowered part on the carrier through that part's input protection diodes.
-- **`HP_EN`:** U2's EN is rated to VDD + 0.3 V, so with VDD at 0 V it must stay at 0 V. U4 sits between the Daisy and EN. With VCCB
-  (`+5V`) off, its output goes high-impedance, its A input draws at most a few µA (Ioff), and R26 holds EN at 0 V. No current flows
-  from `HP_EN` into U2.
 - **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. The UART current through R43 (below) can lift `+5V` very
   slightly through the display. That only leaks a little current to the power board. It would matter if anything back-powered `+5V` hard.
 - **Display UART:** Daisy TX idles high into an unpowered display. R43 (10k) limits that current to ≈ 0.27 mA. See "Display connector (J4)".
@@ -204,7 +199,7 @@ cable is miswired (TX to TX) or hot-plugged, and add a little ESD margin.
 
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
-28 `SPK_EN`, 33 `HP_EN`, 34 `HP_DETECT`, 38 `3V3_D` (U4's VCCA and OE only, a few µA), 39 VIN. Every other pin, including `3V3_A` (21) and USB D−/D+ (36/37), is
+28 `SPK_EN`, 34 `HP_DETECT`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
@@ -217,15 +212,16 @@ USB stays on the Daisy's own connector.
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
 - Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while
   running, fade out, mute, save settings, then drive `PWR_HOLD` low.
-- Initialise `SPK_EN` (pin 28) and `HP_EN` (pin 33) as low outputs. Drive `HP_EN` high after the first audio callback has started.
-  Drive `SPK_EN` high to enable the speaker amp (after the first audio callback, like `HP_EN`), low when headphones are in.
+- Initialise `SPK_EN` (pin 28) as a low output. Drive it high to enable the speaker amp after the first audio callback has started,
+  low when headphones are in.
+- Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18 does from boot.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.
   It goes to both outputs.
 
 ## Open items
 - **Check the J5/J9 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
-- **Test the watchdog mute:** stall the audio callback in a debug build. Check that `U2_EN` (at R26) and `SPK_MUTE` both mute within ~10 ms.
+- **Test the watchdog mute:** stall the audio callback in a debug build. Check that J5 and J2 go silent and `SPK_MUTE` mutes within ~10 ms.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio. Record it here so the firmware can convert the reading to volts.
@@ -240,8 +236,10 @@ USB stays on the Daisy's own connector.
   Passive pickups fit, but active pickups or a boost pedal may not. Firmware trim comes after the ADC, so it can't help. Decide the
   maximum supported input, and whether a pad or clamp is needed.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
-- **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.4 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). Sweep it again in
+- **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
+- **Headphone noise while the Daisy boots:** U2 is always on (EN tied to `+5V`). Check TEST_PLAN 7.1 and 7.6 for clicks on J5 at
+  power-up, reset and DFU entry. If they are loud, the fallback is to drive EN from the Daisy through a level translator again (git history has it).
 - **Layout:** every part is placed. Next is routing.
 - **Line-out level:** with no buffer, R28 is the output impedance. Check on the bench that the speaker amp and an interface see enough
   level. If not, lower R28 (1k with C24 at 3.3 nF keeps the corner near 48 kHz).
@@ -295,7 +293,7 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 | Part | Position | Why |
 |---|---|---|
 | J1 (guitar in), J9 (AUX), J5 (headphones), J2 (line out) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
-| A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_EN`, `HP_DETECT`) face the rear. A ~4.5 mm routing channel runs under its front row, where the audio pins are |
+| A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_DETECT`) face the rear. A ~4.5 mm routing channel runs under its front row, where the audio pins are |
 | U1 (TLV9061) | At the end of the guitar row, below Daisy pin 16 | Short guitar input path |
 | U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
 | J3 (power board), J4 (display) | J3 at the rear right beside the Daisy, J4 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
@@ -320,9 +318,7 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
 - **VREF:** R7, R8 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. C18 and C17 sit at Q1's output.
-- **`HP_EN`:** U4 sits above C33, with C37 to its left (at VCCA) and C38 above it (at VCCB). R26 stands to its right. `HP_EN` and
-  `3V3_D` come from the Daisy's rear row (pins 33 and 38) under the Daisy. Keep the `3V3_D` trace away from the `+5V` trace at pins 38/39.
-  `U2_EN` runs from U4 pin 4 down past C33 to U2 pin 13 (EN).
+- **U2 EN:** pin 13 sits next to VDD (pin 14). Join them with a short trace at the pads.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34
   sits above pin 7. C28 and C29 sit just below them. Their nets reach Daisy pins 25–28, 33 and 34 under the Daisy.
 - **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass
@@ -370,7 +366,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 | Hole to hole, hole clearance | 0.25 mm | | |
 | Via annular ring | 0.15 mm | | |
 
-- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A`, which is unused on the carrier, and `/3V3_D`, which only feeds U4).
+- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A`, which is unused on the carrier).
   GND stays in Default and mostly drops straight to L2/L3 through vias.
 - **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 5 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin
@@ -386,7 +382,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or more if C398358 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (8 here, about $24, or more if C398358 turns out to be extended).
 
 **SMD, assembled by JLC**
 
@@ -394,13 +390,13 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 |---|---|---|---|---|
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R44 | Basic | 1.9M |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
-| C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R38 | Basic | 1.0M |
+| C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R34 R37 R38 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 R43 | Basic | 2.5M |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
 | C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 | Basic | 551k |
-| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 C37 C38 | Basic | 1.6M |
+| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 | Basic | 1.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
 | C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
 | C19110 | 2.2 µF 25 V X7R 0805 (Samsung) | C33 C34 C36 | Extended | 297k |
@@ -410,7 +406,6 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 | C8545 | 2N7002 | Q4 | Basic | 2.9M |
 | C398358 | TLV9061IDBVR | U1 | Check | Check (LCSC lists 283k) |
 | C69901 | TPA6132A2RTER | U2 | Extended | **65** |
-| C7136368 | TXU0101DBVR (TI) | U4 | Extended | 5.1k |
 
 **Through hole, hand-soldered (order from LCSC)**
 

@@ -573,10 +573,6 @@
       {
         "netclass": "Power",
         "pattern": "/3V3_A"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "/3V3_D"
       }
     ]
   },
