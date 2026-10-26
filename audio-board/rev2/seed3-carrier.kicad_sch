@@ -8521,7 +8521,7 @@
 		)
 		(uuid "f03e6b7f-4759-43d9-9e7a-4928f80b6b00")
 	)
-	(text "R17 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R1 protects U1A's input."
+	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
 		(exclude_from_sim no)
 		(at 20.32 55.88 0)
 		(effects
@@ -8532,7 +8532,7 @@
 		)
 		(uuid "fd137606-5eb5-42d3-90fd-8858a9622356")
 	)
-	(text "Passive stereo-to-mono sum\nstraight into AUDIO_IN_2. The Seed3\ninput is AC-coupled (≈ 5 kΩ): no\nbuffer or coupling cap needed.\nR38 is the source's DC return.\nC31: RF filter (≈ 65 kHz)."
+	(text "Passive stereo-to-mono sum\nstraight into AUDIO_IN_2. The Seed3\ninput is AC-coupled (≈ 5 kΩ): no\nbuffer or coupling cap needed.\nR5 is the source's DC return.\nC3: RF filter (≈ 65 kHz)."
 		(exclude_from_sim no)
 		(at 93.98 81.28 0)
 		(effects
@@ -8543,7 +8543,7 @@
 		)
 		(uuid "5fdec7bb-7eb2-4eab-a939-6ca592e8dfff")
 	)
-	(text "Q1: reverse-polarity\nprotection for 5V_IN (J3).\nC18 (low-ESR) damps the\nharness ringing. C17 is\nthe entry ceramic."
+	(text "Q1: reverse-polarity\nprotection for 5V_IN (J7).\nC5 (low-ESR) damps the\nharness ringing. C4 is\nthe entry ceramic."
 		(exclude_from_sim no)
 		(at 101.6 127 0)
 		(effects
@@ -8554,7 +8554,7 @@
 		)
 		(uuid "8ced076d-2dcb-4abc-b8cc-d98971550a69")
 	)
-	(text "VREF ≈ 2.5 V, only load R17.\nC7 keeps +5V noise from the\ndisplay out of VREF (≈ 0.7 Hz).\nC8 decouples U1 at pin 5."
+	(text "VREF ≈ 2.5 V, only load R1.\nC7 keeps +5V noise from the\ndisplay out of VREF (≈ 0.7 Hz).\nC6 decouples U1 at pin 5."
 		(exclude_from_sim no)
 		(at 99.06 170.18 0)
 		(effects
@@ -8576,7 +8576,7 @@
 		)
 		(uuid "562b185c-0f50-4716-95f7-9acaccca3ed2")
 	)
-	(text "R43/R44 limit current if the cable is miswired or hot-plugged. R43 is 10k so the Daisy's TX can't\npower an unpowered display (Daisy on USB): keep the UART at 230400 baud or less.\nFB1/C30 keep the display's current pulses (Wi-Fi, backlight) off +5V."
+	(text "R8/R9 limit current if the cable is miswired or hot-plugged. R8 is 10k so the Daisy's TX can't\npower an unpowered display (Daisy on USB): keep the UART at 230400 baud or less.\nFB1/C8 keep the display's current pulses (Wi-Fi, backlight) off +5V."
 		(exclude_from_sim no)
 		(at 144.78 187.96 0)
 		(effects
@@ -8587,7 +8587,7 @@
 		)
 		(uuid "7262124e-9131-425d-80a4-42bc45e91a3f")
 	)
-	(text "Mono to both channels, 16–64 Ω headphones. R2/C2: ≈ 64 kHz low-pass for DAC noise.\nU2: TPA6132A2 DirectPath, 0 dB inverting (G0 high, G1 low). Outputs sit at 0 V: no output caps.\nC12/C13 with U2's 19.8 kΩ inputs: 1.7 Hz high-pass. EN tied to +5V: always on.\nLayout: run SGND straight to the J5 sleeve. HPVDD/HPVSS are made inside U2: caps only."
+	(text "Mono to both channels, 16–64 Ω headphones. R10/C9: ≈ 64 kHz low-pass for DAC noise.\nU2: TPA6132A2 DirectPath, 0 dB inverting (G0 high, G1 low). Outputs sit at 0 V: no output caps.\nC10/C11 with U2's 19.8 kΩ inputs: 1.7 Hz high-pass. EN tied to +5V: always on.\nLayout: run SGND straight to the J4 sleeve. HPVDD/HPVSS are made inside U2: caps only."
 		(exclude_from_sim no)
 		(at 271.78 91.44 0)
 		(effects
@@ -8598,7 +8598,7 @@
 		)
 		(uuid "9c46d46d-73ed-4716-9a8a-bb6ea0f50faf")
 	)
-	(text "J5 pins 5–6: isolated N/O switch, closes on plug insertion.\nHP_DETECT is LOW with headphones in. No external pull-up:\nthe firmware enables PG9's internal pull-up.\nBring-up: short TP11 to GND to simulate a plug."
+	(text "J4 pins 5–6: isolated N/O switch, closes on plug insertion.\nHP_DETECT is LOW with headphones in. No external pull-up:\nthe firmware enables PG9's internal pull-up.\nBring-up: short TP1 to GND to simulate a plug."
 		(exclude_from_sim no)
 		(at 271.78 135.89 0)
 		(effects
@@ -8609,7 +8609,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives J2 (external) and J8 (speaker amp)\ndirectly. R28/C24: ≈ 48 kHz low-pass. R4: DC return.\nWith headphones in, the firmware drives SPK_EN low.\nJ2 stays live."
+	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass. R12: DC return.\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8620,7 +8620,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "J3 goes to the power board (JST-XH, 8 pins). Pins 5–7 are 3.3 V logic: nothing above 3.3 V on them.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nR32, R35 and R33 limit current into an unpowered Daisy. R34 holds PWR_HOLD low while the Daisy is absent or booting."
+	(text "J7 goes to the power board (JST-XH, 8 pins). Pins 5–7 are 3.3 V logic: nothing above 3.3 V on them.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nR13, R16 and R14 limit current into an unpowered Daisy. R15 holds PWR_HOLD low while the Daisy is absent or booting."
 		(exclude_from_sim no)
 		(at 66.04 264.16 0)
 		(effects
@@ -8631,7 +8631,7 @@
 		)
 		(uuid "3f535bf0-a8d8-42b1-87f6-c218b77ed0c1")
 	)
-	(text "U2 EN is tied to +5V. A hung Daisy is muted by the\ncodec: the firmware feeds the STM32 IWDG only from the\naudio callback, so if audio stops the STM32 resets, its\nclocks stop and the TAC5242 powers down its DAC.\nR37 holds SPK_EN low (speaker muted) during a reset.\n5V_SENSE ≈ 2.5 V when +5V is up. With +5V off (Daisy on\nUSB) the firmware keeps both outputs silent: U2's inputs\nare rated only to its own rails ± 0.3 V."
+	(text "U2 EN is tied to +5V. A hung Daisy is muted by the\ncodec: the firmware feeds the STM32 IWDG only from the\naudio callback, so if audio stops the STM32 resets, its\nclocks stop and the TAC5242 powers down its DAC.\nR17 holds SPK_EN low (speaker muted) during a reset.\n5V_SENSE ≈ 2.5 V when +5V is up. With +5V off (Daisy on\nUSB) the firmware keeps both outputs silent: U2's inputs\nare rated only to its own rails ± 0.3 V."
 		(exclude_from_sim no)
 		(at 331.47 219.71 0)
 		(effects
@@ -9449,7 +9449,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "1218a41d-f66b-42a2-9293-d76e1aba579e")
-		(property "Reference" "R41"
+		(property "Reference" "R4"
 			(at 55.88 101.6 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9522,7 +9522,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R41")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -9618,7 +9618,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "163c231e-87d0-4415-aa04-51a0b82b8583")
-		(property "Reference" "J8"
+		(property "Reference" "J6"
 			(at 387.35 186.69 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9693,7 +9693,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J8")
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -9710,7 +9710,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "18b7b852-a182-4840-90c5-9ca6304e4a81")
-		(property "Reference" "R38"
+		(property "Reference" "R5"
 			(at 66.04 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9785,7 +9785,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R38")
+					(reference "R5")
 					(unit 1)
 				)
 			)
@@ -9877,7 +9877,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "1d6c593f-d4ea-4cf5-a31f-4e0955d29ae9")
-		(property "Reference" "R35"
+		(property "Reference" "R16"
 			(at 166.37 234.95 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9950,7 +9950,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R35")
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -10124,7 +10124,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "247e8e49-3cd1-46c7-9300-f20256fd3a4a")
-		(property "Reference" "C18"
+		(property "Reference" "C5"
 			(at 99.06 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10195,7 +10195,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C18")
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -10305,7 +10305,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2b742b23-aa93-462f-8935-cbd8da6d0ffc")
-		(property "Reference" "R40"
+		(property "Reference" "R3"
 			(at 55.88 86.36 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10378,7 +10378,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R40")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -10629,7 +10629,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "34adfea5-b316-4edc-87b9-34ba276361e8")
-		(property "Reference" "C29"
+		(property "Reference" "C18"
 			(at 177.8 242.57 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10704,7 +10704,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C29")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -10721,7 +10721,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "39252404-2b75-48ba-9fde-6dcd8f613087")
-		(property "Reference" "C12"
+		(property "Reference" "C10"
 			(at 337.82 49.88 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10804,7 +10804,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C12")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -10979,7 +10979,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3cc8ab6b-cd53-4cbb-bbea-b3b8eb5cf9c8")
-		(property "Reference" "R4"
+		(property "Reference" "R12"
 			(at 344.17 189.2299 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11054,7 +11054,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R4")
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -11071,7 +11071,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "3de14da3-1acb-40ea-93c6-54b962781aad")
-		(property "Reference" "J2"
+		(property "Reference" "J5"
 			(at 360.045 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11133,7 +11133,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J2")
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -11225,7 +11225,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "422d8852-0783-4511-bb0d-061d0a7ea875")
-		(property "Reference" "R43"
+		(property "Reference" "R8"
 			(at 173.99 163.83 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11298,7 +11298,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R43")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -11317,7 +11317,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "431cba57-4302-40e9-87d8-1fb6a8e4ed9e")
-		(property "Reference" "R2"
+		(property "Reference" "R10"
 			(at 299.72 24.13 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11390,7 +11390,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R2")
+					(reference "R10")
 					(unit 1)
 				)
 			)
@@ -11407,7 +11407,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "4709943b-bab9-45bf-992b-71ca03be3c51")
-		(property "Reference" "C13"
+		(property "Reference" "C11"
 			(at 334.01 64.14 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11490,7 +11490,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C13")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -11507,7 +11507,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "4840c3db-595b-4a21-ad85-e90265130aef")
-		(property "Reference" "R33"
+		(property "Reference" "R14"
 			(at 119.38 240.03 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11580,7 +11580,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R33")
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -11598,7 +11598,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "4a794b57-a160-46ed-816b-d1d0297a2203")
-		(property "Reference" "J3"
+		(property "Reference" "J7"
 			(at 68.58 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11691,7 +11691,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J3")
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -11786,7 +11786,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4e582ee3-8486-4abf-9b21-3b14f545f075")
-		(property "Reference" "R1"
+		(property "Reference" "R2"
 			(at 64.77 27.94 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11859,7 +11859,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R1")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -11954,7 +11954,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "5a660e79-a32e-4a5a-be22-46b5b52c1883")
-		(property "Reference" "C17"
+		(property "Reference" "C4"
 			(at 86.106 137.668 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12025,7 +12025,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C17")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -12135,7 +12135,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "6742b632-a2d3-4260-8f31-61431bff09bc")
-		(property "Reference" "R17"
+		(property "Reference" "R1"
 			(at 62.23 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12210,7 +12210,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R17")
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -12227,7 +12227,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "67ef532b-328e-41a3-a135-0d3629d6931e")
-		(property "Reference" "R32"
+		(property "Reference" "R13"
 			(at 119.38 222.25 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12300,7 +12300,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R32")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -12317,7 +12317,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "7035fa5a-0d9c-4d8e-b5f3-0523e68df441")
-		(property "Reference" "R37"
+		(property "Reference" "R17"
 			(at 200.66 247.65 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12392,7 +12392,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R37")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -12409,7 +12409,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "7a245af1-4f66-4214-b492-04b4967033a9")
-		(property "Reference" "C33"
+		(property "Reference" "C12"
 			(at 346.71 42.55 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12484,7 +12484,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C33")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -12501,7 +12501,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "7d0f4741-4800-4312-bd5d-cdcf6c5df4bb")
-		(property "Reference" "C28"
+		(property "Reference" "C17"
 			(at 129.54 229.87 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12576,7 +12576,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C28")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -12670,7 +12670,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "7eb0fb59-5016-4c97-b149-d3d3228d3868")
-		(property "Reference" "C31"
+		(property "Reference" "C3"
 			(at 76.2 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12745,7 +12745,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C31")
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -12763,7 +12763,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "811c7c71-274c-4986-8eed-36fa0c437700")
-		(property "Reference" "C8"
+		(property "Reference" "C6"
 			(at 27.94 179.0635 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12838,7 +12838,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C8")
+					(reference "C6")
 					(unit 1)
 				)
 			)
@@ -13010,7 +13010,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "8e2e02bc-5362-4824-9457-72fcb5bb67a7")
-		(property "Reference" "R44"
+		(property "Reference" "R9"
 			(at 173.99 172.72 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13083,7 +13083,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R44")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -13101,7 +13101,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "951e8776-cffd-43bf-9e80-31e1b45ef481")
-		(property "Reference" "J9"
+		(property "Reference" "J2"
 			(at 33.02 77.47 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13185,7 +13185,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J9")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -13355,7 +13355,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "9860448e-8f5c-4f32-a12a-3cd3e9615b02")
-		(property "Reference" "Q4"
+		(property "Reference" "Q2"
 			(at 215.9 245.11 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13433,7 +13433,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "Q4")
+					(reference "Q2")
 					(unit 1)
 				)
 			)
@@ -13527,7 +13527,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "9cc6747b-0813-4611-b55d-7af24b3f6554")
-		(property "Reference" "C24"
+		(property "Reference" "C16"
 			(at 302.26 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13602,7 +13602,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C24")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -13698,7 +13698,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a0eafb43-0618-4f5b-985e-5d0133c43f30")
-		(property "Reference" "J4"
+		(property "Reference" "J3"
 			(at 171.45 154.9401 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13779,7 +13779,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J4")
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -13873,7 +13873,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a599f556-32df-4903-867b-be59bf299371")
-		(property "Reference" "J5"
+		(property "Reference" "J4"
 			(at 388.62 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13957,7 +13957,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J5")
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -14460,7 +14460,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "c3fb2314-3f8e-4d06-9f58-0f4850fd15e2")
-		(property "Reference" "R28"
+		(property "Reference" "R11"
 			(at 292.1 172.72 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14533,7 +14533,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R28")
+					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -15044,7 +15044,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ce7ea65b-a911-4ce5-9a8e-ba46c7ca6d55")
-		(property "Reference" "C3"
+		(property "Reference" "C2"
 			(at 55.8863 27.94 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15117,7 +15117,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C3")
+					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -15407,7 +15407,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "dcac3ef2-1e98-43fa-874c-20abf3aac677")
-		(property "Reference" "C34"
+		(property "Reference" "C15"
 			(at 396.24 69.85 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15482,7 +15482,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C34")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -15577,7 +15577,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e2838753-228e-4533-aa9e-921800850123")
-		(property "Reference" "TP11"
+		(property "Reference" "TP1"
 			(at 292.1 124.968 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15638,7 +15638,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "TP11")
+					(reference "TP1")
 					(unit 1)
 				)
 			)
@@ -15655,7 +15655,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e287d52d-6064-4f6c-8ca4-ec8398d7fe26")
-		(property "Reference" "C35"
+		(property "Reference" "C13"
 			(at 383.54 62.23 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15730,7 +15730,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C35")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -15748,7 +15748,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e504d3f8-021c-442d-9550-63224c4bad8e")
-		(property "Reference" "R8"
+		(property "Reference" "R6"
 			(at 67.31 177.7999 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15823,7 +15823,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R8")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -15842,7 +15842,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e6f9a13b-2f80-46f1-ba8e-4f42cbf1c034")
-		(property "Reference" "C2"
+		(property "Reference" "C9"
 			(at 304.8 33.0262 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15917,7 +15917,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C2")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -16012,7 +16012,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e848bd6a-5e64-4d8f-8a6a-8134a591d3d2")
-		(property "Reference" "C30"
+		(property "Reference" "C8"
 			(at 233.68 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16087,7 +16087,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C30")
+					(reference "C8")
 					(unit 1)
 				)
 			)
@@ -16104,7 +16104,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "ec0601b8-a6fd-4874-b2f8-cfa68c2980d4")
-		(property "Reference" "C36"
+		(property "Reference" "C14"
 			(at 383.54 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16179,7 +16179,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C36")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -16738,7 +16738,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "fc333266-e4ad-44f9-9c47-a56155367f9f")
-		(property "Reference" "R34"
+		(property "Reference" "R15"
 			(at 129.54 247.65 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16813,7 +16813,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R34")
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -16922,7 +16922,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a9dd8a09-18a7-4881-91be-dc53966f2c6c")
-		(property "Reference" "R45"
+		(property "Reference" "R18"
 			(at 308.61 227.33 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16997,7 +16997,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R45")
+					(reference "R18")
 					(unit 1)
 				)
 			)
@@ -17014,7 +17014,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "27d5bd96-fa90-4991-96b3-e2b94d6ee108")
-		(property "Reference" "R46"
+		(property "Reference" "R19"
 			(at 308.61 234.95 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17089,7 +17089,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R46")
+					(reference "R19")
 					(unit 1)
 				)
 			)
