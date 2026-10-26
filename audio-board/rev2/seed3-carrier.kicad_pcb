@@ -2626,7 +2626,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "3.3k"
 			(at 0 1.83 270)
 			(layer "F.Fab")
 			(uuid "d95badc2-18e3-4dda-8211-f4ecf72fb3eb")
@@ -2671,7 +2671,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "LCSC" "C26032"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -5189,7 +5189,7 @@
 			(size 0.25 0.875)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "+5V")
+			(net "GND")
 			(pinfunction "G0_6")
 			(pintype "input")
 			(uuid "1efa5ee2-3746-4081-a543-a0a30e9de28e")

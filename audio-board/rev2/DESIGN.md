@@ -25,7 +25,7 @@ J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) →
   ~80 kHz pole. Input trim is done in firmware.
 
 ### AUX input (J2 → `AUDIO_IN_2`)
-J2 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R3/R4 (10k each, passive stereo-to-mono sum) → summing node with R5 (100k to GND)
+J2 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R3/R4 (10k each, passive stereo-to-mono sum) → summing node with R5 (3.3k to GND)
 and C3 (1 nF, RF filter) → `AUDIO_IN_2` (Daisy pin 17) directly. J2's detect switch (pins 5 and 6) is not connected.
 - **No buffer and no coupling cap.** The Seed3's audio inputs are AC-coupled on the module (Seed3 datasheet, Table 1 note), and the
   source is a phone or laptop output, so nothing needs biasing or buffering. The Daisy input itself is the load that sets the level.
@@ -33,17 +33,19 @@ and C3 (1 nF, RF filter) → `AUDIO_IN_2` (Daisy pin 17) directly. J2's detect s
   section 7.3). The Seed3 datasheet doesn't give the module pin's value, so this assumes the pin connects to the codec through its
   coupling cap with no extra series resistance. Electrosmith's own input circuits drive the pin from an op-amp through 1k or 100 Ω
   (Figures 3.2 and 3.4), which fits. TEST_PLAN 5.17 measures the level with the Daisy fitted.
-- **R5** gives the source's own coupling caps a DC return and holds the summing node at GND when the Daisy is out. At 100k it barely
-  affects the level. An empty jack stays quiet because the node then sits at the Daisy's ≈ 5k.
-- **C3** filters RF picked up on the cable, for example from the phone itself. It sees R3 ‖ R4 ‖ R5 ‖ 5k ≈ 2.4k, so the corner is
-  ≈ 65 kHz.
-- **Level:** the same signal on both channels sees R3 ‖ R4 = 5k into the Daisy's input ‖ R5. With the codec at 4k / 5k / 6k that is
-  −7.0 / −6.2 / −5.5 dB. Most backing tracks are close to this case, since bass, kick and vocals sit in the centre. One channel alone
-  (the other driven at 0 V) sees 10k into 5k ‖ 10k ‖ 100k, a gain of 0.24 (−12.3 dB). A 2 Vrms laptop output (5.7 Vpp) then reaches the
-  Daisy at 2.5–3.0 Vpp, under its 3.6 Vpp full scale and its ±1.8 V absolute maximum. The firmware can add gain for quiet phones and
-  trims out the ±0.8 dB spread.
-- **Source load:** each channel sees ≈ 13k (one channel driven) to ≈ 19k (both driven). Phone and laptop headphone outputs drive this easily.
-- **Noise:** the node sits at ≈ 2.4k rather than at an op-amp output. Its thermal noise (≈ 6 nV/√Hz) is far below a backing track's level.
+- **R5 sets the level, whatever the Daisy's input impedance is.** R3 ‖ R4 (5k) into R5 (3.3k) alone is a gain of 0.40 (−8.0 dB), so
+  even if the module pin added no load at all, a 2 Vrms laptop output (5.7 Vpp) would reach it at 0.80 Vrms (2.25 Vpp, ±1.13 V peak).
+  That is under the Daisy's 3.6 Vpp full scale and its ±1.8 V absolute maximum. With R5 at 100k the same worst case was ≈ 5.4 Vpp,
+  so the design relied on the unpublished ≈ 5 kΩ input to stay in range. R5 is also the DC return for the source's coupling caps, and
+  it holds the node at GND with an empty jack or with the Daisy out.
+- **C3** filters RF picked up on the cable, for example from the phone itself. It sees R3 ‖ R4 ‖ R5 ‖ 5k ≈ 1.4k, so the corner is
+  ≈ 110 kHz (≈ 80 kHz with the Daisy out).
+- **Level:** the same signal on both channels sees R3 ‖ R4 = 5k into R5 ‖ the Daisy's input. With the codec at 4k / 5k / 6k that is
+  −11.5 / −10.9 / −10.5 dB, so 2 Vrms reaches the Daisy at 1.5–1.7 Vpp. Most backing tracks are close to this case, since bass, kick
+  and vocals sit in the centre. One channel alone (the other driven at 0 V) sees 10k into 10k ‖ R5 ‖ 5k, a gain of 0.14 (−16.9 dB).
+  A quiet 0.5 Vrms phone lands around −19 dBFS, so the firmware adds gain for phones and trims out the ±0.5 dB spread.
+- **Source load:** each channel sees ≈ 12k (one channel driven) to ≈ 14k (both driven). Phone and laptop headphone outputs drive this easily.
+- **Noise:** the node sits at ≈ 1.4k rather than at an op-amp output. Its thermal noise (≈ 5 nV/√Hz) is far below a backing track's level.
 - **Use:** backing tracks bypass NAM. The firmware mixes `AUDIO_IN_2` in after the amp model, to both outputs.
 
 ### Headphone output (`AUDIO_OUT_1` → J4)
@@ -58,19 +60,23 @@ U2 (TPA6132A2RTE) drives J4 (`HP_L` tip, `HP_R` ring) directly.
     (Seed3 datasheet, Figure 3.9) also adds an amp (TPA6110A2).
   - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which only works if the pin
     sits at 0 V DC, so the outputs are most likely AC-coupled on the module. TEST_PLAN 5.16 measures it with the Daisy fitted.
-- **No buffer between the Daisy and U2.** The Daisy sees R10 plus U2's two 19.8 kΩ inputs in parallel, ≈ 13 kΩ, far above the 600 Ω
+- **No buffer between the Daisy and U2.** The Daisy sees R10 plus U2's two 26.4 kΩ inputs in parallel, ≈ 16.5 kΩ, far above the 600 Ω
   line-out minimum. Electrosmith's reference circuits load the pin with 10k through a 10 µF cap (line out, Figure 3.3) and with a
   pot to GND (headphone amp, Figure 3.9).
-- **R10/C9** filter the DAC's out-of-band noise before U2. With U2's 9.9 kΩ load the corner is ≈ 64 kHz (R10 ‖ 9.9 kΩ with 1 nF).
-- **Level:** R10 and U2's 9.9 kΩ load form a −2.5 dB divider, so full scale reaches U2 at ≈ 0.75 Vrms (≈ 17 mW into 32 Ω).
-  That is below U2's fixed ~1.1 Vrms maximum output, so full scale can't clip it.
-- **Low end:** C10/C11 into U2's 19.8 kΩ input is a 1.7 Hz high-pass. The Daisy's own output coupling cap adds a second one; its value isn't published.
+- **R10/C9** filter the DAC's out-of-band noise before U2. With U2's 13.2 kΩ load the corner is ≈ 60 kHz (R10 ‖ 13.2 kΩ with 1 nF).
+- **Level:** R10 and U2's 13.2 kΩ load form a −1.9 dB divider, so full scale reaches U2's inputs at ≈ 0.80 Vrms, and U2's −6 dB gain
+  puts ≈ 0.40 Vrms on each output: 10 mW into 16 Ω, 5 mW into 32 Ω.
+- **Why −6 dB, not 0 dB:** into headphone loads U2's limit is power, not voltage: 25 mW into 16 Ω and 22 mW into 32 Ω at 1 % THD
+  (≈ 0.63 / 0.84 Vrms, TPA6132A2 datasheet, section 6.6). The 1.1 Vrms figure is into 100 Ω. At 0 dB, full scale (≈ 0.75 Vrms) would
+  clip 16 Ω headphones and leave about 1 dB of margin at 32 Ω. At −6 dB the margin is 4 dB at 16 Ω and 6 dB at 32 Ω, and the hiss
+  drops with the gain. 5 mW is ≈ 105 dB SPL in typical 98 dB/mW headphones.
+- **Low end:** C10/C11 into U2's 26.4 kΩ input is a 1.3 Hz high-pass. The Daisy's own output coupling cap adds a second one; its value isn't published.
 - **U2, TPA6132A2 (DirectPath):** an internal charge pump gives it a negative rail, so its outputs sit at 0 V with no output caps
-  and the bass stays flat to a few Hz. It has built-in click-and-pop suppression and short-circuit and thermal protection. Its maximum
-  output is a fixed ~1.1 Vrms (22 mW into 32 Ω) regardless of supply, which also limits how loud the headphones can get.
+  and the bass stays flat to a few Hz. It has built-in click-and-pop suppression and short-circuit and thermal protection. Its output
+  swing comes from its own charge-pump rails, not VDD, so its limits (above) don't change with the supply.
   VDD is rated 2.3–5.5 V, so it runs from `+5V`.
-- **U2 wiring:** single-ended inputs per the datasheet (INL+/INR+ to GND; the mono source drives both channels). Gain is 0 dB
-  (G0 to `+5V`, G1 to GND), inverting. EN (active high) is tied to `+5V`, so U2 is on whenever `+5V` is up (see "Output mute"). C12 (2.2 µF, VDD), C15 (2.2 µF, HPVDD),
+- **U2 wiring:** single-ended inputs per the datasheet (INL+/INR+ to GND; the mono source drives both channels). Gain is −6 dB
+  (G0 and G1 to GND), inverting. EN (active high) is tied to `+5V`, so U2 is on whenever `+5V` is up (see "Output mute"). C12 (2.2 µF, VDD), C15 (2.2 µF, HPVDD),
   C13 (1 µF, charge-pump flying cap) and C14 (2.2 µF, HPVSS), all 0805 X5R or better. HPVDD and HPVSS are generated inside U2:
   they get caps only (and PWR_FLAGs for ERC), never an external supply.
 - **Symbol:** `seed3-carrier:TPA6132A2RTE` in `seed3-carrier.kicad_sym` is the stock KiCad symbol with the pins rearranged:
@@ -249,15 +255,17 @@ USB stays on the Daisy's own connector.
 - **Display current:** check the display's datasheet. If it draws well over 1 A, feed it from the power board instead of J3.
 - **J7 orientation:** vertical (B8B-XH-A) is drawn. Switch to the right-angle S8B-XH-A if the cable has to leave along the board.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
-- **Headphone level:** check on the bench that 0.75 Vrms is loud enough. If not, lower R10 (1k with C9 at 3.3 nF keeps the corner near 50 kHz).
+- **Headphone level:** check on the bench that 0.40 Vrms is loud enough with the intended headphones (TEST_PLAN 7.8). If not, moving G0
+  to `+5V` (0 dB) only suits headphones of 32 Ω or more, since full scale then clips 16 Ω. Lowering R10 gains little at −6 dB (1k gives ≈ 0.46 Vrms).
 - **AUX input level:** TEST_PLAN 5.17 checks the level with the Daisy fitted (the Daisy's input impedance isn't published). Then measure
-  a phone and a laptop at full volume through J2. 2 Vrms should reach 2.5–3.0 Vpp, under full scale. If it clips, add a resistor from
-  the summing node to GND (10k gives ≈ −8 dB). If quiet phones need too much firmware gain, lower R3/R4 (4.7k each gives ≈ −3.5 dB).
+  a phone and a laptop at full volume through J2: 2 Vrms should reach 1.5–1.7 Vpp, and it can't exceed 2.25 Vpp whatever the module's
+  input is. If quiet phones need too much firmware gain, R5 can go up to 4.7k (≈ −9.7 dB with a 5 kΩ module input, 2.7 Vpp
+  worst case). Above that the no-load worst case passes full scale.
 - **Guitar input level:** U1A is unity gain and can swing ≈ ±2.4 V, beyond the Daisy's 3.6 Vpp full scale and ±1.8 V absolute maximum.
   Passive pickups fit, but active pickups or a boost pedal may not. Firmware trim comes after the ADC, so it can't help. Decide the
   maximum supported input, and whether a pad or clamp is needed.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
-- **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C10/C11 alone (≈ 1.7 Hz). Sweep it again in
+- **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C10/C11 alone (≈ 1.3 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
 - **Headphone noise while the Daisy boots:** U2 is always on (EN tied to `+5V`). Check TEST_PLAN 7.1 and 7.6 for clicks on J4 at
   power-up, reset and DFU entry. If they are loud, the fallback is to drive EN from the Daisy through a level translator again (git history has it).
@@ -415,8 +423,8 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (8 h
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R14 R16 | Basic | 1.9M |
-| C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R10 R11 | Extended | 357k |
-| C17900 | 100k 1% 1206 (UNI-ROYAL) | R5 R12 R15 R17 R18 R19 | Basic | 1.0M |
+| C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 R11 | Extended | 357k |
+| C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R3 R4 R6 R7 R8 R13 | Basic | 2.5M |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
