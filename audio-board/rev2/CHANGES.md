@@ -331,7 +331,9 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 |---|---|---|---|
 | Signal track (Default class, not GND) | 0.2 mm | 0.2 mm | 0.5 mm |
 | GND track | 0.2 mm | 0.5 mm | 2 mm |
-| Power track (`Power` class) | 0.3 mm | 1 mm | 2 mm |
+| Power track (`Power` class) | 0.5 mm | 1 mm | 2 mm |
+| Power track inside U1's courtyard | 0.3 mm | 0.5 mm | 2 mm |
+| Power track inside U2's courtyard | 0.2 mm | 0.25 mm | 2 mm |
 | Via, Default class | 0.6 / 0.3 mm | 0.6 / 0.3 mm | 0.8 / 0.4 mm |
 | Via, `Power` class | 0.6 / 0.3 mm | 0.8 / 0.4 mm | 0.8 / 0.4 mm |
 | Clearance (both classes) | 0.2 mm | | |
@@ -340,8 +342,11 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 | Via annular ring | 0.15 mm | | |
 
 - **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V`, `/3V3_A`, `/3V3_D`. GND stays in Default and mostly drops straight to L2/L3 through vias.
-- **Power min is 0.3 mm, not 1 mm,** so power tracks can neck down onto U2's 0.25 mm pads at 0.5 mm pitch. Keep them at 1 mm everywhere else.
-- **Presets:** tracks 0.2, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
+- **Neck-down at U1 and U2 (2026-10-25):** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 4 without touching
+  the next pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started
+  at the pin begins narrow. Switch to the 1 mm preset once outside the courtyard. Anywhere else a Power trace under 0.5 mm fails DRC.
+  Rules later in `seed3-carrier.kicad_dru` win, so the neck-down rules come after "Power track width".
+- **Presets:** tracks 0.2, 0.25, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
 - **Thermal reliefs (2026-10-25):** through-hole pads join the L2/L3 GND planes with four 0.5 mm spokes and a 0.5 mm gap.
   SMD pads and vias, including U2's exposed-pad vias, stay solid. The through-hole parts are hand-soldered with an iron, and a pin tied solidly
   into two planes (jack sleeves, J3/J4/J8 GND, the Daisy and J6/J7 GND pins, C18) would not heat up enough. Both GND zones use

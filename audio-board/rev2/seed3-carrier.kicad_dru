@@ -11,10 +11,20 @@
 	(condition "A.Type == 'Track' && A.NetName == 'GND'")
 	(constraint track_width (min 0.2mm) (opt 0.5mm) (max 2mm)))
 
-# 0.3 mm min lets power tracks land on U2's 0.25 mm pads at 0.5 mm pitch.
 (rule "Power track width"
 	(condition "A.Type == 'Track' && A.NetClass == 'Power'")
-	(constraint track_width (min 0.3mm) (opt 1mm) (max 2mm)))
+	(constraint track_width (min 0.5mm) (opt 1mm) (max 2mm)))
+
+# Neck-down at fine-pitch power pins. Inside the IC's courtyard a Power track defaults to the pad width,
+# so the router starts narrow at the pin. Switch to 1 mm once outside the courtyard.
+# These come after "Power track width" because the last matching rule wins.
+(rule "Power neck-down at U1"
+	(condition "A.Type == 'Track' && A.NetClass == 'Power' && A.intersectsCourtyard('U1')")
+	(constraint track_width (min 0.3mm) (opt 0.5mm) (max 2mm)))
+
+(rule "Power neck-down at U2"
+	(condition "A.Type == 'Track' && A.NetClass == 'Power' && A.intersectsCourtyard('U2')")
+	(constraint track_width (min 0.2mm) (opt 0.25mm) (max 2mm)))
 
 # Only the two via sizes in the presets: 0.6/0.3 and 0.8/0.4.
 (rule "Via size"
