@@ -44,6 +44,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **Rev 1 TP5, TP9, TP10 removed.** Each duplicated an easy-to-probe pad. TP1 (`HP_DETECT`) is the only test point.
 
 ## Board
+- **ESD diodes added (D1–D6, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring, J5 tip.
 - **New layout:** 4-layer with ground in the middle, 90 × 56.5 mm, with the Daisy flat along the rear edge and every panel jack on the front edge.
 - **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.
 - **Re-annotated** in sheet order (left to right, then top to bottom by section) so the designators have no gaps.

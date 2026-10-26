@@ -101,6 +101,8 @@ inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 34, PG9). TP1 s
 - **Low = headphones in.**
 - **Footprint:** `Seed3_Carrier.pretty/Jack_3.5mm_SameSky_SJ3-35063AG_Horizontal.kicad_mod`, drawn from the datasheet's recommended
   PCB layout. The jack face sits at the board edge (X = −2.4 mm from pin 1), with the nose overhanging. J2 uses the same part and footprint.
+  Every pad, peg and the face position match the recommended layout in the Same Sky SJ3-3506X datasheet (rev 1.01, page 2), checked
+  2026-10-26. Pin 4 is left out because the AG variant doesn't fit it.
 
 ### Speaker / line send (`AUDIO_OUT_2` → J5, J6)
 `AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → R22 (0 Ω) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
@@ -123,6 +125,17 @@ J5 (¼", external) and J6 (internal, to the speaker amp).
   mute and unmute can ramp without clicks, and the speaker and headphones get independent levels.
 - **Speaker wiring** is on the power board, not here: the cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects.
   Most class D amps have a bridged output, so neither speaker wire may be grounded.
+
+### Jack ESD protection (D1–D6)
+Every jack contact that carries a signal has a bidirectional ESD diode to GND, placed at the jack: D1 `GTR_TIP` (J1 tip), D2/D3
+`AUX_TIP`/`AUX_RING` (J2), D4/D5 `HP_L`/`HP_R` (J4), D6 `LINE_OUT` (J5). All six are Nexperia PESD5V0S1BA (SOD-323, C19224).
+- **Why:** these contacts are touched and hot-plugged. Before D1–D6 the guitar input's only protection was R2 and U1's own diodes, and
+  the AUX input ran straight to the Daisy through R3/R4. U2's outputs are rated 8 kV HBM, but a jack sees IEC 61000-4-2 discharges,
+  which are harsher, so J4 gets diodes too.
+- **Why this part:** bidirectional, so it never conducts on the negative half of an audio signal. 5 V working voltage: every signal on
+  these contacts stays below it (the largest, a hot active guitar, is ≈ ±2.4 V where U1 clips it). 5 nA leakage, so it doesn't load
+  the 1 MΩ guitar input, and 35 pF, small next to a guitar cable's few hundred pF.
+- **Not protected:** the J2/J4 detect switches (pins 5/6) are isolated from the plug, so nothing reaches them.
 
 ### Output mute (STM32 watchdog)
 A hung Daisy can loop its last audio buffer at full level, so every output must go silent when audio stops.
@@ -257,7 +270,6 @@ USB stays on the Daisy's own connector.
   It goes to both outputs.
 
 ## Open items
-- **Check the J2/J4 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and J5 go silent and `SPK_MUTE` mutes within ~10 ms.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
@@ -370,6 +382,9 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
 - **Display:** FB1 sits beside J3 pin 4 and C8 just below J3. R8/R9 sit to their left, so the UART traces to J3 pins 2/3 pass
   between R17 and FB1 or drop to L4.
 - **Test point:** TP1 (`HP_DETECT`) is by J4. Other nets are probed on part pads (see TEST_PLAN.md).
+- **ESD diodes:** each sits within a few mm of its jack contact, with its GND pad dropped straight to L2/L3 by a via. D1 is beside
+  J1's tip, between J1 and C1. D2 is right of J2, D3 left of it. D4 is right of J4, D5 left of it. D6 is in the column left of J5.
+  Route each jack contact to its diode before the signal goes on to the circuit, so the discharge current doesn't cross the board.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
   trace fits between them. The exceptions are on purpose: C6 and R2 at U1's pins (0.58 and 0.80 mm) and C13 at U2 (0.90 mm). Making the
   board shallower would mean breaking this rule in the rear-right corner.
@@ -428,7 +443,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or more if C398358 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (11 here, about $33, or more if C398358 turns out to be extended).
 
 **SMD, assembled by JLC**
 
@@ -437,6 +452,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R11 R14 R16 R21 | Basic | 1.9M |
 | C4502 | 470 Ω 1% 1206 (UNI-ROYAL) | R20 | Extended | 131k (2026-10-26) |
 | C17888 | 0 Ω 1206 (UNI-ROYAL) | R22 | Basic | 1.9M (2026-10-26) |
+| C19224 | PESD5V0S1BA bidirectional ESD, SOD-323 (Nexperia) | D1 D2 D3 D4 D5 D6 | Extended | 46k (2026-10-26) |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 | Extended | 357k |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |

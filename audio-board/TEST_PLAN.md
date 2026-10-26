@@ -23,6 +23,7 @@ the log at the end (one copy per board serial).
 | Headphone filter | R10, C9 | Daisy `AUDIO_OUT_1` (expected to be AC-coupled on the module; 5.16 checks) → ~60 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
 | Headphone amp | U2 (TPA6132A2), C10/C11, C12–C15 | DirectPath stereo amp, −6 dB inverting (mono source on both channels), outputs at 0 V straight to J4 (`HP_L` tip, `HP_R` ring). EN tied to `+5V`: U2 is on whenever `+5V` is up |
 | Headphone detect | J4.5/J4.6, TP1 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 34, wired directly; STM32 internal pull-up, enabled by the firmware). **Low = headphones in.** Probe at **TP1** (`TP_HP_DET`) |
+| Jack ESD | D1–D6 (PESD5V0S1BA) | Bidirectional ESD diode from each jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring, J5 tip |
 | Speaker / line send | R11, C16, R22, R12 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass (R11/C16, no buffer) → R22 (0 Ω; the 10 µF DC-block option) → `LINE_OUT` on J5 (¼" external) and J6 (internal, to the speaker amp) |
 | `+5V` sense | R18, R19 (100k/100k) | `+5V` divided to ≈ 2.5 V → `5V_SENSE` (Daisy pin 22, ADC_0). The firmware keeps both outputs silent while it reads low (USB alone) |
 | Display | J3, R8, R9 | GND / `UART_TX_CONN` / `UART_RX_CONN` / `DISPLAY_5V`; series resistors to Daisy USART1 (R8 10k on TX, R9 1k on RX) |
@@ -56,7 +57,7 @@ the log at the end (one copy per board serial).
 
 | # | Check | Pass criteria |
 |---|---|---|
-| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1 SOT-23-5 pins, U2 QFN pins, Q1, Q2), no cold/dull joints, no solder balls |
+| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1 SOT-23-5 pins, U2 QFN pins, Q1, Q2, the SOD-323 ESD diodes D1–D6), no cold/dull joints, no solder balls |
 | 0.2 | IC orientation | U1 and U2 pin-1 marks match silkscreen; U1 = TLV9061, U2 = TPA6132A2 |
 | 0.3 | U2 (WQFN-16) | Even fillets on all 16 side pads; part flat, not tilted or floating on the exposed pad; exposed pad soldered (solder visible in the thermal vias from the bottom) |
 | 0.4 | Q1 and Q2 | Both SOT-23: confirm markings match AO3401A (Q1) and 2N7002 (Q2) — not swapped; seated on correct pads |
@@ -65,7 +66,7 @@ the log at the end (one copy per board serial).
 | 0.7 | J7, J6 (JST-XH) | Seated flat; key orientation matches the power-board cable |
 | 0.8 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
 | 0.9 | J3 header | Flush, straight, correct side of board |
-| 0.10 | Jacks J1, J5, J4, J2 | Fully seated, flush to board edge, plugs insert/eject cleanly. J2/J4 noses overhang the edge as drawn; note any footprint mismatch (J2/J4 footprint was hand-drawn) |
+| 0.10 | Jacks J1, J5, J4, J2 | Fully seated, flush to board edge, plugs insert/eject cleanly. J2/J4 noses overhang the edge as drawn; note any footprint mismatch (the J2/J4 footprint was checked against the datasheet only) |
 | 0.11 | Enclosure fit (if available) | Jacks, USB and J3/J6/J7 cables line up with panel holes and cable routes |
 
 ## Stage 1 — Unpowered resistance checks (no Daisy)
@@ -98,6 +99,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.21 | J3.2 → A1.14; J3.3 → A1.15 | ≈ 10 kΩ (R8), ≈ 1 kΩ (R9) | UART series resistors |
 | 1.21a | A1.22 (`5V_SENSE`) → GND | Below 100 kΩ (R19, with R18 through the `+5V` loads); not ≈ 0 Ω | R18/R19 missing or shorted |
 | 1.21b | A1.16 (`AUDIO_IN_1`) → GND | ≤ 1 kΩ (R21), not ≈ 0 Ω | > 1 kΩ = R21 open; ≈ 0 Ω = shorted |
+| 1.21c | ESD diodes: J1 tip, J2 tip, J2 ring, J4 tip, J4 ring, J5 tip → GND, in DMM diode mode both ways | No conduction below ≈ 5 V either way (bidirectional TVS; the meter reads open) | A reading = D1–D6 shorted, fitted wrong, or a solder bridge |
 | 1.22 | Daisy socket (A1) adjacent pins | Spot-check no shorts between neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge — **5 V into 3V3_D would damage the Daisy** |
 
 ## Stage 2 — First power-up, Daisy **removed**
