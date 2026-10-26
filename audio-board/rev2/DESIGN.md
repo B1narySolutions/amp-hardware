@@ -30,15 +30,20 @@ J1 tip → C1 (100 pF to GND, RF shunt) → C3 (1 µF) → R17 (1M to `VREF`) �
   ~80 kHz pole. Input trim is done in firmware.
 
 ### AUX input (J9 → `AUDIO_IN_2`)
-J9 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R40/R41 (10k each, passive stereo-to-mono sum, −6 dB) → summing node with R38 (47k to GND)
-and C31 (1 nF, ~32 kHz RF filter) → C32 (1 µF) → R39 (100k to `VREF`, ~1.6 Hz high-pass) → U1D follower → `AUDIO_IN_2` (Daisy pin 17).
+J9 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R40/R41 (10k each, passive stereo-to-mono sum) → summing node with R38 (4.7k to GND)
+and C31 (1 nF, ~67 kHz RF filter) → C32 (1 µF) → R39 (100k to `VREF`, ~1.6 Hz high-pass) → U1D follower → `AUDIO_IN_2` (Daisy pin 17).
 J9's detect switch (pins 5 and 6) is not connected.
 - It mirrors the guitar input: biased at `VREF`, unity-gain buffer, Daisy input driven from a low impedance.
-- **R38** holds the summing node near GND when nothing is plugged in, so an empty jack stays quiet. It also gives the source's own
-  coupling caps a DC return.
-- **C31** filters RF picked up on the cable, for example from the phone itself.
+- **R38** sets the attenuation (see "Level"). It also holds the summing node near GND when nothing is plugged in, so an empty jack
+  stays quiet, and gives the source's own coupling caps a DC return.
+- **C31** filters RF picked up on the cable, for example from the phone itself. It sees R40 ‖ R41 ‖ R38 ≈ 2.4k, so the corner is ≈ 67 kHz.
 - **No series resistor at U1D.** R40/R41 already put ≈ 5k in series, with C31 to GND ahead of C32, so C32/R39 go straight to U1 pin 12.
-- **−6 dB** from summing gives headroom for hot laptop outputs (up to 2 Vrms). The firmware can add gain for quiet phones.
+- **Level:** the node is loaded by R38 ‖ R39 ≈ 4.5k (R39 goes to `VREF`, which is AC ground). The same signal on both channels sees
+  R40 ‖ R41 = 5k into 4.5k, a gain of 0.47 (−6.5 dB). Most backing tracks are close to this case, since bass, kick and vocals sit in the
+  centre. One channel alone (the other driven at 0 V) sees 10k into 4.5k ‖ 10k, a gain of 0.24 (−12.5 dB).
+  A 2 Vrms laptop output (5.7 Vpp) then reaches the Daisy at ≈ 2.7 Vpp worst case, under its 3.6 Vpp full scale and its ±1.8 V absolute
+  maximum. The firmware can add gain for quiet phones.
+- **Source load:** each channel sees ≈ 13k (one channel driven) to ≈ 19k (both driven). Phone and laptop headphone outputs drive this easily.
 - **Use:** backing tracks bypass NAM. The firmware mixes `AUDIO_IN_2` in after the amp model, to both outputs.
 
 ### Headphone output (`AUDIO_OUT_1` → J5)
@@ -57,7 +62,7 @@ U2 (TPA6132A2RTE) drives J5 (`HP_L` tip, `HP_R` ring) directly.
   output is a fixed ~1.1 Vrms (22 mW into 32 Ω) regardless of supply, which also limits how loud the headphones can get.
   VDD is rated 2.3–5.5 V, so it runs from `+5V`.
 - **U2 wiring:** single-ended inputs per the datasheet (INL+/INR+ to GND; the mono source drives both channels). Gain is 0 dB
-  (G0 to `+5V`, G1 to GND), inverting. EN (active high) is `HP_EN` (see "Output mute"). C33 (2.2 µF, VDD), C34 (2.2 µF, HPVDD),
+  (G0 to `+5V`, G1 to GND), inverting. EN (active high) is `U2_EN`, driven from `HP_EN` by U4 (see "Output mute"). C33 (2.2 µF, VDD), C34 (2.2 µF, HPVDD),
   C35 (1 µF, charge-pump flying cap) and C36 (2.2 µF, HPVSS), all 0805 X5R or better. HPVDD and HPVSS are generated inside U2:
   they get caps only (and PWR_FLAGs for ERC), never an external supply.
 - **Symbol:** `seed3-carrier:TPA6132A2RTE` in `seed3-carrier.kicad_sym` is the stock KiCad symbol with the pins rearranged:
@@ -90,12 +95,19 @@ TN and RN are no-connects.
 
 ### Output mute (STM32 watchdog)
 A hung Daisy can loop its last audio buffer at full level, so both amps must mute when audio stops.
-- `HP_EN` (Daisy pin 33) drives U2's EN directly, with R26 (100k) pull-down.
+- `HP_EN` (Daisy pin 33) drives U2's EN through U4, a TXU0101 single-bit level translator: A from `HP_EN`, VCCA and OE from the
+  Daisy's `3V3_D` (pin 38), VCCB from `+5V`, BY to `U2_EN`. C37 (100 nF) decouples VCCA and C38 (100 nF) decouples VCCB.
+  R26 (100k) pulls `U2_EN` low.
+- **Why U4:** the Daisy and U2 are on different supplies (see "Running from USB alone"). U4's output can only swing to VCCB, which is
+  U2's own VDD, so EN can't exceed its VDD + 0.3 V rating. If either supply is off, U4's output goes high-impedance (TI's "VCC isolation"
+  and Ioff features) and R26 holds EN low. U4's A input has a 5 MΩ internal pull-down, so a floating Daisy pin reads low.
+  The datasheet specifies the Ioff and VCC isolation behaviour, so both power-up orders are covered.
 - `SPK_EN` (Daisy pin 28) drives Q4's gate, with R37 (100k) pull-down. Q4 (2N7002) pulls `SPK_MUTE` (J3.8) to GND, which means
   speaker on. The power board pulls `SPK_MUTE` up, which means muted.
 - **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs on its
   own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
-  Daisy is absent, booting or in DFU, its pins float: R26 holds `HP_EN` low (U2 off) and R37 holds `SPK_EN` low (speaker amp muted).
+  Daisy is booting or in DFU, its pins float: U4's internal pull-down holds its output low (U2 off) and R37 holds `SPK_EN` low (speaker amp
+  muted). With the Daisy absent, U4 has no VCCA, its output goes high-impedance, and R26 holds `U2_EN` low.
 - **Why Q4 instead of driving `SPK_MUTE` from the Daisy pin:** the power board can pull `SPK_MUTE` up to any voltage, and an unpowered
   Daisy isn't back-powered through it.
 - **Trade-off:** an external retriggerable one-shot watching an audio-callback toggle would watch the audio from outside the STM32.
@@ -116,6 +128,18 @@ A hung Daisy can loop its last audio buffer at full level, so both amps must mut
 - **Local decoupling:** C8 at U1 pin 4 and C33 at U2 VDD.
 - **Display supply:** FB1 (600 Ω @ 100 MHz bead, 1206) and C30 (47 µF, 1210) between `+5V` and J4 pin 4 (`DISPLAY_5V`). They keep
   the display's current pulses (ESP32 Wi-Fi, backlight PWM) off the rail that feeds the analog circuits.
+
+### Running from USB alone
+The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear to drive the
+VIN pin. With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
+Daisy output that is high then pushes current into an unpowered part on the carrier through that part's input protection diodes.
+- **`HP_EN`:** U2's EN is rated to VDD + 0.3 V, so with VDD at 0 V it must stay at 0 V. U4 sits between the Daisy and EN. With VCCB
+  (`+5V`) off, its output goes high-impedance, its A input draws at most a few µA (Ioff), and R26 holds EN at 0 V. No current flows
+  from `HP_EN` into U2.
+- **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. The UART current through R43 (below) can lift `+5V` very
+  slightly through the display. That only leaks a little current to the power board. It would matter if anything back-powered `+5V` hard.
+- **Display UART:** Daisy TX idles high into an unpowered display. R43 (10k) limits that current to ≈ 0.27 mA. See "Display connector (J4)".
+- **`PWR_HOLD`** goes to the power board through R33 (1k). The power board has to tolerate 3.3 V on that pin while it is off.
 
 ## Connectors
 
@@ -150,18 +174,23 @@ on the display, and a speaker mute that is independent of the headphone amp.
 - The power button is panel mounted and wired to the power board.
 
 ### Display connector (J4)
-J4 is a 1×4 2.54 mm header: 1 GND, 2 `UART_TX_CONN`, 3 `UART_RX_CONN`, 4 `DISPLAY_5V`. R43/R44 (1k) sit in series with the UART
-between J4 and Daisy USART1 (pins 14/15, `DISPLAY_UART_TX`/`DISPLAY_UART_RX`). They limit current if the cable is miswired (TX to TX)
-or hot-plugged, and add a little ESD margin. 1k with ~50 pF of cable is ~50 ns, fine up to ~2 Mbaud.
+J4 is a 1×4 2.54 mm header: 1 GND, 2 `UART_TX_CONN`, 3 `UART_RX_CONN`, 4 `DISPLAY_5V`. R43 (10k, Daisy TX) and R44 (1k, Daisy RX)
+sit in series with the UART between J4 and Daisy USART1 (pins 14/15, `DISPLAY_UART_TX`/`DISPLAY_UART_RX`). They limit current if the
+cable is miswired (TX to TX) or hot-plugged, and add a little ESD margin.
+- **R43 is 10k** because the display is powered from the carrier's `+5V`. With the Daisy on USB alone (see "Running from USB alone"),
+  its TX idles high into an unpowered display. 10k keeps the current into the display's RX protection diode to ≈ 0.27 mA.
+- **Baud rate limit:** R43 with ~50 pF of cable and pin capacitance is a ≈ 0.5 µs time constant. That is fine up to 230400 baud
+  (a 4.3 µs bit), but not for 921600. To go faster, lower R43 and accept more current into an unpowered display.
+- **R44 stays 1k.** The display only drives it while the carrier is powered, and then the Daisy is powered too.
 
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
-28 `SPK_EN`, 33 `HP_EN`, 34 `HP_DETECT`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
+28 `SPK_EN`, 33 `HP_EN`, 34 `HP_DETECT`, 38 `3V3_D` (U4's VCCA and OE only, a few µA), 39 VIN. Every other pin, including `3V3_A` (21) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
 ## Firmware requirements
-- Take volume and mute from the display over the UART. Ramp volume changes.
+- Run the display UART at 230400 baud or less (R43, see "Display connector (J4)"). Take volume and mute from the display over it. Ramp volume changes.
 - Start the IWDG early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
 - Send the speaker mix to output 2 and headphones to output 1.
 - Read `HP_DETECT` (pin 34, PG9) with its internal pull-up enabled: **low = headphones in**. Debounce it. Ramp the speaker down and
@@ -170,15 +199,19 @@ USB stays on the Daisy's own connector.
 - Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while
   running, fade out, mute, save settings, then drive `PWR_HOLD` low.
 - Initialise `SPK_EN` (pin 28) and `HP_EN` (pin 33) as low outputs. Drive `HP_EN` high after the first audio callback has started.
-  Drive `SPK_EN` high to enable the speaker amp, low when headphones are in. At power-on, wait about 0.5 s after audio starts before
-  raising it, so C26 and the speaker amp's input caps settle and don't pop the speaker.
+  Drive `SPK_EN` high to enable the speaker amp, low when headphones are in. At power-on, wait until at least 4 s after `+5V` comes
+  up before raising it. `LINE_OUT` drifts while the bias settles: `VREF` rises with τ ≈ 0.24 s (R7 ‖ R8, C7), U1C's input follows through
+  R29/C25 (τ = 1 s), and C26 into R4 (τ = 1 s) passes the change on. Into an open J8 the output peaks at ≈ 0.9 V about 1.3 s after
+  power-on, and is still ≈ 0.5 V at 0.5 s and ≈ 0.25 V at 4 s. A speaker amp's lower input impedance shrinks this (≈ 0.14 V peak into
+  10k). The firmware can't see `+5V` directly, so count from boot. The Daisy boots from the same rail, so boot is a slightly late
+  stand-in for `+5V`. J2 has no mute and shows the same drift, so turn an external amp on after the carrier.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.
   It goes to both outputs.
 
 ## Open items
 - **Check the J5/J9 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
-- **Test the watchdog mute:** stall the audio callback in a debug build. Check that `HP_EN` (at R26) and `SPK_MUTE` both mute within ~10 ms.
+- **Test the watchdog mute:** stall the audio callback in a debug build. Check that `U2_EN` (at R26) and `SPK_MUTE` both mute within ~10 ms.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio. Record it here so the firmware can convert the reading to volts.
@@ -186,7 +219,11 @@ USB stays on the Daisy's own connector.
 - **J3 orientation:** vertical (B8B-XH-A) is drawn. Switch to the right-angle S8B-XH-A if the cable has to leave along the board.
 - **2N7002 gate drive:** Q4 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** check on the bench that 0.75 Vrms is loud enough. If not, lower R2 (1k with C2 at 3.3 nF keeps the corner near 50 kHz).
-- **AUX input level:** measure a phone and a laptop at full volume through J9 and check that the Daisy input doesn't clip. If it does, raise R40/R41.
+- **AUX input level:** measure a phone and a laptop at full volume through J9 and check that the Daisy input doesn't clip. With
+  R38 at 4.7k, 2 Vrms shouldn't clip it. If it does, lower R38. If quiet phones need too much firmware gain, raise R38.
+- **Guitar input level:** U1A is unity gain and can swing ≈ ±2.4 V, beyond the Daisy's 3.6 Vpp full scale and ±1.8 V absolute maximum.
+  Passive pickups fit, but active pickups or a boost pedal may not. Firmware trim comes after the ADC, so it can't help. Decide the
+  maximum supported input, and whether a pad or clamp is needed.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.4 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
@@ -263,6 +300,9 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
 - **VREF:** R7, R8 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. C18 and C17 sit at Q1's output.
+- **`HP_EN`:** U4 sits above C33, with C37 to its left (at VCCA) and C38 above it (at VCCB). R26 stands to its right. `HP_EN` and
+  `3V3_D` come from the Daisy's rear row (pins 33 and 38) under the Daisy. Keep the `3V3_D` trace away from the `+5V` trace at pins 38/39.
+  `U2_EN` runs from U4 pin 4 down past C33 to U2 pin 13 (EN).
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34
   sits above pin 7. C28 and C29 sit just below them. Their nets reach Daisy pins 25–28, 33 and 34 under the Daisy.
 - **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass
@@ -310,7 +350,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 | Hole to hole, hole clearance | 0.25 mm | | |
 | Via annular ring | 0.15 mm | | |
 
-- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A` and `/3V3_D`, which are unused on the carrier).
+- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A`, which is unused on the carrier, and `/3V3_D`, which only feeds U4).
   GND stays in Default and mostly drops straight to L2/L3 through vias.
 - **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 4 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin
@@ -326,23 +366,23 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30).
+Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or 11 if C17936 turns out to be extended).
 
 **SMD, assembled by JLC**
 
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R43 R44 | Basic | 1.9M |
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R44 | Basic | 1.9M |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
 | C17901 | 100 Ω 1% 1206 (UNI-ROYAL) | R3 | Basic | 2.5M |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R39 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 R29 | Basic | 3.8M |
-| C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 | Basic | 2.5M |
-| C25833 | 47k 1% 1206 (UNI-ROYAL) | R38 | Extended | 141k |
+| C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 R43 | Basic | 2.5M |
+| C17936 | 4.7k 1% 1206 (UNI-ROYAL 1206W4F4701T5E) | R38 | Check | Check |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
 | C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C25 C32 | Basic | 551k |
-| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 | Basic | 1.6M |
+| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 C37 C38 | Basic | 1.6M |
 | C13585 | 10 µF 50 V X5R 1206 (Samsung) | C26 | Basic | 2.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
 | C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
@@ -353,6 +393,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 | C8545 | 2N7002 | Q4 | Basic | 2.9M |
 | C388176 | TLV9064IDR | U1 | Extended | 6.1k |
 | C69901 | TPA6132A2RTER | U2 | Extended | **65** |
+| C7136368 | TXU0101DBVR (TI) | U4 | Extended | 5.1k |
 
 **Through hole, hand-soldered (order from LCSC)**
 

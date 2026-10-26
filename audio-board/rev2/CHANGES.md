@@ -25,6 +25,10 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
   the speaker mute. Adds R32–R35, C28, C29, Q4 and R37. Q1 still provides reverse-polarity protection.
 - **Output mute on the STM32's independent watchdog.** R26 and R37 hold both amps off whenever the Daisy is absent, booting or reset,
   and the IWDG resets it if the audio callback stops.
+- **U4 (TXU0101 level translator) between `HP_EN` and U2's EN, with C37/C38.** The Daisy can run from USB while `+5V` is off. U4's
+  output goes high-impedance when either supply is off, so EN stays within its VDD + 0.3 V rating. R26 now pulls U2's EN (`U2_EN`) low.
+  Daisy pin 38 (`3V3_D`) now feeds U4's VCCA.
+- **R43 is 10k** (was 1k), to limit current into an unpowered display while the Daisy runs from USB.
 - **Display: FB1 and C30 added** to keep the display's current pulses off the analog rail, and **R43/R44 added** in series with the UART
   against miswiring and hot-plugging.
 - **C9 removed.** It sat on the same node as C18 and C17.
