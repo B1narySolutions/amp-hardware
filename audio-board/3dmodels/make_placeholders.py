@@ -43,6 +43,16 @@ save(
     cyl_x(16.95, 25.85, nrj_axis_y, 6.5, 11.0),
 )
 
+# Same Sky SJ3-35063AG, datasheet SJ3-3506X (09/12/2024): body 11 x 9 x 4.5 tall
+# behind a 3 mm Ø6 nose, axis 2.25 above PCB. Body outline matches the footprint's
+# F.Fab (X -2.4 to 8.6, Y -4.6 to 4.4). The nose overhangs the board edge, so it
+# dips 0.75 below the PCB surface.
+save(
+    "SameSky_SJ3-35063AG_placeholder",
+    box(-2.4, 8.6, -4.6, 4.4, 0, 4.5),
+    cyl_x(-5.4, -2.4, 0.0, 2.25, 6.0),
+)
+
 # Electrosmith Daisy Seed: 51 x 18 x 1.6 PCB, plugged into two 8.5 mm 1x20
 # female sockets (modelled separately on the A1 footprint) so it can be swapped.
 # Its own male headers add a 2.5 mm plastic spacer on top of the sockets.

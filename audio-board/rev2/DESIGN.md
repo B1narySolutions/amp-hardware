@@ -280,7 +280,7 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   placeholders from `make_placeholders.py`. Re-running "Update footprints from library" on A1, J1 or J2 resets the paths to KiCad's missing models.
 - **The Daisy placeholder is the original Seed's outline** (micro-USB, ~1 mm overhang, 3 mm tall). The Seed3's USB-C overhangs the
   PCB by 1.55 mm and stands 3.25 mm tall (Seed3 datasheet, page 8). Allow for that when checking the enclosure.
-- **J5/J9 (SJ3-35063AG)** have no 3D model.
+- **J5/J9** use `3dmodels/SameSky_SJ3-35063AG_placeholder.step`, set in the project footprint itself, so a footprint update keeps it.
 
 ### U2 exposed pad
 - U2's footprint is `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm`. Four 0.6/0.3 mm GND vias sit in the exposed pad at ±0.4 mm from its centre,

@@ -11641,6 +11641,17 @@
 			(uuid "5f2e23fd-27b4-43c0-9674-8c6966f6e282")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../3dmodels/SameSky_SJ3-35063AG_placeholder.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 		(layer "F.Cu")
@@ -12386,6 +12397,17 @@
 			(uuid "270da52a-7b72-4574-9e83-463a384ff318")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../3dmodels/SameSky_SJ3-35063AG_placeholder.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Module:Electrosmith_Daisy_Seed"
 		(layer "F.Cu")
