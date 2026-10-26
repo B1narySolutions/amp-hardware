@@ -21,7 +21,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 
 ### Output mute (STM32 internal watchdog)
 - **Now:** `HP_EN` (Daisy pin 33, was `AUDIO_ALIVE`, and before that D26) drives U2's active-high EN pin directly.
-  R26 (100k) pulls it low. TP10 is renamed `TP_HP_EN`. The speaker mute is Q4 alone (see the power board connector).
+  R26 (100k) pulls it low. The speaker mute is Q4 alone (see the power board connector).
 - **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs on its
   own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
   Daisy is absent, booting or in DFU, its pins float: R26 holds `HP_EN` low (U2 off) and R37 holds `SPK_EN` low (speaker amp muted).
@@ -42,7 +42,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   The path is `AUDIO_OUT_2` → R28/C24 (3.3k/1nF, ~48 kHz low-pass, same as the headphone path) → C25/R29 (AC coupling, biased to VREF)
   → U1C buffer → C26 (10µF) → `LINE_SEND` → R3 → J2. J2 and R3/R4 are unchanged and remain the feed to the speaker amp.
 - **Changed:** U1 is now a TLV9064 quad (SOIC-14) instead of the TLV9062 dual, using the same TL07x-style symbol.
-  Units A and B are unchanged. Unit C is the speaker buffer. Unit D is the AUX input buffer (see below).
+  Unit A is unchanged. Unit B is unused (see "Headphone buffer removed"). Unit C is the speaker buffer. Unit D is the AUX input buffer (see below).
   Power moves to pin 4 (+5V) and pin 11 (GND).
 - **Added:** `HP_DETECT` on Daisy pin 34 (was D27), with a 10k pull-up, 1k series resistor (R30, R31) and 100nF (C27).
   TP11 sits on the switch side (`HP_DETECT_SW`).
@@ -141,6 +141,25 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Why:** removes the two largest parts in the headphone section, flattens the bass, and adds built-in click-and-pop suppression.
   Its maximum output is a fixed ~1.1 Vrms (22 mW into 32 Ω) regardless of supply, which also limits how loud the headphones can get.
 
+### Test points and C9 removed (2026-10-25)
+- **Removed:** TP5 (`TP_VREF`), TP9 (`TP_5V`), TP10 (`TP_HP_EN`) and C9 (10 µF on `+5V`), from the schematic and the board.
+  The reference designators are left unused rather than renumbered.
+- **Why the test points went:** each one duplicated a pad that is easy to probe. TEST_PLAN.md now uses C18 `+` for `+5V`,
+  C7 for `VREF` and R26's `HP_EN` end for `HP_EN`.
+- **Why C9 went:** it sat on the same node as C18 (47 µF bulk) and C17 (100 nF). C18 stays, because its ESR damps the ringing
+  between the harness inductance and the ceramics. U1 and U2 keep their own decoupling (C8, C33).
+
+### Headphone buffer removed (2026-10-25)
+- **Removed:** C5 (1 µF) and R6 (1M). The reference designators are left unused rather than renumbered.
+- **Changed:** `HP_SOURCE` is now the R2/C2 node, so the Daisy drives C12/C13 and U2 through R2. U1B no longer drives `HP_SOURCE`.
+  It is parked as a follower: pin 5 to `VREF`, pins 6 and 7 tied (net `Net-(U1B--)`), so its output sits at 2.5 V and doesn't oscillate.
+- **Why it is safe:** the Seed3 outputs are AC-coupled, 1 Vrms at 0 dBFS (Daisy Seed3 datasheet, Table 3), and its TAC5242 codec can drive 16 Ω headphones.
+  Electrosmith's own reference circuits load the pin directly with 10k (line out), 15k (instrument out) and a pot plus 22k into a headphone amp (Figure 3.9).
+  Here the Daisy sees R2 plus U2's two 19.8 kΩ inputs in parallel, ≈ 13 kΩ.
+- **Effects:** R2 and U2's 9.9 kΩ load form a −2.5 dB divider, so full scale reaches U2 at ≈ 0.75 Vrms (≈ 17 mW into 32 Ω), below its ~1.1 Vrms clip point.
+  The R2/C2 corner moves from ≈ 48 kHz to ≈ 64 kHz (R2 ‖ 9.9 kΩ with 1 nF). The low-end corner is now C12/C13 into U2 plus the Daisy's own
+  output coupling cap, whose value isn't published.
+
 ## Firmware changes these require
 - Take volume and mute from the display over the UART instead of the volume/tone ADCs. Ramp volume changes.
 - Start the STM32 independent watchdog (IWDG) early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
@@ -158,7 +177,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 
 ## Open items
 - **Check the J5 footprint** against a physical part (or a 1:1 print) before ordering boards. It was drawn by hand from the datasheet.
-- **Test the watchdog mute:** stall the audio callback in a debug build. Check on TP10 (`TP_HP_EN`) and `SPK_MUTE` that both amps mute within ~10 ms.
+- **Test the watchdog mute:** stall the audio callback in a debug build. Check `HP_EN` (at R26) and `SPK_MUTE` that both amps mute within ~10 ms.
   The target is ~10 ms, comfortably longer than the 2 ms edge period.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
@@ -166,12 +185,13 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Display current:** check the display's datasheet. If it draws well over 1 A, feed it from the power board instead of J4.
 - **J3 orientation:** vertical (B8B-XH-A) is drawn. Switch to the right-angle S8B-XH-A if the cable has to leave along the board.
 - **2N7002 gate drive:** Q4 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
-- **Headphone level:** U2's gain is fixed at 0 dB by G0/G1. If `HP_SOURCE` at full scale clips U2's ~1.1 Vrms output, tie G0 to GND for −6 dB
-  (or limit it in firmware).
+- **Headphone level:** U2's gain is fixed at 0 dB by G0/G1. Full scale reaches U2 at ≈ 0.75 Vrms, below its ~1.1 Vrms clip point.
+  Check on the bench that this is loud enough. If not, lower R2 (1k with C2 at 3.3 nF keeps the corner near 50 kHz).
 - **AUX input level:** measure a phone and a laptop at full volume through J9 and check that the Daisy input doesn't clip.
   If it does, raise R40/R41.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
-- **TEST_PLAN check 3B.4:** the low-end corner is ≈ 12.6 Hz, not 9 Hz.
+- **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.4 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). With the Daisy in, its own output
+  coupling cap adds a second high-pass. Sweep it in Stage 5 and record the corner.
 - **Layout:** every part is placed (see "Board outline and placement" and "Passive placement" below). Next is routing.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
@@ -243,20 +263,20 @@ the front jacks. Power, the display and the power board controls sit in the rear
   node longer than 7 mm. Route it all on L1 with no vias, and keep other signals off L1 next to it.
 - **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
   the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
-- **Headphone and speaker filters:** R2/C2/C5/R6 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3
+- **Headphone and speaker filters:** R2/C2 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3
   to the right of pin 8. Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
 - **Decoupling:** C8 is right under U1 pin 4 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within
   3 mm of their pins. U2 is rotated so its inputs face C12/C13, the charge pump faces away from J5, and OUTR drops straight to J5's ring.
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
-- **VREF:** R7, R8 and C7 sit below U1, near the middle of the VREF loads (R5, R6, R17, R29, R39). C7 holds the node at low
+- **VREF:** R7, R8 and C7 sit below U1, near the middle of the VREF loads (R5, R17, R29, R39, U1 pin 5). C7 holds the node at low
   impedance, so the VREF trace can run on L4.
-- **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF), C9 (10 µF) and C17 (100 nF) sit at Q1's output.
+- **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF) and C17 (100 nF) sit at Q1's output.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34 sits above pin 7.
   The Daisy-side parts (C28, C29, R30, C27, R36) sit just below them. Their nets reach Daisy pins 25–28, 33, 34 and 38 under the Daisy.
 - **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass between R37 and FB1 or drop to L4.
-- **Test points:** TP5 (VREF) and TP9 (+5 V) are at the front centre. TP10 (`HP_EN`) is by U2, and TP11 (`HP_DETECT_SW`) is by J5.
+- **Test points:** TP11 (`HP_DETECT_SW`) is by J5. TP5, TP9 and TP10 were removed (see "Test points and C9 removed").
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and
-  a 0.2 mm trace fits between them. The exceptions are on purpose: C8, C5, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
+  a 0.2 mm trace fits between them. The exceptions are on purpose: C8, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
   The schematic's MPN fields for C12/C13 are hidden on the board.
 
@@ -287,14 +307,14 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (11 
 | C17901 | 100 Ω 1% 1206 (UNI-ROYAL) | R3 | Basic | 2.5M |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R39 | Basic | 1.0M |
 | C26119 | 10M 1% 1206 (UNI-ROYAL) | R5 | Extended | 179k |
-| C17927 | 1M 1% 1206 (UNI-ROYAL) | R6 R17 R29 | Basic | 3.8M |
+| C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 R29 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R30 R32 R36 R40 R41 | Basic | 2.5M |
 | C25833 | 47k 1% 1206 (UNI-ROYAL) | R38 | Extended | 141k |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
-| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C5 C25 C32 | Basic | 551k |
+| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C25 C32 | Basic | 551k |
 | C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C27 C28 C29 | Basic | 1.6M |
-| C13585 | 10 µF 50 V X5R 1206 (Samsung) | C9 C26 | Basic | 2.6M |
+| C13585 | 10 µF 50 V X5R 1206 (Samsung) | C26 | Basic | 2.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
 | C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
 | C19110 | 2.2 µF 25 V X7R 0805 (Samsung) | C33 C34 C36 | Extended | 297k |
@@ -322,7 +342,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (11 
 - **C0G for the filter caps.** C1, C2, C24 and C31 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
   which adds distortion. C2/C24/C31 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
 - **Voltage ratings above the schematic's:** C7 (47 µF, schematic says 10 V) shares C30's 16 V part, which also derates better under DC bias.
-  C18 is 16 V rather than 10 V. C9/C26 are 50 V. Same footprints, same or better behaviour.
+  C18 is 16 V rather than 10 V. C26 is 50 V. Same footprints, same or better behaviour.
 - **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them out
   (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
 
