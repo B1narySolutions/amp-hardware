@@ -25,7 +25,6 @@ the log at the end (one copy per board serial).
 | Headphone detect | J5.5/J5.6, R30, R31, C27 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 34, 10k pull-up to 3V3_D). **Low = headphones in.** Switch side at **TP11** (`TP_HP_DET`) |
 | Speaker / line send | R28, C24, C25, R29, U1C, C26, R3, R4 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass → AC-couple → buffer → C26 → `LINE_SEND` → R3 → `LINE_OUT` on J2 (¼" external) and J8 (internal, to the speaker amp) |
 | Display | J4, R43, R44 | GND / `UART_TX_CONN` / `UART_RX_CONN` / `DISPLAY_5V`; 1k series resistors to Daisy USART1 |
-| Breakout | J6, J7 | Female sockets mirroring the Daisy pins (see pinouts below) |
 | Daisy | A1 + two 1×20 sockets | Plug-in module. Mute while absent, booting or reset comes from R26 (`HP_EN` low) and R37 (`SPK_EN` low); the firmware feeds the STM32 IWDG only from the audio callback |
 
 **Pinouts used below**
@@ -36,8 +35,10 @@ the log at the end (one copy per board serial).
 - Q1 AO3401A, Q4 2N7002 (SOT-23): 1 G, 2 S, 3 D
 - J3: 1–2 `5V_IN`, 3–4 GND, 5 `BATT_SENSE_CONN`, 6 `PWR_BTN_CONN`, 7 `PWR_HOLD_CONN`, 8 `SPK_MUTE`
 - J5 / J9 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J9's 5/6 not connected)
-- J6: 1 GND, 2 `AUDIO_OUT_2`, 3 `AUDIO_OUT_1`, 4 `AUDIO_IN_2`, 5 `AUDIO_IN_1`, 6 USART1 RX, 7 USART1 TX, 10–13 D10–D7
-- J7: 1 `3V3_A`, 5 `BATT_SENSE`, 6 `PWR_BTN`, 7 `PWR_HOLD`, 8 `SPK_EN`, 13 `HP_EN`, 14 `HP_DETECT`, 18 `3V3_D`, 19 `+5V`, 20 GND
+- A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`,
+  19 `AUDIO_OUT_2`, 20 GND, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`, 28 `SPK_EN`, 33 `HP_EN`, 34 `HP_DETECT`, 38 `3V3_D`,
+  39 `+5V`, 40 GND. All other Daisy pins are not connected on the carrier. Probe the sockets while the Daisy is out. With it fitted
+  they are covered, so the checks name a carrier part on the same net instead
 
 ## Equipment
 
@@ -62,14 +63,14 @@ the log at the end (one copy per board serial).
 | 0.6 | Passive values vs BOM | Spot-check R17/R6/R29 (1M), R5 (10M), R7/R8/R30/R32/R36/R40/R41 (10k), R26/R34/R37/R39 (100k), R38 (47k); C7/C12/C13/C30 are the 1210 parts, C33–C36 the 0805 parts; FB1 is the 1206 bead, not a resistor |
 | 0.7 | J3, J8 (JST-XH) | Seated flat; key orientation matches the power-board cable |
 | 0.8 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
-| 0.9 | J6/J7 sockets, J4 header | Flush, straight, correct side of board |
+| 0.9 | J4 header | Flush, straight, correct side of board |
 | 0.10 | Jacks J1, J2, J5, J9 | Fully seated, flush to board edge, plugs insert/eject cleanly. J5/J9 noses overhang the edge as drawn; note any footprint mismatch (J5/J9 footprint was hand-drawn) |
 | 0.11 | Enclosure fit (if available) | Jacks, USB and J3/J4/J8 cables line up with panel holes and cable routes |
 
 ## Stage 1 — Unpowered resistance checks (no Daisy)
 
 Measure with the DMM; let capacitors charge before reading. Probe on IC pins,
-test pads or J6/J7 sockets, not on connector shells.
+test pads or the Daisy sockets (A1), not on connector shells.
 
 | # | Measure | Expect | Fail indicates |
 |---|---|---|---|
@@ -87,14 +88,14 @@ test pads or J6/J7 sockets, not on connector shells.
 | 1.12 | J9 tip → GND | ≈ 57 kΩ (R40 + R38) | R38 missing or C31 shorted |
 | 1.13 | TP11 (`HP_DETECT_SW`) → GND, no plug in J5 | Open | J5 detect switch closed or bridged |
 | 1.14 | TP11 → GND, plug in J5 | ≈ 0 Ω | J5 detect switch not closing (check pins 5/6 mapping) |
-| 1.15 | TP11 → J7.14 (`HP_DETECT`); J7.14 → J7.18 (`3V3_D`) | ≈ 1 kΩ (R31); ≈ 10 kΩ (R30) | R30/R31 wrong or open |
+| 1.15 | TP11 → A1.34 (`HP_DETECT`); A1.34 → A1.38 (`3V3_D`) | ≈ 1 kΩ (R31); ≈ 10 kΩ (R30) | R30/R31 wrong or open |
 | 1.16 | J2 tip → GND; J2 tip ↔ J8.1; J8.2 → GND | ≈ 100 kΩ (R4); ≈ 0 Ω; ≈ 0 Ω | R4 missing; J8 joints |
 | 1.17 | J2 tip → C26 (`LINE_SEND` side) | ≈ 100 Ω (R3) | R3 open |
-| 1.18 | J3.5 → J7.5; J3.6 → J7.6; J7.6 → J7.18 | ≈ 10 kΩ (R32); ≈ 1 kΩ (R35); ≈ 10 kΩ (R36) | Power-board signal resistors |
-| 1.19 | J3.7 → J7.7; J3.7 → GND | ≈ 1 kΩ (R33); ≈ 100 kΩ (R34) | `PWR_HOLD` network |
-| 1.20 | J7.8 (`SPK_EN`) → GND; J3.8 → GND | ≈ 100 kΩ (R37); open (Q4 off) | R37 missing; Q4 shorted or swapped with Q1 |
-| 1.21 | J4.2 → J6.7; J4.3 → J6.6 | ≈ 1 kΩ each (R43, R44) | UART series resistors |
-| 1.22 | J6/J7 adjacent pins | Spot-check no shorts between neighbouring pins, esp. J7.19 (+5V) ↔ J7.18 (3V3_D) and J7.20 (GND) | Socket bridge — **5 V into 3V3_D would damage the Daisy** |
+| 1.18 | J3.5 → A1.25; J3.6 → A1.26; A1.26 → A1.38 | ≈ 10 kΩ (R32); ≈ 1 kΩ (R35); ≈ 10 kΩ (R36) | Power-board signal resistors |
+| 1.19 | J3.7 → A1.27; J3.7 → GND | ≈ 1 kΩ (R33); ≈ 100 kΩ (R34) | `PWR_HOLD` network |
+| 1.20 | A1.28 (`SPK_EN`) → GND; J3.8 → GND | ≈ 100 kΩ (R37); open (Q4 off) | R37 missing; Q4 shorted or swapped with Q1 |
+| 1.21 | J4.2 → A1.14; J4.3 → A1.15 | ≈ 1 kΩ each (R43, R44) | UART series resistors |
+| 1.22 | Daisy socket (A1) adjacent pins | Spot-check no shorts between neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge — **5 V into 3V3_D would damage the Daisy** |
 
 ## Stage 2 — First power-up, Daisy **removed**
 
@@ -111,8 +112,8 @@ With the Daisy out, R26 holds `HP_EN` low, so U2 starts in shutdown.
 | 2.6 | TP10 (`HP_EN`) | 0 V (R26) |
 | 2.7 | J5 tip and ring (DC), U2 off | ≈ 0 V |
 | 2.8 | J2 tip / J8.1 (DC) | ≈ 0 V (blocked by C26) |
-| 2.9 | J4.4 (`DISPLAY_5V`) and J7.19 | +5 V; J4.1 and J7.20 are GND |
-| 2.10 | J7.1 (`3V3_A`), J7.18 (`3V3_D`) | ≈ 0 V (nothing on the carrier back-feeds the Daisy rails) |
+| 2.9 | J4.4 (`DISPLAY_5V`) and A1.39 | +5 V; J4.1 and A1.40 are GND |
+| 2.10 | A1.21 (`3V3_A`, not connected on the carrier), A1.38 (`3V3_D`) | ≈ 0 V (nothing on the carrier back-feeds the Daisy rails) |
 | 2.11 | J3.8 (`SPK_MUTE`) with 10k pull-up to 3.3 V | ≈ 3.3 V (Q4 off = speaker muted while the Daisy is absent) |
 | 2.12 | Enable U2: 10k from TP10 to TP9 | Current rises by a few mA (U2 quiescent + charge pump); TP10 ≈ 4.5 V |
 | 2.13 | U2 charge pump, enabled | HPVDD (C34) positive and HPVSS (C36) roughly equal and negative; record both. ≈ 0 V on either = charge-pump fault (C35, pins 8/9/11) |
@@ -122,13 +123,13 @@ With the Daisy out, R26 holds `HP_EN` low, so U2 starts in shutdown.
 
 ## Stage 3 — Analog paths, Daisy **removed**
 
-The J6 breakout reaches the Daisy-side nets with the module out, so the analog
+With the module out, its sockets (A1) reach the Daisy-side nets, so the analog
 stages can be tested on their own. Supply 5.0 V, limit 50 mA. Keep the 10k from
 TP10 to TP9 for 3B (U2 enabled).
 
 **3A. Guitar input buffer (J1 → AUDIO_IN_1)**
 
-1. Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `J6.5` (AUDIO_IN_1) or U1.1.
+1. Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `A1.16` (AUDIO_IN_1) or U1.1.
 2. | # | Check | Expect |
    |---|---|---|
    | 3A.1 | Output level | 1 kHz sine riding on ≈ 2.5 V DC, amplitude ≈ input (unity gain, no level pot) |
@@ -139,7 +140,7 @@ TP10 to TP9 for 3B (U2 enabled).
 
 **3B. Headphone buffer + headphone amp (AUDIO_OUT_1 → J5)**
 
-1. Inject 1 kHz, 1 Vpp sine into `J6.3` (AUDIO_OUT_1), ground at `J6.1`.
+1. Inject 1 kHz, 1 Vpp sine into `A1.18` (AUDIO_OUT_1), ground at `A1.20`.
    Load J5 tip and ring with 32 Ω each (or headphones at low level).
 2. | # | Check | Expect |
    |---|---|---|
@@ -152,7 +153,7 @@ TP10 to TP9 for 3B (U2 enabled).
 
 **3C. Speaker / line send (AUDIO_OUT_2 → J2 / J8)**
 
-1. Inject 1 kHz, 1 Vpp sine into `J6.2` (AUDIO_OUT_2), ground at `J6.1`.
+1. Inject 1 kHz, 1 Vpp sine into `A1.19` (AUDIO_OUT_2), ground at `A1.20`.
 2. | # | Check | Expect |
    |---|---|---|
    | 3C.1 | U1.8 (OUTC) | ≈ 1 Vpp on 2.5 V DC |
@@ -162,7 +163,7 @@ TP10 to TP9 for 3B (U2 enabled).
 
 **3D. AUX input (J9 → AUDIO_IN_2)**
 
-1. Inject 1 kHz, 1 Vpp sine into J9 with a TRS cable, same signal on tip and ring. Scope on `J6.4` (AUDIO_IN_2) or U1.14.
+1. Inject 1 kHz, 1 Vpp sine into J9 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or U1.14.
 2. | # | Check | Expect |
    |---|---|---|
    | 3D.1 | Tip and ring driven together | ≈ 0.9 Vpp on 2.5 V DC (R40‖R41 into R38) |
@@ -184,10 +185,10 @@ Remove the injected signal and the TP10 pull-up before going on.
 |---|---|---|
 | 4.1 | Supply current | Within the Daisy's normal draw (roughly 100–200 mA depending on firmware); record value |
 | 4.2 | `+5V` (TP9) | ≥ 4.85 V under load |
-| 4.3 | `3V3_A` (J7.1) and `3V3_D` (J7.18) | 3.3 V ± 5 % (from the Daisy regulators) |
+| 4.3 | `3V3_D` (R30 pin 1) | 3.3 V ± 5 % (from the Daisy regulator) |
 | 4.4 | `VREF`, U1 biases | Same as Stage 2 |
-| 4.5 | `HP_DETECT` (J7.14) | ≈ 3.3 V with no plug in J5; ≈ 0 V with a plug in |
-| 4.6 | Hold the Daisy in reset (RESET button held) | TP10 (`HP_EN`) 0 V, J7.8 (`SPK_EN`) 0 V, J3.8 ≈ 3.3 V (muted), J3.7 (`PWR_HOLD_CONN`) 0 V |
+| 4.5 | `HP_DETECT` (C27 pin 1) | ≈ 3.3 V with no plug in J5; ≈ 0 V with a plug in |
+| 4.6 | Hold the Daisy in reset (RESET button held) | TP10 (`HP_EN`) 0 V, Q4 pin 1 (`SPK_EN`) 0 V, J3.8 ≈ 3.3 V (muted), J3.7 (`PWR_HOLD_CONN`) 0 V |
 | 4.7 | Daisy LED / existing firmware | Boots normally |
 | 4.8 | Thermal after 5 min | Nothing hot; Q1 and U2 at most warm |
 | 4.9 | Back-power: J3 supply **off**, 3.3 V on J3.5 (`BATT_SENSE_CONN`) | ≤ 0.3 mA drawn (R32); record `3V3_D`. More means the Daisy is being back-powered |
@@ -218,13 +219,12 @@ Keep the 10k pull-up from J3.8 to 3.3 V unless the power board is connected.
 | 5.6 | AUX: phone/laptop into J9 at full volume | Heard on J5 and J2; record the logged peak and whether input 2 clips |
 | 5.7 | `HP_DETECT` | Prints high with J5 empty, low with a plug in; TP11 ≈ 0 V with a plug in. No chatter after debounce |
 | 5.8 | `HP_EN` toggled low/high | TP10 follows; J5 silent while low |
-| 5.9 | `SPK_EN` toggled high/low | J7.8 follows; J3.8 < 0.1 V while high (Q4 on, speaker playing), ≈ 3.3 V while low. Record the low level (Q4 gate drive from 3.3 V) |
+| 5.9 | `SPK_EN` toggled high/low | Q4 pin 1 follows; J3.8 < 0.1 V while high (Q4 on, speaker playing), ≈ 3.3 V while low. Record the low level (Q4 gate drive from 3.3 V) |
 | 5.10 | `PWR_BTN`: short J3.6 to GND, release | Prints low while shorted, high released (R36) |
 | 5.11 | `PWR_HOLD` | J3.7 ≈ 3.3 V after boot |
 | 5.12 | `BATT_SENSE`: known voltage (e.g. 1.65 V) on J3.5 | ADC reading matches within a few % |
 | 5.13 | UART on J4 with a 3.3 V USB-serial adapter (adapter TX → J4.3, RX → J4.2, GND → J4.1) | Heartbeat received; echo works. **Before connecting the real display**, confirm its TX idles at ≤ 3.3 V |
 | 5.14 | Display on J4 | Powers from J4.4 (`DISPLAY_5V`), shows data from the Daisy. Scope TP9 with Wi-Fi/backlight active: ripple much lower than at J4.4 (FB1/C30) |
-| 5.15 | Breakout spot-check | Toggle Daisy GPIOs D7–D10 in firmware and confirm they appear on J6.13–J6.10 |
 
 ## Stage 6 — Soak and robustness
 
@@ -246,7 +246,7 @@ On the bench, pull J3.8 (`SPK_MUTE`) up to 3.3 V with 10k so it can be probed wi
 | # | Check | Expect |
 |---|---|---|
 | 7.1 | Power-on pop: record J5 and J2, then power the board | No click on either output. Headphones come on only after audio starts (`HP_EN`, TP10, goes high after boot) |
-| 7.2 | Speaker enable delay: scope `+5V` (TP_5V) and `SPK_EN` (J7.8) at power-on | `SPK_EN` goes high ≥ 0.5 s after `+5V`, so C26 and the speaker amp's caps settle first |
+| 7.2 | Speaker enable delay: scope `+5V` (TP_5V) and `SPK_EN` (Q4 pin 1) at power-on | `SPK_EN` goes high ≥ 0.5 s after `+5V`, so C26 and the speaker amp's caps settle first |
 | 7.3 | Power-off pop: record J5 and J2, press the power button for a clean shutdown | Audio fades out, then silence. No click when `PWR_HOLD` drops |
 | 7.4 | Hard power cut: record J5 and J2, unplug J3 while playing | Note the result. A small click is acceptable here, a loud bang is not |
 | 7.5 | Headphone plug-in and removal while playing a 1 kHz tone | J2 ramps down when a plug goes into J5 and back up when it's removed. No click on either output. `SPK_EN` follows |
@@ -270,7 +270,7 @@ On the bench, pull J3.8 (`SPK_MUTE`) up to 3.3 V with 10k so it can be probed wi
 | AUX input dead or quiet | J9 pins, R40/R41, C32, R42, U1D (pins 12–14) |
 | `HP_DETECT` stuck or inverted | J5 pins 5/6 mapping, R30/R31, TP11, C27 |
 | Speaker amp never unmutes / never mutes | Q4 orientation or swapped with Q1; R37; `SPK_MUTE` polarity on the power board |
-| Daisy won't boot | Socket orientation / offset; 3V3 pins shorted at J7.18/J7.19 |
+| Daisy won't boot | Socket orientation / offset; `3V3_D` and `+5V` shorted at A1.38/A1.39 |
 | Daisy partly alive with J3 off | Back-powering through J3.5–J3.7: check R32/R35/R33 values and the power board's divider |
 
 ## Results log

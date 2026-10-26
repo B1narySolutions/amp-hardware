@@ -14,7 +14,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 ### Master volume encoder (added, then removed)
 - **Removed (2026-10-25):** SW1 (EC11E rotary encoder with push switch), R18–R23 and C19–C21. The reference designators are
   left unused rather than renumbered.
-- **Daisy pins:** pins 22, 23 and 24 (ADC_0–ADC_2) are now unused and only go to the J7 breakout, labelled `A0`, `A1`, `A2`
+- **Daisy pins:** pins 22, 23 and 24 (ADC_0–ADC_2) are now unused and marked no-connect (they went to the J7 breakout, labelled `A0`, `A1`, `A2`, until J6/J7 were removed)
   (were `ENC_A`, `ENC_B`, `ENC_SW`, and before that VOLUME_POT, TONE_POT, A2).
 - **Why:** the master volume encoder, if there is one, goes on the touchscreen / ESP32 side, which sends volume changes over the display UART.
   No volume control remains on this board.
@@ -44,7 +44,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Changed:** U1 is now a TLV9064 quad (SOIC-14) instead of the TLV9062 dual, using the same TL07x-style symbol.
   Units A and B are unchanged. Unit C is the speaker buffer. Unit D is the AUX input buffer (see below).
   Power moves to pin 4 (+5V) and pin 11 (GND).
-- **Added:** `HP_DETECT` on Daisy pin 34 (was D27, also renamed on J7), with a 10k pull-up, 1k series resistor (R30, R31) and 100nF (C27).
+- **Added:** `HP_DETECT` on Daisy pin 34 (was D27), with a 10k pull-up, 1k series resistor (R30, R31) and 100nF (C27).
   TP11 sits on the switch side (`HP_DETECT_SW`).
 - **Changed:** J5 is now a Same Sky **SJ3-35063AG** (3.5 mm stereo, through hole; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)).
   Pins 1/2/3 are sleeve/ring/tip on GND/HP_R/HP_L. Pins 5 and 6 are an isolated normally-open switch that closes when a plug
@@ -213,33 +213,32 @@ refer to Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PC
   - Put J3 (power in) and J4 (display) close together, so the display's return current doesn't pass under U1, J1 or J9.
   - Route U2's SGND (pin 15) straight to J5's sleeve, and put vias under U2's exposed pad down to L2.
 - **Why 1.6 mm:** the 1/4" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
-- **No controlled impedance.** `USB_D+`/`USB_D−` only reach the J6/J7 breakout, and the Daisy module handles USB itself.
+- **No controlled impedance.** `USB_D+`/`USB_D−` no longer leave the Daisy (the J6/J7 breakout is gone), and the module handles USB itself.
   The rules (0.6/0.3 mm vias, 0.2 mm track and clearance) are within JLC's 4-layer limits. See "Design rules" below.
 
 ### Board outline and placement (2026-10-25)
-90 × 62 mm, 2 mm corner radius, three M3 holes (non-plated): rear right, and one on each side just behind the ¼" jacks.
-The jack nuts hold the front of the board to the panel. The front panel is the bottom edge (y = 62 mm).
+90 × 56.5 mm, 2 mm corner radius, three M3 holes (non-plated): rear right, and one on each side just behind the ¼" jacks.
+The jack nuts hold the front of the board to the panel. The front panel is the bottom edge (y = 56.5 mm).
 Coordinates below are from the board's top-left corner.
 The first version was 90 × 80 mm with the Daisy upright. Laying the Daisy flat along the rear edge removed 18 mm of depth
-and the empty area beside it. The jacks set the width.
+and the empty area beside it, giving 90 × 62 mm. Removing J6/J7 then freed another 5.5 mm (see below). The jacks set the width.
 
 | Part | Position | Why |
 |---|---|---|
 | J1 (guitar in), J9 (AUX), J5 (headphones), J2 (line out) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
 | A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_EN`, `HP_DETECT`) face the rear |
-| J6, J7 (breakouts) | J6 in front of the Daisy, J7 along the rear edge, 5.08 mm from each row | Each pin lines up with the Daisy pin on the same net (J6 pin n = A1 pin 21 − n, J7 pin n = A1 pin 20 + n) |
-| U1 (TLV9064) | Between the input jacks and J6 pins 2–5 | Short input and output paths for all four buffers |
+| U1 (TLV9064) | Between the input jacks and Daisy pins 16–19 | Short input and output paths for all four buffers |
 | U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
-| J3 (power board), J4 (display) | J3 at the rear right beside the Daisy, J4 on the right edge below it | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
+| J3 (power board), J4 (display) | J3 at the rear right beside the Daisy, J4 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
 | J8 (internal line out) | Right side, just above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
 
 L2 and L3 each have one GND zone covering the board, inset 0.5 mm from the edge.
 
 ### Passive placement (2026-10-25)
-All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between J6 and
+All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and
 the front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
 
-- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face J6, with a row of parts and labels between it and J6.
+- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face the Daisy, with a row of parts and labels between them.
 - **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → R5 → U1 pin 3 is one row about 15 mm long, with no
   node longer than 7 mm. Route it all on L1 with no vias, and keep other signals off L1 next to it.
 - **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
@@ -254,12 +253,25 @@ the front jacks. Power, the display and the power board controls sit in the rear
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF), C9 (10 µF) and C17 (100 nF) sit at Q1's output.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34 sits above pin 7.
   The Daisy-side parts (C28, C29, R30, C27, R36) sit just below them. Their nets reach Daisy pins 25–28, 33, 34 and 38 under the Daisy.
-- **Display:** R43, R44, FB1 and C30 sit next to J4.
+- **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass between R37 and FB1 or drop to L4.
 - **Test points:** TP5 (VREF) and TP9 (+5 V) are at the front centre. TP10 (`HP_EN`) is by U2, and TP11 (`HP_DETECT_SW`) is by J5.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and
   a 0.2 mm trace fits between them. The exceptions are on purpose: C8, C5, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
   The schematic's MPN fields for C12/C13 are hidden on the board.
+
+### J6/J7 breakout headers removed (2026-10-25)
+- **Removed:** J6 and J7 (1×20 female sockets that mirrored every Daisy pin), their 40 net labels and the "Seed3 breakout headers"
+  heading in the schematic, and both footprints on the board.
+- **Daisy pins:** the 24 pins that only went to the breakouts are now marked no-connect: D0–D12 (pins 1–13), A0–A2 (22–24), A7–A11
+  (29–32, 35), `USB_D−`/`USB_D+` (36, 37) and `3V3_A` (21). Every other Daisy pin is wired as before. `3V3_D` still feeds R30 and R36.
+- **Probing:** with the Daisy out, its own sockets (A1) give the same access. TEST_PLAN.md now uses `A1.n`, or a carrier part on the same
+  net where the Daisy is fitted. The breakout spot-check (old 5.15) is gone. USB stays on the Daisy's own connector.
+- **Board shrunk to 90 × 56.5 mm (was 90 × 62):** the Daisy moved 5.4 mm into J7's strip along the rear edge, and the front section (jacks,
+  analog parts, J8 and the side holes) moved 5.5 mm toward it. That leaves a ~4.5 mm routing channel under the Daisy's front row, where its
+  audio pins are. The power entry and power-board controls stay put. To make room, the display group was repacked: J4 is on the right edge
+  under the rear-right hole, with FB1, C30, R43 and R44 beside it. The spacing rule (≥ 1 mm copper between different-net pads) still holds,
+  apart from the same deliberate exceptions at U1/U2. Going shallower would mean breaking that rule in the rear-right corner.
 
 ### Parts sourcing: LCSC numbers (2026-10-25)
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
@@ -302,7 +314,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (11 
 | C157972 | JST B8B-XH-A | J3 | 4.8k |
 | C158012 | JST B2B-XH-A | J8 | 425k |
 | C53055674 | 1×4 2.54 mm pin header | J4 | 47k |
-| C2905423 | 1×20 2.54 mm female header, 8.5 mm | J6 J7, plus 2 per board for the Daisy | 15.9k |
+| C2905423 | 1×20 2.54 mm female header, 8.5 mm | 2 per board, for the Daisy (A1) | 15.9k |
 | — | Neutrik NRJ4HF | J1 J2 | Not at LCSC: order from Mouser, DigiKey or a Neutrik distributor |
 
 - **U2 is the stock risk.** JLC has 65 TPA6132A2RTER (the RTET reel has none). That covers this build, but order soon, or buy
@@ -349,7 +361,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 - **Presets:** tracks 0.2, 0.25, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
 - **Thermal reliefs (2026-10-25):** through-hole pads join the L2/L3 GND planes with four 0.5 mm spokes and a 0.5 mm gap.
   SMD pads and vias, including U2's exposed-pad vias, stay solid. The through-hole parts are hand-soldered with an iron, and a pin tied solidly
-  into two planes (jack sleeves, J3/J4/J8 GND, the Daisy and J6/J7 GND pins, C18) would not heat up enough. Both GND zones use
+  into two planes (jack sleeves, J3/J4/J8 GND, the Daisy's GND pins, C18) would not heat up enough. Both GND zones use
   "Thermal reliefs for PTH", and the "Thermal reliefs on through-hole pads" rule in `seed3-carrier.kicad_dru` enforces it for
   any zone added later. DRC's minimum of 2 spokes per pad passes.
 - **Was:** the minimum track width was 0.3 mm while the Default class used 0.2 mm, so every default track failed DRC. The minimum is now 0.2 mm.
