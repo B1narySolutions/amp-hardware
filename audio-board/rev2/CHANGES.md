@@ -8,6 +8,8 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **Pots removed (rev 1 RV1 input level, RV2 volume, RV3 tone, C10, C11).** Level, volume and tone move to the touchscreen. With the
   input-level pot at mid travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole.
   R1 (1M to `VREF`) now sets the 1 MΩ guitar load, and U1A runs at unity gain.
+- **Input pad added (R20/R21) after U1.** U1's 5 V swing (4.8 Vpp clean at J1) now reaches the Daisy at ≤ 3.4 Vpp, so neither
+  passive nor active pickups can overdrive the Daisy pin. Passive pickups lose 3.9 dB of converter signal-to-noise.
 - **Rev 1 R5 removed.** R1 biases U1A+ through R2, so rev 1 R5 only sat in parallel and lowered the guitar load to ≈ 0.91 MΩ.
 - **AUX input added (J2 → passive sum → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.
   No buffer: the Seed3's AC-coupled input loads the R3/R4 sum directly. R5 (3.3k to GND) sets the level whatever the module's

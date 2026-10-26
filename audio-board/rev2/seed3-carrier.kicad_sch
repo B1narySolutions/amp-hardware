@@ -7417,16 +7417,6 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 36.83) (xy 110.49 36.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d9c741cf-de42-4f9e-813e-a414cf6932ed")
-	)
-	(wire
-		(pts
 			(xy 368.3 78.74) (xy 368.3 81.28)
 		)
 		(stroke
@@ -8016,7 +8006,7 @@
 		(uuid "b8ef9d61-373d-4655-988f-7cf0bf78cfcc")
 	)
 	(label "AUDIO_IN_1"
-		(at 110.49 36.83 0)
+		(at 121.92 36.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8485,7 +8475,7 @@
 		)
 		(uuid "f03e6b7f-4759-43d9-9e7a-4928f80b6b00")
 	)
-	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
+	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nR20/R21 pad: U1's swing (≤ 4.8 Vpp clean) reaches the Daisy at ≤ 3.4 Vpp, so no pickup can overdrive it.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
 		(exclude_from_sim no)
 		(at 20.32 55.88 0)
 		(effects
@@ -8631,6 +8621,42 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ec7566ee-38ea-4111-8c6e-0b93fe5a02a0")
+	)
+	(wire
+		(pts
+			(xy 102.87 36.83) (xy 106.68 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1c17d756-2466-41e5-8697-f05ab91ddae7")
+	)
+	(wire
+		(pts
+			(xy 111.76 36.83) (xy 116.84 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9946be6c-724a-43c6-acd6-208db257a47b")
+	)
+	(wire
+		(pts
+			(xy 116.84 36.83) (xy 121.92 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5db095b0-4842-4e38-bb65-77edc0f27a84")
+	)
+	(junction
+		(at 116.84 36.83)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "140897e8-e920-454b-afbb-b87839375657")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -17235,6 +17261,266 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR072")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 109.22 36.83 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "46a90ad0-26ed-441d-a031-242723145eb9")
+		(property "Reference" "R20"
+			(at 109.22 30.48 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 109.22 33.02 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4502"
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f0847835-53eb-469b-912b-f1321ff58925")
+		)
+		(pin "1"
+			(uuid "d0e78908-9e84-4d8b-b557-f36ca3cdaace")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 116.84 39.37 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3e66d770-0d8b-4f2f-88f5-9ceccc16afc4")
+		(property "Reference" "R21"
+			(at 119.38 38.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 119.38 40.64 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 116.84 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 116.84 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4410"
+			(at 116.84 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a8c206d2-788a-4d7c-84f3-9e847215a735")
+		)
+		(pin "2"
+			(uuid "8e7489df-df9d-4aac-a72b-97ab26dd64c9")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 116.84 41.91 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "273883cb-e08e-4fe1-9b19-6983c81e427d")
+		(property "Reference" "#PWR073"
+			(at 116.84 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 116.84 46.99 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 116.84 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "286c37ce-6247-4957-a059-17d4eea97a34")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "#PWR073")
 					(unit 1)
 				)
 			)

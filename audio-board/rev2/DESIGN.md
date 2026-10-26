@@ -18,11 +18,20 @@ R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source i
 noise on `+5V` (from the display) out of `VREF`. Its only load is R1.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
-J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → U1A follower → `AUDIO_IN_1` (Daisy pin 16).
+J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → U1A follower → R20/R21 pad → `AUDIO_IN_1`
+(Daisy pin 16).
 - J1's tip switch shorts the tip to GND when nothing is plugged in.
 - **R1** sets both the 1 MΩ guitar load and the DC bias. **R2** is the only series resistance in this path. It protects U1A's input from plug-in transients.
 - **Unity gain, no level pot.** A pot at mid travel put about 250 kΩ of source impedance in front of U1A, which added noise and an
   ~80 kHz pole. Input trim is done in firmware.
+- **Pad (R20/R21) and headroom, for passive and active pickups.** U1 runs on 5 V, so its output swings at most ≈ 0.1–4.9 V:
+  4.8 Vpp clean at J1. R20 (470 Ω) into R21 (1k to GND) scales that to fit the Daisy pin. With no module load the ratio is 0.68,
+  so even U1 hard against both rails gives ≤ 3.4 Vpp at the pin, under the Daisy's 3.6 Vpp full scale and ±1.8 V absolute maximum.
+  With the module's ≈ 5 kΩ input the ratio is 0.64 (−3.9 dB), so 4.8 Vpp at J1 reaches the Daisy at ≈ 3.1 Vpp (≈ −1.4 dBFS).
+  - **Covers:** passive pickups (≈ 14 dB above a 1 Vpp hard strum) and typical 9 V active pickups. Hotter sources (boost pedals,
+    18 V systems) clip in U1 at ≈ 4.8 Vpp, which is harmless: R2 limits the current into U1's input protection to ≈ 1.5 mA even at 9 Vpp.
+  - **Cost:** 3.9 dB of converter signal-to-noise with passive pickups.
+  - **DC:** the pad output sits at ≈ 1.7 V into the AC-coupled Daisy input, and U1 sources ≈ 1.7 mA through it.
 
 ### AUX input (J2 → `AUDIO_IN_2`)
 J2 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R3/R4 (10k each, passive stereo-to-mono sum) → summing node with R5 (3.3k to GND)
@@ -260,9 +269,8 @@ USB stays on the Daisy's own connector.
   a phone and a laptop at full volume through J2: 2 Vrms should reach 1.5–1.7 Vpp, and it can't exceed 2.25 Vpp whatever the module's
   input is. If quiet phones need too much firmware gain, R5 can go up to 4.7k (≈ −9.7 dB with a 5 kΩ module input, 2.7 Vpp
   worst case). Above that the no-load worst case passes full scale.
-- **Guitar input level:** U1A is unity gain and can swing ≈ ±2.4 V, beyond the Daisy's 3.6 Vpp full scale and ±1.8 V absolute maximum.
-  Passive pickups fit, but active pickups or a boost pedal may not. Firmware trim comes after the ADC, so it can't help. Decide the
-  maximum supported input, and whether a pad or clamp is needed.
+- **Active pickups:** the guitar input is clean up to ≈ 4.8 Vpp (see "Guitar input"). Play a real active-pickup guitar hard into J1
+  (TEST_PLAN 5.19) and confirm its peaks stay below that.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C10/C11 alone (≈ 1.3 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
@@ -338,6 +346,8 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   and pin 2 (GND) takes a via to L2/L3. The follower feedback, pin 4 to pin 1, wraps around the right side of the body.
 - **Guitar input (most sensitive):** J1 tip → C1 → C2 → R1 → R2 → U1 pin 3 is one row about 15 mm long, with no node longer than 7 mm.
   Route it all on L1 with no vias, and keep other signals off L1 next to it.
+- **Pad:** R20 stands directly above U1 pin 1 (out) and R21 beside it. Their top pads form `AUDIO_IN_1`, which runs up to Daisy pin 16.
+  R21's bottom pad takes a GND via.
 - **AUX input:** R3/R4, R5 and C3 form a block above J1. `AUDIO_IN_2` runs from that block straight to Daisy pin 17, clear of U1.
   J2's tip and ring reach the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and
   L2/L3 shield them from the guitar row on L1.
@@ -415,13 +425,14 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (8 here, about $24, or more if C398358 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (9 here, about $27, or more if C398358 turns out to be extended).
 
 **SMD, assembled by JLC**
 
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R14 R16 | Basic | 1.9M |
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R14 R16 R21 | Basic | 1.9M |
+| C4502 | 470 Ω 1% 1206 (UNI-ROYAL) | R20 | Extended | 131k (2026-10-26) |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 R11 | Extended | 357k |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
