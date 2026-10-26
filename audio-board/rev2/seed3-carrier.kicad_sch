@@ -6289,7 +6289,7 @@
 		)
 		(uuid "68a60ad7-064d-4b8c-b236-c18118f228be")
 	)
-	(text "CONTROLS & DISPLAY"
+	(text "DISPLAY"
 		(exclude_from_sim no)
 		(at 106.68 71.12 0)
 		(effects
@@ -16405,7 +16405,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Electrosmith_Daisy_Seed_Rev4"
+		(property "Value" "Daisy Seed3"
 			(at 223.1233 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)

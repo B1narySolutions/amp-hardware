@@ -1283,7 +1283,7 @@
 			(uuid "94986667-73e3-4a1b-b9f3-a74d53e60f3c")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_6.35mm_Neutrik_NRJ4HF_Horizontal.step"
+		(model "${KIPRJMOD}/../3dmodels/Neutrik_NRJ4HF_placeholder.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1613,7 +1613,7 @@
 			(uuid "01589e2c-5c5c-40ba-8a75-65f15beaab0e")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_6.35mm_Neutrik_NRJ4HF_Horizontal.step"
+		(model "${KIPRJMOD}/../3dmodels/Neutrik_NRJ4HF_placeholder.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -12404,7 +12404,7 @@
 				)
 			)
 		)
-		(property "Value" "Electrosmith_Daisy_Seed_Rev4"
+		(property "Value" "Daisy Seed3"
 			(at 7.62 51 90)
 			(layer "F.Fab")
 			(uuid "8f54d670-9d10-487d-b3b5-5ba6e99d4750")
@@ -13058,9 +13058,31 @@
 			(uuid "70397d33-0aaf-4561-a4f8-4fc9e2266fe0")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Module.3dshapes/Electrosmith_Daisy_Seed.step"
+		(model "${KIPRJMOD}/../3dmodels/Electrosmith_Daisy_Seed_placeholder.step"
 			(offset
 				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x20_P2.54mm_Vertical.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x20_P2.54mm_Vertical.step"
+			(offset
+				(xyz 15.24 0 0)
 			)
 			(scale
 				(xyz 1 1 1)

@@ -274,6 +274,14 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label. The schematic's MPN
   fields for C12/C13 are hidden on the board.
 
+### 3D models
+- **A1** uses `3dmodels/Electrosmith_Daisy_Seed_placeholder.step` on two stock `PinSocket_1x20_P2.54mm_Vertical` models (8.5 mm), at x = 0 and 15.24.
+  **J1/J2** use `3dmodels/Neutrik_NRJ4HF_placeholder.step`. KiCad ships no model for either part, so the board points at these
+  placeholders from `make_placeholders.py`. Re-running "Update footprints from library" on A1, J1 or J2 resets the paths to KiCad's missing models.
+- **The Daisy placeholder is the original Seed's outline** (micro-USB, ~1 mm overhang, 3 mm tall). The Seed3's USB-C overhangs the
+  PCB by 1.55 mm and stands 3.25 mm tall (Seed3 datasheet, page 8). Allow for that when checking the enclosure.
+- **J5/J9 (SJ3-35063AG)** have no 3D model.
+
 ### U2 exposed pad
 - U2's footprint is `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm`. Four 0.6/0.3 mm GND vias sit in the exposed pad at ±0.4 mm from its centre,
   under the four paste windows. Solder the exposed pad (tied to GND).
