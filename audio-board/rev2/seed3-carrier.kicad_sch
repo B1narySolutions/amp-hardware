@@ -11,7 +11,7 @@
 		(comment 1 "Audio interface, controls and power")
 	)
 	(lib_symbols
-		(symbol "Amplifier_Operational:TL072"
+		(symbol "seed3-carrier:TLV9061DBV"
 			(pin_names
 				(offset 0.127)
 			)
@@ -31,7 +31,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "TL072"
+			(property "Value" "TLV9061DBV"
 				(at 0 -5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -42,7 +42,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
 				(at -1.27 2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -53,7 +53,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl071.pdf"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv9061.pdf"
 				(at 1.27 5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -64,7 +64,7 @@
 					)
 				)
 			)
-			(property "Description" "Dual Low-Noise JFET-Input Operational Amplifiers, DIP-8/SOIC-8"
+			(property "Description" "10-MHz, RRIO, CMOS Operational Amplifier, SOT-23-5. Op-amp and power as separate units"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -85,7 +85,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "dual opamp"
+			(property "ki_keywords" "single opamp rail to rail input output"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -96,7 +96,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* TO*99* OnSemi*Micro8* TSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm* MSOP*3x3mm*P0.65mm* SSOP*3.9x4.9mm*P0.635mm* LFCSP*2x2mm*P0.5mm* *SIP* SOIC*5.3x6.2mm*P1.27mm*"
+			(property "ki_fp_filters" "SOT?23*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -107,7 +107,7 @@
 					)
 				)
 			)
-			(symbol "TL072_1_1"
+			(symbol "TLV9061DBV_1_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -148,7 +148,7 @@
 							)
 						)
 					)
-					(number "2"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -175,75 +175,7 @@
 					)
 				)
 			)
-			(symbol "TL072_2_1"
-				(polyline
-					(pts
-						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin input line
-					(at -7.62 2.54 0)
-					(length 2.54)
-					(name "+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -7.62 -2.54 0)
-					(length 2.54)
-					(name "-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "TL072_3_1"
+			(symbol "TLV9061DBV_2_1"
 				(pin power_in line
 					(at -2.54 7.62 270)
 					(length 3.81)
@@ -254,7 +186,7 @@
 							)
 						)
 					)
-					(number "8"
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -272,7 +204,7 @@
 							)
 						)
 					)
-					(number "4"
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6592,12 +6524,6 @@
 		(uuid "d27de796-4bd8-4a87-9bde-429949d5ecfc")
 	)
 	(junction
-		(at 109.22 223.52)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d3efa7f4-b4d3-4214-b15b-0a95bc80e5db")
-	)
-	(junction
 		(at 345.44 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6638,12 +6564,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f9273b86-72e9-4e40-a579-713c41cf637f")
-	)
-	(junction
-		(at 73.66 220.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "fa268e98-ce13-4835-9a3b-9d5c33e83e79")
 	)
 	(junction
 		(at 322.58 162.56)
@@ -6851,16 +6771,6 @@
 		)
 		(uuid "0fda8dd7-08c7-4636-8b62-d6ff8e43ef47")
 	)
-	(wire
-		(pts
-			(xy 88.9 226.06) (xy 91.44 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "107ac6bb-94ce-43e3-9f23-4db49bacbe59")
-	)
 	(polyline
 		(pts
 			(xy 17.78 63.5) (xy 279.4 63.5)
@@ -6953,16 +6863,6 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 220.98) (xy 91.44 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1d3cea7e-270b-4ddf-9995-dde9cbccdbfe")
-	)
-	(wire
-		(pts
 			(xy 322.58 162.56) (xy 335.28 162.56)
 		)
 		(stroke
@@ -7043,16 +6943,6 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 223.52) (xy 109.22 223.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "29f95257-2682-48ae-a543-55de43b96dc4")
-	)
-	(wire
-		(pts
 			(xy 322.58 160.02) (xy 322.58 167.64)
 		)
 		(stroke
@@ -7110,16 +7000,6 @@
 			(type default)
 		)
 		(uuid "3250c740-3b1b-45fc-9d81-564683f4d864")
-	)
-	(wire
-		(pts
-			(xy 68.58 220.98) (xy 73.66 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "36195776-a55d-46fe-9973-7a23ed70719a")
 	)
 	(wire
 		(pts
@@ -7653,16 +7533,6 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 231.14) (xy 88.9 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8544db3e-e815-4305-ba3d-37f016da7863")
-	)
-	(wire
-		(pts
 			(xy 223.52 43.18) (xy 223.52 38.1)
 		)
 		(stroke
@@ -7690,6 +7560,16 @@
 			(type default)
 		)
 		(uuid "8885eee1-bf75-4370-afb1-7991641c413e")
+	)
+	(label "AUDIO_IN_2"
+		(at 63.5 220.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4da1ab98-084d-4610-91f0-08d408fef004")
 	)
 	(wire
 		(pts
@@ -7800,16 +7680,6 @@
 			(type default)
 		)
 		(uuid "9880783b-b72a-4459-a172-dec93958acde")
-	)
-	(wire
-		(pts
-			(xy 109.22 223.52) (xy 114.3 223.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "990fd4da-699d-4019-bfbf-b2b8fa065203")
 	)
 	(wire
 		(pts
@@ -8223,16 +8093,6 @@
 	)
 	(wire
 		(pts
-			(xy 109.22 223.52) (xy 109.22 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da69ba05-16c3-4a71-9131-0940814e997f")
-	)
-	(wire
-		(pts
 			(xy 387.35 109.22) (xy 377.19 109.22)
 		)
 		(stroke
@@ -8420,16 +8280,6 @@
 			(type default)
 		)
 		(uuid "f8c644c1-57bc-45a6-af8a-4e29f8ed75e9")
-	)
-	(wire
-		(pts
-			(xy 109.22 231.14) (xy 88.9 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f905dbda-d34a-4b13-b2bb-8aa4b0ac8733")
 	)
 	(wire
 		(pts
@@ -8651,16 +8501,6 @@
 		)
 		(uuid "3ddfbf37-5a27-4034-be5d-9848de125177")
 	)
-	(label "VREF"
-		(at 73.66 215.9 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "40a65671-a579-4f1c-8838-be0047f38765")
-	)
 	(label "SPK_MUTE"
 		(at 180.34 251.46 0)
 		(effects
@@ -8800,16 +8640,6 @@
 			(justify left bottom)
 		)
 		(uuid "9a3e4638-cfd3-4c9e-81a2-eae74dbd6093")
-	)
-	(label "AUDIO_IN_2"
-		(at 114.3 223.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9d863210-5a4f-4f6e-9186-c5af3d588abc")
 	)
 	(label "BATT_SENSE_CONN"
 		(at 35.56 264.16 0)
@@ -10140,7 +9970,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "100k"
 			(at 50.8 224.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10184,7 +10014,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C17936"
+		(property "LCSC" "C17900"
 			(at 53.34 223.52 0)
 			(hide yes)
 			(show_name no)
@@ -10877,96 +10707,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#FLG03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 66.04 220.98 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2cf91694-9b0b-4151-84a9-74bac810be75")
-		(property "Reference" "C32"
-			(at 66.04 215.9 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1uF"
-			(at 66.04 217.81 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 66.04 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 66.04 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 66.04 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C1848"
-			(at 66.04 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5bd036f8-5dbb-453e-9eb5-a3662a050e54")
-		)
-		(pin "2"
-			(uuid "8f396a9e-c333-42ac-aefb-ca3f66fd0c32")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C32")
 					(unit 1)
 				)
 			)
@@ -12971,98 +12711,6 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 73.66 218.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "684a010f-41c4-400e-808f-128ed4cc5530")
-		(property "Reference" "R39"
-			(at 75.56 217.17 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100k"
-			(at 75.56 219.71 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 73.66 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 73.66 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 73.66 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C17900"
-			(at 73.66 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "58ca546e-6aa1-432b-98ce-3c3abbbd9aab")
-		)
-		(pin "2"
-			(uuid "53273533-ccf8-4073-a5ac-f459dfb194b9")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R39")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
 		(at 165.1 271.78 0)
 		(unit 1)
 		(body_style 1)
@@ -14020,114 +13668,6 @@
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR03")
 					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Amplifier_Operational:TL072")
-		(at 99.06 223.52 0)
-		(unit 2)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8e008484-7432-4baf-b3fe-9a95233dea0d")
-		(property "Reference" "U1"
-			(at 99.06 213.36 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TLV9062IDR"
-			(at 99.06 215.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 99.06 223.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl074.pdf"
-			(at 99.06 223.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Quad Low-Noise JFET-Input Operational Amplifiers, DIP-14/SOIC-14"
-			(at 99.06 223.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C398355"
-			(at 99.06 223.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "82aff31f-4bc5-489b-aa85-2785ef97b035")
-		)
-		(pin "2"
-			(uuid "5efacefe-60c6-406f-a54b-8ad89c329865")
-		)
-		(pin "3"
-			(uuid "5d4b0efd-f7ad-4bc7-98db-e79717e5544e")
-		)
-		(pin "4"
-			(uuid "9fdb18bc-c10f-43e3-9f49-e13aea13b66e")
-		)
-		(pin "5"
-			(uuid "42b6502d-405d-4cc2-82cd-2feb08dc293c")
-		)
-		(pin "6"
-			(uuid "599f7065-e60f-4066-97e4-6f6fdb5c5146")
-		)
-		(pin "7"
-			(uuid "3dd83146-1999-4aa6-9fd5-baa4dbb1fa18")
-		)
-		(pin "8"
-			(uuid "01740372-4ce9-453d-acc0-6c778a773621")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "U1")
-					(unit 2)
 				)
 			)
 		)
@@ -15750,9 +15290,9 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:TL072")
+		(lib_id "seed3-carrier:TLV9061DBV")
 		(at 44.45 153.67 0)
-		(unit 3)
+		(unit 2)
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15772,7 +15312,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TLV9062IDR"
+		(property "Value" "TLV9061IDBVR"
 			(at 43.18 154.9399 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15783,7 +15323,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
 			(at 44.45 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -15794,7 +15334,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl071.pdf"
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv9061.pdf"
 			(at 44.45 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -15805,7 +15345,7 @@
 				)
 			)
 		)
-		(property "Description" "Dual Low-Noise JFET-Input Operational Amplifiers, DIP-8/SOIC-8"
+		(property "Description" "10-MHz, RRIO, CMOS Operational Amplifier, SOT-23-5"
 			(at 44.45 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -15816,7 +15356,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C398355"
+		(property "LCSC" "C398358"
 			(at 44.45 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -15828,40 +15368,31 @@
 			)
 		)
 		(pin "1"
-			(uuid "b30c40e1-01c6-4cb9-afa8-3f483ff82bfe")
+			(uuid "cb6f88e1-0357-4667-88d3-abfdc4a6391c")
 		)
 		(pin "2"
-			(uuid "d5f02848-e26e-4149-bd65-bb53972f8aa4")
+			(uuid "af6fe8c0-4e88-43e2-9663-b388da1201dc")
 		)
 		(pin "3"
-			(uuid "7e95813f-7e5a-43ea-9950-b0e768f71207")
+			(uuid "2594fd11-ee4d-4b39-bd0d-ec63c8c91929")
 		)
 		(pin "4"
-			(uuid "97007360-9c41-45b8-9b17-047d4c1d7e5d")
+			(uuid "554a052e-7049-4bbc-9d2f-d5ab47c79f65")
 		)
 		(pin "5"
-			(uuid "02d269ab-9dab-4aa7-b26e-7795a84a11de")
-		)
-		(pin "6"
-			(uuid "50c3e398-35e1-436b-a2bc-50d679018d09")
-		)
-		(pin "7"
-			(uuid "9cc88654-2034-4363-8bcb-233355848f6e")
-		)
-		(pin "8"
-			(uuid "a1884571-19c0-4e01-a628-3104125ed2a3")
+			(uuid "48bf6b8c-8dd3-42b0-ad3c-16f9f1a7c6ad")
 		)
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "U1")
-					(unit 3)
+					(unit 2)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:TL072")
+		(lib_id "seed3-carrier:TLV9061DBV")
 		(at 99.06 43.18 0)
 		(unit 1)
 		(body_style 1)
@@ -15882,7 +15413,7 @@
 				)
 			)
 		)
-		(property "Value" "TLV9062IDR"
+		(property "Value" "TLV9061IDBVR"
 			(at 99.06 35.56 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15892,7 +15423,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
 			(at 99.06 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -15903,7 +15434,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl071.pdf"
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv9061.pdf"
 			(at 99.06 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -15914,7 +15445,7 @@
 				)
 			)
 		)
-		(property "Description" "Dual Low-Noise JFET-Input Operational Amplifiers, DIP-8/SOIC-8"
+		(property "Description" "10-MHz, RRIO, CMOS Operational Amplifier, SOT-23-5"
 			(at 99.06 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -15925,7 +15456,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C398355"
+		(property "LCSC" "C398358"
 			(at 99.06 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -15937,28 +15468,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "2504a77f-4aaf-4bc5-9888-761b422bfbac")
+			(uuid "f2ab0421-22c7-4b21-9caf-38e320757fba")
 		)
 		(pin "2"
-			(uuid "c0a71216-8c48-4b25-aea9-818fdd31ba93")
+			(uuid "c222afba-b270-4c7b-99f3-9b347cc2a044")
 		)
 		(pin "3"
-			(uuid "fb6ed9dc-eee8-4be9-b9de-8f42d348cf8c")
+			(uuid "83d5cacc-fd12-44e5-bb15-d49651b008e3")
 		)
 		(pin "4"
-			(uuid "ae1dd640-0a02-481b-b6cc-908b9b01d7db")
+			(uuid "55f5c1a7-2b2b-4816-a95b-afeb9646f405")
 		)
 		(pin "5"
-			(uuid "21c5c28f-8bd4-4bed-823f-3ebe040600ab")
-		)
-		(pin "6"
-			(uuid "13807ffe-d018-4bbd-a6b9-6110827725d1")
-		)
-		(pin "7"
-			(uuid "a8b263a5-3b2f-4673-8bf3-e42afcfbaca2")
-		)
-		(pin "8"
-			(uuid "f60254eb-51cf-4701-9bea-634ba110a8b0")
+			(uuid "4bfaab53-43ff-48f1-aa57-55e050315c4e")
 		)
 		(instances
 			(project "seed3-carrier"

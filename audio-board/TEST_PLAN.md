@@ -19,7 +19,7 @@ the log at the end (one copy per board serial).
 | Display supply | FB1, C30 | Ferrite + 47 µF filter from `+5V` to `DISPLAY_5V` (J4.4) |
 | Mid-rail reference | R7, R8 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
 | Guitar input | J1, C1, C3, R17 (1M), R1, U1A | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; unity-gain buffer → Daisy `AUDIO_IN_1` |
-| AUX input | J9, R40/R41, R38, C31, C32, R39, U1B | 3.5 mm TRS, passive stereo-to-mono sum (−6.5 dB with the same signal on both channels), ~67 kHz RF filter, biased to VREF; unity-gain buffer → Daisy `AUDIO_IN_2` |
+| AUX input | J9, R40/R41, R38, C31 | 3.5 mm TRS, passive stereo-to-mono sum, ~65 kHz RF filter, straight into Daisy `AUDIO_IN_2` (no buffer). The Daisy's ≈ 5k input sets the level (≈ −6 dB with the same signal on both channels) |
 | Headphone filter | R2, C2 | Daisy `AUDIO_OUT_1` (expected to be AC-coupled on the module; 5.16 checks) → ~64 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
 | Headphone amp | U2 (TPA6132A2), C12/C13, C33–C36 | DirectPath stereo amp, 0 dB inverting (mono source on both channels), outputs at 0 V straight to J5 (`HP_L` tip, `HP_R` ring). EN = `U2_EN`, driven from `HP_EN` (Daisy pin 33) by U4 (TXU0101: VCCA/OE = `3V3_D`, VCCB = `+5V`, output Hi-Z if either supply is off), R26 pull-down, probe at R26 (`U2_EN` end) |
 | Headphone detect | J5.5/J5.6, TP11 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 34, wired directly; STM32 internal pull-up, enabled by the firmware). **Low = headphones in.** Probe at **TP11** (`TP_HP_DET`) |
@@ -29,7 +29,7 @@ the log at the end (one copy per board serial).
 
 **Pinouts used below**
 
-- U1 TLV9062 (SOIC-8): 1 OUTA, 2 INA−, 3 INA+, 4 V−, 5 INB+, 6 INB−, 7 OUTB, 8 V+
+- U1 TLV9061 (SOT-23-5): 1 OUT, 2 V−, 3 IN+, 4 IN−, 5 V+
 - U2 TPA6132A2 (WQFN-16): 1 INL−, 2 INL+, 3 INR+, 4 INR−, 5 OUTR, 6 G0, 7 G1, 8 HPVSS, 9 CPN, 10 PGND, 11 CPP, 12 HPVDD, 13 EN, 14 VDD, 15 SGND, 16 OUTL, EP GND.
   INL+/INR+, G1, PGND, SGND and EP to GND; G0 and VDD to `+5V`
 - U4 TXU0101 (SOT-23-6): 1 VCCA (`3V3_D`), 2 GND, 3 A (`HP_EN`), 4 BY (`U2_EN`), 5 OE (`3V3_D`), 6 VCCB (`+5V`).
@@ -56,12 +56,12 @@ the log at the end (one copy per board serial).
 
 | # | Check | Pass criteria |
 |---|---|---|
-| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1 SOIC-14 pins, U2 QFN pins, Q1, Q4), no cold/dull joints, no solder balls |
-| 0.2 | IC orientation | U1, U2 and U4 pin-1 marks match silkscreen; U1 = TLV9062, U2 = TPA6132A2, U4 = TXU0101 |
+| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1 SOT-23-5 pins, U2 QFN pins, Q1, Q4), no cold/dull joints, no solder balls |
+| 0.2 | IC orientation | U1, U2 and U4 pin-1 marks match silkscreen; U1 = TLV9061, U2 = TPA6132A2, U4 = TXU0101 |
 | 0.3 | U2 (WQFN-16) | Even fillets on all 16 side pads; part flat, not tilted or floating on the exposed pad; exposed pad soldered (solder visible in the thermal vias from the bottom) |
 | 0.4 | Q1 and Q4 | Both SOT-23: confirm markings match AO3401A (Q1) and 2N7002 (Q4) — not swapped; seated on correct pads |
 | 0.5 | Electrolytic polarity | C18 `+` to `+5V` |
-| 0.6 | Passive values vs BOM | Spot-check R17/R29 (1M), R7/R8/R32/R40/R41/R43 (10k), R26/R34/R37/R39 (100k), R38 (4.7k); C7/C12/C13/C30 are the 1210 parts, C33–C36 the 0805 parts; FB1 is the 1206 bead, not a resistor |
+| 0.6 | Passive values vs BOM | Spot-check R17 (1M), R7/R8/R32/R40/R41/R43 (10k), R4/R26/R34/R37/R38 (100k); C7/C12/C13/C30 are the 1210 parts, C33–C36 the 0805 parts; FB1 is the 1206 bead, not a resistor |
 | 0.7 | J3, J8 (JST-XH) | Seated flat; key orientation matches the power-board cable |
 | 0.8 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
 | 0.9 | J4 header | Flush, straight, correct side of board |
@@ -75,7 +75,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 
 | # | Measure | Expect | Fail indicates |
 |---|---|---|---|
-| 1.1 | `+5V` (C18 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on 5 V rail — check C8/C17/C18/C33, U1.8, U2.14, U2.6 |
+| 1.1 | `+5V` (C18 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on 5 V rail — check C8/C17/C18/C33, U1.5, U2.14, U2.6 |
 | 1.2 | J3.1 → GND | High; diode mode shows Q1's body diode into the `+5V` rail, not a short | Q1 shorted or bridged |
 | 1.3 | J3.1 ↔ J3.2, J3.3/J3.4 → GND | ≈ 0 Ω | J3 joint open |
 | 1.4 | `VREF` (C7) → GND | ≈ 5 kΩ (R7 in parallel with R8 via 5 V loads) | R7/R8 wrong or open, C7 shorted |
@@ -87,7 +87,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.9 | J1 tip → GND, no plug | ≈ 0 Ω (tip-normal shorts to GND) | J1 switch / footprint issue |
 | 1.10 | J1 tip → GND, plug inserted (other end open) | ≈ 1 MΩ (R17 via VREF) once C3 charges; not ≈ 0 Ω | Plug not lifting the switch |
 | 1.11 | J9 tip → ring | ≈ 20 kΩ (R40 + R41) | R40/R41 open |
-| 1.12 | J9 tip → GND | ≈ 14.7 kΩ (R40 + R38) | ≈ 10 kΩ = R38 or C31 shorted; ≈ 57 kΩ = 47k fitted for R38 |
+| 1.12 | J9 tip → GND | ≈ 110 kΩ (R40 + R38) | ≈ 10 kΩ = R38 or C31 shorted; ≈ 14.7 kΩ = 4.7k fitted for R38 |
 | 1.13 | TP11 (`HP_DETECT`) → GND, no plug in J5 | Open | J5 detect switch closed or bridged |
 | 1.14 | TP11 → GND, plug in J5 | ≈ 0 Ω | J5 detect switch not closing (check pins 5/6 mapping) |
 | 1.15 | TP11 → A1.34 (`HP_DETECT`) | < 1 Ω (direct trace) | Open trace or J5 pin 6 joint |
@@ -106,11 +106,11 @@ With the Daisy out, U4 has no VCCA, so its output is high-impedance and R26 hold
 
 | # | Check | Expect |
 |---|---|---|
-| 2.1 | Supply current at 5.0 V | A few mA (TLV9062 quiescent + 0.25 mA divider; U2 off); < 10 mA. Stop if it hits the limit |
+| 2.1 | Supply current at 5.0 V | A few mA (TLV9061 quiescent + 0.25 mA divider; U2 off); < 10 mA. Stop if it hits the limit |
 | 2.2 | `+5V` at C18 `+` | 4.9–5.0 V (Q1 drop is tens of mV) |
 | 2.3 | `VREF` at C7 | 2.45–2.55 V |
-| 2.4 | U1.1, U1.7 (both outputs) | ≈ 2.5 V (both buffers sit at VREF) |
-| 2.5 | U1.3, U1.5 | ≈ 2.5 V |
+| 2.4 | U1.1 (output) | ≈ 2.5 V (the buffer sits at VREF) |
+| 2.5 | U1.3 (IN+) | ≈ 2.5 V |
 | 2.6 | `U2_EN` (R26) | 0 V (R26) |
 | 2.7 | J5 tip and ring (DC), U2 off | ≈ 0 V |
 | 2.8 | J2 tip / J8.1 (DC) | ≈ 0 V (R4 to GND) |
@@ -165,14 +165,15 @@ R26 (`U2_EN`) to C18 `+` for 3B (U2 enabled).
 
 **3D. AUX input (J9 → AUDIO_IN_2)**
 
-1. Inject 1 kHz, 1 Vpp sine into J9 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or U1.7.
+With the Daisy out, only R38 loads the summing node, so these levels are higher than in use. 5.17 checks the real level with the Daisy fitted.
+
+1. Inject 1 kHz, 1 Vpp sine into J9 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or C31.
 2. | # | Check | Expect |
    |---|---|---|
-   | 3D.1 | Tip and ring driven together | ≈ 0.47 Vpp on 2.5 V DC (R40‖R41 into R38‖R39, −6.5 dB) |
-   | 3D.2 | Tip only, ring grounded (TS plug) | ≈ 0.24 Vpp (−12.5 dB) |
+   | 3D.1 | Tip and ring driven together | ≈ 0.95 Vpp centred on 0 V (R40‖R41 into R38) |
+   | 3D.2 | Tip only, ring grounded (TS plug) | ≈ 0.48 Vpp |
    | 3D.3 | Unplug J9 | Output goes quiet (R38 holds the summing node at GND) |
-   | 3D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat, ≈ −0.4 dB at 20 kHz (C31, ~67 kHz pole) |
-   | 3D.5 | Raise amplitude until clipping (tip and ring driven) | U1B clips near the rails at ≈ 10 Vpp in. A 2 Vrms laptop (5.7 Vpp, both channels) gives ≈ 2.7 Vpp at U1.7, under the Daisy's 3.6 Vpp full scale |
+   | 3D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat, ≈ −1.3 dB at 20 kHz (C31 with no Daisy load, ~33 kHz pole; ~65 kHz with the Daisy fitted) |
 
 Remove the injected signal and the `U2_EN` pull-up before going on.
 
@@ -229,6 +230,7 @@ Keep the 10k pull-up from J3.8 to 3.3 V unless the power board is connected.
 | 5.14 | Display on J4 | Powers from J4.4 (`DISPLAY_5V`), shows data from the Daisy. Scope `+5V` at C18 with Wi-Fi/backlight active: ripple much lower than at J4.4 (FB1/C30) |
 | 5.15 | Back-power from USB: J3 supply **off**, display unplugged, Daisy on USB, `HP_EN` driven high | `U2_EN` (R26) ≈ 0 V and `+5V` (C18 `+`) ≈ 0 V (U4 output Hi-Z with VCCB off). Record both |
 | 5.16 | Output DC with the codec running: firmware outputs digital silence, nothing plugged into J2/J8. Measure DC at A1.18 and A1.19 (on top of the module) and at J2 tip (`LINE_OUT`). Then hold RESET (clocks stop, codec powers down) and release, watching J2 tip on the scope | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled on the module. More than a few tens of mV at A1.19 or J2: fit a 10 µF series cap after R28 (see DESIGN.md "Speaker / line send"). Record any step or pop on J2 at reset and release |
+| 5.17 | AUX level with the Daisy fitted: 1 kHz, 1 Vpp into J9, same signal on tip and ring, then tip only with ring grounded. Scope A1.17 (on top of the module) and read the firmware's input-2 peak | Tip and ring: 0.44–0.55 Vpp (−7.0 to −5.5 dB, the Daisy's input at 4–6 kΩ). Tip only: ≈ 0.22–0.27 Vpp. Record both. Much lower means the module input is lower than 4 kΩ: lower R40/R41 (see DESIGN.md "AUX input") |
 
 ## Stage 6 — Soak and robustness
 
@@ -271,7 +273,7 @@ On the bench, pull J3.8 (`SPK_MUTE`) up to 3.3 V with 10k so it can be probed wi
 | DC or hum on J5 outputs | U2 SGND (pin 15) / exposed pad to GND; INL+/INR+ (pins 2/3) grounded |
 | Output only on one HP channel | That channel's C12/C13, U2 pin 1/4 (input) or 16/5 (output) joints, J5 tip/ring pins |
 | Speaker output (J2/J8) dead | R28, C24 (shorted?), R4; `AUDIO_OUT_2` from firmware |
-| AUX input dead or quiet | J9 pins, R40/R41, C32, R39, U1B (pins 5–7) |
+| AUX input dead or quiet | J9 pins, R40/R41, R38 (4.7k fitted instead of 100k?), C31 shorted; `AUDIO_IN_2` trace to A1.17 |
 | `HP_DETECT` stuck or inverted | J5 pins 5/6 mapping, TP11 → A1.34 trace, firmware pull-up on pin 34 (PG9) |
 | Speaker amp never unmutes / never mutes | Q4 orientation or swapped with Q1; R37; `SPK_MUTE` polarity on the power board |
 | Daisy won't boot | Socket orientation / offset; `3V3_D` and `+5V` shorted at A1.38/A1.39 |
@@ -292,7 +294,7 @@ Fab package: __________  Tested by: __________  Firmware commit: __________
 | 3A Guitar input buffer | | Clip level = ____ Vpp |
 | 3B Headphone filter / amp | | L = ____ Vpp, R = ____ Vpp into 32 Ω, DC offset L/R = ____ / ____ mV |
 | 3C Speaker / line send | | J2 = ____ Vpp |
-| 3D AUX input | | Tip+ring = ____ Vpp, clip level = ____ Vpp |
+| 3D AUX input | | Tip+ring = ____ Vpp |
 | 4 Power-up with Daisy | | I = ____ mA, 3V3_A = ____ V, 3V3_D = ____ V, back-power I = ____ mA |
 | 5 Firmware functional | | SPK_MUTE low = ____ V, AUX peak = ____ |
 | 6 Soak & robustness | | |

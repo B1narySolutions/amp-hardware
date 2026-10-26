@@ -8,12 +8,14 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
   travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole.
   R17 (1M to `VREF`) now sets the 1 MΩ guitar load, and U1A runs at unity gain.
 - **R5 removed.** R17 biases U1A+ through R1, so R5 only sat in parallel and lowered the guitar load to ≈ 0.91 MΩ.
-- **AUX input added (J9 → U1B → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.
+- **AUX input added (J9 → passive sum → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.
+  No buffer: the Seed3's AC-coupled input loads the R40/R41 sum directly, with R38 (100k) as the DC return.
 
 ## Outputs
 - **Headphone amp: TPA6111A2 → TPA6132A2 (DirectPath).** It removes C14/C15 (470 µF output caps, the two largest parts in the
   headphone section), R9–R16 and C16, flattens the bass and adds click-and-pop suppression.
-- **Headphone buffer removed (U1B, C5, R6).** The Seed3's AC-coupled outputs can drive U2 through R2 directly. U1B now buffers the AUX input.
+- **Headphone buffer removed (U1B, C5, R6).** The Seed3's outputs drive U2 through R2 directly.
+- **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
 - **Speaker / line send driven by `AUDIO_OUT_2`** (R28/C24, R4, no buffer) instead of J5's tip-switch line out, which muted J2
   mechanically. Muting the speaker amp in firmware saves battery, ramps without clicks, gives the speaker and headphones independent
   levels, and keeps J2 live with headphones in (record while monitoring).
