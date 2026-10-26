@@ -6176,7 +6176,7 @@
 		)
 		(uuid "22844f4b-81fb-4fb8-ad39-52909926a6e5")
 	)
-	(text "HEADPHONE BUFFER"
+	(text "HEADPHONE FILTER"
 		(exclude_from_sim no)
 		(at 154.94 17.78 0)
 		(effects
@@ -6187,6 +6187,17 @@
 			(justify left bottom)
 		)
 		(uuid "24450a35-782f-4873-87e3-2f1e98f846b7")
+	)
+	(text "U1B is unused, parked as a VREF follower. The Daisy drives U2 through R2/C2."
+		(exclude_from_sim no)
+		(at 154.94 66.04 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "921f11f5-ec43-4202-acb5-3ffbcb74d8b1")
 	)
 	(text "DAISY SEED"
 		(exclude_from_sim no)
@@ -6222,7 +6233,7 @@
 		)
 		(uuid "39e876eb-d8b3-467b-934d-ddeafe9ee5c2")
 	)
-	(text "Headphone detect: J5 pins 5-6 are an isolated N-O switch\nthat closes on plug insertion, so HP_DETECT is LOW with\nheadphones in. Bring-up: short TP11 to GND to simulate it."
+	(text "Headphone detect: J5 pins 5-6 are an isolated N-O switch\nthat closes on plug insertion, so HP_DETECT is LOW with\nheadphones in. No external pull-up: the firmware enables\nPG9's internal pull-up, so the line floats until it runs.\nBring-up: short TP11 to GND to simulate it."
 		(exclude_from_sim no)
 		(at 289.56 138.43 0)
 		(effects
