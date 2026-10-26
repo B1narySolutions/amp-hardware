@@ -228,8 +228,7 @@ USB stays on the Daisy's own connector.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.4 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
-- **Layout:** run "Update PCB from Schematic" to pick up U1's SOIC-8 footprint and drop U1C's parts (C25, C26, R29, R3). Then re-place
-  U1, C8 and the line-out block (R28/C24/R4) before routing.
+- **Layout:** every part is placed. Next is routing.
 - **Line-out level:** with no buffer, R28 is the output impedance. Check on the bench that the speaker amp and an interface see enough
   level. If not, lower R28 (1k with C24 at 3.3 nF keeps the corner near 48 kHz).
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
@@ -292,14 +291,17 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and the
 front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
 
-- **U1** (SOIC-8) still needs placing. The guitar input enters at pin 3 and the AUX input at pin 5; outputs 1 and 7 go to Daisy pins 16 and 17.
+- **U1** (SOIC-8) sits unrotated where the old SOIC-14 was. Pins 1–4 face the guitar row, so R1 reaches pin 3 in ≈ 3 mm. Outputs 1 and
+  7 run straight up to Daisy pins 16 and 17, pin 7 passing right of C8. The AUX node (C32/R39) reaches pin 5 from above, so it crosses
+  both outputs: take it on L4 for that stretch.
 - **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → U1 pin 3 is one row about 15 mm long, with no node longer than 7 mm.
   Route it all on L1 with no vias, and keep other signals off L1 next to it.
 - **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 sits at U1 pin 5. J9's tip and ring reach the block on L4.
   They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
-- **Headphone and speaker filters:** R2/C2 sit by C12/C13 at U2's inputs. R28/C24 and R4 sit between Daisy pin 19 and J2/J8.
+- **Headphone and speaker filters:** R2/C2 sit below-right of U1. R28/C24 sit above J8, with R4 beside J8 pin 1. `AUDIO_OUT_2` runs
+  from Daisy pin 19 to R28 as the low-impedance DAC output, so only the short R28 → J8 stretch is at 3.3k.
   Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
-- **Decoupling:** C8 goes right at U1 pin 8 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within 3 mm
+- **Decoupling:** C8 sits directly above U1 pin 8 (V+), with its GND end away from the IC. C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within 3 mm
   of their pins. U2 is rotated so its inputs face C12/C13, the charge pump faces away from J5, and OUTR drops straight to J5's ring.
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
 - **VREF:** R7, R8 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
