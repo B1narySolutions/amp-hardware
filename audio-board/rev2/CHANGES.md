@@ -15,9 +15,9 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 
 ## Outputs
 - **Headphone amp: TPA6111A2 → TPA6132A2 (DirectPath).** It removes rev 1 C14/C15 (470 µF output caps, the two largest parts in the
-  headphone section), R9–R16 and C16, flattens the bass and adds click-and-pop suppression. Its gain is −6 dB (G0 and G1 to GND), so full
+  headphone section), rev 1 R9–R16 and rev 1 C16, flattens the bass and adds click-and-pop suppression. Its gain is −6 dB (G0 and G1 to GND), so full
   scale doesn't clip 16 Ω headphones.
-- **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and R6).** The Seed3's outputs drive U2 through R10 directly.
+- **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's outputs drive U2 through R10 directly.
 - **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
 - **Speaker / line send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer) instead of rev 1's tip-switch line out on the headphone
   jack, which muted the ¼" line out mechanically. Muting the speaker amp in firmware saves battery, ramps without clicks, gives the

@@ -46,7 +46,7 @@ the log at the end (one copy per board serial).
 - Current-limited bench supply (0–6 V), DMM, oscilloscope (≥ 20 MHz)
 - Signal generator or audio interface (sine 20 Hz – 20 kHz, ≥ 2 Vpp); a phone/laptop
   headphone output works for listening tests
-- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), a 32 Ω dummy load (one per channel)
+- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), 32 Ω and 16 Ω dummy loads (one per channel)
 - 8-pin JST-XH pigtail with flying leads for J7, 2-pin JST-XH pigtail for J6
 - 10k resistor and clip leads to pull `SPK_MUTE` (J7.8) up to 3.3 V
 - USB cable for the Daisy, USB-serial adapter (3.3 V) for J3
@@ -75,16 +75,16 @@ test pads or the Daisy sockets (A1), not on connector shells.
 
 | # | Measure | Expect | Fail indicates |
 |---|---|---|---|
-| 1.1 | `+5V` (C5 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on 5 V rail — check C4/C5/C6/C12, U1.5, U2.14, U2.6 |
+| 1.1 | `+5V` (C5 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on 5 V rail — check C4/C5/C6/C12, U1.5, and U2.14 (VDD) bridged to U2.15 (SGND) |
 | 1.2 | J7.1 → GND | High; diode mode shows Q1's body diode into the `+5V` rail, not a short | Q1 shorted or bridged |
 | 1.3 | J7.1 ↔ J7.2, J7.3/J7.4 → GND | ≈ 0 Ω | J7 joint open |
-| 1.4 | `VREF` (C7) → GND | ≈ 5 kΩ (R7 in parallel with R6 via 5 V loads) | R6/R7 wrong or open, C7 shorted |
+| 1.4 | `VREF` (C7) → GND | 5–10 kΩ (R7, in parallel with R6 through the unpowered `+5V` rail) | < 1 kΩ = C7 shorted; > 10 kΩ = R7 open or wrong |
 | 1.5 | `DISPLAY_5V` (J3.4) → C5 `+` | < 1 Ω (FB1) | FB1 open or missing |
 | 1.6 | HPVDD (C15) → `+5V` (C5 `+`) | High (no short) | U2.13 (EN, on `+5V`) bridged to U2.12 (HPVDD) |
 | 1.7 | A1.33 and A1.38 → GND and → `+5V` | Open (not connected on the carrier) | Stray copper or a socket bridge |
 | 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V` | High (no short), not < 100 Ω | QFN bridge: OUTL (16)/SGND (15), OUTR (5)/G0 (6) or INR− (4) |
 | 1.9 | J1 tip → GND, no plug | ≈ 0 Ω (tip-normal shorts to GND) | J1 switch / footprint issue |
-| 1.10 | J1 tip → GND, plug inserted (other end open) | ≈ 1 MΩ (R1 via VREF) once C2 charges; not ≈ 0 Ω | Plug not lifting the switch |
+| 1.10 | J1 tip → GND, plug inserted (other end open) | Open once C1 and C2 charge (both block DC); not ≈ 0 Ω | ≈ 0 Ω = plug not lifting the switch |
 | 1.11 | J2 tip → ring | ≈ 20 kΩ (R3 + R4) | R3/R4 open |
 | 1.12 | J2 tip → GND | ≈ 13.3 kΩ (R3 + R5) | ≈ 10 kΩ = R5 or C3 shorted; ≈ 110 kΩ = 100k fitted for R5 |
 | 1.13 | TP1 (`HP_DETECT`) → GND, no plug in J4 | Open | J4 detect switch closed or bridged |
@@ -153,7 +153,7 @@ stages can be tested on their own. Supply 5.0 V, limit 50 mA.
 2. | # | Check | Expect |
    |---|---|---|
    | 3C.1 | J5 tip and J6.1, nothing plugged in | ≈ 1 Vpp centred on 0 V (R11 into R12, −0.3 dB), same phase as the input, identical on both. Set the generator's DC offset to 0 V |
-   | 3C.2 | Load J5 with 10 kΩ | ≈ 0.74 Vpp (R11 into 10k ‖ R12, −2.6 dB) |
+   | 3C.2 | Load J5 with 10 kΩ | ≈ 0.73 Vpp (R11 into 10k ‖ R12, −2.7 dB) |
    | 3C.3 | Frequency sweep 20 Hz – 20 kHz | Flat in the audio band; falls off above ≈ 48 kHz (R11/C16) |
    | 3C.4 | Insert and remove a plug in J4 | J5/J6 unchanged (rev 2 has no tip-switch; speaker muting is in firmware) |
 

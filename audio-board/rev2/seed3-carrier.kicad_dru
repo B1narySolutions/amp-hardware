@@ -33,7 +33,7 @@
 	(constraint hole_size (min 0.3mm) (max 0.4mm)))
 
 # Through-hole pads join copper zones with thermal-relief spokes so an iron can heat them (jack sleeves, GND pins
-# on J3/J4/J8, the Daisy sockets). SMD pads and vias stay solid. Applies to every zone, including ones added later.
+# on J3/J6/J7, the Daisy sockets). SMD pads and vias stay solid. Applies to every zone, including ones added later.
 (rule "Thermal reliefs on through-hole pads"
 	(condition "A.Type == 'Pad' && A.Pad_Type == 'Through-hole'")
 	(constraint zone_connection thermal_reliefs)

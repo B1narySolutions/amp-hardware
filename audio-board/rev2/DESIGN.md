@@ -86,7 +86,6 @@ U2 (TPA6132A2RTE) drives J4 (`HP_L` tip, `HP_R` ring) directly.
 J4 (Same Sky SJ3-35063AG, 3.5 mm stereo, through hole; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)):
 pins 1/2/3 are sleeve/ring/tip on GND/`HP_R`/`HP_L`. Pins 5 and 6 are an isolated normally-open switch that closes when a plug is
 inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 34, PG9). TP1 sits on it. Pin 4 isn't fitted on this variant.
-TN and RN are no-connects.
 - **No external pull-up, series resistor or RC.** The switch is a mechanically actuated contact on this board, not on a cable, and
   isolated from the plug. The firmware enables PG9's internal pull-up and debounces it. This matches the Seed3 datasheet's own switch
   circuits (Figures 2.1 and 2.2: switch to GND, internal pull-up, "Any GPIO").
@@ -101,8 +100,8 @@ J5 (¼", external) and J6 (internal, to the speaker amp).
   "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
 - **This path assumes pin 19 sits at 0 V DC.** With no cap of our own, any DC offset at the pin would reach J5, J6 and R12. If TEST_PLAN
   5.16 finds more than a few tens of mV, fit a series cap after R11 (10 µF; with R12 and a 10k load the corner stays under 3 Hz).
-- **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input it costs ≈ 2.6 dB (≈ 0.74 Vrms at
-  full scale). Cable capacitance adds to C16 and lowers the corner, ≈ 37 kHz with 3 m of typical cable.
+- **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input (with R12 in parallel) it costs ≈ 2.7 dB
+  (≈ 0.73 Vrms at full scale). Cable capacitance adds to C16 and lowers the corner, ≈ 37 kHz with 3 m of typical cable.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
 - **J6** is a 2-pin JST-XH (B2B-XH-A, vertical): pin 1 `LINE_OUT`, pin 2 GND. It feeds the speaker amp on the power board (or an
   off-the-shelf class D module while prototyping). A keyed internal header instead of a ¼" cable between boards. Audio ground has its
@@ -140,7 +139,7 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 ## Power
 
 `5V_IN` arrives on J7 pins 1–2 and goes through Q1 (AO3401A P-FET, reverse-polarity protection) onto `+5V`. `+5V` feeds Daisy VIN
-(pin 39), U1, U2, `VREF`, and the display through FB1.
+(pin 39), U1, U2, `VREF`, the `5V_SENSE` divider (R18/R19), and the display through FB1.
 - **Why Q1 with a keyed connector:** the JST-XH key stops the plug going in backwards, but not a hand-crimped harness with 5 V and GND
   swapped, or swapped clip leads on a bench supply (TEST_PLAN 2.12 tests this). The Seed3's VIN is reverse-protected on the module, but
   U1, U2 and the display are not. Q1 drops about 50 mV at 1 A.
@@ -354,7 +353,7 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
 - **`5V_SENSE`:** R18 and R19 stand side by side to the right of C5, between Q1 and R11. R18's top pad is `+5V`, R19's top pad is
   GND, and their bottom pads form `5V_SENSE`. Route it to Daisy pin 22 (rear row, next to pin 21). It is a DC level, so the route isn't critical.
 - **Power board signals:** the series resistors R13, R16 and R14 sit in a row under J7 pins 5–7. Q2 and R17 sit under pin 8, and R15
-  sits above pin 7. C17 and C18 sit just below them. Their nets reach Daisy pins 25–28, 33 and 34 under the Daisy.
+  sits at the end of the row, right of Q2. C17 and C18 sit just below them. Their nets reach Daisy pins 25–28 under the Daisy.
 - **Display:** FB1 sits beside J3 pin 4 and C8 just below J3. R8/R9 sit to their left, so the UART traces to J3 pins 2/3 pass
   between R17 and FB1 or drop to L4.
 - **Test point:** TP1 (`HP_DETECT`) is by J4. Other nets are probed on part pads (see TEST_PLAN.md).
@@ -458,5 +457,6 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (8 h
 - **C0G for the filter caps.** C1, C9, C16 and C3 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
   which adds distortion. C3/C9/C16 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
 - **16 V for C7 and C5:** C7 shares C8's 16 V part, which also derates better under DC bias than a 10 V part. C5 is 16 V too.
+- **TP1** is a bare 2 mm copper pad, not a part, so it has no LCSC number and nothing to order.
 - **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them
   out (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
