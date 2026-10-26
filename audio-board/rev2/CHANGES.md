@@ -21,7 +21,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   scale doesn't clip 16 Ω headphones.
 - **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's outputs drive U2 through R10 directly.
 - **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
-- **Speaker / line send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer) instead of rev 1's tip-switch line out on the headphone
+- **Speaker / line send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer; R11 is 1k, so the line out loses ≈ 0.9 dB into a 10k input) instead of rev 1's tip-switch line out on the headphone
   jack, which muted the ¼" line out mechanically. Muting the speaker amp in firmware saves battery, ramps without clicks, gives the
   speaker and headphones independent levels, and keeps J5 live with headphones in (record while monitoring).
 - **J6 added:** a keyed internal line out to the speaker amp. J5 stays as an external line out.

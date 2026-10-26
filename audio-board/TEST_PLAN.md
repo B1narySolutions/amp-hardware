@@ -61,7 +61,7 @@ the log at the end (one copy per board serial).
 | 0.3 | U2 (WQFN-16) | Even fillets on all 16 side pads; part flat, not tilted or floating on the exposed pad; exposed pad soldered (solder visible in the thermal vias from the bottom) |
 | 0.4 | Q1 and Q2 | Both SOT-23: confirm markings match AO3401A (Q1) and 2N7002 (Q2) — not swapped; seated on correct pads |
 | 0.5 | Electrolytic polarity | C5 `+` to `+5V` |
-| 0.6 | Passive values vs BOM | Spot-check R1 (1M), R3/R4/R6/R7/R8/R13 (10k), R12/R15/R17/R18/R19 (100k), R5/R10/R11 (3.3k), R20 (470), R2/R9/R14/R16/R21 (1k); C7/C8/C10/C11 are the 1210 parts, C12–C15 the 0805 parts; FB1 is the 1206 bead, not a resistor |
+| 0.6 | Passive values vs BOM | Spot-check R1 (1M), R3/R4/R6/R7/R8/R13 (10k), R12/R15/R17/R18/R19 (100k), R5/R10 (3.3k), R20 (470), R2/R9/R11/R14/R16/R21 (1k); C7/C8/C10/C11 are the 1210 parts, C12–C16 the 0805 parts; FB1 is the 1206 bead, not a resistor |
 | 0.7 | J7, J6 (JST-XH) | Seated flat; key orientation matches the power-board cable |
 | 0.8 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
 | 0.9 | J3 header | Flush, straight, correct side of board |
@@ -91,7 +91,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.14 | TP1 → GND, plug in J4 | ≈ 0 Ω | J4 detect switch not closing (check pins 5/6 mapping) |
 | 1.15 | TP1 → A1.34 (`HP_DETECT`) | < 1 Ω (direct trace) | Open trace or J4 pin 6 joint |
 | 1.16 | J5 tip → GND; J5 tip ↔ J6.1; J6.2 → GND | ≈ 100 kΩ (R12); ≈ 0 Ω; ≈ 0 Ω | R12 missing; J6 joints |
-| 1.17 | J5 tip → A1.19 (`AUDIO_OUT_2`) | ≈ 3.3 kΩ (R11) | R11 open or wrong value |
+| 1.17 | J5 tip → A1.19 (`AUDIO_OUT_2`) | ≈ 1 kΩ (R11) | R11 open or wrong value |
 | 1.18 | J7.5 → A1.25; J7.6 → A1.26 | ≈ 10 kΩ (R13); ≈ 1 kΩ (R16) | Power-board signal resistors |
 | 1.19 | J7.7 → A1.27; J7.7 → GND | ≈ 1 kΩ (R14); ≈ 100 kΩ (R15) | `PWR_HOLD` network |
 | 1.20 | A1.28 (`SPK_EN`) → GND; J7.8 → GND | ≈ 100 kΩ (R17); open (Q2 off) | R17 missing; Q2 shorted or swapped with Q1 |
@@ -153,8 +153,8 @@ stages can be tested on their own. Supply 5.0 V, limit 50 mA.
 1. Inject 1 kHz, 1 Vpp sine into `A1.19` (AUDIO_OUT_2), ground at `A1.20`.
 2. | # | Check | Expect |
    |---|---|---|
-   | 3C.1 | J5 tip and J6.1, nothing plugged in | ≈ 1 Vpp centred on 0 V (R11 into R12, −0.3 dB), same phase as the input, identical on both. Set the generator's DC offset to 0 V |
-   | 3C.2 | Load J5 with 10 kΩ | ≈ 0.73 Vpp (R11 into 10k ‖ R12, −2.7 dB) |
+   | 3C.1 | J5 tip and J6.1, nothing plugged in | ≈ 1 Vpp centred on 0 V (R11 into R12, −0.1 dB), same phase as the input, identical on both. Set the generator's DC offset to 0 V |
+   | 3C.2 | Load J5 with 10 kΩ | ≈ 0.90 Vpp (R11 into 10k ‖ R12, −0.9 dB) |
    | 3C.3 | Frequency sweep 20 Hz – 20 kHz | Flat in the audio band; falls off above ≈ 48 kHz (R11/C16) |
    | 3C.4 | Insert and remove a plug in J4 | J5/J6 unchanged (rev 2 has no tip-switch; speaker muting is in firmware) |
 

@@ -103,14 +103,15 @@ inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 34, PG9). TP1 s
   PCB layout. The jack face sits at the board edge (X = −2.4 mm from pin 1), with the nose overhanging. J2 uses the same part and footprint.
 
 ### Speaker / line send (`AUDIO_OUT_2` → J5, J6)
-`AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (3.3k/1 nF, ~48 kHz low-pass) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
+`AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
 J5 (¼", external) and J6 (internal, to the speaker amp).
 - **No buffer**, for the same reason as the headphone path: R11 plus a ≥ 10k amp input is far above the 600 Ω line-out minimum (see
   "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
 - **This path assumes pin 19 sits at 0 V DC.** With no cap of our own, any DC offset at the pin would reach J5, J6 and R12. If TEST_PLAN
   5.16 finds more than a few tens of mV, fit a series cap after R11 (10 µF; with R12 and a 10k load the corner stays under 3 Hz).
-- **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input (with R12 in parallel) it costs ≈ 2.7 dB
-  (≈ 0.73 Vrms at full scale). Cable capacitance adds to C16 and lowers the corner, ≈ 37 kHz with 3 m of typical cable.
+- **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input (with R12 in parallel) it costs ≈ 0.9 dB
+  (≈ 0.90 Vrms at full scale), and ≈ 1.6 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
+  cable. If J5 is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load. A lower R11 would cut that margin.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
 - **J6** is a 2-pin JST-XH (B2B-XH-A, vertical): pin 1 `LINE_OUT`, pin 2 GND. It feeds the speaker amp on the power board (or an
   off-the-shelf class D module while prototyping). A keyed internal header instead of a ¼" cable between boards. Audio ground has its
@@ -280,8 +281,8 @@ USB stays on the Daisy's own connector.
   connected and audio playing. Record how long the input stays outside HPVSS − 0.3 V … HPVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
 - **Layout:** every part is placed. Next is routing.
-- **Line-out level:** with no buffer, R11 is the output impedance. Check on the bench that the speaker amp and an interface see enough
-  level. If not, lower R11 (1k with C16 at 3.3 nF keeps the corner near 48 kHz).
+- **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
+  the loss is ≈ 0.9 dB into 10k and grows below that.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
@@ -352,7 +353,7 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   J2's tip and ring reach the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and
   L2/L3 shield them from the guitar row on L1.
 - **Headphone and speaker filters:** R10/C9 sit below-right of U1. R11/C16 sit above J6, with R12 beside J6 pin 1. `AUDIO_OUT_2` runs
-  from Daisy pin 19 to R11 as the low-impedance DAC output, so only the short R11 → J6 stretch is at 3.3k.
+  from Daisy pin 19 to R11 as the low-impedance DAC output, so only the short R11 → J6 stretch is at 1k.
   Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
 - **Decoupling:** C6 sits just right of U1 pin 5 (V+), 0.6 mm away, with its GND end away from the IC. C12 (VDD), C15 (HPVDD), C13 (flying cap) and C14 (HPVSS) surround U2 within 3 mm
   of their pins. U2 is rotated so its inputs face C10/C11, the charge pump faces away from J4, and OUTR drops straight to J4's ring.
@@ -425,20 +426,21 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (9 here, about $27, or more if C398358 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or more if C398358 turns out to be extended).
 
 **SMD, assembled by JLC**
 
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R14 R16 R21 | Basic | 1.9M |
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R11 R14 R16 R21 | Basic | 1.9M |
 | C4502 | 470 Ω 1% 1206 (UNI-ROYAL) | R20 | Extended | 131k (2026-10-26) |
-| C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 R11 | Extended | 357k |
+| C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 | Extended | 357k |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R3 R4 R6 R7 R8 R13 | Basic | 2.5M |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
-| C1885 | 1 nF 50 V C0G 1206 (FH) | C3 C9 C16 | Extended | 4.4k |
+| C1885 | 1 nF 50 V C0G 1206 (FH) | C3 C9 | Extended | 4.4k |
+| C486355 | 3.3 nF 50 V C0G 0805 (FH 0805CG332J500NT) | C16 | Extended | 3.9k (2026-10-26) |
 | C1848 | 1 µF 50 V X7R 1206 (Samsung) | C2 | Basic | 551k |
 | C24497 | 100 nF 50 V X7R 1206 (Samsung) | C4 C6 C17 C18 | Basic | 1.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C8 | Extended | 164k |
@@ -466,7 +468,8 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (9 h
 - **U2 is the stock risk.** JLC has 65 TPA6132A2RTER (the RTET reel has none). That covers this build, but order soon, or buy spares
   from DigiKey or Mouser and send them to JLC as consigned parts if the stock is gone.
 - **C0G for the filter caps.** C1, C9, C16 and C3 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
-  which adds distortion. C3/C9/C16 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
+  which adds distortion. C3/C9 (C1885) and C16 (C486355) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the
+  fallback for C1885. JLC had no 3.3 nF C0G in 1206 in stock on 2026-10-26, so C16 is 0805.
 - **16 V for C7 and C5:** C7 shares C8's 16 V part, which also derates better under DC bias than a 10 V part. C5 is 16 V too.
 - **TP1** is a bare 2 mm copper pad, not a part, so it has no LCSC number and nothing to order.
 - **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them

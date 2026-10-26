@@ -8563,7 +8563,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass. R12: DC return.\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
+	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -13554,7 +13554,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1nF"
+		(property "Value" "3.3nF"
 			(at 302.26 182.88 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13565,7 +13565,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 299.72 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -13598,7 +13598,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1885"
+		(property "LCSC" "C486355"
 			(at 299.72 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -14486,7 +14486,7 @@
 				)
 			)
 		)
-		(property "Value" "3.3k"
+		(property "Value" "1k"
 			(at 292.1 175.26 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14529,7 +14529,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26032"
+		(property "LCSC" "C4410"
 			(at 292.1 179.07 0)
 			(hide yes)
 			(show_name no)
