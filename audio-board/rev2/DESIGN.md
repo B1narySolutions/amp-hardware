@@ -449,7 +449,6 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (8 h
   from DigiKey or Mouser and send them to JLC as consigned parts if the stock is gone.
 - **C0G for the filter caps.** C1, C2, C24 and C31 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
   which adds distortion. C2/C24/C31 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
-- **Voltage ratings above the schematic's:** C7 (47 µF, schematic says 10 V) shares C30's 16 V part, which also derates better under
-  DC bias. C18 is 16 V rather than 10 V. Same footprints, same or better behaviour.
+- **16 V for C7 and C18:** C7 shares C30's 16 V part, which also derates better under DC bias than a 10 V part. C18 is 16 V too.
 - **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them
   out (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
