@@ -255,6 +255,8 @@ the front jacks. Power, the display and the power board controls sit in the rear
   The Daisy-side parts (C28, C29, R30, C27, R36) sit just below them. Their nets reach Daisy pins 25–28, 33, 34 and 38 under the Daisy.
 - **Display:** R43, R44, FB1 and C30 sit next to J4.
 - **Test points:** TP5 (VREF) and TP9 (+5 V) are at the front centre. TP10 (`HP_EN`) is by U2, and TP11 (`HP_DETECT_SW`) is by J5.
+- **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and
+  a 0.2 mm trace fits between them. The exceptions are on purpose: C8, C5, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
   The schematic's MPN fields for C12/C13 are hidden on the board.
 
