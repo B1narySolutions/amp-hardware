@@ -5,7 +5,7 @@ Keep this list to the net difference from rev 1. Parts that were added and then 
 
 ## Inputs
 - **Pots removed (RV1 input level, RV2 volume, RV3 tone, C10, C11).** Level, volume and tone move to the touchscreen. With RV1 at mid
-  travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole (`studies/signal-path-response`).
+  travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole.
   R17 (1M to `VREF`) now sets the 1 MΩ guitar load, and U1A runs at unity gain.
 - **R5 removed.** R17 biases U1A+ through R1, so R5 only sat in parallel and lowered the guitar load to ≈ 0.91 MΩ.
 - **AUX input added (J9 → U1D → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.

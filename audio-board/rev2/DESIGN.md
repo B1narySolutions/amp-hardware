@@ -27,7 +27,7 @@ J1 tip → C1 (100 pF to GND, RF shunt) → C3 (1 µF) → R17 (1M to `VREF`) �
 - J1's tip switch shorts the tip to GND when nothing is plugged in.
 - **R17** sets both the 1 MΩ guitar load and the DC bias. **R1** is the only series resistance in this path. It protects U1A's input from plug-in transients.
 - **Unity gain, no level pot.** A pot at mid travel put about 250 kΩ of source impedance in front of U1A, which added noise and an
-  ~80 kHz pole (see `studies/signal-path-response`). Input trim is done in firmware.
+  ~80 kHz pole. Input trim is done in firmware.
 
 ### AUX input (J9 → `AUDIO_IN_2`)
 J9 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R40/R41 (10k each, passive stereo-to-mono sum, −6 dB) → summing node with R38 (47k to GND)
