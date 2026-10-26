@@ -173,6 +173,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **TEST_PLAN check 3B.4:** the low-end corner is ≈ 12.6 Hz, not 9 Hz.
 - **Layout:** every part is placed (see "Board outline and placement" and "Passive placement" below). Next is routing.
+- **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
 ## Layout decisions
@@ -259,6 +260,59 @@ the front jacks. Power, the display and the power board controls sit in the rear
   a 0.2 mm trace fits between them. The exceptions are on purpose: C8, C5, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
   The schematic's MPN fields for C12/C13 are hidden on the board.
+
+### Parts sourcing: LCSC numbers (2026-10-25)
+Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
+Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
+Basic parts have no loading fee. Each extended part adds about $3 per order (11 here, about $33).
+
+**SMD, assembled by JLC**
+
+| LCSC | Part | Refs | Type | Stock |
+|---|---|---|---|---|
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R31 R33 R35 R42 R43 R44 | Basic | 1.9M |
+| C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
+| C17901 | 100 Ω 1% 1206 (UNI-ROYAL) | R3 | Basic | 2.5M |
+| C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R39 | Basic | 1.0M |
+| C26119 | 10M 1% 1206 (UNI-ROYAL) | R5 | Extended | 179k |
+| C17927 | 1M 1% 1206 (UNI-ROYAL) | R6 R17 R29 | Basic | 3.8M |
+| C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R30 R32 R36 R40 R41 | Basic | 2.5M |
+| C25833 | 47k 1% 1206 (UNI-ROYAL) | R38 | Extended | 141k |
+| C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
+| C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
+| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C5 C25 C32 | Basic | 551k |
+| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C27 C28 C29 | Basic | 1.6M |
+| C13585 | 10 µF 50 V X5R 1206 (Samsung) | C9 C26 | Basic | 2.6M |
+| C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
+| C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
+| C19110 | 2.2 µF 25 V X7R 0805 (Samsung) | C33 C34 C36 | Extended | 297k |
+| C28323 | 1 µF 50 V X7R 0805 (Samsung) | C35 | Basic | 1.9M |
+| C357023 | 600 Ω@100 MHz, 3 A, 40 mΩ 1206 bead (TAI-TECH HCB3216KF-601T30) | FB1 | Extended | 272k |
+| C15127 | AO3401A | Q1 | Basic | 642k |
+| C8545 | 2N7002 | Q4 | Basic | 2.9M |
+| C388176 | TLV9064IDR | U1 | Extended | 6.1k |
+| C69901 | TPA6132A2RTER | U2 | Extended | **65** |
+
+**Through hole, hand-soldered (order from LCSC)**
+
+| LCSC | Part | Refs | Stock |
+|---|---|---|---|
+| C2835642 | 47 µF 16 V radial 5 × 11 mm, 2 mm pitch, low ESR (SamYoung NXB) | C18 | 8.0k |
+| C39461671 | Same Sky SJ3-35063AG | J5 J9 | 100 |
+| C157972 | JST B8B-XH-A | J3 | 4.8k |
+| C158012 | JST B2B-XH-A | J8 | 425k |
+| C53055674 | 1×4 2.54 mm pin header | J4 | 47k |
+| C2905423 | 1×20 2.54 mm female header, 8.5 mm | J6 J7, plus 2 per board for the Daisy | 15.9k |
+| — | Neutrik NRJ4HF | J1 J2 | Not at LCSC: order from Mouser, DigiKey or a Neutrik distributor |
+
+- **U2 is the stock risk.** JLC has 65 TPA6132A2RTER (the RTET reel has none). That covers this build, but order soon, or buy
+  spares from DigiKey or Mouser and send them to JLC as consigned parts if the stock is gone.
+- **C0G for the filter caps.** C1, C2, C24 and C31 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
+  which adds distortion. C2/C24/C31 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
+- **Voltage ratings above the schematic's:** C7 (47 µF, schematic says 10 V) shares C30's 16 V part, which also derates better under DC bias.
+  C18 is 16 V rather than 10 V. C9/C26 are 50 V. Same footprints, same or better behaviour.
+- **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them out
+  (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
 
 ### U2 exposed-pad vias (2026-10-25)
 - **Changed:** U2's footprint is now `WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm` (was the `_ThermalVias` variant).

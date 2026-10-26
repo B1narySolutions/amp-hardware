@@ -10842,6 +10842,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C77101"
+			(at 76.2 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "0c1488b3-1222-4a6b-8a9d-489717998ccc")
 		)
@@ -10989,6 +11000,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 40.64 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 40.64 226.06 0)
 			(hide yes)
 			(show_name no)
@@ -11238,6 +11260,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C158012"
+			(at 264.16 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0808d421-954b-4fc0-8345-ab9d7c7a5a1c")
 		)
@@ -11309,6 +11342,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 53.34 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25833"
 			(at 53.34 223.52 0)
 			(hide yes)
 			(show_name no)
@@ -11463,6 +11507,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 119.38 264.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4410"
 			(at 119.38 264.16 0)
 			(hide yes)
 			(show_name no)
@@ -11707,6 +11762,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C2835642"
+			(at 363.22 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "773f3517-68e3-4c76-b083-4be7ea53ce89")
 		)
@@ -11779,6 +11845,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 66.04 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 66.04 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -11870,6 +11947,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17902"
+			(at 322.58 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a4b92bfb-6cce-46ec-83bd-4c9a33855757")
 		)
@@ -11939,6 +12027,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 40.64 220.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 40.64 220.98 0)
 			(hide yes)
 			(show_name no)
@@ -12097,6 +12196,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 66.04 220.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1848"
 			(at 66.04 220.98 0)
 			(hide yes)
 			(show_name no)
@@ -12343,6 +12453,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C24497"
+			(at 137.16 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "853957a4-8dad-4b90-95df-96e6bd5aaedc")
 		)
@@ -12500,6 +12621,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1848"
+			(at 177.8 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "86c9d2ca-0056-4c40-9114-475ae3114108")
 		)
@@ -12580,6 +12712,17 @@
 		)
 		(property "MPN" "GRM32ER71H475KA88L"
 			(at 320.04 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C86052"
+			(at 320.04 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12828,6 +12971,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17900"
+			(at 223.52 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "623bc11c-1bad-4e35-85a3-cb87c6b24898")
 		)
@@ -13061,6 +13215,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4410"
+			(at 139.7 168.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d1d71b94-fb5d-4cce-b160-84e48deffb36")
 		)
@@ -13132,6 +13297,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 162.56 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C26032"
 			(at 162.56 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -13231,6 +13407,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C86052"
+			(at 320.04 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ead1ea68-ec45-414c-ab78-f097f2969496")
 		)
@@ -13300,6 +13487,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 81.28 269.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4410"
 			(at 81.28 269.24 0)
 			(hide yes)
 			(show_name no)
@@ -13382,6 +13580,17 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 30.48 261.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C157972"
 			(at 30.48 261.62 0)
 			(hide yes)
 			(show_name no)
@@ -13567,6 +13776,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4410"
+			(at 69.85 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "f961a524-be49-4759-b2e9-755791b38a35")
 		)
@@ -13722,6 +13942,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C24497"
+			(at 350.52 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f1cb87d6-47e5-4030-ba7d-4e9667c7acd9")
 		)
@@ -13794,6 +14025,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 52.07 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C107179"
 			(at 52.07 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -13886,6 +14128,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C26119"
+			(at 81.28 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "35e7bdc1-5af6-4530-b7e0-13e678ecd65a")
 		)
@@ -13967,6 +14220,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17927"
+			(at 64.77 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "4d5679ae-d593-472d-b316-3494f4bb95f5")
 		)
@@ -14036,6 +14300,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 81.28 251.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 81.28 251.46 0)
 			(hide yes)
 			(show_name no)
@@ -14127,6 +14402,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17900"
+			(at 73.66 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "58ca546e-6aa1-432b-98ce-3c3abbbd9aab")
 		)
@@ -14198,6 +14484,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 165.1 271.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17900"
 			(at 165.1 271.78 0)
 			(hide yes)
 			(show_name no)
@@ -14289,6 +14586,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19110"
+			(at 335.28 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "2a5a7783-4579-4e09-b74f-87d9887d103c")
 		)
@@ -14360,6 +14668,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 327.66 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C24497"
 			(at 327.66 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -14451,6 +14770,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C24497"
+			(at 88.9 254 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6f9aac7e-1319-47d4-bf10-0ca1fa82ccde")
 		)
@@ -14522,6 +14852,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 134.62 261.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 134.62 261.62 0)
 			(hide yes)
 			(show_name no)
@@ -14690,6 +15031,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1885"
+			(at 58.42 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a2086d3a-00aa-4328-8a7b-a4ee86d97dad")
 		)
@@ -14772,6 +15124,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C24497"
+			(at 26.67 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "c1f879c0-1310-474a-b663-a8c12bf533a4")
 		)
@@ -14844,6 +15207,17 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x20, script generated"
+			(at 241.3 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2905423"
 			(at 241.3 203.2 0)
 			(hide yes)
 			(show_name no)
@@ -14979,6 +15353,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 337.82 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17900"
 			(at 337.82 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -15223,6 +15608,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C388176"
+			(at 99.06 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "12"
 			(uuid "593292d7-2db0-4bae-a9f8-50707cc6c540")
 		)
@@ -15338,6 +15734,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4410"
+			(at 139.7 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "687fdc58-092a-4440-8baa-9fd80d5cb655")
 		)
@@ -15410,6 +15817,17 @@
 			)
 		)
 		(property "Description" "3.5mm stereo (TRS) jack, through hole, with isolated normally-open detect switch"
+			(at 25.4 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C39461671"
 			(at 25.4 226.06 0)
 			(hide yes)
 			(show_name no)
@@ -15663,6 +16081,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C8545"
+			(at 172.72 269.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "da10c9d2-906d-406a-9b16-a60ab72d50b4")
 		)
@@ -15824,6 +16253,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1885"
+			(at 50.8 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ebcfbb73-01ac-4d15-b93f-1511568b9d86")
 		)
@@ -15895,6 +16335,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 209.55 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17901"
 			(at 209.55 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -16062,6 +16513,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4410"
+			(at 86.36 220.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3f5c6ee5-23ba-4269-9b18-a28a5ca0f2e6")
 		)
@@ -16134,6 +16596,17 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 134.62 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C53055674"
 			(at 134.62 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -16376,6 +16849,17 @@
 			)
 		)
 		(property "Description" "3.5mm stereo (TRS) jack, through hole, with isolated normally-open detect switch"
+			(at 392.43 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C39461671"
 			(at 392.43 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -16634,6 +17118,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15127"
+			(at 50.8 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "2ecdfdcd-259e-46f1-b96b-03350ee2c02c")
 		)
@@ -16709,6 +17204,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 60.96 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C13585"
 			(at 60.96 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -17030,6 +17536,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C26032"
+			(at 43.18 200.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "652dd9c8-f3dc-4b4a-8b4d-4d61a7cf1d7a")
 		)
@@ -17102,6 +17619,17 @@
 			)
 		)
 		(property "Description" "Dual Low-Noise JFET-Input Operational Amplifiers, DIP-8/SOIC-8"
+			(at 44.45 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C388176"
 			(at 44.45 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -17228,6 +17756,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C388176"
+			(at 196.85 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e1460dd9-4c49-4179-b55f-0a2221142048")
 		)
@@ -17334,6 +17873,17 @@
 			)
 		)
 		(property "Description" "Dual Low-Noise JFET-Input Operational Amplifiers, DIP-8/SOIC-8"
+			(at 99.06 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C388176"
 			(at 99.06 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -17461,6 +18011,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C69901"
+			(at 345.44 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "914a8f83-b220-47f2-ad22-a585a626c839")
 		)
@@ -17575,6 +18136,17 @@
 			)
 		)
 		(property "Description" "Quad Low-Noise JFET-Input Operational Amplifiers, DIP-14/SOIC-14"
+			(at 99.06 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C388176"
 			(at 99.06 203.2 0)
 			(hide yes)
 			(show_name no)
@@ -17777,6 +18349,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1848"
+			(at 58.42 200.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "590317a8-f667-4cc4-9386-fdf3151a503b")
 		)
@@ -17850,6 +18433,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 186.69 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17927"
 			(at 186.69 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -18007,6 +18601,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 60.96 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1848"
 			(at 60.96 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -18371,6 +18976,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19110"
+			(at 375.92 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7b887f62-9fd3-49da-84d1-b507c40ab802")
 		)
@@ -18520,6 +19136,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 68.58 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17927"
 			(at 68.58 198.12 0)
 			(hide yes)
 			(show_name no)
@@ -18689,6 +19316,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C28323"
+			(at 363.22 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "55e687b3-2d97-42dc-86f0-876e8e0c7428")
 		)
@@ -18761,6 +19399,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 66.04 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
 			(at 66.04 143.51 0)
 			(hide yes)
 			(show_name no)
@@ -18844,6 +19493,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 170.18 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1885"
 			(at 170.18 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -19013,6 +19673,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C77101"
+			(at 218.44 256.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "578f4fee-8b49-4293-ab5f-7ab58d7f7013")
 		)
@@ -19084,6 +19755,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 363.22 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19110"
 			(at 363.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -19486,6 +20168,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C2905423"
+			(at 201.93 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "11"
 			(uuid "b4452221-daee-455d-98a0-150ac2f818f7")
 		)
@@ -19774,6 +20467,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C13585"
+			(at 116.84 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e81f85e4-771d-42aa-b532-047f7855628e")
 		)
@@ -19932,6 +20636,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17900"
+			(at 88.9 271.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a0a4e964-8c3f-4b3d-9cca-423c17a50fde")
 		)
@@ -20001,6 +20716,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 314.96 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4410"
 			(at 314.96 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -20082,6 +20808,17 @@
 			)
 		)
 		(property "Description" "Ferrite bead, small symbol"
+			(at 213.36 248.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C357023"
 			(at 213.36 248.92 0)
 			(hide yes)
 			(show_name no)
