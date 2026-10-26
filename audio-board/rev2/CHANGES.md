@@ -288,4 +288,9 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 - **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V`, `/3V3_A`, `/3V3_D`. GND stays in Default and mostly drops straight to L2/L3 through vias.
 - **Power min is 0.3 mm, not 1 mm,** so power tracks can neck down onto U2's 0.25 mm pads at 0.5 mm pitch. Keep them at 1 mm everywhere else.
 - **Presets:** tracks 0.2, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
+- **Thermal reliefs (2026-10-25):** through-hole pads join the L2/L3 GND planes with four 0.5 mm spokes and a 0.5 mm gap.
+  SMD pads and vias, including U2's exposed-pad vias, stay solid. The through-hole parts are hand-soldered with an iron, and a pin tied solidly
+  into two planes (jack sleeves, J3/J4/J8 GND, the Daisy and J6/J7 GND pins, C18) would not heat up enough. Both GND zones use
+  "Thermal reliefs for PTH", and the "Thermal reliefs on through-hole pads" rule in `seed3-carrier.kicad_dru` enforces it for
+  any zone added later. DRC's minimum of 2 spokes per pad passes.
 - **Was:** the minimum track width was 0.3 mm while the Default class used 0.2 mm, so every default track failed DRC. The minimum is now 0.2 mm.
