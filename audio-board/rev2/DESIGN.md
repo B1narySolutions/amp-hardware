@@ -9,18 +9,18 @@ board has no pots or encoder. If there is a master volume encoder, it goes on th
 
 ## Signal paths
 
-U1 is a TLV9064 quad op-amp (SOIC-14) on `+5V` (pin 4) and GND (pin 11), using the TL07x-style symbol.
+U1 is a TLV9062 dual op-amp (SOIC-8) on `+5V` (pin 8) and GND (pin 4), using the TL07x-style symbol.
 
 | Unit | Use |
 |---|---|
 | U1A | Guitar input buffer |
-| U1B | Unused, parked as a follower: pin 5 to `VREF`, pins 6 and 7 tied, so it sits at 2.5 V and doesn't oscillate |
-| U1C | Speaker / line-send buffer |
-| U1D | AUX input buffer |
+| U1B | AUX input buffer |
+
+Both outputs are driven straight from the Daisy, with no op-amp (see "Headphone output" and "Speaker / line send").
 
 ### Mid-rail reference (VREF)
 R7/R8 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source impedance, C7 gives a ≈ 0.7 Hz corner, which keeps
-noise on `+5V` (from the display) out of `VREF`. Its loads are R17, R29, R39 and U1 pin 5.
+noise on `+5V` (from the display) out of `VREF`. Its loads are R17 and R39.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
 J1 tip → C1 (100 pF to GND, RF shunt) → C3 (1 µF) → R17 (1M to `VREF`) → R1 (1k) → U1A follower → `AUDIO_IN_1` (Daisy pin 16).
@@ -31,13 +31,13 @@ J1 tip → C1 (100 pF to GND, RF shunt) → C3 (1 µF) → R17 (1M to `VREF`) �
 
 ### AUX input (J9 → `AUDIO_IN_2`)
 J9 (SJ3-35063AG, 3.5 mm TRS) tip and ring → R40/R41 (10k each, passive stereo-to-mono sum) → summing node with R38 (4.7k to GND)
-and C31 (1 nF, ~67 kHz RF filter) → C32 (1 µF) → R39 (100k to `VREF`, ~1.6 Hz high-pass) → U1D follower → `AUDIO_IN_2` (Daisy pin 17).
+and C31 (1 nF, ~67 kHz RF filter) → C32 (1 µF) → R39 (100k to `VREF`, ~1.6 Hz high-pass) → U1B follower → `AUDIO_IN_2` (Daisy pin 17).
 J9's detect switch (pins 5 and 6) is not connected.
 - It mirrors the guitar input: biased at `VREF`, unity-gain buffer, Daisy input driven from a low impedance.
 - **R38** sets the attenuation (see "Level"). It also holds the summing node near GND when nothing is plugged in, so an empty jack
   stays quiet, and gives the source's own coupling caps a DC return.
 - **C31** filters RF picked up on the cable, for example from the phone itself. It sees R40 ‖ R41 ‖ R38 ≈ 2.4k, so the corner is ≈ 67 kHz.
-- **No series resistor at U1D.** R40/R41 already put ≈ 5k in series, with C31 to GND ahead of C32, so C32/R39 go straight to U1 pin 12.
+- **No series resistor at U1B.** R40/R41 already put ≈ 5k in series, with C31 to GND ahead of C32, so C32/R39 go straight to U1 pin 5.
 - **Level:** the node is loaded by R38 ‖ R39 ≈ 4.5k (R39 goes to `VREF`, which is AC ground). The same signal on both channels sees
   R40 ‖ R41 = 5k into 4.5k, a gain of 0.47 (−6.5 dB). Most backing tracks are close to this case, since bass, kick and vocals sit in the
   centre. One channel alone (the other driven at 0 V) sees 10k into 4.5k ‖ 10k, a gain of 0.24 (−12.5 dB).
@@ -81,13 +81,19 @@ TN and RN are no-connects.
   PCB layout. The jack face sits at the board edge (X = −2.4 mm from pin 1), with the nose overhanging. J9 uses the same part and footprint.
 
 ### Speaker / line send (`AUDIO_OUT_2` → J2, J8)
-`AUDIO_OUT_2` (Daisy pin 19) → R28/C24 (3.3k/1 nF, ~48 kHz low-pass) → C25/R29 (1 µF, 1M to `VREF`) → U1C buffer → C26 (10 µF)
-→ `LINE_SEND` → R3 (100 Ω) → `LINE_OUT`, with R4 (100k) to GND. `LINE_OUT` goes to J2 (¼", external) and J8 (internal, to the speaker amp).
-- **R3** keeps the cable capacitance off U1C. J2 and J8 share it. **C26** blocks `VREF`'s DC, and **R4** bleeds it, so the output sits at 0 V.
+`AUDIO_OUT_2` (Daisy pin 19) → R28/C24 (3.3k/1 nF, ~48 kHz low-pass) → `LINE_OUT`, with R4 (100k) to GND. `LINE_OUT` goes to
+J2 (¼", external) and J8 (internal, to the speaker amp).
+- **No buffer**, for the same reason as the headphone path: the Seed3's outputs are AC-coupled on the module and can drive 16 Ω
+  headphones, so a cable and a ≥ 10k amp input are an easy load. With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't
+  drift at power-on.
+- **R28** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input it costs ≈ 2.6 dB (≈ 0.74 Vrms at
+  full scale). Cable capacitance adds to C24 and lowers the corner, ≈ 37 kHz with 3 m of typical cable.
+- **R4** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
 - **J8** is a 2-pin JST-XH (B2B-XH-A, vertical): pin 1 `LINE_OUT`, pin 2 GND. It feeds the speaker amp on the power board (or an
   off-the-shelf class D module while prototyping). A keyed internal header instead of a ¼" cable between boards. Audio ground has its
   own pin, separate from J3's supply current. Use a short twisted pair routed away from the guitar input and speaker wires.
-- **J2** is the external line out, for testing with an outside amp before the power board is ready.
+- **J2** is the external line out: for an outside amp, or to record into a DAW while monitoring on headphones. It stays live when
+  headphones are in (only the speaker amp is muted, through `SPK_EN`).
 - **Why a separate speaker output:** muting in firmware means the speaker amp can be shut down while headphones are in (saving battery),
   mute and unmute can ramp without clicks, and the speaker and headphones get independent levels.
 - **Speaker wiring** is on the power board, not here: the cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects.
@@ -193,18 +199,13 @@ USB stays on the Daisy's own connector.
 - Run the display UART at 230400 baud or less (R43, see "Display connector (J4)"). Take volume and mute from the display over it. Ramp volume changes.
 - Start the IWDG early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
 - Send the speaker mix to output 2 and headphones to output 1.
-- Read `HP_DETECT` (pin 34, PG9) with its internal pull-up enabled: **low = headphones in**. Debounce it. Ramp the speaker down and
-  shut its amp off when headphones are in.
+- Read `HP_DETECT` (pin 34, PG9) with its internal pull-up enabled: **low = headphones in**. Debounce it. When headphones go in, ramp
+  `AUDIO_OUT_2` down, drive `SPK_EN` low, then ramp `AUDIO_OUT_2` back up so J2 stays live for recording. Reverse it when they come out.
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
 - Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while
   running, fade out, mute, save settings, then drive `PWR_HOLD` low.
 - Initialise `SPK_EN` (pin 28) and `HP_EN` (pin 33) as low outputs. Drive `HP_EN` high after the first audio callback has started.
-  Drive `SPK_EN` high to enable the speaker amp, low when headphones are in. At power-on, wait until at least 4 s after `+5V` comes
-  up before raising it. `LINE_OUT` drifts while the bias settles: `VREF` rises with τ ≈ 0.24 s (R7 ‖ R8, C7), U1C's input follows through
-  R29/C25 (τ = 1 s), and C26 into R4 (τ = 1 s) passes the change on. Into an open J8 the output peaks at ≈ 0.9 V about 1.3 s after
-  power-on, and is still ≈ 0.5 V at 0.5 s and ≈ 0.25 V at 4 s. A speaker amp's lower input impedance shrinks this (≈ 0.14 V peak into
-  10k). The firmware can't see `+5V` directly, so count from boot. The Daisy boots from the same rail, so boot is a slightly late
-  stand-in for `+5V`. J2 has no mute and shows the same drift, so turn an external amp on after the carrier.
+  Drive `SPK_EN` high to enable the speaker amp (after the first audio callback, like `HP_EN`), low when headphones are in.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from the display.
   It goes to both outputs.
@@ -227,7 +228,10 @@ USB stays on the Daisy's own connector.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.4 (Daisy out) checks C12/C13 alone (≈ 1.7 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
-- **Layout:** every part is placed. Next is routing.
+- **Layout:** run "Update PCB from Schematic" to pick up U1's SOIC-8 footprint and drop U1C's parts (C25, C26, R29, R3). Then re-place
+  U1, C8 and the line-out block (R28/C24/R4) before routing.
+- **Line-out level:** with no buffer, R28 is the output impedance. Check on the bench that the speaker amp and an interface see enough
+  level. If not, lower R28 (1k with C24 at 3.3 nF keeps the corner near 48 kHz).
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
@@ -279,7 +283,7 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 |---|---|---|
 | J1 (guitar in), J9 (AUX), J5 (headphones), J2 (line out) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
 | A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_EN`, `HP_DETECT`) face the rear. A ~4.5 mm routing channel runs under its front row, where the audio pins are |
-| U1 (TLV9064) | Between the input jacks and Daisy pins 16–19 | Short input and output paths for all the buffers |
+| U1 (TLV9062) | Between J1/J9 and Daisy pins 16–17 | Short input paths for both buffers |
 | U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
 | J3 (power board), J4 (display) | J3 at the rear right beside the Daisy, J4 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
 | J8 (internal line out) | Right side, just above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
@@ -288,14 +292,14 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and the
 front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
 
-- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face the Daisy, with a row of parts and labels between them.
+- **U1** (SOIC-8) still needs placing. The guitar input enters at pin 3 and the AUX input at pin 5; outputs 1 and 7 go to Daisy pins 16 and 17.
 - **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → U1 pin 3 is one row about 15 mm long, with no node longer than 7 mm.
   Route it all on L1 with no vias, and keep other signals off L1 next to it.
-- **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 sits at U1 pin 12. J9's tip and ring reach the block on L4.
+- **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 sits at U1 pin 5. J9's tip and ring reach the block on L4.
   They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
-- **Headphone and speaker filters:** R2/C2 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3 to the right of pin 8.
+- **Headphone and speaker filters:** R2/C2 sit by C12/C13 at U2's inputs. R28/C24 and R4 sit between Daisy pin 19 and J2/J8.
   Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
-- **Decoupling:** C8 is right under U1 pin 4 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within 3 mm
+- **Decoupling:** C8 goes right at U1 pin 8 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within 3 mm
   of their pins. U2 is rotated so its inputs face C12/C13, the charge pump faces away from J5, and OUTR drops straight to J5's ring.
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
 - **VREF:** R7, R8 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
@@ -352,7 +356,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 
 - **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A`, which is unused on the carrier, and `/3V3_D`, which only feeds U4).
   GND stays in Default and mostly drops straight to L2/L3 through vias.
-- **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 4 without touching the next
+- **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 8 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin
   begins narrow. Switch to the 1 mm preset once outside the courtyard. Anywhere else a Power trace under 0.5 mm fails DRC. Rules later in
   `seed3-carrier.kicad_dru` win, so the neck-down rules come after "Power track width".
@@ -366,7 +370,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or 11 if C17936 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30, or more if C17936 or C398355 turn out to be extended).
 
 **SMD, assembled by JLC**
 
@@ -374,16 +378,14 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 |---|---|---|---|---|
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R44 | Basic | 1.9M |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
-| C17901 | 100 Ω 1% 1206 (UNI-ROYAL) | R3 | Basic | 2.5M |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R39 | Basic | 1.0M |
-| C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 R29 | Basic | 3.8M |
+| C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 | Basic | 3.8M |
 | C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 R43 | Basic | 2.5M |
 | C17936 | 4.7k 1% 1206 (UNI-ROYAL 1206W4F4701T5E) | R38 | Check | Check |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
-| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C25 C32 | Basic | 551k |
+| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C32 | Basic | 551k |
 | C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 C37 C38 | Basic | 1.6M |
-| C13585 | 10 µF 50 V X5R 1206 (Samsung) | C26 | Basic | 2.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
 | C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
 | C19110 | 2.2 µF 25 V X7R 0805 (Samsung) | C33 C34 C36 | Extended | 297k |
@@ -391,7 +393,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 | C357023 | 600 Ω@100 MHz, 3 A, 40 mΩ 1206 bead (TAI-TECH HCB3216KF-601T30) | FB1 | Extended | 272k |
 | C15127 | AO3401A | Q1 | Basic | 642k |
 | C8545 | 2N7002 | Q4 | Basic | 2.9M |
-| C388176 | TLV9064IDR | U1 | Extended | 6.1k |
+| C398355 | TLV9062IDR | U1 | Check | Check (LCSC lists 41k) |
 | C69901 | TPA6132A2RTER | U2 | Extended | **65** |
 | C7136368 | TXU0101DBVR (TI) | U4 | Extended | 5.1k |
 
@@ -412,6 +414,6 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 - **C0G for the filter caps.** C1, C2, C24 and C31 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
   which adds distortion. C2/C24/C31 (C1885) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the fallback.
 - **Voltage ratings above the schematic's:** C7 (47 µF, schematic says 10 V) shares C30's 16 V part, which also derates better under
-  DC bias. C18 is 16 V rather than 10 V. C26 is 50 V. Same footprints, same or better behaviour.
+  DC bias. C18 is 16 V rather than 10 V. Same footprints, same or better behaviour.
 - **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them
   out (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
