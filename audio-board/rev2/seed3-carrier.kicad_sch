@@ -6377,12 +6377,6 @@
 		(uuid "1fe27ee9-10b4-48f8-8009-7b91af977364")
 	)
 	(junction
-		(at 322.58 121.92)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "23212f9f-5f6e-461a-9875-02903a78ab90")
-	)
-	(junction
 		(at 107.95 43.18)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6399,12 +6393,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2f2adbf9-965d-4b65-b275-458ddc3a25e0")
-	)
-	(junction
-		(at 327.66 121.92)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "30497bfe-6109-495b-bc6f-7a13d931608b")
 	)
 	(junction
 		(at 170.18 40.64)
@@ -6467,22 +6455,10 @@
 		(uuid "9099c6bb-18da-4854-b98b-8f08ce7b7baa")
 	)
 	(junction
-		(at 81.28 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9c603d69-3aa3-480d-8bc1-49e5c6e86c7d")
-	)
-	(junction
 		(at 66.04 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a16b182b-96b8-4533-b4c9-4423cf408557")
-	)
-	(junction
-		(at 134.62 264.16)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "aff7365e-c87d-4919-a5a5-43c5cb288765")
 	)
 	(junction
 		(at 342.9 81.28)
@@ -6724,16 +6700,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 73.66) (xy 218.44 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "054e6eac-69d9-44e5-a80b-25fe344db2e3")
-	)
-	(wire
-		(pts
 			(xy 358.14 68.58) (xy 368.3 68.58)
 		)
 		(stroke
@@ -6894,23 +6860,13 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 220.98) (xy 83.82 220.98)
+			(xy 73.66 220.98) (xy 91.44 220.98)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "1d3cea7e-270b-4ddf-9995-dde9cbccdbfe")
-	)
-	(wire
-		(pts
-			(xy 81.28 40.64) (xy 91.44 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "209d57d2-692e-4fe6-8175-bb00d2838b2f")
 	)
 	(wire
 		(pts
@@ -6994,16 +6950,6 @@
 	)
 	(wire
 		(pts
-			(xy 307.34 121.92) (xy 312.42 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2b8f7d8f-ae26-40b9-b302-93951432e888")
-	)
-	(wire
-		(pts
 			(xy 72.39 93.98) (xy 72.39 97.79)
 		)
 		(stroke
@@ -7051,16 +6997,6 @@
 			(type default)
 		)
 		(uuid "30ed0b07-7298-4331-b8e0-17d0a4ddcb79")
-	)
-	(wire
-		(pts
-			(xy 317.5 121.92) (xy 322.58 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3181a1ff-b436-4a56-af12-7fa3ce3f9559")
 	)
 	(wire
 		(pts
@@ -7194,16 +7130,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 36.83) (xy 81.28 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "465801ce-6322-4dac-a7ab-353e99cbb4d8")
-	)
-	(wire
-		(pts
 			(xy 337.82 81.28) (xy 340.36 81.28)
 		)
 		(stroke
@@ -7214,16 +7140,6 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 220.98) (xy 91.44 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "46806dd3-cb56-4091-b412-4aaad09b983d")
-	)
-	(wire
-		(pts
 			(xy 342.9 40.64) (xy 335.28 40.64)
 		)
 		(stroke
@@ -7231,16 +7147,6 @@
 			(type default)
 		)
 		(uuid "469d6ec1-f328-489d-b02c-a9c04e7feb9c")
-	)
-	(wire
-		(pts
-			(xy 327.66 121.92) (xy 332.74 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "48bf3411-683e-4fa6-9141-78efb9802107")
 	)
 	(wire
 		(pts
@@ -7264,7 +7170,7 @@
 	)
 	(wire
 		(pts
-			(xy 121.92 264.16) (xy 134.62 264.16)
+			(xy 121.92 264.16) (xy 137.16 264.16)
 		)
 		(stroke
 			(width 0)
@@ -7504,7 +7410,7 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 40.64) (xy 81.28 40.64)
+			(xy 72.39 40.64) (xy 91.44 40.64)
 		)
 		(stroke
 			(width 0)
@@ -7631,16 +7537,6 @@
 			(type default)
 		)
 		(uuid "871f9a41-d7ad-4b7c-827c-25c431ae8a49")
-	)
-	(wire
-		(pts
-			(xy 322.58 121.92) (xy 327.66 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "87caf8ec-8b14-475d-bd64-cdfc37112689")
 	)
 	(wire
 		(pts
@@ -7914,16 +7810,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 27.94) (xy 81.28 31.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aa14053e-e2ff-4ed1-902f-fb574ff1c128")
-	)
-	(wire
-		(pts
 			(xy 167.64 269.24) (xy 165.1 269.24)
 		)
 		(stroke
@@ -8191,16 +8077,6 @@
 			(type default)
 		)
 		(uuid "d3e8607d-28dd-4ae4-83cb-18b72a20158f")
-	)
-	(wire
-		(pts
-			(xy 134.62 264.16) (xy 137.16 264.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d3f7ac13-e45f-4e6c-9680-09f3052dbafd")
 	)
 	(wire
 		(pts
@@ -8522,16 +8398,6 @@
 		)
 		(uuid "00a5193c-a741-41d9-947f-e6a9d12b36b5")
 	)
-	(label "3V3_D"
-		(at 134.62 259.08 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "041fad49-4818-4626-a516-802d7186e201")
-	)
 	(label "UART_RX_CONN"
 		(at 134.62 177.8 180)
 		(effects
@@ -8652,7 +8518,7 @@
 		)
 		(uuid "296a8784-3953-4642-82ef-8143c477dec5")
 	)
-	(label "HP_DETECT_SW"
+	(label "HP_DETECT"
 		(at 377.19 109.22 180)
 		(effects
 			(font
@@ -8802,16 +8668,6 @@
 		)
 		(uuid "5baf7769-07df-4bce-93dc-6d4c71c87554")
 	)
-	(label "VREF"
-		(at 81.28 27.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6470e3eb-71f0-4f88-ab76-7efd3929c03a")
-	)
 	(label "PWR_BTN"
 		(at 184.15 118.11 180)
 		(effects
@@ -8871,16 +8727,6 @@
 			(justify left bottom)
 		)
 		(uuid "95f382ec-97f3-4786-b9cf-b424112ebf8a")
-	)
-	(label "HP_DETECT"
-		(at 332.74 121.92 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "96f4082d-3a5c-4e16-a996-a781d3ce933f")
 	)
 	(label "PWR_HOLD"
 		(at 76.2 269.24 180)
@@ -8942,15 +8788,9 @@
 		)
 		(uuid "a4f59d54-422c-47f5-a36d-a504ca51b24e")
 	)
-	(label "3V3_D"
-		(at 218.44 73.66 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a95b715b-a4fe-4138-ada5-51764e27c835")
+	(no_connect
+		(at 218.44 80.01)
+		(uuid "45fb49a7-4b7f-4141-b45d-823415f96d98")
 	)
 	(label "SPK_EN"
 		(at 184.15 123.19 180)
@@ -9042,7 +8882,7 @@
 		)
 		(uuid "beccfac4-3ac9-4ada-bafd-e6cdfec8f597")
 	)
-	(label "HP_DETECT_SW"
+	(label "HP_DETECT"
 		(at 289.56 121.92 0)
 		(effects
 			(font
@@ -9051,16 +8891,6 @@
 			(justify left bottom)
 		)
 		(uuid "ca2e7fdd-4ffc-45ce-9500-c6e5d5750987")
-	)
-	(label "3V3_D"
-		(at 322.58 116.84 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cad73f2d-df98-4201-b850-91348659ada9")
 	)
 	(label "AUDIO_OUT_2"
 		(at 184.15 102.87 180)
@@ -10819,98 +10649,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 322.58 119.38 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "27bc99cd-4817-4630-98c8-410d7e15ff6a")
-		(property "Reference" "R30"
-			(at 325.12 117.475 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 325.12 119.38 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 322.58 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 322.58 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 322.58 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C17902"
-			(at 322.58 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a4b92bfb-6cce-46ec-83bd-4c9a33855757")
-		)
-		(pin "2"
-			(uuid "202e4998-e65a-4db5-ac81-4095bf16cda7")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R30")
 					(unit 1)
 				)
 			)
@@ -12915,99 +12653,6 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 81.28 34.29 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "64e77a1d-269c-49df-8bfa-216e4220eae0")
-		(property "Reference" "R5"
-			(at 83.82 33.0199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10M"
-			(at 83.82 35.5599 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 81.28 34.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 81.28 34.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 81.28 34.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C26119"
-			(at 81.28 34.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "35e7bdc1-5af6-4530-b7e0-13e678ecd65a")
-		)
-		(pin "1"
-			(uuid "0d60438f-913c-4396-bee3-02b852bd6167")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
 		(at 64.77 50.8 0)
 		(unit 1)
 		(body_style 1)
@@ -13466,98 +13111,6 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 327.66 124.46 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7b478638-476c-4c1d-96fb-80f9ba43cae6")
-		(property "Reference" "C27"
-			(at 330.2 123.19 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 330.2 125.73 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 327.66 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 327.66 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 327.66 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C24497"
-			(at 327.66 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "14218a1f-fd03-40cb-b9a5-a2efe117b828")
-		)
-		(pin "2"
-			(uuid "131f0f2e-b595-4e28-a742-bb0d6ec3f952")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "C27")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
 		(at 88.9 254 0)
 		(unit 1)
 		(body_style 1)
@@ -13643,98 +13196,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "C28")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 134.62 261.62 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7d166bcf-9742-47e0-af73-61944d034136")
-		(property "Reference" "R36"
-			(at 132.08 260.35 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10k"
-			(at 132.08 262.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 134.62 261.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 261.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 134.62 261.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C17902"
-			(at 134.62 261.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8ac7bda8-e457-48fe-b0d2-f95218b106c6")
-		)
-		(pin "2"
-			(uuid "f0b65bad-545d-4629-9949-63281c8db45e")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R36")
 					(unit 1)
 				)
 			)
@@ -15155,96 +14616,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 86.36 220.98 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9feafc91-42af-4b54-9403-74934d090392")
-		(property "Reference" "R42"
-			(at 86.36 214.63 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 86.36 217.17 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 86.36 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 86.36 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 86.36 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C4410"
-			(at 86.36 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3f5c6ee5-23ba-4269-9b18-a28a5ca0f2e6")
-		)
-		(pin "2"
-			(uuid "acb008ab-a825-458a-991b-db8e80b5baeb")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R42")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
 		(at 134.62 154.94 0)
 		(mirror x)
@@ -15846,83 +15217,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR055")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 327.66 127 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b4fad969-d455-4085-bd5f-075623dcd68c")
-		(property "Reference" "#PWR049"
-			(at 327.66 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 327.66 132.08 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 327.66 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 327.66 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 327.66 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b2ede36f-170d-4f9d-84ab-e17a1b3b2be7")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -18950,96 +18244,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "R34")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 314.96 121.92 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "fcfc0cd8-4981-4b17-b31f-29a24edf883d")
-		(property "Reference" "R31"
-			(at 314.96 124.46 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 314.96 126.365 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 314.96 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 314.96 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 314.96 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C4410"
-			(at 314.96 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f0b605e8-586e-409f-a987-f593357b08c4")
-		)
-		(pin "2"
-			(uuid "080d1441-328c-4bc5-a195-98cefc6f20a3")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R31")
 					(unit 1)
 				)
 			)

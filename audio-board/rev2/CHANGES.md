@@ -44,11 +44,10 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Changed:** U1 is now a TLV9064 quad (SOIC-14) instead of the TLV9062 dual, using the same TL07x-style symbol.
   Unit A is unchanged. Unit B is unused (see "Headphone buffer removed"). Unit C is the speaker buffer. Unit D is the AUX input buffer (see below).
   Power moves to pin 4 (+5V) and pin 11 (GND).
-- **Added:** `HP_DETECT` on Daisy pin 34 (was D27), with a 10k pull-up, 1k series resistor (R30, R31) and 100nF (C27).
-  TP11 sits on the switch side (`HP_DETECT_SW`).
+- **Added:** `HP_DETECT` on Daisy pin 34 (was D27). TP11 sits on it. (R30, R31 and C27 were removed later, see "Small-signal cleanup".)
 - **Changed:** J5 is now a Same Sky **SJ3-35063AG** (3.5 mm stereo, through hole; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)).
   Pins 1/2/3 are sleeve/ring/tip on GND/HP_R/HP_L. Pins 5 and 6 are an isolated normally-open switch that closes when a plug
-  is inserted: pin 5 goes to GND and pin 6 to `HP_DETECT_SW`. Pin 4 isn't fitted on this variant.
+  is inserted: pin 5 goes to GND and pin 6 to `HP_DETECT`. Pin 4 isn't fitted on this variant.
   The symbol is new in `seed3-carrier.kicad_sym`, and the footprint is new in
   `Seed3_Carrier.pretty/Jack_3.5mm_SameSky_SJ3-35063AG_Horizontal.kicad_mod`, drawn from the datasheet's recommended PCB layout.
   The jack face sits at the board edge (X = −2.4 mm from pin 1), with the nose overhanging.
@@ -66,7 +65,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   | 1, 2 | `5V_IN` | Power board → carrier | 39 (VIN) via Q1 | 5 V supply, two pins share the current |
   | 3, 4 | GND | — | 20 / 40 | Ground, two pins |
   | 5 | `BATT_SENSE_CONN` | Power board → carrier | 25 (`BATT_SENSE`, was A3) | Battery voltage scaled to ≤ 3.3 V. R32 (10k) and C28 (100nF) filter it into the ADC |
-  | 6 | `PWR_BTN_CONN` | Power board → carrier | 26 (`PWR_BTN`, was A4) | Low while the power button is pressed. R36 (10k) pull-up to 3V3_D, R35 (1k) series, C29 (100nF) |
+  | 6 | `PWR_BTN_CONN` | Power board → carrier | 26 (`PWR_BTN`, was A4) | Low while the power button is pressed. R35 (1k) series, C29 (100nF), STM32 internal pull-up |
   | 7 | `PWR_HOLD_CONN` | Carrier → power board | 27 (`PWR_HOLD`, was A5) | High keeps the power on. R33 (1k) series, R34 (100k) pull-down so it is low while the Daisy is absent or booting |
   | 8 | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`, was A6) | Open drain speaker-amp mute (see below) |
 
@@ -76,7 +75,8 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   (Q3 was in series with Q4, gated by the old `WD_OK` watchdog signal. It was removed on 2026-10-25, see "Output mute".)
 - **Added:** FB1 (ferrite bead, 1206) and C30 (47µF, 1210) between `+5V` and J4 pin 4, which is now `DISPLAY_5V`.
   They keep the display's current pulses (ESP32 Wi-Fi, backlight PWM) off the rail that feeds the analog circuits.
-- **Power board requirements:** nothing above 3.3 V on pins 5–7. Switch the `BATT_SENSE` divider off with the 5 V output
+- **Power board requirements:** nothing above 3.3 V on pins 5–7. Give `PWR_BTN_CONN` its own pull-up (≤ 3.3 V) if the power board reads the button:
+  the carrier only has the STM32's internal pull-up, which is off while the Daisy is unpowered or booting. Switch the `BATT_SENSE` divider off with the 5 V output
   (or give it ≥ 100k source impedance), so it doesn't drain the battery or feed an unpowered Daisy while the amp is off. Pull `SPK_MUTE` up on the amp side so the amp is muted when this
   board is unpowered or unplugged. Keep the power on for about 2 s after a button press until the Daisy raises `PWR_HOLD`, and force
   the power off when the button is held for about 5 s. The power button itself is panel mounted and wired to the power board.
@@ -97,7 +97,7 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
 - **Added:** J9, a second SJ3-35063AG (3.5 mm TRS, same part and footprint as J5) for backing tracks from a phone or laptop.
   Its detect switch (pins 5 and 6) is not connected.
 - **Path:** tip and ring → R40/R41 (10k each, passive stereo-to-mono sum, −6 dB) → summing node with R38 (47k to GND) and C31 (1nF, ~32 kHz RF filter)
-  → C32 (1µF) → R39 (100k to VREF, ~1.6 Hz high-pass) → R42 (1k) → U1D follower → `AUDIO_IN_2` (Daisy pin 17).
+  → C32 (1µF) → R39 (100k to VREF, ~1.6 Hz high-pass) → U1D follower → `AUDIO_IN_2` (Daisy pin 17).
   It mirrors the guitar input: biased at VREF, unity-gain buffer, Daisy input DC-coupled from a low impedance.
 - **Changed:** U1D is no longer parked as a VREF follower. Its old wiring is removed, and the unit moved next to the AUX parts.
   The speaker section is now "Speaker / line send, AUX input".
@@ -160,13 +160,29 @@ Changes from rev 1, with the reason for each. Keep this list current as the sche
   The R2/C2 corner moves from ≈ 48 kHz to ≈ 64 kHz (R2 ‖ 9.9 kΩ with 1 nF). The low-end corner is now C12/C13 into U2 plus the Daisy's own
   output coupling cap, whose value isn't published.
 
+### Small-signal cleanup (2026-10-25)
+- **Removed:** R5, R42, R30, R31, C27 and R36. The reference designators are left unused rather than renumbered.
+- **R5 (10M, `VREF` → U1A+):** R17 already biases U1A+ to `VREF` through R1, so R5 only sat in parallel with that path. It lowered the
+  guitar input load from 1 MΩ to ≈ 0.91 MΩ. It was also the only 10M part, an extended one.
+- **R42 (1k into U1D+):** the AUX path already has ≈ 5k in series (R40 ‖ R41) and C31 to GND ahead of C32, so it added no protection or filtering.
+  C32/R39 now go straight to U1 pin 12.
+- **R30, R31, C27 (`HP_DETECT`):** J5's detect switch is an isolated, mechanically actuated contact on this board, not on a cable. J5 pin 6 now goes
+  straight to Daisy pin 34 (PG9), and the `HP_DETECT_SW` net is merged into `HP_DETECT`. The firmware enables the internal pull-up and debounces.
+  This matches the Seed3 datasheet's own switch circuits (Figures 2.1 and 2.2: switch to GND, internal pull-up, "Any GPIO").
+- **R36 (`PWR_BTN` pull-up):** replaced by the STM32's internal pull-up on pin 26 (PA6). R35 and C29 stay, since that line runs off the board
+  to a panel button. With a ≈ 40k internal pull-up, C29 gives a ≈ 4 ms release time, fine for a button. The power board must provide its own pull-up
+  if it reads the button (see "Power board requirements").
+- **Daisy pin 38 (`3V3_D`)** fed only R30 and R36, so it is now marked no-connect.
+- **Kept C17:** it was on the removal list while C9 was still fitted. With C9 gone it is the only ceramic at the power entry, beside C18's electrolytic,
+  and the Seed3 datasheet recommends extra filtering on VIN, so it stays.
+
 ## Firmware changes these require
 - Take volume and mute from the display over the UART instead of the volume/tone ADCs. Ramp volume changes.
 - Start the STM32 independent watchdog (IWDG) early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
-- Send the speaker mix to output 2 and headphones to output 1. Read `HP_DETECT` (pin 34):
+- Send the speaker mix to output 2 and headphones to output 1. Read `HP_DETECT` (pin 34, PG9) with its internal pull-up enabled:
   **low = headphones in** (J5's normally-open switch closes to GND). Debounce it in firmware. Ramp the speaker down and shut its amp off when headphones are in.
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
-- Drive `PWR_HOLD` (pin 27) high early in boot. On a `PWR_BTN` (pin 26, active low) press while running, fade out, mute,
+- Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while running, fade out, mute,
   save settings, then drive `PWR_HOLD` low.
 - Drive `SPK_EN` (pin 28) high to enable the speaker amp, low when headphones are in. At power-on, wait about 0.5 s after audio
   starts before raising it, so C26 and the speaker amp's input caps settle and don't pop the speaker. Drive `HP_EN` (pin 33) high
@@ -259,24 +275,24 @@ All parts sit on the top side, in blocks next to the pins they serve. The analog
 the front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
 
 - **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face the Daisy, with a row of parts and labels between them.
-- **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → R5 → U1 pin 3 is one row about 15 mm long, with no
+- **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → U1 pin 3 is one row about 15 mm long, with no
   node longer than 7 mm. Route it all on L1 with no vias, and keep other signals off L1 next to it.
-- **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
+- **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 sits at U1 pin 12. J9's tip and ring reach
   the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
 - **Headphone and speaker filters:** R2/C2 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3
   to the right of pin 8. Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
 - **Decoupling:** C8 is right under U1 pin 4 (V+). C33 (VDD), C34 (HPVDD), C35 (flying cap) and C36 (HPVSS) surround U2 within
   3 mm of their pins. U2 is rotated so its inputs face C12/C13, the charge pump faces away from J5, and OUTR drops straight to J5's ring.
   OUTL and SGND leave from the top edge. Take them to J5's tip and sleeve together on L4, so the output and its return run side by side.
-- **VREF:** R7, R8 and C7 sit below U1, near the middle of the VREF loads (R5, R17, R29, R39, U1 pin 5). C7 holds the node at low
+- **VREF:** R7, R8 and C7 sit below U1, near the middle of the VREF loads (R17, R29, R39, U1 pin 5). C7 holds the node at low
   impedance, so the VREF trace can run on L4.
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF) and C17 (100 nF) sit at Q1's output.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34 sits above pin 7.
-  The Daisy-side parts (C28, C29, R30, C27, R36) sit just below them. Their nets reach Daisy pins 25–28, 33, 34 and 38 under the Daisy.
+  The Daisy-side parts (C28, C29) sit just below them. Their nets reach Daisy pins 25–28, 33 and 34 under the Daisy.
 - **Display:** FB1 sits beside J4 pin 4 and C30 just below J4. R43/R44 sit to their left, so the UART traces to J4 pins 2/3 pass between R37 and FB1 or drop to L4.
-- **Test points:** TP11 (`HP_DETECT_SW`) is by J5. TP5, TP9 and TP10 were removed (see "Test points and C9 removed").
+- **Test points:** TP11 (`HP_DETECT`) is by J5. TP5, TP9 and TP10 were removed (see "Test points and C9 removed").
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and
-  a 0.2 mm trace fits between them. The exceptions are on purpose: C8, R1 and R5 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
+  a 0.2 mm trace fits between them. The exceptions are on purpose: C8 and R1 at U1's pins (0.73–0.93 mm) and C35 at U2 (0.90 mm).
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
   The schematic's MPN fields for C12/C13 are hidden on the board.
 
@@ -284,7 +300,7 @@ the front jacks. Power, the display and the power board controls sit in the rear
 - **Removed:** J6 and J7 (1×20 female sockets that mirrored every Daisy pin), their 40 net labels and the "Seed3 breakout headers"
   heading in the schematic, and both footprints on the board.
 - **Daisy pins:** the 24 pins that only went to the breakouts are now marked no-connect: D0–D12 (pins 1–13), A0–A2 (22–24), A7–A11
-  (29–32, 35), `USB_D−`/`USB_D+` (36, 37) and `3V3_A` (21). Every other Daisy pin is wired as before. `3V3_D` still feeds R30 and R36.
+  (29–32, 35), `USB_D−`/`USB_D+` (36, 37) and `3V3_A` (21). Every other Daisy pin is wired as before. `3V3_D` (38) is now no-connect too, since R30 and R36 were removed (see "Small-signal cleanup").
 - **Probing:** with the Daisy out, its own sockets (A1) give the same access. TEST_PLAN.md now uses `A1.n`, or a carrier part on the same
   net where the Daisy is fitted. The breakout spot-check (old 5.15) is gone. USB stays on the Daisy's own connector.
 - **Board shrunk to 90 × 56.5 mm (was 90 × 62):** the Daisy moved 5.4 mm into J7's strip along the rear edge, and the front section (jacks,
@@ -296,24 +312,23 @@ the front jacks. Power, the display and the power board controls sit in the rear
 ### Parts sourcing: LCSC numbers (2026-10-25)
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (11 here, about $33).
+Basic parts have no loading fee. Each extended part adds about $3 per order (10 here, about $30).
 
 **SMD, assembled by JLC**
 
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R31 R33 R35 R42 R43 R44 | Basic | 1.9M |
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R1 R33 R35 R43 R44 | Basic | 1.9M |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R2 R28 | Extended | 357k |
 | C17901 | 100 Ω 1% 1206 (UNI-ROYAL) | R3 | Basic | 2.5M |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R4 R26 R34 R37 R39 | Basic | 1.0M |
-| C26119 | 10M 1% 1206 (UNI-ROYAL) | R5 | Extended | 179k |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R17 R29 | Basic | 3.8M |
-| C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R30 R32 R36 R40 R41 | Basic | 2.5M |
+| C17902 | 10k 1% 1206 (UNI-ROYAL) | R7 R8 R32 R40 R41 | Basic | 2.5M |
 | C25833 | 47k 1% 1206 (UNI-ROYAL) | R38 | Extended | 141k |
 | C107179 | 100 pF 50 V C0G 1206 (Yageo) | C1 | Extended | 74k |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C2 C24 C31 | Extended | 4.4k |
 | C1848 | 1 µF 50 V X7R 1206 (Samsung) | C3 C25 C32 | Basic | 551k |
-| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C27 C28 C29 | Basic | 1.6M |
+| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C8 C17 C28 C29 | Basic | 1.6M |
 | C13585 | 10 µF 50 V X5R 1206 (Samsung) | C26 | Basic | 2.6M |
 | C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C30 | Extended | 164k |
 | C86052 | 4.7 µF 50 V X7R 1210 (Murata GRM32ER71H475KA88L) | C12 C13 | Extended | 53k |
@@ -373,7 +388,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 | Hole to hole, hole clearance | 0.25 mm | | |
 | Via annular ring | 0.15 mm | | |
 
-- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V`, `/3V3_A`, `/3V3_D`. GND stays in Default and mostly drops straight to L2/L3 through vias.
+- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V`, `/3V3_A`, `/3V3_D` (both unused on the carrier now). GND stays in Default and mostly drops straight to L2/L3 through vias.
 - **Neck-down at U1 and U2 (2026-10-25):** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 4 without touching
   the next pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started
   at the pin begins narrow. Switch to the 1 mm preset once outside the courtyard. Anywhere else a Power trace under 0.5 mm fails DRC.
