@@ -6775,18 +6775,8 @@
 		)
 		(uuid "66b4c127-5fef-4cf5-85c6-4e952a5632a8")
 	)
-	(wire
-		(pts
-			(xy 299.72 179.07) (xy 312.42 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "edeb8a08-aa1a-4d90-87ea-9924874be6b6")
-	)
 	(label "LINE_OUT"
-		(at 312.42 179.07 0)
+		(at 317.5 179.07 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8563,7 +8553,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
+	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nR22: 0 Ω; fit 10 µF if pin 19 has DC (TEST_PLAN 5.16).\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8657,6 +8647,26 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "140897e8-e920-454b-afbb-b87839375657")
+	)
+	(wire
+		(pts
+			(xy 299.72 179.07) (xy 304.8 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0a0b364d-78a8-42c8-956a-58090c349c17")
+	)
+	(wire
+		(pts
+			(xy 309.88 179.07) (xy 317.5 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f047fffd-20d1-4f64-b18c-adb3cd85da7f")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -17521,6 +17531,96 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR073")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 179.07 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d3b6728e-85ca-47a7-bc1a-699f236db37f")
+		(property "Reference" "R22"
+			(at 307.34 172.72 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 307.34 175.26 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 307.34 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17888"
+			(at 307.34 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fa81b202-61bb-4e07-8742-9aa02064e067")
+		)
+		(pin "2"
+			(uuid "97dbf5b2-95ad-4ef8-98a1-68a9b2ac059d")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R22")
 					(unit 1)
 				)
 			)

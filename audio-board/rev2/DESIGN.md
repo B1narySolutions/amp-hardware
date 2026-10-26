@@ -103,12 +103,13 @@ inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 34, PG9). TP1 s
   PCB layout. The jack face sits at the board edge (X = −2.4 mm from pin 1), with the nose overhanging. J2 uses the same part and footprint.
 
 ### Speaker / line send (`AUDIO_OUT_2` → J5, J6)
-`AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
+`AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → R22 (0 Ω) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
 J5 (¼", external) and J6 (internal, to the speaker amp).
 - **No buffer**, for the same reason as the headphone path: R11 plus a ≥ 10k amp input is far above the 600 Ω line-out minimum (see
   "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
-- **This path assumes pin 19 sits at 0 V DC.** With no cap of our own, any DC offset at the pin would reach J5, J6 and R12. If TEST_PLAN
-  5.16 finds more than a few tens of mV, fit a series cap after R11 (10 µF; with R12 and a 10k load the corner stays under 3 Hz).
+- **This path assumes pin 19 sits at 0 V DC.** With R22 fitted as 0 Ω, any DC offset at the pin would reach J5, J6 and R12. R22 is
+  there so that doesn't need a respin: if TEST_PLAN 5.16 finds more than a few tens of mV, replace R22 with a 10 µF ceramic (1206, 10 V
+  or more). R12 then holds `LINE_OUT` at 0 V, and with a 10k load the corner is ≈ 1.8 Hz.
 - **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input (with R12 in parallel) it costs ≈ 0.9 dB
   (≈ 0.90 Vrms at full scale), and ≈ 1.6 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
   cable. If J5 is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load. A lower R11 would cut that margin.
@@ -347,6 +348,7 @@ front jacks. Power, the display and the power board controls sit in the rear-rig
   and pin 2 (GND) takes a via to L2/L3. The follower feedback, pin 4 to pin 1, wraps around the right side of the body.
 - **Guitar input (most sensitive):** J1 tip → C1 → C2 → R1 → R2 → U1 pin 3 is one row about 15 mm long, with no node longer than 7 mm.
   Route it all on L1 with no vias, and keep other signals off L1 next to it.
+- **R22** (line-out DC-block option) stands below R11, left of R12. Its top pad joins R11/C16, its bottom pad `LINE_OUT`.
 - **Pad:** R20 stands directly above U1 pin 1 (out) and R21 beside it. Their top pads form `AUDIO_IN_1`, which runs up to Daisy pin 16.
   R21's bottom pad takes a GND via.
 - **AUX input:** R3/R4, R5 and C3 form a block above J1. `AUDIO_IN_2` runs from that block straight to Daisy pin 17, clear of U1.
@@ -434,6 +436,7 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (10 
 |---|---|---|---|---|
 | C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R11 R14 R16 R21 | Basic | 1.9M |
 | C4502 | 470 Ω 1% 1206 (UNI-ROYAL) | R20 | Extended | 131k (2026-10-26) |
+| C17888 | 0 Ω 1206 (UNI-ROYAL) | R22 | Basic | 1.9M (2026-10-26) |
 | C26032 | 3.3k 1% 1206 (UNI-ROYAL) | R5 R10 | Extended | 357k |
 | C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
