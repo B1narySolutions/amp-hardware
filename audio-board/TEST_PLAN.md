@@ -20,7 +20,7 @@ the log at the end (one copy per board serial).
 | Mid-rail reference | R7, R8 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
 | Guitar input | J1, C1, C3, R17 (1M), R1, U1A | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; unity-gain buffer → Daisy `AUDIO_IN_1` |
 | AUX input | J9, R40/R41, R38, C31, C32, R39, U1B | 3.5 mm TRS, passive stereo-to-mono sum (−6.5 dB with the same signal on both channels), ~67 kHz RF filter, biased to VREF; unity-gain buffer → Daisy `AUDIO_IN_2` |
-| Headphone filter | R2, C2 | Daisy `AUDIO_OUT_1` (AC-coupled on the module) → ~64 kHz RC low-pass → `HP_SOURCE`, driving U2 directly. U1B is unused, parked as a VREF follower |
+| Headphone filter | R2, C2 | Daisy `AUDIO_OUT_1` (expected to be AC-coupled on the module; 5.16 checks) → ~64 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
 | Headphone amp | U2 (TPA6132A2), C12/C13, C33–C36 | DirectPath stereo amp, 0 dB inverting (mono source on both channels), outputs at 0 V straight to J5 (`HP_L` tip, `HP_R` ring). EN = `U2_EN`, driven from `HP_EN` (Daisy pin 33) by U4 (TXU0101: VCCA/OE = `3V3_D`, VCCB = `+5V`, output Hi-Z if either supply is off), R26 pull-down, probe at R26 (`U2_EN` end) |
 | Headphone detect | J5.5/J5.6, TP11 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 34, wired directly; STM32 internal pull-up, enabled by the firmware). **Low = headphones in.** Probe at **TP11** (`TP_HP_DET`) |
 | Speaker / line send | R28, C24, R4 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass (R28/C24, no buffer) → `LINE_OUT` on J2 (¼" external) and J8 (internal, to the speaker amp) |
@@ -228,6 +228,7 @@ Keep the 10k pull-up from J3.8 to 3.3 V unless the power board is connected.
 | 5.13 | UART on J4 with a 3.3 V USB-serial adapter (adapter TX → J4.3, RX → J4.2, GND → J4.1) | Heartbeat received; echo works. **Before connecting the real display**, confirm its TX idles at ≤ 3.3 V |
 | 5.14 | Display on J4 | Powers from J4.4 (`DISPLAY_5V`), shows data from the Daisy. Scope `+5V` at C18 with Wi-Fi/backlight active: ripple much lower than at J4.4 (FB1/C30) |
 | 5.15 | Back-power from USB: J3 supply **off**, display unplugged, Daisy on USB, `HP_EN` driven high | `U2_EN` (R26) ≈ 0 V and `+5V` (C18 `+`) ≈ 0 V (U4 output Hi-Z with VCCB off). Record both |
+| 5.16 | Output DC with the codec running: firmware outputs digital silence, nothing plugged into J2/J8. Measure DC at A1.18 and A1.19 (on top of the module) and at J2 tip (`LINE_OUT`). Then hold RESET (clocks stop, codec powers down) and release, watching J2 tip on the scope | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled on the module. More than a few tens of mV at A1.19 or J2: fit a 10 µF series cap after R28 (see DESIGN.md "Speaker / line send"). Record any step or pop on J2 at reset and release |
 
 ## Stage 6 — Soak and robustness
 

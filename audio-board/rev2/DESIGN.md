@@ -49,10 +49,18 @@ J9's detect switch (pins 5 and 6) is not connected.
 ### Headphone output (`AUDIO_OUT_1` → J5)
 `AUDIO_OUT_1` (Daisy pin 18) → R2 (3.3k) / C2 (1 nF to GND) → `HP_SOURCE` → C12/C13 (4.7 µF each) → U2 INL−/INR−.
 U2 (TPA6132A2RTE) drives J5 (`HP_L` tip, `HP_R` ring) directly.
-- **No buffer between the Daisy and U2.** The Seed3 outputs are AC-coupled on the module, 1 Vrms at 0 dBFS (Seed3 datasheet,
-  Table 3), and its TAC5242 codec can drive 16 Ω headphones. Electrosmith's own reference circuits load the pin directly with 10k
-  (line out), 15k (instrument out) and a pot plus 22k into a headphone amp (datasheet Figure 3.9). Here the Daisy sees R2 plus U2's two
-  19.8 kΩ inputs in parallel, ≈ 13 kΩ.
+- **What the Seed3 outputs are rated for:** 1 Vrms at 0 dBFS (Seed3 datasheet, Table 3). The datasheet gives no output impedance,
+  minimum load or coupling-cap value for pins 18/19, and says only the *inputs* are AC-coupled.
+  - **Line-out mode, not headphones.** The TAC5242 drives 16 Ω headphones (62.5 mW) only in its differential or pseudo-differential
+    modes, set by its MD4/MD5 pins on the module. The Seed3 brings out one single-ended pin per channel at 1 Vrms, with single-ended
+    AC-coupled inputs. That matches only MD5 high / MD4 low, "Single-ended output; Line-out only" (TAC5242 datasheet, Table 7-10),
+    whose minimum load is 600 Ω. The module cannot drive headphones, which is why U2 is here. Electrosmith's own headphone circuit
+    (Seed3 datasheet, Figure 3.9) also adds an amp (TPA6110A2).
+  - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which only works if the pin
+    sits at 0 V DC, so the outputs are most likely AC-coupled on the module. TEST_PLAN 5.16 measures it with the Daisy fitted.
+- **No buffer between the Daisy and U2.** The Daisy sees R2 plus U2's two 19.8 kΩ inputs in parallel, ≈ 13 kΩ, far above the 600 Ω
+  line-out minimum. Electrosmith's reference circuits load the pin with 10k through a 10 µF cap (line out, Figure 3.3) and with a
+  pot to GND (headphone amp, Figure 3.9).
 - **R2/C2** filter the DAC's out-of-band noise before U2. With U2's 9.9 kΩ load the corner is ≈ 64 kHz (R2 ‖ 9.9 kΩ with 1 nF).
 - **Level:** R2 and U2's 9.9 kΩ load form a −2.5 dB divider, so full scale reaches U2 at ≈ 0.75 Vrms (≈ 17 mW into 32 Ω).
   That is below U2's fixed ~1.1 Vrms maximum output, so full scale can't clip it.
@@ -83,9 +91,10 @@ TN and RN are no-connects.
 ### Speaker / line send (`AUDIO_OUT_2` → J2, J8)
 `AUDIO_OUT_2` (Daisy pin 19) → R28/C24 (3.3k/1 nF, ~48 kHz low-pass) → `LINE_OUT`, with R4 (100k) to GND. `LINE_OUT` goes to
 J2 (¼", external) and J8 (internal, to the speaker amp).
-- **No buffer**, for the same reason as the headphone path: the Seed3's outputs are AC-coupled on the module and can drive 16 Ω
-  headphones, so a cable and a ≥ 10k amp input are an easy load. With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't
-  drift at power-on.
+- **No buffer**, for the same reason as the headphone path: R28 plus a ≥ 10k amp input is far above the 600 Ω line-out minimum (see
+  "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
+- **This path assumes pin 19 sits at 0 V DC.** With no cap of our own, any DC offset at the pin would reach J2, J8 and R4. If TEST_PLAN
+  5.16 finds more than a few tens of mV, fit a series cap after R28 (10 µF; with R4 and a 10k load the corner stays under 3 Hz).
 - **R28** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input it costs ≈ 2.6 dB (≈ 0.74 Vrms at
   full scale). Cable capacitance adds to C24 and lowers the corner, ≈ 37 kHz with 3 m of typical cable.
 - **R4** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
@@ -114,6 +123,10 @@ A hung Daisy can loop its last audio buffer at full level, so both amps must mut
   own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
   Daisy is booting or in DFU, its pins float: U4's internal pull-down holds its output low (U2 off) and R37 holds `SPK_EN` low (speaker amp
   muted). With the Daisy absent, U4 has no VCCA, its output goes high-impedance, and R26 holds `U2_EN` low.
+- **The codec mutes too.** The STM32 clocks the TAC5242, and the TAC5242 powers down its DAC by itself when its audio clocks stop
+  (TAC5242 datasheet, section 7.4.1). An IWDG reset therefore also silences pins 18/19, including J2, which has no amp to mute.
+  This doesn't help while the clocks keep running, such as a DMA looping a stale buffer with the CPU hung, which is why the IWDG has
+  to reset the chip. The datasheet doesn't say whether the power-down clicks; TEST_PLAN 5.16 records it.
 - **Why Q4 instead of driving `SPK_MUTE` from the Daisy pin:** the power board can pull `SPK_MUTE` up to any voltage, and an unpowered
   Daisy isn't back-powered through it.
 - **Trade-off:** an external retriggerable one-shot watching an audio-callback toggle would watch the audio from outside the STM32.
@@ -131,7 +144,7 @@ A hung Daisy can loop its last audio buffer at full level, so both amps must mut
   onto pins 5–8. Q1 can't catch that. The keying and a careful look at the first harness do. R33 limits the current into the Daisy pin if it happens.
 - **Bulk at the power entry:** C18 (47 µF low-ESR electrolytic) and C17 (100 nF) at Q1's output. C18's ESR damps the ringing between the
   harness inductance and the ceramics. C17 is the only ceramic at the entry, and the Seed3 datasheet recommends extra filtering on VIN.
-- **Local decoupling:** C8 at U1 pin 4 and C33 at U2 VDD.
+- **Local decoupling:** C8 at U1 pin 8 and C33 at U2 VDD.
 - **Display supply:** FB1 (600 Ω @ 100 MHz bead, 1206) and C30 (47 µF, 1210) between `+5V` and J4 pin 4 (`DISPLAY_5V`). They keep
   the display's current pulses (ESP32 Wi-Fi, backlight PWM) off the rail that feeds the analog circuits.
 
