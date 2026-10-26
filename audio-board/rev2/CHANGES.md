@@ -216,30 +216,32 @@ refer to Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PC
   The rules (0.6/0.3 mm vias, 0.2 mm track and clearance) are within JLC's 4-layer limits. See "Design rules" below.
 
 ### Board outline and placement (2026-10-25)
-90 × 80 mm, 2 mm corner radius, four M3 holes (non-plated, 4 mm in from the edges). The front panel is the bottom edge (y = 80 mm).
+90 × 62 mm, 2 mm corner radius, three M3 holes (non-plated): rear right, and one on each side just behind the ¼" jacks.
+The jack nuts hold the front of the board to the panel. The front panel is the bottom edge (y = 62 mm).
 Coordinates below are from the board's top-left corner.
+The first version was 90 × 80 mm with the Daisy upright. Laying the Daisy flat along the rear edge removed 18 mm of depth
+and the empty area beside it. The jacks set the width.
 
 | Part | Position | Why |
 |---|---|---|
 | J1 (guitar in), J9 (AUX), J5 (headphones), J2 (line out) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
-| A1 (Daisy) | Centre, USB end 2 mm from the rear edge | USB stays reachable for flashing. Audio pins 16–20 end up at the front, next to U1 |
-| J6, J7 (breakouts) | 5.08 mm outside each Daisy row, rotated 180° | Each pin lines up with the Daisy pin on the same net (J6 pin n = A1 pin 21 − n, J7 pin n = A1 pin 20 + n). J6 ("PINS_RIGHT") ends up on the left |
-| U1 (TLV9064) | Between the input jacks and Daisy pins 16–19 | Short input and output paths for all four buffers |
+| A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_EN`, `HP_DETECT`) face the rear |
+| J6, J7 (breakouts) | J6 in front of the Daisy, J7 along the rear edge, 5.08 mm from each row | Each pin lines up with the Daisy pin on the same net (J6 pin n = A1 pin 21 − n, J7 pin n = A1 pin 20 + n) |
+| U1 (TLV9064) | Between the input jacks and J6 pins 2–5 | Short input and output paths for all four buffers |
 | U2 (TPA6132A2) | Next to J5 | Short SGND and output runs to J5 |
-| J3 (power board), J4 (display) | J3 at the rear right, J4 on the right edge below it | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. J3 is near Daisy VIN (pin 39). J4 moved down 8 mm to make room for the control parts under J3 |
+| J3 (power board), J4 (display) | J3 at the rear right beside the Daisy, J4 on the right edge below it | The display's return current flows between J4 and J3 without passing under U1, J1 or J9. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
 | J8 (internal line out) | Right side, just above J2 | Same net as J2. The speaker-amp cable stays away from the guitar input |
 
 L2 and L3 each have one GND zone covering the board, inset 0.5 mm from the edge.
 
 ### Passive placement (2026-10-25)
-All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and
-the front jacks. Power, the display and the power board controls stay in the rear-right quarter.
+All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between J6 and
+the front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
 
-- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face the Daisy. It moved down 1 mm to leave a row for parts
-  and labels between it and the Daisy.
+- **U1** is rotated so its pins 1–7 face the jacks and pins 8–14 face J6, with a row of parts and labels between it and J6.
 - **Guitar input (most sensitive):** J1 tip → C1 → C3 → R17 → R1 → R5 → U1 pin 3 is one row about 15 mm long, with no
   node longer than 7 mm. Route it all on L1 with no vias, and keep other signals off L1 next to it.
-- **AUX input:** R40/R41, R38, C31 and C32 form a block left of J6. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
+- **AUX input:** R40/R41, R38, C31 and C32 form a block above J1. Only R39 and R42 sit at U1 pin 12. J9's tip and ring reach
   the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and L2/L3 shield them from the guitar row on L1.
 - **Headphone and speaker filters:** R2/C2/C5/R6 sit below U1 pin 5. R28/C24/C25/R29 sit above pin 10, with C26 and R3
   to the right of pin 8. Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
@@ -250,7 +252,7 @@ the front jacks. Power, the display and the power board controls stay in the rea
   impedance, so the VREF trace can run on L4.
 - **Power entry:** Q1 sits between J3 pins 1–2 and Daisy VIN. Bulk C18 (47 µF), C9 (10 µF) and C17 (100 nF) sit at Q1's output.
 - **Power board signals:** the series resistors R32, R35 and R33 sit in a row under J3 pins 5–7. Q4 and R37 sit under pin 8, and R34 sits above pin 7.
-  The Daisy-side parts (C28, C29, R30, C27, R36) sit next to their J7 pins.
+  The Daisy-side parts (C28, C29, R30, C27, R36) sit just below them. Their nets reach Daisy pins 25–28, 33, 34 and 38 under the Daisy.
 - **Display:** R43, R44, FB1 and C30 sit next to J4.
 - **Test points:** TP5 (VREF) and TP9 (+5 V) are at the front centre. TP10 (`HP_EN`) is by U2, and TP11 (`HP_DETECT_SW`) is by J5.
 - **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label.
