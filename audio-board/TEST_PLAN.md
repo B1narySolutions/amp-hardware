@@ -2,7 +2,7 @@
 
 Bring-up and acceptance tests for one hand-assembled **rev 2** board built from the rev 2 schematic
 (`rev2/seed3-carrier.kicad_sch`), its fabrication package and its BOM. Record the package name in the log.
-`rev2/CHANGES.md` lists what changed from rev 1 and why.
+`rev2/DESIGN.md` describes the design and the reasons for it, and `rev2/CHANGES.md` lists what changed from rev 1.
 
 Work through the stages in order. Each stage assumes the one before it passed,
 so a failure stays localized: unpowered checks first, then the board powered

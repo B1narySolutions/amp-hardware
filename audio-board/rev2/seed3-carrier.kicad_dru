@@ -1,7 +1,7 @@
 (version 1)
 
 # Min / default (opt) / max for tracks and vias. Board Setup holds the absolute minimums and the
-# net class widths; these rules add the upper limits. See "Design rules" in CHANGES.md.
+# net class widths; these rules add the upper limits. See "Design rules" in DESIGN.md.
 
 (rule "Signal track width"
 	(condition "A.Type == 'Track' && A.NetClass == 'Default' && A.NetName != 'GND'")
