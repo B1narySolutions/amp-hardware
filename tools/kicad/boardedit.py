@@ -8,8 +8,14 @@
     b.track("/VREF", [b.pad("R6", "2"), b.pad("R1", "2")], width=0.25)
     b.via(124.6, 87.75, "GND")
     b.gnd_via("C7", "1", dx=0, dy=1.6)                   # via plus a short stub from the pad
-    b.set_pad_net("A1", "23", "/HP_DETECT")              # None leaves the pad unconnected
+    b.set_pad_net("A1", "23", "/HP_DETECT")              # creates the net if it's new
+    b.set_pad_unconnected("A1", "34")                    # KiCad's "unconnected-(A1-<pin>-Pad34)" net
     b.remove_tracks(nets=["/VREF"])                      # removes only what the filter names
+    b.replace_footprint("J5", x=185.4, y=69.0, rot=90)   # footprint, fields and nets from the schematic
+    b.add_footprint("R21", 179.3, 66.9)                  # a part that's in the schematic but not the board
+    b.remove_footprint("FB1")                            # and the copper hanging off its pads
+    b.set_field("R9", "Value", "10k")
+    b.text("LINE+", 185.4, 71.75)                        # free silkscreen text, 1.0 / 0.15 mm by default
     b.auto_labels(["R1", "R6"])                          # references beside their parts
     b.save()                                             # writes the board, then refills zones
 
@@ -22,6 +28,12 @@ needs first, applies placements immediately (those are safe), and applies every 
 save(), after label placement and track selection have done their reads. The breakage lasts for the
 whole process, even for boards loaded later, so use one Board per process and nothing pcbnew after
 save(). FindNet() is also unreliable, so nets come from the pads, tracks and zones that use them.
+New footprints are loaded from their libraries when you call add_footprint/replace_footprint (a read),
+held until save(), and only then added to the board.
+
+Footprints added or replaced are linked to their schematic symbols the way KiCad's "Update PCB from
+Schematic" does it: footprint, value, fields, symbol path, sheet and pad nets come from a kicad-cli
+netlist of the .kicad_sch next to the board (schnet.py). Anything you pass explicitly wins.
 """
 import os
 import subprocess
@@ -85,6 +97,13 @@ class Board:
         self._labels, self._auto = {}, None
         self._moved = []
         self._saved = False
+        self._loaded = dict(self.fps)           # footprints on the board as loaded (removed ones included)
+        self._sch = None                        # schematic parts, read on first use
+        self._added = {}                        # ref -> new FOOTPRINT, added in save()
+        self._added_pads = {}                   # ref -> [(pad, net)] for the new footprints
+        self._removed = []                      # (ref, FOOTPRINT, remove its tracks?)
+        self._pending_nets = set()              # nets that save() will create
+        self._texts, self._text_removes, self._text_moved = [], [], []
 
     # ------------------------------------------------------------ reads
     def _fp(self, ref):
@@ -112,7 +131,9 @@ class Board:
         return (TOMM(fp.GetPosition().x), TOMM(fp.GetPosition().y), fp.GetOrientationDegrees())
 
     def _layer(self, name):
-        fixed = {"F.Cu": pcbnew.F_Cu, "B.Cu": pcbnew.B_Cu, "In1.Cu": pcbnew.In1_Cu, "In2.Cu": pcbnew.In2_Cu}
+        fixed = {"F.Cu": pcbnew.F_Cu, "B.Cu": pcbnew.B_Cu, "In1.Cu": pcbnew.In1_Cu, "In2.Cu": pcbnew.In2_Cu,
+                 "F.SilkS": pcbnew.F_SilkS, "B.SilkS": pcbnew.B_SilkS, "F.Silkscreen": pcbnew.F_SilkS,
+                 "B.Silkscreen": pcbnew.B_SilkS, "F.Fab": pcbnew.F_Fab, "B.Fab": pcbnew.B_Fab}
         if name in fixed:
             return fixed[name]
         lid = self.board.GetLayerID(name)
@@ -121,9 +142,30 @@ class Board:
         return lid
 
     def _net(self, name):
+        if name in self._pending_nets:
+            return None
         if name not in self.nets:
-            raise KeyError(f"no net {name!r} on the board (nets come from pads, tracks and zones that use them)")
+            raise KeyError(f"no net {name!r} on the board (nets come from pads, tracks and zones that use them, "
+                           "or from set_pad_net / add_footprint / replace_footprint)")
         return self.nets[name]
+
+    def _schematic(self, required):
+        if self._sch is None:
+            import schnet
+            self._sch = schnet.load(self.path) or {}
+        if required and not self._sch:
+            raise FileNotFoundError(f"no schematic next to {os.path.basename(self.path)}; pass link=False and "
+                                    "give footprint= and nets= yourself")
+        return self._sch
+
+    def _unconnected_name(self, ref, num, pin_function=""):
+        part = (self._sch or {}).get(ref)
+        if part and part["pins"].get(num, "").startswith("unconnected-"):
+            return part["pins"][num]
+        pin = pin_function
+        if pin.endswith("_" + num):              # pin functions carry a _<number> suffix KiCad drops here
+            pin = pin[: -len(num) - 1]
+        return f"unconnected-({ref}-{pin}-Pad{num})" if pin else f"unconnected-({ref}-Pad{num})"
 
     # ------------------------------------------------------------ immediate edits
     def place(self, ref, x, y, rot=None, side=None):
@@ -156,7 +198,207 @@ class Board:
     def set_pad_net(self, ref, num, net):
         """Connect a pad to a net (created if new), or leave it unconnected with net=None."""
         self._pad(ref, num)
+        if ref in self._added:
+            raise ValueError(f"{ref} is a new footprint: give its nets to add_footprint/replace_footprint")
+        if net is not None and net not in self.nets:
+            self._pending_nets.add(net)
         self._net_changes.append((ref, str(num), net))
+
+    def set_pad_unconnected(self, ref, num):
+        """Put a pad on KiCad's own no-connect net, "unconnected-(<ref>-<pin name>-Pad<num>)", as the schematic
+        names it when the pin is unconnected there (e.g. a pin that just got a no-connect flag)."""
+        self.set_pad_net(ref, num, None)
+
+    def set_field(self, ref, name, value, visible=None):
+        """Set a footprint field ("Value", "LCSC", ...). A field the footprint didn't have is added hidden.
+        Immediate, like place(). The schematic should say the same, or parity reports the difference."""
+        fp = self._fp(ref)
+        if name == "Reference":
+            raise ValueError("rename a part in the schematic, then add_footprint/replace_footprint it")
+        if name == "Value":
+            fp.SetValue(value)
+        else:
+            if not fp.HasField(name) and visible is None:
+                visible = False
+            fp.SetField(name, value)
+        if visible is not None:
+            for f in fp.GetFields():
+                if f.GetName() == name:
+                    f.SetVisible(visible)
+
+    # ------------------------------------------------------------ footprints (added/removed in save)
+    def _part(self, ref, link, required):
+        if not link:
+            return None
+        part = self._schematic(required=required).get(ref)
+        if part is None and required:
+            raise KeyError(f"{ref} isn't in the schematic; add it there first, or pass link=False")
+        return part
+
+    def _build(self, ref, footprint, value, fields, part, like=None):
+        lib, _, name = (footprint or "").partition(":")
+        if not name:
+            raise ValueError(f'{ref}: footprint must be "Library:Footprint", e.g. "Resistor_SMD:R_0805_2012Metric"')
+        lib_dir = kicadenv.footprint_lib_dir(lib, os.path.dirname(self.path))
+        fp = pcbnew.FootprintLoad(lib_dir, name)
+        if fp is None:
+            raise KeyError(f"no footprint {name!r} in {lib_dir}")
+        fp.SetFPID(pcbnew.LIB_ID(lib, name))
+        fp.SetReference(ref)
+        fp.SetValue(value if value is not None else (part["value"] if part else (like.GetValue() if like else name)))
+        if part:
+            fp.SetPath(pcbnew.KIID_PATH(part["path"]))
+            fp.SetSheetname(part["sheetname"])
+            fp.SetSheetfile(part["sheetfile"])
+        elif like:
+            fp.SetPath(like.GetPath())
+            fp.SetSheetname(like.GetSheetname())
+            fp.SetSheetfile(like.GetSheetfile())
+        want = {}
+        if like and not part:                     # no schematic entry: keep the old footprint's own fields,
+            lib_fields = {f.GetName() for f in fp.GetFields()}   # but the new library's fields win
+            want.update({f.GetName(): f.GetText() for f in like.GetFields()
+                         if f.GetName() not in ("Reference", "Value", "Footprint") and f.GetName() not in lib_fields})
+        if part:
+            want.update(part["fields"])
+            if part["dnp"] and hasattr(fp, "SetDNP"):
+                fp.SetDNP(True)
+            if part["exclude_from_bom"] and hasattr(fp, "SetExcludedFromBOM"):
+                fp.SetExcludedFromBOM(True)
+        want.update(fields or {})
+        for k, v in want.items():
+            fp.SetField(k, v)
+        for f in fp.GetFields():
+            if f.GetName() in want:
+                f.SetVisible(False)
+        if like:
+            old, new = like.Reference(), fp.Reference()
+            new.SetTextHeight(old.GetTextHeight()); new.SetTextWidth(old.GetTextWidth())
+            new.SetTextThickness(old.GetTextThickness()); new.SetVisible(old.IsVisible())
+        return fp
+
+    def _stage(self, ref, fp, x, y, rot, side, nets, part, like):
+        if side and (side == "B") != fp.IsFlipped():
+            fp.Flip(fp.GetPosition(), pcbnew.FLIP_DIRECTION_LEFT_RIGHT)
+        fp.SetOrientationDegrees(rot)
+        fp.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
+        old_nets = {p.GetNumber(): p.GetNetname() for p in like.Pads()} if (like and not part) else {}
+        staged = []
+        for p in fp.Pads():
+            num = p.GetNumber()
+            if part and num in part["pins"]:
+                net = part["pins"][num]
+                p.SetPinFunction(part["pinfunctions"].get(num, ""))
+                if hasattr(p, "SetPinType"):
+                    p.SetPinType(part["pintypes"].get(num, ""))
+            else:
+                net = old_nets.get(num, "")
+            if nets and num in nets:
+                net = nets[num] if nets[num] is not None else self._unconnected_name(ref, num)
+            if net and net not in self.nets:
+                self._pending_nets.add(net)
+            staged.append((p, net))
+        self.fps[ref] = fp
+        self._added[ref] = fp
+        self._added_pads[ref] = staged
+        self._moved.append(ref)
+
+    def add_footprint(self, ref, x, y, rot=0, side="F", footprint=None, value=None, fields=None, nets=None, link=True):
+        """Add a part that's in the schematic but not on the board yet, at (x, y) mm, rot degrees.
+
+        With link=True (the default) everything comes from the schematic next to the board: the footprint
+        ("Library:Name" from the symbol's Footprint field), value, fields (LCSC, Description, ...), the symbol
+        link KiCad's parity check needs, and each pad's net. footprint/value/fields/nets override it:
+        nets maps pad number -> net name ("" = no net, None = KiCad's unconnected-(...) net).
+        link=False adds an unlinked footprint (parity will report it as extra); then pass footprint= and nets=.
+        """
+        self._check()
+        if ref in self.fps:
+            raise ValueError(f"{ref} is already on the board; use replace_footprint")
+        part = self._part(ref, link, required=True)
+        fp = self._build(ref, footprint or (part["footprint"] if part else None), value, fields, part)
+        self._stage(ref, fp, x, y, rot, side, nets, part, None)
+
+    def replace_footprint(self, ref, footprint=None, x=None, y=None, rot=None, side=None, value=None, fields=None,
+                          nets=None, link=True, tracks=True):
+        """Swap a part's footprint (a new package, connector, or the schematic's newer pinout).
+
+        Position, rotation, side and label size default to the old footprint's. With link=True the
+        footprint, value, fields and pad nets come from the schematic (as add_footprint); without a
+        schematic entry they're copied from the old footprint, nets matched by pad number. tracks=True
+        also removes the copper attached to the old pads (see remove_footprint), since the new pads rarely
+        land in the same places.
+        """
+        old = self._fp(ref)
+        if ref in self._added:
+            raise ValueError(f"{ref} is already new in this edit")
+        part = self._part(ref, link, required=False)
+        footprint = footprint or (part["footprint"] if part else old.GetFPIDAsString())
+        fp = self._build(ref, footprint, value, fields, part, like=old)
+        ox, oy, orot = self.position(ref)
+        self._remove_staged(ref, old, tracks)
+        self._stage(ref, fp, ox if x is None else x, oy if y is None else y, orot if rot is None else rot,
+                    side or ("B" if old.IsFlipped() else "F"), nets, part, old)
+
+    def _remove_staged(self, ref, fp, tracks):
+        self._removed.append((ref, fp, tracks))
+        del self.fps[ref]
+        if ref in self._moved:
+            self._moved.remove(ref)
+
+    def remove_footprint(self, ref, tracks=True):
+        """Remove a part from the board. tracks=True also removes the copper hanging off its pads: each track
+        chain from a pad up to the next junction, via or other part's pad, and vias left with nothing
+        else attached (e.g. a GND via on a stub). Longer routes beyond a junction stay; use remove_tracks."""
+        fp = self._fp(ref)
+        if ref in self._added:
+            raise ValueError(f"{ref} was added in this edit; just don't add it")
+        self._remove_staged(ref, fp, tracks)
+
+    # ------------------------------------------------------------ board text
+    def text(self, s, x, y, height=1.0, thickness=0.15, layer="F.SilkS", rot=0):
+        """Free text on the board (a terminal's pin names, a version, a warning), centred on (x, y).
+        1.0 / 0.15 mm is JLC's legibility minimum. Back-side text is mirrored, as KiCad does."""
+        self._check()
+        t = pcbnew.PCB_TEXT(self.board)
+        lid = self._layer(layer)
+        t.SetText(s)
+        t.SetLayer(lid)
+        t.SetTextHeight(MM(height)); t.SetTextWidth(MM(height)); t.SetTextThickness(MM(thickness))
+        t.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
+        t.SetVertJustify(pcbnew.GR_TEXT_V_ALIGN_CENTER)
+        t.SetTextAngleDegrees(rot)
+        if self.board.GetLayerName(lid).startswith("B."):
+            t.SetMirrored(True)
+        t.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
+        self._texts.append(t)
+        return t
+
+    def _find_text(self, s, near):
+        removed = {t.m_Uuid.AsString() for t in self._text_removes}
+        hits = [d for d in self.board.GetDrawings() if d.GetClass() == "PCB_TEXT" and d.GetText() == s
+                and d.m_Uuid.AsString() not in removed]
+        if not hits:
+            raise KeyError(f"no board text {s!r}")
+        def pos(d):
+            return (round(TOMM(d.GetPosition().x), 2), round(TOMM(d.GetPosition().y), 2))
+        if near is None:
+            if len(hits) > 1:
+                raise ValueError(f"{len(hits)} texts read {s!r}, at {[pos(d) for d in hits]}; pass near=(x, y)")
+            return hits[0]
+        return min(hits, key=lambda d: (pos(d)[0] - near[0]) ** 2 + (pos(d)[1] - near[1]) ** 2)
+
+    def move_text(self, s, x, y, near=None):
+        """Move existing board text that reads s (the one closest to near=(x, y) if several do). Immediate."""
+        self._check()
+        t = self._find_text(s, near)
+        t.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
+        self._text_moved.append(t)
+
+    def remove_text(self, s, near=None):
+        """Remove existing board text that reads s (the one closest to near=(x, y) if several do)."""
+        self._check()
+        self._text_removes.append(self._find_text(s, near))
 
     def remove_tracks(self, nets=None, layers=None, region=None, vias=True, tracks=True):
         """Remove existing tracks and/or vias matching every given filter.
@@ -216,6 +458,17 @@ class Board:
                     polys.extend(_poly_points(ps))
             if ref not in movers and fp.Reference().IsVisible():
                 rects.append(bb(fp.Reference().GetBoundingBox(), 0.1))
+        silk = (pcbnew.F_SilkS, pcbnew.B_SilkS)
+        removed = {t.m_Uuid.AsString() for t in self._text_removes}
+        for d in list(b.GetDrawings()) + self._texts:      # board-level silkscreen: free text and shapes
+            if d.GetLayer() not in silk or d.m_Uuid.AsString() in removed:
+                continue
+            if d.GetClass() == "PCB_TEXT":
+                rects.append(bb(d.GetBoundingBox(), 0.1))
+            elif d.GetClass() == "PCB_SHAPE":
+                ps = pcbnew.SHAPE_POLY_SET()
+                d.TransformShapeToPolygon(ps, d.GetLayer(), MM(0.1), MM(0.01), pcbnew.ERROR_OUTSIDE)
+                polys.extend(_poly_points(ps))
         for t in b.GetTracks():
             if t.GetClass() == "PCB_VIA":
                 q, r = t.GetPosition(), TOMM(t.GetWidth(pcbnew.F_Cu)) / 2 + 0.1
@@ -305,31 +558,106 @@ class Board:
                 break
         return out
 
+    def _attached_tracks(self):
+        """Tracks and vias hanging off the pads of footprints being removed (read phase)."""
+        follow = [fp for _, fp, tracks in self._removed if tracks]
+        if not follow:
+            return []
+        items = list(self.board.GetTracks())
+        segs = [t for t in items if t.GetClass() in ("PCB_TRACK", "PCB_ARC")]
+        vias = [t for t in items if t.GetClass() == "PCB_VIA"]
+        uid = lambda t: t.m_Uuid.AsString()
+        ends = {}
+        for s in segs:
+            for p in (s.GetStart(), s.GetEnd()):
+                ends.setdefault((p.x, p.y, s.GetLayer()), []).append(s)
+        gone = {id(fp) for fp in follow}
+        other_pads = [p for fp in self._loaded.values() if id(fp) not in gone for p in fp.Pads()]
+
+        def via_at(p):
+            for v in vias:
+                q = v.GetPosition()
+                if (q.x - p.x) ** 2 + (q.y - p.y) ** 2 <= (v.GetWidth(pcbnew.F_Cu) / 2) ** 2:
+                    return v
+            return None
+
+        out, cand = {}, []
+        for fp in follow:
+            for pad in fp.Pads():
+                for s in segs:
+                    if uid(s) in out or not pad.IsOnLayer(s.GetLayer()):
+                        continue
+                    for came in (s.GetStart(), s.GetEnd()):
+                        if not pad.HitTest(came):
+                            continue
+                        stack = [(s, came)]
+                        while stack:
+                            cur, at = stack.pop()
+                            if uid(cur) in out:
+                                continue
+                            out[uid(cur)] = cur
+                            a, c = cur.GetStart(), cur.GetEnd()
+                            far = c if (a.x, a.y) == (at.x, at.y) else a
+                            layer = cur.GetLayer()
+                            v = via_at(far)
+                            if v is not None:
+                                cand.append(v)
+                                continue
+                            if any(p.IsOnLayer(layer) and p.HitTest(far) for p in other_pads):
+                                continue
+                            nxt = [o for o in ends.get((far.x, far.y, layer), []) if uid(o) != uid(cur)]
+                            if len(nxt) == 1:
+                                stack.append((nxt[0], far))
+                        break
+        for v in cand:
+            q, r2 = v.GetPosition(), (v.GetWidth(pcbnew.F_Cu) / 2) ** 2
+            touching = [s for s in segs if any((p.x - q.x) ** 2 + (p.y - q.y) ** 2 <= r2 for p in (s.GetStart(), s.GetEnd()))]
+            if all(uid(s) in out for s in touching):
+                out[uid(v)] = v
+        return list(out.values())
+
     def save(self, path=None, refill_zones=True):
         """Apply queued edits and write the board (default: over the file it was loaded from).
 
-        Returns a dict: tracks/vias added and removed, nets changed, and labels that found no spot.
+        Returns a dict: tracks/vias added and removed, nets changed, footprints and texts added/removed,
+        and labels that found no spot.
         """
         self._check()
         b = self.board
         unplaced = self._place_labels()            # reads first
         removals = self._select_removals()
+        seen = {t.m_Uuid.AsString() for t in removals}
+        removals += [t for t in self._attached_tracks() if t.m_Uuid.AsString() not in seen]
         pads = {(ref, num): self._pad(ref, num) for ref, num, _ in self._net_changes}
-        names = {(ref, num): (self.fps[ref].GetReference(), self._pad(ref, num).GetPinFunction()) for ref, num, _ in self._net_changes}
+        names = {(ref, num): self._pad(ref, num).GetPinFunction() for ref, num, _ in self._net_changes}
 
-        for ref, num, net in self._net_changes:    # then mutations
+        for net in sorted(self._pending_nets):     # then mutations
+            if net not in self.nets:
+                item = pcbnew.NETINFO_ITEM(b, net)
+                b.Add(item)
+                self.nets[net] = item
+        for ref, num, net in self._net_changes:
             if net is None:
-                r, pin = names[(ref, num)]
-                if pin.endswith("_" + num):          # pin functions carry a _<number> suffix KiCad drops here
-                    pin = pin[: -len(num) - 1]
-                net = f"unconnected-({r}-{pin or num}-Pad{num})"
+                net = self._unconnected_name(ref, num, names[(ref, num)])
             if net not in self.nets:
                 item = pcbnew.NETINFO_ITEM(b, net)
                 b.Add(item)
                 self.nets[net] = item
             pads[(ref, num)].SetNet(self.nets[net])
+        for ref, staged in self._added_pads.items():
+            for pad, net in staged:
+                if net:
+                    pad.SetNet(self.nets[net])
         for t in removals:
             b.Remove(t)
+        for _, fp, _ in self._removed:
+            b.Remove(fp)
+        for fp in self._added.values():
+            b.Add(fp)
+        for t in self._text_removes:
+            b.Remove(t)
+        for t in self._texts:
+            b.Add(t)
         for (x, y, net, d, h) in self._vias:
             v = pcbnew.PCB_VIA(b)
             v.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
@@ -356,7 +684,12 @@ class Board:
             if r.returncode not in (0, 5):
                 print(f"zone refill failed ({r.returncode}): {r.stderr.strip()}", file=sys.stderr)
         result = {"tracks_added": sum(len(p) - 1 for _, p, _, _ in self._tracks), "vias_added": len(self._vias),
-                  "removed": len(removals), "nets_changed": len(self._net_changes), "unplaced_labels": unplaced}
+                  "removed": len(removals), "nets_changed": len(self._net_changes),
+                  "footprints_added": sorted(r for r in self._added if r not in {x for x, _, _ in self._removed}),
+                  "footprints_replaced": sorted(r for r, _, _ in self._removed if r in self._added),
+                  "footprints_removed": sorted(r for r, _, _ in self._removed if r not in self._added),
+                  "texts_added": len(self._texts), "texts_moved": len(self._text_moved),
+                  "texts_removed": len(self._text_removes), "unplaced_labels": unplaced}
         if unplaced:
             print(f"no clear label spot for {', '.join(unplaced)}; place them with label()", file=sys.stderr)
         return result

@@ -7,6 +7,7 @@ Override the search with the KICAD_PYTHON and KICAD_CLI environment variables.
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -56,6 +57,87 @@ def kicad_cli():
     if p:
         return p
     sys.exit("Can't find kicad-cli. Set KICAD_CLI to its path.")
+
+
+_FOOTPRINT_DIRS = [
+    "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints",
+    r"C:\Program Files\KiCad\10.0\share\kicad\footprints",
+    r"C:\Program Files\KiCad\9.0\share\kicad\footprints",
+    "/usr/share/kicad/footprints",
+    "/usr/local/share/kicad/footprints",
+]
+
+
+def stock_footprint_dir():
+    """KiCad's bundled footprint libraries (what ${KICAD10_FOOTPRINT_DIR} points at)."""
+    for var in ("KICAD10_FOOTPRINT_DIR", "KICAD9_FOOTPRINT_DIR", "KICAD_FOOTPRINT_DIR"):
+        if os.environ.get(var):
+            return os.environ[var]
+    for d in _FOOTPRINT_DIRS:
+        if os.path.isdir(d):
+            return d
+    return None
+
+
+def _global_fp_tables():
+    home = os.path.expanduser("~")
+    for ver in ("10.0", "9.0"):
+        for base in (os.path.join(home, "Library", "Preferences", "kicad"),
+                     os.path.join(os.environ.get("XDG_CONFIG_HOME", os.path.join(home, ".config")), "kicad"),
+                     os.path.join(os.environ.get("APPDATA", ""), "kicad")):
+            p = os.path.join(base, ver, "fp-lib-table")
+            if os.path.isfile(p):
+                yield p
+
+
+def _expand(uri, project_dir):
+    def sub(m):
+        var = m.group(1)
+        if var == "KIPRJMOD":
+            return project_dir
+        if os.environ.get(var):
+            return os.environ[var]
+        if var.endswith("_FOOTPRINT_DIR"):
+            return stock_footprint_dir() or m.group(0)
+        return m.group(0)
+    return os.path.normpath(re.sub(r"\$\{([^}]+)\}", sub, uri))
+
+
+def _table_lookup(table, nickname, project_dir, seen):
+    if table in seen or not os.path.isfile(table):
+        return None
+    seen.add(table)
+    with open(table) as f:
+        text = f.read()
+    for m in re.finditer(r'\(lib\s+\(name\s+"([^"]+)"\)\s*\(type\s+"([^"]+)"\)\s*\(uri\s+"([^"]+)"\)', text):
+        name, kind, uri = m.groups()
+        path = _expand(uri, project_dir)
+        if kind == "Table":
+            found = _table_lookup(path, nickname, project_dir, seen)
+            if found:
+                return found
+        elif name == nickname:
+            return path
+    return None
+
+
+def footprint_lib_dir(nickname, project_dir):
+    """Resolve a footprint library nickname (the part before ':' in "Lib:Footprint") to its .pretty folder.
+
+    Looks in the project's fp-lib-table, then the user's global table (following KiCad 10's nested
+    "Table" entries), then KiCad's stock footprint folder. A path to a .pretty folder is returned as is.
+    """
+    if os.path.isdir(nickname):
+        return nickname
+    seen = set()
+    for table in [os.path.join(project_dir, "fp-lib-table"), *_global_fp_tables()]:
+        found = _table_lookup(table, nickname, project_dir, seen)
+        if found:
+            return found
+    stock = stock_footprint_dir()
+    if stock and os.path.isdir(os.path.join(stock, nickname + ".pretty")):
+        return os.path.join(stock, nickname + ".pretty")
+    raise KeyError(f"footprint library {nickname!r} isn't in the project or global fp-lib-table")
 
 
 def run_pcbnew_script(script, *args):
