@@ -314,9 +314,8 @@ USB stays on the Daisy's own connector.
   the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
-- **J1's panel nut:** with the nose tips aligned, J1's threaded bushing reaches only 3.05 mm past the board edge, like the SJ3 noses.
-  If the panel sits at the board edge, panel thickness plus J1's nut has to fit in those 3.05 mm. Check it against the enclosure, or
-  recess the panel around J1.
+- **Front panel thickness:** under 3 mm, Neutrik's limit for the NRJ4HF's nut. The SJ3 noses stand 3.0 mm proud of their faces, so a
+  panel up to 3 mm also takes them.
 
 ## Layout
 
@@ -364,7 +363,7 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 
 | Part | Position | Why |
 |---|---|---|
-| J1 (guitar in), J2 (AUX), J4 (headphones) | Front edge, left to right. J1 at x ≈ 2–19 mm, J2's sleeve at x = 41.9 mm, J4's at x = 58.0 mm. All three nose tips end on one line, y = 59.55 mm (3.05 mm past the edge) | All panel jacks on one edge, aligned so a flat panel meets every nose the same way. The SJ3 faces sit at the edge as drawn in the footprint. J1's nose is 9 mm long, so its body sits 5.9 mm in from the edge. Inputs are on the left, outputs on the right. J2 lines its ring and tip up under the AUX block, and J4 lines its tip up under U2's OUTL |
+| J1 (guitar in), J2 (AUX), J4 (headphones) | Front edge, left to right. J1 at x ≈ 2–19 mm, J2's sleeve at x = 41.9 mm, J4's at x = 58.0 mm. All three body faces sit on the front edge | All panel jacks on one edge. Every jack mounts against the back of a flat front panel, so their faces line up, not their nose tips. J1 (Neutrik NRJ4HF) is rear-mounted: its face presses on the panel and a nut on its 8.9 mm threaded nose clamps it from the front (Ø11.2 mm panel hole). The SJ3 faces sit at the edge as drawn in the footprint, with their 3.0 mm noses into the panel holes. Inputs are on the left, outputs on the right. J2 lines its ring and tip up under the AUX block, and J4 lines its tip up under U2's OUTL |
 | A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face the analog band. Pins 21–40 (power, controls, `HP_DETECT`) face the rear |
 | U1 (TLV9061) | At the end of the guitar row, beside J1's tip | The high-impedance guitar input stays short. U1's low-impedance output makes the long run to Daisy pin 16 |
 | U2 (TPA6132A2) | Above J4, rotated 180° | OUTL and SGND drop straight down to J4's tip and sleeve |
@@ -427,9 +426,8 @@ regulators and class D amp are the noisiest things the carrier connects to.
 - **Mounting holes:** three M2.5 holes (non-plated, MountingHole_2.7mm_M2.5), plus J1's panel nut at the front-left corner:
   - H2 at the rear-right and H3 at the front-right corner, each 4 mm in from both edges.
   - H1 at the rear-left, in the gap between the Daisy's front socket row and J1's back face (centre 4 mm from the left edge,
-    y = 22.57 mm). It supports the Daisy's end of the board when the module is pressed into its sockets or USB is plugged in.
-  - Why M2.5: the gap behind J1 is 6.4 mm between keep-outs. An M2.5 pan head (5 mm) and its 5.9 mm keep-out fit; an M3's 7 mm don't.
-    All three use M2.5 so the enclosure takes one screw size.
+    y = 27.9 mm). It supports the Daisy's end of the board when the module is pressed into its sockets or USB is plugged in.
+  - All three are M2.5, so the enclosure takes one screw size.
   - The rear-left corner itself and the left edge behind the Daisy have no room for a hole.
 - **Fiducials:** three global fiducials for JLC's assembly camera, 1 mm copper dots with 2 mm mask openings (Fiducial_1mm_Mask2mm),
   at FID1 beside H1, FID2 under H2 and FID3 near H3. They're asymmetric, so the camera can tell the board's orientation. Like the holes,
