@@ -9,7 +9,7 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
 
-Supporting files: `board_dump.py` exports a board to JSON for the viewer and checker; `jlcpcb.py` holds JLC's numbers, their sources and the KiCad rules built from them; `kicadenv.py` finds KiCad.
+Supporting files: `board_dump.py` exports a board to JSON for the viewer and checker; `jlcpcb.py` holds JLC's numbers, their sources and the KiCad rules built from them; `kicadenv.py` finds KiCad and resolves footprint libraries; `schnet.py` reads each part's footprint, fields, symbol link and pin nets from the schematic (through a kicad-cli netlist).
 
 ## Requirements
 
@@ -80,7 +80,13 @@ b.place("C1", 120.0, 80.0, rot=-90)                   # immediate
 b.gnd_via("C1", "2", dx=0, dy=1.4)                    # via plus a 0.5 mm stub from the pad
 b.track("/SIG", [b.pad("R5", "2"), (124.0, 82.0), b.pad("U3", "3")], width=0.25)
 b.remove_tracks(nets=["/SIG"], region=(110, 70, 130, 90))
-b.set_pad_net("U3", "7", "/NEW_NET")                  # creates the net if needed; None = unconnected
+b.set_pad_net("U3", "7", "/NEW_NET")                  # creates the net if needed
+b.set_pad_unconnected("U3", "8")                      # KiCad's unconnected-(U3-<pin>-Pad8) net
+b.set_field("R5", "Value", "10k")                     # or any field, e.g. "LCSC"; immediate
+b.replace_footprint("J5", x=185.4, y=69.0, rot=90)    # new footprint/pinout from the schematic
+b.add_footprint("R21", 179.3, 66.9)                   # in the schematic, not yet on the board
+b.remove_footprint("FB1")                             # and the copper hanging off its pads
+b.text("LINE+", 185.4, 71.75)                         # free silkscreen text; move_text / remove_text
 b.auto_labels(["C1"])                                 # or label("C1", x, y)
 print(b.save())                                       # writes the file, then refills zones
 ```
@@ -91,7 +97,19 @@ print(b.save())                                       # writes the file, then re
   read afterwards come back as bare `SwigPyObject`s, even from boards loaded later. `Board` therefore reads everything first,
   applies placements at once, and applies every add and remove in `save()`. After `save()`, start a new process.
 - `FindNet()` is unreliable in the same way, so nets come from the pads, tracks and zones that use them. A net nothing uses yet
-  can only be created through `set_pad_net`.
+  is created by `set_pad_net`, `add_footprint` or `replace_footprint`, and `track`/`via` can use it in the same script.
+- **Footprints come from the schematic.** `add_footprint(ref, x, y)` and `replace_footprint(ref)` read the `.kicad_sch` next to the
+  board (a kicad-cli netlist, so hierarchy and KiCad's net names come out exactly as "Update PCB from Schematic" sees them): the
+  footprint named in the symbol's Footprint field, its value and fields (LCSC, Description, ...), the symbol link parity checks,
+  and every pad's net and pin function. Edit the schematic first, then run the board script. Arguments override any of it;
+  `link=False` skips the schematic (parity then reports the part). Libraries resolve through the project's and the user's
+  `fp-lib-table`, then KiCad's stock footprint folder.
+- `replace_footprint` keeps the old position, rotation, side and label size unless told otherwise. Like `remove_footprint`, it
+  removes the copper attached to the old pads by default (`tracks=False` keeps it): each chain of track from a pad up to the next
+  junction, via or other part's pad, and any via left with nothing else on it. Longer routes beyond a junction stay; clear them
+  with `remove_tracks`. Free vias, such as an exposed pad's, aren't attached by track and stay too.
+- `text`, `move_text` and `remove_text` handle free board text (pin names beside a terminal block, a revision mark). Text that
+  appears more than once needs `near=(x, y)`. Back-side text is mirrored. `auto_labels` treats board text as an obstacle.
 - `pcbnew.ZONE_FILLER` crashes without a GUI, so `save()` refills zones with `kicad-cli pcb drc --refill-zones --save-board`.
 - `auto_labels` tests real silkscreen shapes, not bounding boxes. A label that finds no clear spot keeps its old position
   and is reported in the return value; place it with `label(ref, x, y)`. `label(ref, height=1.0, thickness=0.15)` resizes a
