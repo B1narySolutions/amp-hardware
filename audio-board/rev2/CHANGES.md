@@ -21,16 +21,19 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   scale doesn't clip 16 Ω headphones.
 - **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's outputs drive U2 through R10 directly.
 - **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
-- **Speaker send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer; R11 is 1k, so it loses ≈ 0.9 dB into a 10k input) instead of
+- **Speaker send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer; with R11 and R21 at 1k each, it loses ≈ 1.7 dB into a 10k differential input) instead of
   rev 1's tip-switch line out on the headphone jack. Muting the speaker amp in firmware saves battery, ramps without clicks and gives
   the speaker and headphones independent levels.
 - **¼" line out removed.** The sponsor doesn't ask for one, and recording to a DAW goes through the Daisy's USB-C.
-- **J5 added:** a keyed internal header to the speaker amp.
+- **J5 added:** a 2-way 3.5 mm screw terminal to the speaker amp's differential input: LINE+ (`LINE_OUT`) and LINE− (`LINE_REF`).
+  R21 (1k to GND) gives LINE− the same source impedance as LINE+, so the amp rejects ground noise between the boards.
 - **The headphone jack (J4) is now a Same Sky SJ3-35063AG,** with an isolated detect switch read by the firmware on `HP_DETECT`.
 
 ## Power and control
-- **J6: 2-pin 5 V header → 8-pin JST-XH to the power board.** One connector for power, the power button, `PWR_HOLD`, battery sense and
-  the speaker mute. Adds R13–R16, C17, C18, Q2 and R17. Q1 still provides reverse-polarity protection.
+- **J6: 2-pin 5 V header → 4-way 3.5 mm screw terminal to the power board:** 5V, GND, battery sense and the speaker mute. Adds R13,
+  C17, Q2 and R17. Q1 still provides reverse-polarity protection. The power switch and low-battery cutoff are on the power board.
+- **Screw terminals for every board-to-board connection (J3, J5, J6),** so prototype wiring needs no crimping. Each terminal's function
+  is printed on the silkscreen.
 - **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
   stop with it, so its DAC powers down and both outputs go silent. R17 holds the speaker amp off whenever the Daisy is absent, booting or reset.
 - **U2's EN tied to `+5V`.** The headphone amp has no hardware mute, as in rev 1 (whose TPA6111A2 had SHUTDOWN tied to GND). The
@@ -38,8 +41,9 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   USB while `+5V` is off.
 - **R18/R19 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`).** On USB alone, `+5V` and U2's rails are off, and pin 18's audio would
   reach U2's inputs through C10/C11. The firmware keeps the outputs silent while `5V_SENSE` is low.
-- **Display: FB1 and C8 added** to keep the display's current pulses off the analog rail, and **R8/R9 added** in series with the UART
-  against miswiring and hot-plugging. R8 is 10k, to limit current into an unpowered display while the Daisy runs from USB.
+- **Display: J3 carries only the UART and GND.** The display takes its power from the power board, so its current pulses stay off
+  the carrier's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
+  different times.
 - **Rev 1 C9 removed.** It sat on the same node as C5 and C4.
 - **Rev 1 TP5, TP9, TP10 removed.** Each duplicated an easy-to-probe pad. TP1 (`HP_DETECT`) is the only test point.
 
@@ -47,11 +51,12 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **ESD diodes added (D1–D5, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring.
 - **New layout:** 4-layer with ground in the middle, 90 × 56.5 mm, with the Daisy flat along the rear edge and every panel jack on the front edge.
 - **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.
-- **Re-annotated** in sheet order (left to right, then top to bottom by section), with no gaps in the designators. R20 (after U1) was
-  added afterwards, so it sits in the guitar input section but is numbered last.
+- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1) and R21 (J5's LINE−) were added
+  afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
+  power board), which leaves gaps in the designators.
 
 ## Designators
-Rev 2 was re-annotated on 2026-10-26. U1, U2, A1 and FB1 kept their numbers. Commits before then, and rev 1, use the old
+Rev 2 was re-annotated on 2026-10-26. U1, U2 and A1 kept their numbers. Commits before then, and rev 1, use the old
 numbers on the right. A part carried over from rev 1 had the same old number there.
 
 | Rev 2 | Old |

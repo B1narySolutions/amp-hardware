@@ -104,19 +104,29 @@ inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 23, PA3). TP1 s
 
 ### Speaker send (`AUDIO_OUT_2` → J5)
 `AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT` goes to
-J5, the internal header to the speaker amp. There is no external line out: recording to a DAW goes through the Daisy's USB-C.
+J5 pin 1 (LINE+), and J5 pin 2 (LINE−) is `LINE_REF`, GND through R21 (1k). There is no external line out: recording to a DAW goes
+through the Daisy's USB-C.
 - **No buffer**, for the same reason as the headphone path: R11 plus a ≥ 10k amp input is far above the 600 Ω line-out minimum (see
   "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
 - **No DC-blocking cap: this path assumes pin 19 sits at 0 V DC.** The outputs are most likely AC-coupled on the module (see "DC level"
   under "Headphone output"), so a cap here would only add a part. If TEST_PLAN 5.16 finds more than a few tens of mV at pin 19, that DC
   reaches J5, R12 and the speaker amp, and the fix is a 10 µF cap in series between C16 and `LINE_OUT`, which needs a cut trace or a respin.
-- **R11** is the output impedance and isolates the Daisy from cable capacitance. Into a 10k input (with R12 in parallel) it costs ≈ 0.9 dB
-  (≈ 0.90 Vrms at full scale), and ≈ 1.6 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
+- **R11** is the output impedance and isolates the Daisy from cable capacitance. With R21, a differential input sees a 2k source:
+  into 10k (with R12) it costs ≈ 1.7 dB (≈ 0.83 Vrms at full scale), and ≈ 3.0 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
   cable. If `LINE_OUT` is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load. A lower R11 would cut that margin.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
-- **J5** is a 2-pin JST-XH (B2B-XH-A, vertical): pin 1 `LINE_OUT`, pin 2 GND. It feeds the speaker amp on the power board (or an
-  off-the-shelf class D module while prototyping). A keyed internal header instead of a ¼" cable between boards. Audio ground has its
-  own pin, separate from J6's supply current. Use a short twisted pair routed away from the guitar input and speaker wires.
+- **J5** is a 2-way 3.5 mm screw terminal (KF350-3.5-2P) on the right edge: pin 1 LINE+ (`LINE_OUT`), pin 2 LINE− (`LINE_REF`),
+  marked on the silkscreen. It feeds the speaker amp on the power board (or an off-the-shelf class D module while prototyping). Use a
+  short twisted pair routed away from the guitar input and speaker wires.
+- **Pseudo-differential output for a differential amp input.** The Daisy has one output pin per channel, so LINE− is the carrier's
+  ground rather than an inverted copy of the signal. Wire LINE+ to the amp's IN+ and LINE− to its IN− **only**, never to the amp's
+  GND as well. The amp then amplifies only the difference between the two wires, and any voltage between the two boards' grounds
+  (the power board's supply current flowing in J6's GND wire) is rejected instead of added to the speaker signal. Tied to the amp's
+  GND, LINE− would close a ground loop through J6 and J5.
+- **R21 (1k) balances the two legs.** LINE+ comes through R11 (1k), so LINE− gets the same 1k to GND. The amp's common-mode rejection
+  depends on both inputs seeing equal source impedances: with LINE− a hard ground, a 1k imbalance would let part of the ground noise
+  through. C16 makes LINE+ slightly lower impedance above ≈ 20 kHz, which only matters out of band. With R21, LINE− is still DC-referenced
+  to GND, so a shorted pair only loads the Daisy with R11 + R21 (2k).
 - **Why a separate speaker output:** muting in firmware means the speaker amp can be shut down while headphones are in (saving battery),
   mute and unmute can ramp without clicks, and the speaker and headphones get independent levels.
 - **Speaker wiring** is on the power board, not here: the cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects.
@@ -137,7 +147,7 @@ Every jack contact that carries a signal has a bidirectional ESD diode to GND, p
 A hung Daisy can loop its last audio buffer at full level, so every output must go silent when audio stops.
 - **Headphones: no hardware mute.** U2's EN is tied to `+5V`. The codec mutes the headphones (see "The codec mutes"), the same way
   it mutes the speaker send. U2's own click-and-pop suppression covers its power-up and power-down.
-- `SPK_EN` (Daisy pin 28) drives Q2's gate, with R17 (100k) pull-down. Q2 (2N7002) pulls `SPK_MUTE` (J6.8) to GND, which means
+- `SPK_EN` (Daisy pin 28) drives Q2's gate, with R17 (100k) pull-down. Q2 (2N7002) pulls `SPK_MUTE` (J6 pin 4) to GND, which means
   speaker on. The power board pulls `SPK_MUTE` up, which means muted.
 - **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs on its
   own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a reset, and while the
@@ -158,27 +168,29 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 
 ## Power
 
-`5V_IN` arrives on J6 pins 1–2 and goes through Q1 (AO3401A P-FET, reverse-polarity protection) onto `+5V`. `+5V` feeds Daisy VIN
-(pin 39), U1, U2, `VREF`, the `5V_SENSE` divider (R18/R19), and the display through FB1.
-- **Why Q1 with a keyed connector:** the JST-XH key stops the plug going in backwards, but not a hand-crimped harness with 5 V and GND
-  swapped, or swapped clip leads on a bench supply (TEST_PLAN 2.12 tests this). The Seed3's VIN is reverse-protected on the module, but
-  U1, U2 and the display are not. Q1 drops about 50 mV at 1 A.
-- **Mirrored harness:** with this pinout, a harness wired end-to-end mirrored puts the power board's signals on `5V_IN`/GND and 5 V/GND
-  onto pins 5–8. Q1 can't catch that. The keying and a careful look at the first harness do. R14 limits the current into the Daisy pin if it happens.
+`5V_IN` arrives on J6 pin 1 and goes through Q1 (AO3401A P-FET, reverse-polarity protection) onto `+5V`. `+5V` feeds Daisy VIN
+(pin 39), U1, U2, `VREF` and the `5V_SENSE` divider (R18/R19). The display takes its power from the power board, not from here.
+- **Why Q1:** a screw terminal has no key, so 5 V and GND can land on each other's terminals, as can swapped clip leads on a bench
+  supply (TEST_PLAN 2.12 tests this). The Seed3's VIN is reverse-protected on the module, but U1 and U2 are not. Q1 drops about 50 mV at 1 A.
+- **Wires on the wrong terminal:** Q1 only covers 5 V and GND swapped. If 5 V lands on a signal terminal: on `BATT_SENSE_CONN`, R13 (10k)
+  limits the current into the Daisy pin to ≈ 0.2 mA; on `SPK_MUTE`, Q2 is rated 60 V; on J3, R8 and R9 (10k each) limit it; on J5's
+  LINE+, R11 (1k) puts ≈ 3 mA into the codec output's protection, which it will probably survive but which is the worst case. GND sits
+  between 5V and the signals on J6, so a stray strand from the 5 V wire can only reach GND. Check every terminal against its silkscreen
+  label before powering up.
 - **Bulk at the power entry:** C5 (47 µF low-ESR electrolytic) and C4 (100 nF) at Q1's output. C5's ESR damps the ringing between the
-  harness inductance and the ceramics. C4 is the only ceramic at the entry, and the Seed3 datasheet recommends extra filtering on VIN.
+  wiring's inductance and the ceramics. C4 is the only ceramic at the entry, and the Seed3 datasheet recommends extra filtering on VIN.
 - **Local decoupling:** C6 at U1 pin 5 and C12 at U2 VDD.
-- **Display supply:** FB1 (600 Ω @ 100 MHz bead, 1206) and C8 (47 µF, 1210) between `+5V` and J3 pin 4 (`DISPLAY_5V`). They keep
-  the display's current pulses (ESP32 Wi-Fi, backlight PWM) off the rail that feeds the analog circuits.
+- **Display supply:** the power board feeds the display directly. Its current pulses (ESP32 Wi-Fi, backlight PWM) never flow through
+  Q1 or `+5V`, the rail that feeds the analog circuits, and its current draw doesn't count against J6.
 
 ### Running from USB alone
 The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear to drive the
 VIN pin. With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
 Daisy output that is high then pushes current into an unpowered part on the carrier through that part's input protection diodes.
-- **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. The UART current through R8 (below) can lift `+5V` very
-  slightly through the display. That only leaks a little current to the power board. It would matter if anything back-powered `+5V` hard.
-- **Display UART:** Daisy TX idles high into an unpowered display. R8 (10k) limits that current to ≈ 0.27 mA. See "Display connector (J3)".
-- **`PWR_HOLD`** goes to the power board through R14 (1k). The power board has to tolerate 3.3 V on that pin while it is off.
+- **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. That would only leak a little current to the power
+  board. Nothing on the carrier back-powers `+5V`.
+- **Display UART:** with the power board off, the display is unpowered too, and Daisy TX idles high into it. R8 (10k) limits that
+  current to ≈ 0.27 mA. See "Display connector (J3)".
 - **Headphone input (`5V_SENSE`):** C10/C11 pass pin 18's audio straight to U2's inputs, which are rated only from HPVSS − 0.3 V to
   HPVDD + 0.3 V (TPA6132A2 datasheet, section 6.1). U2's charge pump makes both rails, so with `+5V` off they sit at 0 V and the
   inputs may only see ±0.3 V. Full scale is ±1.4 V. R10 limits the current into U2's protection diodes to ≈ 0.3 mA, but that is still
@@ -190,54 +202,58 @@ Daisy output that is high then pushes current into an unpowered part on the carr
   - **No filter cap:** the source impedance is 50k, so the firmware uses a long ADC sample time instead of a cap like C17.
   - With `+5V` up, U2's charge pump is always running (EN is tied to `+5V`), so its input rating is met whenever it is powered.
   - **Limit: a fast power loss.** The firmware reacts within one or two audio blocks plus the codec's output delay, a few ms. If `+5V`
-    and U2's rails collapse faster than that (J6 pulled while the display draws hundreds of mA), the last few ms of audio still reach
+    and U2's rails collapse faster than that (the 5 V wire pulled out of J6 under load), the last few ms of audio still reach
     U2's unpowered inputs, limited to ≈ 0.3 mA by R10. TEST_PLAN 5.18 measures this.
 
 ## Connectors
 
 ### Power board connector (J6)
-J6 is an 8-pin JST-XH (B8B-XH-A, vertical). It carries power and the control signals to the separate power board, which handles
-the battery, the power button and the speaker amp. One connector gives power, a clean firmware-controlled shutdown, the battery level
-on the display, and a speaker mute that is independent of the headphone amp.
+J6 is a 4-way 3.5 mm screw terminal on the rear edge, made of two KF350-3.5-2P blocks slid together (LCSC has no 4-way KF350). Wires
+screw in, so there's nothing to crimp and a damaged wire is quick to replace. It carries power, the battery level and the speaker mute.
+The power switch is on the power board, which cuts the 5 V output itself.
 
-| Pin | Net | Direction | Daisy pin | Use |
-|---|---|---|---|---|
-| 1, 2 | `5V_IN` | Power board → carrier | 39 (VIN) via Q1 | 5 V supply, two pins share the current |
-| 3, 4 | GND | — | 20 / 40 | Ground, two pins |
-| 5 | `BATT_SENSE_CONN` | Power board → carrier | 25 (`BATT_SENSE`) | Battery voltage scaled to ≤ 3.3 V. R13 (10k) and C17 (100 nF) filter it into the ADC |
-| 6 | `PWR_BTN_CONN` | Power board → carrier | 26 (`PWR_BTN`) | Low while the power button is pressed. R16 (1k) series, C18 (100 nF), STM32 internal pull-up |
-| 7 | `PWR_HOLD_CONN` | Carrier → power board | 27 (`PWR_HOLD`) | High keeps the power on. R14 (1k) series, R15 (100k) pull-down so it is low while the Daisy is absent or booting |
-| 8 | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`) via Q2 | Open-drain speaker-amp mute (see "Output mute") |
+| Pin | Silkscreen | Net | Direction | Daisy pin | Use |
+|---|---|---|---|---|---|
+| 1 | 5V | `5V_IN` | Power board → carrier | 39 (VIN) via Q1 | 5 V supply |
+| 2 | GND | GND | — | 20 / 40 | Ground |
+| 3 | BAT | `BATT_SENSE_CONN` | Power board → carrier | 25 (`BATT_SENSE`) | Battery voltage scaled to ≤ 3.3 V. R13 (10k) and C17 (100 nF) filter it into the ADC |
+| 4 | MUTE | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`) via Q2 | Open-drain speaker-amp mute (see "Output mute") |
 
+- **Pin order:** seen from the wire side, the terminals read 5V, GND, BAT, MUTE from left to right. GND sits between 5V and the signals.
+- **One 5 V and one GND pin:** the carrier draws well under 1 A now that the display has its own supply, and a KF350 contact is rated
+  10 A. A single GND is fine because the speaker amp's input is differential and LINE− connects only to the amp's IN− (see "Speaker
+  send"), so no supply current returns through J5.
 - **R13 is 10k:** while the amp is off, the power board's battery divider can still hold `BATT_SENSE_CONN` near 3.3 V. Through 1k that
   would push ~3 mA into the unpowered Daisy's pin protection diodes and back-power its 3.3 V rail. 10k limits it to ~0.3 mA.
   With C17 the filter corner is ~160 Hz, far above battery changes. C17 also supplies the ADC's sampling charge.
-- **`PWR_BTN`:** the STM32's internal pull-up (pin 26, PA6, ≈ 40k) replaces an external one. R16 and C18 stay, because the line runs
-  off the board to a panel button. With C18, the release time is ≈ 4 ms, fine for a button.
 
 **Power board requirements**
-- Nothing above 3.3 V on pins 5–7.
-- Give `PWR_BTN_CONN` its own pull-up (≤ 3.3 V) if the power board reads the button. The carrier only has the STM32's internal
-  pull-up, which is off while the Daisy is unpowered or booting.
+- Keep `BATT_SENSE_CONN` within 0–3.3 V.
 - Switch the `BATT_SENSE` divider off with the 5 V output (or give it ≥ 100k source impedance), so it doesn't drain the battery or feed
   an unpowered Daisy while the amp is off.
 - Pull `SPK_MUTE` up on the amp side so the amp is muted when this board is unpowered or unplugged.
-- Keep the power on for about 2 s after a button press until the Daisy raises `PWR_HOLD`, and force the power off when the button is held for about 5 s.
-- The power button is panel mounted and wired to the power board.
+- Provide the power switch and a low-battery cutoff: the carrier can no longer turn the power off itself.
+- Supply the display's 5 V directly, with its own wire pair.
 
 ### Display connector (J3)
-J3 is a 1×4 2.54 mm header: 1 GND, 2 `UART_TX_CONN`, 3 `UART_RX_CONN`, 4 `DISPLAY_5V`. R8 (10k, Daisy TX) and R9 (1k, Daisy RX)
-sit in series with the UART between J3 and Daisy USART1 (pins 14/15, `DISPLAY_UART_TX`/`DISPLAY_UART_RX`). They limit current if the
-cable is miswired (TX to TX) or hot-plugged, and add a little ESD margin.
-- **R8 is 10k** because the display is powered from the carrier's `+5V`. With the Daisy on USB alone (see "Running from USB alone"),
-  its TX idles high into an unpowered display. 10k keeps the current into the display's RX protection diode to ≈ 0.27 mA.
-- **Baud rate limit:** R8 with ~50 pF of cable and pin capacitance is a ≈ 0.5 µs time constant. That is fine up to 230400 baud
-  (a 4.3 µs bit), but not for 921600. To go faster, lower R8 and accept more current into an unpowered display.
-- **R9 stays 1k.** The display only drives it while the carrier is powered, and then the Daisy is powered too.
+J3 is a 3-way 3.5 mm screw terminal (KF350-3.5-3P) on the rear edge next to J6: 1 GND, 2 `UART_TX_CONN` (TX), 3 `UART_RX_CONN` (RX),
+marked on the silkscreen. The display takes its power from the power board, so only the UART and its ground reference come here.
+R8 (10k, Daisy TX) and R9 (10k, Daisy RX) sit in series with the UART between J3 and Daisy USART1 (pins 14/15,
+`DISPLAY_UART_TX`/`DISPLAY_UART_RX`). They limit current if a wire lands on the wrong terminal or the display and the Daisy power up at
+different times, and add a little ESD margin.
+- **J3's GND is needed:** the UART needs a common reference. The display's ground also returns to the power board with its power wire,
+  so some display return current comes back through J3's GND and across to J6's. J3 and J6 sit side by side on the rear edge, so that
+  current stays in the rear-right corner.
+- **R8 is 10k:** with the Daisy on USB alone and the power board off (see "Running from USB alone"), its TX idles high into an
+  unpowered display. 10k keeps the current into the display's RX protection diode to ≈ 0.27 mA.
+- **R9 is 10k too:** the display and the Daisy both run from the power board, but they no longer share a supply rail, so their power-up
+  order isn't fixed. 10k limits the current from a powered display into an unpowered Daisy's RX pin the same way.
+- **Baud rate limit:** 10k with ~50 pF of cable and pin capacitance is a ≈ 0.5 µs time constant. That is fine up to 230400 baud
+  (a 4.3 µs bit), but not for 921600. To go faster, lower R8 and R9 and accept more current in those cases.
 
 ### Daisy pins
-Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
-28 `SPK_EN`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
+Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
+39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
@@ -248,12 +264,13 @@ USB stays on the Daisy's own connector.
 - Read `HP_DETECT` (pin 23, PA3) with its internal pull-up enabled: **low = headphones in**. Debounce it. When headphones go in, ramp
   `AUDIO_OUT_2` down, then drive `SPK_EN` low. Reverse it when they come out: raise `SPK_EN`, then ramp `AUDIO_OUT_2` up.
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
-- Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while
-  running, fade out, mute, save settings, then drive `PWR_HOLD` low.
+- Save settings when they change (debounced, to spare the flash), not at shutdown. The power switch is on the power board, so the
+  power can disappear at any time.
 - Initialise `SPK_EN` (pin 28) as a low output. Drive it high to enable the speaker amp after the first audio callback has started,
   low when headphones are in.
 - Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18 does from boot.
-- Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display. Shut down cleanly when it gets low.
+- Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display every few seconds. Warn on the display when it gets low;
+  the power board cuts the power at its own low-battery threshold.
 - Read `5V_SENSE` (pin 22, ADC_0) with the longest ADC sample time (its source impedance is 50k). It reads ≈ 2.4–2.5 V with `+5V`
   at 4.85–5.0 V.
   - **Before starting audio:** require it above 2.35 V (`+5V` ≥ 4.7 V) for at least 10 ms. U2's start-up time is 5 ms (TPA6132A2
@@ -270,8 +287,9 @@ USB stays on the Daisy's own connector.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio. Record it here so the firmware can convert the reading to volts.
-- **Display current:** check the display's datasheet. If it draws well over 1 A, feed it from the power board instead of J3.
-- **J6 orientation:** vertical (B8B-XH-A) is drawn. Switch to the right-angle S8B-XH-A if the cable has to leave along the board.
+- **J6 fit:** J6 is two KF350-3.5-2P blocks slid together on a 4-position footprint. Check that the interlocked pair keeps the 3.5 mm
+  pitch across the joint before soldering, or buy a true 4-way 3.5 mm block elsewhere.
+- **Wire ends:** use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** check on the bench that 0.40 Vrms is loud enough with the intended headphones (TEST_PLAN 7.8). If not, moving G0
   to `+5V` (0 dB) only suits headphones of 32 Ω or more, since full scale then clips 16 Ω. Lowering R10 gains little at −6 dB (1k gives ≈ 0.46 Vrms).
@@ -289,10 +307,11 @@ USB stays on the Daisy's own connector.
 - **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J6 power is removed and restored with USB
   connected and audio playing. Record how long the input stays outside HPVSS − 0.3 V … HPVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
-- **Layout:** placement, the GND vias and the analog routing are done (see "Passive placement"). Still to route: Daisy VIN, the
-  display feed through FB1, R18, the power board signals, the display UART and `HP_DETECT`. All are DC or slow.
+- **Layout:** placement, the GND vias and the analog routing are done (see "Passive placement"). Still to route: Daisy VIN, R18,
+  the power board signals (J6 to R13 and Q2, then on to the Daisy), the display UART (J3 to R8/R9, then to the Daisy) and `HP_DETECT`.
+  All are DC or slow.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
-  the loss is ≈ 0.9 dB into 10k and grows below that.
+  the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
 - **Mechanical:** the outline and jack positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 
@@ -307,7 +326,7 @@ Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PCB Design*
 
 | Layer | Use | To next layer |
 |---|---|---|
-| L1 (top) | Parts, most signal routing, `+5V` and `DISPLAY_5V` as wide traces (≥ 1 mm) | 0.21 mm prepreg |
+| L1 (top) | Parts, most signal routing, `+5V` and `5V_IN` as wide traces (≥ 1 mm) | 0.21 mm prepreg |
 | L2 | Solid GND. No traces, no cuts | ~1.07 mm core |
 | L3 | Solid GND. No traces, no cuts | 0.21 mm prepreg |
 | L4 (bottom) | Remaining signals, power traces that don't fit on L1 | — |
@@ -315,8 +334,8 @@ Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PCB Design*
 - **Why ground in the middle:** both signal layers sit 0.21 mm from a solid GND plane. All routing can be seen and probed from the
   outside, and the symmetrical build won't warp (p. 480). The JLC build above is the book's own example (p. 475, Fig. 23.3).
 - **Why no power plane:** a power plane is only needed above about 20 A (pp. 466, 479). The board draws about 1 A at most, and a 20 mil
-  (0.5 mm) trace carries 3 A (p. 466). `+5V` also feeds the display, which pulls current pulses (ESP32 Wi-Fi, backlight PWM). A full
-  power plane would spread that rail under the guitar input and the analog circuits.
+  (0.5 mm) trace carries 3 A (p. 466). `+5V` also feeds the Daisy, which pulls digital current pulses. A full power plane would spread
+  that rail under the guitar input and the analog circuits.
 - **Why power is on L1/L4, not L3:** with L2 and L3 both GND, a signal that goes from L1 to L4 can return through a via between the
   two planes. A power layer in the middle would block that path (pp. 467, 479–480). Keep the power traces short and wide between the
   decoupling capacitors and the IC pins, where low inductance matters (p. 466).
@@ -329,7 +348,8 @@ Eric Bogatin, *Bogatin's Practical Guide to Prototype Breadboard and PCB Design*
 - **One GND net, no split.** A split only helps with sub-millivolt noise below 100 kHz when more than 10 A of low-frequency current
   flows in the ground plane (p. 465). The board stays well under that. Separate analog and digital areas by placement. At audio
   frequencies return current takes the lowest-resistance path, so placement matters more than the stackup:
-  - Put J6 (power in) and J3 (display) close together, so the display's return current doesn't pass under U1, J1 or J2.
+  - Put J6 (power in) and J3 (display) side by side, so the display return current that comes back through J3's GND doesn't pass
+    under U1, U2, J1 or J2.
   - Route U2's SGND (pin 15) straight to J4's sleeve, as the datasheet requires, and put vias under U2's exposed pad down to L2.
 - **Why 1.6 mm:** the ¼" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
 - **No controlled impedance.** USB doesn't leave the Daisy, and the module handles it itself.
@@ -346,8 +366,8 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 | A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face the analog band. Pins 21–40 (power, controls, `HP_DETECT`) face the rear |
 | U1 (TLV9061) | At the end of the guitar row, beside J1's tip | The high-impedance guitar input stays short. U1's low-impedance output makes the long run to Daisy pin 16 |
 | U2 (TPA6132A2) | Above J4, rotated 180° | OUTL and SGND drop straight down to J4's tip and sleeve |
-| J6 (power board), J3 (display) | J6 at the rear right beside the Daisy, J3 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J3 and J6 without passing under U1, U2, J1 or J2. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
-| J5 (speaker send) | Just right of the Daisy's front-right corner, below the power entry | Short run from Daisy pin 19. J5's GND pin is the speaker amp's audio ground, so it sits in the power corner (see "Passive placement") |
+| J6 (power board), J3 (display) | Screw terminals side by side on the rear edge, J6 against the Daisy's right end and J3 under the rear-right hole, wire openings facing out | Wires leave straight off the board. Any display return current through J3's GND flows to J6 without passing under U1, U2, J1 or J2. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
+| J5 (speaker send) | Screw terminal on the right edge between the two right-hand holes, wire openings facing out | J5 carries LINE+ and LINE− to a differential amp input and no ground current, so it doesn't need to sit by J6. The right edge keeps the speaker wiring away from the guitar input |
 
 ### Passive placement
 All parts sit on the top side, in blocks next to the pins they serve. Each filter or divider sits at its load. The long runs are
@@ -375,38 +395,36 @@ regulators and class D amp are the noisiest things the carrier connects to.
 - **Decoupling:** C6 sits right of U1, its `+5V` pad 0.8 mm from pin 5. Around U2: C13 (flying cap) left of pins 9 and 11, C14 (HPVSS)
   above pin 8, C12 (VDD and EN) just below pins 13 and 14, each within 1 mm. C15 (HPVDD) sits below-left of pin 12, 1.9 mm away,
   because HPVDD's trace has to clear C13. C12's `+5V` arrives on L4 through a via beside it.
-- **Analog `+5V`:** its own branch on L4 from C5 at the power entry, down past J5 to C12 at U2, left to C6 at U1, then up to R6. It
+- **Analog `+5V`:** its own branch on L4 from C5 at the power entry, down to C12 at U2, left to C6 at U1, then up to R6. It
   carries only the analog parts' current. The Daisy's and the display's current pulses never flow in it. L3 sits directly above it as
   its return path, and a GND return via sits next to each layer change.
-- **Speaker send:** R11 sits right of Daisy pin 19, with C16 and R12 below the `LINE_OUT` trace and J5 straight after them.
-  `AUDIO_OUT_2` is about 6 mm long and the 1k `LINE_OUT` stretch 6 mm.
-- **J5 in the power corner:** J5's GND pin is the speaker amp's audio ground. Ground current between the power board's two connections,
-  J5 pin 2 and J6 pins 3–4, flows in the carrier's planes. With J5 directly below the power entry, that loop stays in the rear-right
-  corner, away from U1 and U2.
+- **Speaker send:** R11, C16 and R12 sit next to J5, and R21 next to J5's LINE− pin. `AUDIO_OUT_2`, the low-impedance DAC output,
+  makes the long run from Daisy pin 19 along the bottom of the power corner (about 30 mm on L1), so the 1k `LINE_OUT` and `LINE_REF`
+  stretches are only about 5 mm each.
+- **Screw terminals:** J6 and J3 sit on the rear edge and J5 on the right edge, with their wire openings facing out and the screws on
+  top. Each terminal's function is printed on the silkscreen next to it (5V, GND, BAT, MUTE; RX, TX, GND; LINE+, LINE−), because
+  nothing else stops a wire landing on the wrong terminal.
 - **ESD diodes:** each sits at its jack contact, with its GND pad dropped to L2/L3 by its own via. D2 and D3 sit above J2, D5 above J4's
   ring, D4 right of J4's tip, and D1 between J1's tip and C1. The discharge path from contact to diode to via is a few mm.
 - **GND vias:** every SMD GND pad has its own 0.6/0.3 mm via, 1–1.6 mm from the pad on a short 0.4–0.5 mm stub, on the side away from
   the signal routing. There are no vias in pads, so reflow doesn't wick solder away. U2's GND pins (2, 3, 6, 7 and 10) tie into its
   exposed pad, which has four vias. SGND (pin 15) doesn't: it reaches GND only at J4's sleeve.
-- **Power entry:** J6 pins 1–2 → Q1 → C4 and C5 on short wide traces. C4's GND via sits near J6's GND pins. C5 is the `+5V` star:
-  the analog branch leaves from its pad on L4.
-- **`5V_SENSE`:** R18 and R19 stand side by side left of Q1, against the Daisy's right edge, with `5V_SENSE` on their top pads. It goes
-  to Daisy pin 22. It is a DC level, so the route isn't critical.
-- **Power board signals:** R13, R16, R14 and R15 stand in a row under J6 pins 5–7 at J6's 2.5 mm pitch, about 4 mm below J6 so their
-  labels fit between them. Q2 sits under pin 8 with R17 below its gate, and C17 and C18 sit under R13 and R16. Their Daisy-side nets go to pins 25–28 under the Daisy. J6's pins 5–8 run left
-  to right and Daisy pins 25–28 run right to left, so the four routes nest without crossing.
-- **Display:** FB1 sits beside J3 pin 4 and C8 lies horizontally below them. `DISPLAY_5V` runs from FB1 to J3 pin 4 and down to C8.
-  C8's body is 3.35 mm from the right edge: JLC's assembly terms need 2.5 mm between a part body and the board edge. R8 and R9 sit
-  below the power board block. Their J3-side nets can reach J3's through-hole pins on L4.
+- **Under J6 and J3, one column per terminal:** each part sits straight below the terminal it serves, with its reference just above
+  it and the terminal's function label above that. Under MUTE: Q2, with R17 below its gate. Under BAT: R13, then C17. Under GND: R19,
+  then R18. Under 5V: Q1, with C4 beside it and C5 below. Under RX and TX: R9 and R8.
+- **Power entry:** J6 pin 1 → Q1 → C4 and C5 on short wide traces. C5 is the `+5V` star: the analog branch leaves from its pad on L4.
+- **`5V_SENSE`:** R19 (GND end up) and R18 (`+5V` end down, next to C5) stand in one column, with `5V_SENSE` between them. It goes to
+  Daisy pin 22. It is a DC level, so the route isn't critical.
+- **Power board signals:** R13 (`BATT_SENSE`) and Q2/R17 (`SPK_EN`) connect to Daisy pins 25 and 28 under the Daisy. The display
+  UART reaches pins 14/15 the same way from R8/R9. All are slow, so L4 under the Daisy suits them.
 - **`HP_DETECT` and TP1:** TP1 sits left of J4, on a short trace to J4 pin 6. The net goes to Daisy pin 23, at the right end of the rear
   row. It is a DC level, so the route isn't critical.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
   trace fits between them. Inside a block, the decoupling caps sit closer on purpose: C6 and R2 at U1's pins (0.80 and 0.83 mm), C12 and
   C14 at U2 (0.60 mm), C13 and C10 at U2 (0.90 mm).
 - **Silkscreen:** references are 1.0 mm high with 0.15 mm strokes, JLC's minimum for legible text. They're horizontal, beside their
-  parts, and clear of pads, vias and other labels. A 1.0 mm label is wider than J6's 2.5 mm pitch, so in the power board block R13's
-  and R14's labels sit above their parts and R16's and R15's below; C17's label is to its left and C18's to its right. R8's label sits
-  above R8 and R9's below R9.
+  parts, and clear of pads, vias and other labels. Under J6 and J3 the references sit in a row between the terminal labels and their
+  parts. J6's own reference sits at the end of its terminal labels, next to 5V.
   The schematic's MPN fields for C10/C11 are hidden on the board.
 
 ### 3D models
@@ -445,7 +463,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 | Hole to hole, hole clearance | 0.25 mm | | |
 | Via annular ring | 0.15 mm | | |
 
-- **`Power` class:** `+5V`, `/5V_IN`, `/DISPLAY_5V` (the class also lists `/3V3_A`, which is unused on the carrier).
+- **`Power` class:** `+5V`, `/5V_IN` (the class also lists `/3V3_A`, which is unused on the carrier).
   GND stays in Default and mostly drops straight to L2/L3 through vias.
 - **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.25 mm pads (0.5 mm pitch) or U1 pin 5 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin
@@ -454,36 +472,35 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 - **Presets:** tracks 0.2, 0.25, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
 - **Thermal reliefs:** through-hole pads join the L2/L3 GND planes with four 0.5 mm spokes and a 0.5 mm gap. SMD pads and vias,
   including U2's exposed-pad vias, stay solid. The through-hole parts are hand-soldered with an iron, and a pin tied solidly into two
-  planes (jack sleeves, J3/J5/J6 GND, the Daisy's GND pins, C5) would not heat up enough. Both GND zones use "Thermal reliefs for PTH",
+  planes (jack sleeves, J3/J6 GND, the Daisy's GND pins, C5) would not heat up enough. Both GND zones use "Thermal reliefs for PTH",
   and the "Thermal reliefs on through-hole pads" rule in `seed3-carrier.kicad_dru` enforces it for any zone added later. DRC's minimum of
   2 spokes per pad passes.
 
 ## Parts sourcing
 Build plan: JLC makes the 4-layer board and assembles every SMD part (Economic, top side). The through-hole parts are hand-soldered.
 Every part below has its LCSC number in an `LCSC` field in the schematic, copied to the board. Stock is JLC's, checked 2026-10-25.
-Basic parts have no loading fee. Each extended part adds about $3 per order (7 here, about $21, or more if C398358 turns out to be extended).
+Basic parts have no loading fee. Each extended part adds about $3 per order (6 here, about $18, or more if C398358 turns out to be extended).
 
 **SMD, assembled by JLC**
 
 | LCSC | Part | Refs | Type | Stock |
 |---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R9 R11 R14 R16 | Basic | 1.9M |
+| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R11 R21 | Basic | 1.9M |
 | C17710 | 470 Ω 1% 0805 (UNI-ROYAL 0805W8F4700T5E) | R20 | Basic | 2.3M (2026-10-27) |
 | C19224 | PESD5V0S1BA bidirectional ESD, SOD-323 (Nexperia) | D1 D2 D3 D4 D5 | Extended | 46k (2026-10-26) |
 | C26010 | 3.3k 1% 0805 (UNI-ROYAL 0805W8F3301T5E) | R5 R10 | Basic | 1.7M (2026-10-27) |
-| C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R15 R17 R18 R19 | Basic | 1.0M |
+| C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R17 R18 R19 | Basic | 1.0M |
 | C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
-| C17902 | 10k 1% 1206 (UNI-ROYAL) | R3 R4 R6 R7 R8 R13 | Basic | 2.5M |
+| C17902 | 10k 1% 1206 (UNI-ROYAL) | R3 R4 R6 R7 R8 R9 R13 | Basic | 2.5M |
 | C1790 | 100 pF 50 V C0G 0805 (Samsung CL21C101JBANNNC) | C1 | Basic | 647k (2026-10-27) |
 | C1885 | 1 nF 50 V C0G 1206 (FH) | C3 C9 | Extended | 4.4k |
 | C486355 | 3.3 nF 50 V C0G 0805 (FH 0805CG332J500NT) | C16 | Extended | 3.9k (2026-10-26) |
 | C1848 | 1 µF 50 V X7R 1206 (Samsung) | C2 | Basic | 551k |
-| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C4 C6 C17 C18 | Basic | 1.6M |
-| C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 C8 | Extended | 164k |
+| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C4 C6 C17 | Basic | 1.6M |
+| C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 | Extended | 164k |
 | C1779 | 4.7 µF 25 V X5R 0805 (Samsung CL21A475KAQNNNE) | C10 C11 | Basic | 2.0M (2026-10-27) |
 | C19110 | 2.2 µF 25 V X7R 0805 (Samsung) | C12 C14 C15 | Extended | 297k |
 | C28323 | 1 µF 50 V X7R 0805 (Samsung) | C13 | Basic | 1.9M |
-| C357023 | 600 Ω@100 MHz, 3 A, 40 mΩ 1206 bead (TAI-TECH HCB3216KF-601T30) | FB1 | Extended | 272k |
 | C15127 | AO3401A | Q1 | Basic | 642k |
 | C8545 | 2N7002 | Q2 | Basic | 2.9M |
 | C398358 | TLV9061IDBVR | U1 | Check | Check (LCSC lists 283k) |
@@ -495,9 +512,8 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (7 h
 |---|---|---|---|
 | C2835642 | 47 µF 16 V radial 5 × 11 mm, 2 mm pitch, low ESR (SamYoung NXB) | C5 | 8.0k |
 | C39461671 | Same Sky SJ3-35063AG | J2 J4 | 100 |
-| C157972 | JST B8B-XH-A | J6 | 4.8k |
-| C158012 | JST B2B-XH-A | J5 | 425k |
-| C53055674 | 1×4 2.54 mm pin header | J3 | 47k |
+| C474892 | Cixi Kefa KF350-3.5-2P, 2-way 3.5 mm screw terminal | J5, and 2 slid together for J6 (3 per board) | 17.2k (2026-10-27) |
+| C474893 | Cixi Kefa KF350-3.5-3P, 3-way 3.5 mm screw terminal | J3 | 1.5k (2026-10-27) |
 | C2905423 | 1×20 2.54 mm female header, 8.5 mm | 2 per board, for the Daisy (A1) | 15.9k |
 | — | Neutrik NRJ4HF | J1 | Not at LCSC: order from Mouser, DigiKey or a Neutrik distributor |
 
@@ -506,7 +522,9 @@ Basic parts have no loading fee. Each extended part adds about $3 per order (7 h
 - **C0G for the filter caps.** C1, C9, C16 and C3 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
   which adds distortion. C3/C9 (C1885) and C16 (C486355) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the
   fallback for C1885. JLC had no 3.3 nF C0G in 1206 in stock on 2026-10-26, so C16 is 0805.
-- **16 V for C7 and C5:** C7 shares C8's 16 V part, which also derates better under DC bias than a 10 V part. C5 is 16 V too.
+- **16 V for C7 and C5:** C7's 16 V part derates better under DC bias than a 10 V part. C5 is 16 V too.
+- **Screw terminals:** the footprints are KiCad's Phoenix PT 1,5/x-3,5-H, the standard 3.5 mm pattern the KF350 blocks fit. LCSC
+  has no 4-way KF350 or DG350, so J6 is two 2-ways; KF350 blocks dovetail together at the same pitch.
 - **R5, R10, R20, C1, C10 and C11 are 0805** because that is the size JLC stocks them in as basic parts (no loading fee). C10/C11 sit at
   ≈ 0 V DC, so a 25 V X5R part loses no capacitance to DC bias. The 2.2 µF caps (C12, C14, C15) stay extended: the only basic 2.2 µF found
   at JLC on 2026-10-27 was a 16 V 0603 (C23630), which keeps roughly half its value at 5 V.
