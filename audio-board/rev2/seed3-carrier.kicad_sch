@@ -6148,12 +6148,6 @@
 		(uuid "2f1b9f37-f924-40cd-9a30-4680ab6b34f6")
 	)
 	(junction
-		(at 346.71 184.15)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2f2adbf9-965d-4b65-b275-458ddc3a25e0")
-	)
-	(junction
 		(at 307.34 30.48)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6393,6 +6387,16 @@
 	)
 	(wire
 		(pts
+			(xy 304.8 179.07) (xy 309.88 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "409fbac5-70a0-4074-bc1a-130007b15c65")
+	)
+	(wire
+		(pts
 			(xy 320.04 55.88) (xy 335.28 55.88)
 		)
 		(stroke
@@ -6570,16 +6574,6 @@
 			(type default)
 		)
 		(uuid "266e545a-9479-42c5-919a-4e2edfdd665f")
-	)
-	(wire
-		(pts
-			(xy 351.79 186.69) (xy 351.79 194.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "27c843fe-c07a-498b-8891-23e7cac1e60c")
 	)
 	(wire
 		(pts
@@ -6850,16 +6844,6 @@
 			(type default)
 		)
 		(uuid "57fdbcbd-3e67-42e4-a951-bef547773410")
-	)
-	(wire
-		(pts
-			(xy 354.33 186.69) (xy 351.79 186.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "581323a1-cba1-496a-9f4f-91e8399f32ca")
 	)
 	(wire
 		(pts
@@ -7230,16 +7214,6 @@
 			(type default)
 		)
 		(uuid "9327ecf9-d742-4c7b-8851-516dae4b15c1")
-	)
-	(wire
-		(pts
-			(xy 346.71 184.15) (xy 354.33 184.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9880783b-b72a-4459-a172-dec93958acde")
 	)
 	(wire
 		(pts
@@ -8571,7 +8545,7 @@
 		)
 		(uuid "54598ace-5dbe-4131-8818-d02e0f4d9aa5")
 	)
-	(text "LINE OUT & SPEAKER SEND"
+	(text "SPEAKER SEND"
 		(exclude_from_sim no)
 		(at 269.24 165.1 0)
 		(effects
@@ -8631,7 +8605,7 @@
 		)
 		(uuid "f03e6b7f-4759-43d9-9e7a-4928f80b6b00")
 	)
-	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nR20/R21 pad: U1's swing (≤ 4.8 Vpp clean) reaches the Daisy at ≤ 3.4 Vpp, so no pickup can overdrive it.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
+	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nR20 limits current into the Daisy pin if U1 is ever overdriven. Passive pickups only: no pad.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
 		(exclude_from_sim no)
 		(at 20.32 55.88 0)
 		(effects
@@ -8653,7 +8627,7 @@
 		)
 		(uuid "5fdec7bb-7eb2-4eab-a939-6ca592e8dfff")
 	)
-	(text "Q1: reverse-polarity\nprotection for 5V_IN (J7).\nC5 (low-ESR) damps the\nharness ringing. C4 is\nthe entry ceramic."
+	(text "Q1: reverse-polarity\nprotection for 5V_IN (J6).\nC5 (low-ESR) damps the\nharness ringing. C4 is\nthe entry ceramic."
 		(exclude_from_sim no)
 		(at 101.6 127 0)
 		(effects
@@ -8719,7 +8693,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives J5 (external) and J6 (speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nR22: 0 Ω; fit 10 µF if pin 19 has DC (TEST_PLAN 5.16).\nWith headphones in, the firmware drives SPK_EN low.\nJ5 stays live."
+	(text "AUDIO_OUT_2 drives J5 (to the speaker amp)\ndirectly. R11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nAssumes pin 19 sits at 0 V DC (TEST_PLAN 5.16).\nWith headphones in, the firmware drives SPK_EN low."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8730,7 +8704,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "J7 goes to the power board (JST-XH, 8 pins). Pins 5–7 are 3.3 V logic: nothing above 3.3 V on them.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nR13, R16 and R14 limit current into an unpowered Daisy. R15 holds PWR_HOLD low while the Daisy is absent or booting."
+	(text "J6 goes to the power board (JST-XH, 8 pins). Pins 5–7 are 3.3 V logic: nothing above 3.3 V on them.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nR13, R16 and R14 limit current into an unpowered Daisy. R15 holds PWR_HOLD low while the Daisy is absent or booting."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -8807,12 +8781,6 @@
 			(type default)
 		)
 		(uuid "5db095b0-4842-4e38-bb65-77edc0f27a84")
-	)
-	(junction
-		(at 116.84 36.83)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "140897e8-e920-454b-afbb-b87839375657")
 	)
 	(wire
 		(pts
@@ -8934,26 +8902,6 @@
 		)
 		(uuid "3dd8da0a-6822-4bb5-aec3-e8486492fde9")
 	)
-	(label "LINE_OUT"
-		(at 283.21 233.68 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9892a7a0-7fa7-4a66-b4b2-40de4078aa2b")
-	)
-	(wire
-		(pts
-			(xy 283.21 233.68) (xy 283.21 236.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c76c97a9-d523-4b16-9eb1-5a6027602ee2")
-	)
 	(rectangle
 		(start 203.2 210.82)
 		(end 297.18 281.94)
@@ -8978,7 +8926,7 @@
 		)
 		(uuid "89b67d1e-95f7-4ba8-bb4c-c148b9f3c692")
 	)
-	(text "D1–D6: bidirectional ESD diodes (PESD5V0S1BA: 5 V working,\n35 pF, 5 nA) from every jack signal contact to GND, each placed\nat its jack. Guitar signals stay below the 5 V working voltage.\nThe J2/J4 detect switches are isolated from the plug: no diode."
+	(text "D1–D5: bidirectional ESD diodes (PESD5V0S1BA: 5 V working,\n35 pF, 5 nA) from every jack signal contact to GND, each placed\nat its jack. Guitar signals stay below the 5 V working voltage.\nThe J2/J4 detect switches are isolated from the plug: no diode."
 		(exclude_from_sim no)
 		(at 208.28 256.54 0)
 		(effects
@@ -9906,85 +9854,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 351.79 194.31 0)
-		(mirror y)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "133bd288-8176-443b-bd30-1588df781b38")
-		(property "Reference" "#PWR02"
-			(at 351.79 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 351.79 199.39 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 351.79 194.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 351.79 194.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 351.79 194.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "1c8eb9eb-f8d9-4fcf-aadb-fb7ee3a9b5fc")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR02")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 387.35 189.23 0)
 		(unit 1)
@@ -9995,7 +9864,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "163c231e-87d0-4415-aa04-51a0b82b8583")
-		(property "Reference" "J6"
+		(property "Reference" "J5"
 			(at 387.35 186.69 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10070,7 +9939,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J6")
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -10109,7 +9978,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 68.58 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -10142,7 +10011,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26032"
+		(property "LCSC" "C26010"
 			(at 68.58 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -11118,7 +10987,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 337.82 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -11129,7 +10998,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM32ER71H475KA88-01A.pdf"
+		(property "Datasheet" ""
 			(at 337.82 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -11150,7 +11019,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER71H475KA88L"
+		(property "MPN" "CL21A475KAQNNNE"
 			(at 337.82 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -11161,7 +11030,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C86052"
+		(property "LCSC" "C1779"
 			(at 337.82 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -11438,85 +11307,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Audio:AudioJack2")
-		(at 359.41 184.15 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3de14da3-1acb-40ea-93c6-54b962781aad")
-		(property "Reference" "J5"
-			(at 360.045 190.5 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NRJ4HF"
-			(at 360.045 193.04 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NRJ4HF_Horizontal"
-			(at 359.41 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 359.41 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Audio Jack, 2 Poles (Mono / TS)"
-			(at 359.41 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "T"
-			(uuid "3ee8ef92-71fd-4d2d-9690-f4798c3a0198")
-		)
-		(pin "S"
-			(uuid "da0ff3e6-217e-4aaa-bccb-da88d8eedc65")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 386.08 153.67 0)
 		(unit 1)
@@ -11714,7 +11504,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 299.72 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -11747,7 +11537,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26032"
+		(property "LCSC" "C26010"
 			(at 299.72 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -11804,7 +11594,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 337.82 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11815,7 +11605,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM32ER71H475KA88-01A.pdf"
+		(property "Datasheet" ""
 			(at 337.82 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11836,7 +11626,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER71H475KA88L"
+		(property "MPN" "CL21A475KAQNNNE"
 			(at 337.82 60.96 90)
 			(hide yes)
 			(show_name no)
@@ -11847,7 +11637,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C86052"
+		(property "LCSC" "C1779"
 			(at 337.82 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11975,7 +11765,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "4a794b57-a160-46ed-816b-d1d0297a2203")
-		(property "Reference" "J7"
+		(property "Reference" "J6"
 			(at 38.1 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12068,7 +11858,7 @@
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J7")
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -12442,7 +12232,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 46.99 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -12475,7 +12265,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107179"
+		(property "LCSC" "C1790"
 			(at 46.99 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -17659,7 +17449,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 109.22 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -17692,7 +17482,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4502"
+		(property "LCSC" "C17710"
 			(at 109.22 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -17713,265 +17503,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "R20")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 116.84 39.37 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3e66d770-0d8b-4f2f-88f5-9ceccc16afc4")
-		(property "Reference" "R21"
-			(at 119.38 38.1 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1k"
-			(at 119.38 40.64 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 116.84 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 116.84 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C4410"
-			(at 116.84 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a8c206d2-788a-4d7c-84f3-9e847215a735")
-		)
-		(pin "2"
-			(uuid "8e7489df-df9d-4aac-a72b-97ab26dd64c9")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R21")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 116.84 41.91 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "273883cb-e08e-4fe1-9b19-6983c81e427d")
-		(property "Reference" "#PWR073"
-			(at 116.84 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 116.84 46.99 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 116.84 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 116.84 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "286c37ce-6247-4957-a059-17d4eea97a34")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR073")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 307.34 179.07 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d3b6728e-85ca-47a7-bc1a-699f236db37f")
-		(property "Reference" "R22"
-			(at 307.34 172.72 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0"
-			(at 307.34 175.26 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 307.34 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 307.34 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 307.34 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C17888"
-			(at 307.34 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "fa81b202-61bb-4e07-8742-9aa02064e067")
-		)
-		(pin "2"
-			(uuid "97dbf5b2-95ad-4ef8-98a1-68a9b2ac059d")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -18822,176 +18353,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR078")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_TVS")
-		(at 283.21 240.03 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3e6fe1a6-7c15-43c8-99be-d1efb9ac0433")
-		(property "Reference" "D6"
-			(at 287.02 240.03 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PESD5V0S1BA"
-			(at 285.75 241.3 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-323"
-			(at 283.21 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 283.21 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Bidirectional ESD diode, 5 V working"
-			(at 283.21 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C19224"
-			(at 283.21 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "ba2f0604-aa6c-468c-bf5b-265a3ecb2894")
-		)
-		(pin "1"
-			(uuid "6bc3b9e6-f05c-4704-968d-75c709d2ea29")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "D6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 283.21 243.84 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "80b8b7b3-3d11-4c45-b7a4-80ae1d766312")
-		(property "Reference" "#PWR079"
-			(at 283.21 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 283.21 248.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 283.21 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 283.21 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 283.21 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "cfca7e2e-e4f9-4b42-9e45-b4db11e6d8c5")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR079")
 					(unit 1)
 				)
 			)
