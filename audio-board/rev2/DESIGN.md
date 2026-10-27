@@ -392,18 +392,21 @@ regulators and class D amp are the noisiest things the carrier connects to.
   the analog branch leaves from its pad on L4.
 - **`5V_SENSE`:** R18 and R19 stand side by side left of Q1, against the Daisy's right edge, with `5V_SENSE` on their top pads. It goes
   to Daisy pin 22. It is a DC level, so the route isn't critical.
-- **Power board signals:** R13, R16, R14 and R15 stand in a row under J6 pins 5–7 at J6's 2.5 mm pitch. Q2 sits under pin 8 with R17
-  below its gate, and C17 and C18 sit under R13 and R16. Their Daisy-side nets go to pins 25–28 under the Daisy. J6's pins 5–8 run left
+- **Power board signals:** R13, R16, R14 and R15 stand in a row under J6 pins 5–7 at J6's 2.5 mm pitch, about 4 mm below J6 so their
+  labels fit between them. Q2 sits under pin 8 with R17 below its gate, and C17 and C18 sit under R13 and R16. Their Daisy-side nets go to pins 25–28 under the Daisy. J6's pins 5–8 run left
   to right and Daisy pins 25–28 run right to left, so the four routes nest without crossing.
-- **Display:** FB1 and C8 sit below J3, routed to J3 pin 4. R8 and R9 sit below the power board block. Their J3-side nets can reach J3's
-  through-hole pins on L4.
+- **Display:** FB1 sits beside J3 pin 4 and C8 lies horizontally below them. `DISPLAY_5V` runs from FB1 to J3 pin 4 and down to C8.
+  C8's body is 3.35 mm from the right edge: JLC's assembly terms need 2.5 mm between a part body and the board edge. R8 and R9 sit
+  below the power board block. Their J3-side nets can reach J3's through-hole pins on L4.
 - **`HP_DETECT` and TP1:** TP1 sits left of J4, on a short trace to J4 pin 6. The net goes to Daisy pin 23, at the right end of the rear
   row. It is a DC level, so the route isn't critical.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
   trace fits between them. Inside a block, the decoupling caps sit closer on purpose: C6 and R2 at U1's pins (0.80 and 0.83 mm), C12 and
   C14 at U2 (0.60 mm), C13 and C10 at U2 (0.90 mm).
-- **Silkscreen:** references are 0.8 mm, horizontal, beside their parts and clear of pads, vias and other labels. In the power board
-  block, R13's label sits below R13, R16's below R16 (C18 has its own label to its right), and R14's and R15's are staggered below theirs.
+- **Silkscreen:** references are 1.0 mm high with 0.15 mm strokes, JLC's minimum for legible text. They're horizontal, beside their
+  parts, and clear of pads, vias and other labels. A 1.0 mm label is wider than J6's 2.5 mm pitch, so in the power board block R13's
+  and R14's labels sit above their parts and R16's and R15's below; C17's label is to its left and C18's to its right. R8's label sits
+  above R8 and R9's below R9.
   The schematic's MPN fields for C10/C11 are hidden on the board.
 
 ### 3D models
