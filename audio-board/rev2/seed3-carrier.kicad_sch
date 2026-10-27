@@ -6382,7 +6382,7 @@
 		(uuid "f1acacde-2609-49a0-bf6a-67c90b75bd87")
 	)
 	(no_connect
-		(at 173.99 66.04)
+		(at 173.99 96.52)
 		(uuid "f50db184-0ec0-495e-b13a-40485e53b63f")
 	)
 	(wire
@@ -6417,7 +6417,7 @@
 	)
 	(wire
 		(pts
-			(xy 171.45 96.52) (xy 173.99 96.52)
+			(xy 171.45 66.04) (xy 173.99 66.04)
 		)
 		(stroke
 			(width 0)
@@ -7776,7 +7776,7 @@
 		(uuid "04c0a42b-a18d-4ce6-99b2-45248c9727f7")
 	)
 	(label "HP_DETECT"
-		(at 171.45 96.52 180)
+		(at 171.45 66.04 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8682,7 +8682,7 @@
 		)
 		(uuid "9c46d46d-73ed-4716-9a8a-bb6ea0f50faf")
 	)
-	(text "J4 pins 5–6: isolated N/O switch, closes on plug insertion.\nHP_DETECT is LOW with headphones in. No external pull-up:\nthe firmware enables PG9's internal pull-up.\nBring-up: short TP1 to GND to simulate a plug."
+	(text "J4 pins 5–6: isolated N/O switch, closes on plug insertion.\nHP_DETECT is LOW with headphones in. No external pull-up:\nthe firmware enables PA3's internal pull-up.\nBring-up: short TP1 to GND to simulate a plug."
 		(exclude_from_sim no)
 		(at 271.78 135.89 0)
 		(effects

@@ -92,9 +92,9 @@ U2 (TPA6132A2RTE) drives J4 (`HP_L` tip, `HP_R` ring) directly.
 ### Headphone detect (`HP_DETECT`)
 J4 (Same Sky SJ3-35063AG, 3.5 mm stereo, through hole; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)):
 pins 1/2/3 are sleeve/ring/tip on GND/`HP_R`/`HP_L`. Pins 5 and 6 are an isolated normally-open switch that closes when a plug is
-inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 34, PG9). TP1 sits on it. Pin 4 isn't fitted on this variant.
+inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 23, PA3). TP1 sits on it. Pin 4 isn't fitted on this variant.
 - **No external pull-up, series resistor or RC.** The switch is a mechanically actuated contact on this board, not on a cable, and
-  isolated from the plug. The firmware enables PG9's internal pull-up and debounces it. This matches the Seed3 datasheet's own switch
+  isolated from the plug. The firmware enables PA3's internal pull-up and debounces it. This matches the Seed3 datasheet's own switch
   circuits (Figures 2.1 and 2.2: switch to GND, internal pull-up, "Any GPIO").
 - **Low = headphones in.**
 - **Footprint:** `Seed3_Carrier.pretty/Jack_3.5mm_SameSky_SJ3-35063AG_Horizontal.kicad_mod`, drawn from the datasheet's recommended
@@ -236,8 +236,8 @@ cable is miswired (TX to TX) or hot-plugged, and add a little ESD margin.
 - **R9 stays 1k.** The display only drives it while the carrier is powered, and then the Daisy is powered too.
 
 ### Daisy pins
-Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
-28 `SPK_EN`, 34 `HP_DETECT`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
+Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 26 `PWR_BTN`, 27 `PWR_HOLD`,
+28 `SPK_EN`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
@@ -245,7 +245,7 @@ USB stays on the Daisy's own connector.
 - Run the display UART at 230400 baud or less (R8, see "Display connector (J3)"). Take volume and mute from the display over it. Ramp volume changes.
 - Start the IWDG early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
 - Send the speaker mix to output 2 and headphones to output 1.
-- Read `HP_DETECT` (pin 34, PG9) with its internal pull-up enabled: **low = headphones in**. Debounce it. When headphones go in, ramp
+- Read `HP_DETECT` (pin 23, PA3) with its internal pull-up enabled: **low = headphones in**. Debounce it. When headphones go in, ramp
   `AUDIO_OUT_2` down, then drive `SPK_EN` low. Reverse it when they come out: raise `SPK_EN`, then ramp `AUDIO_OUT_2` up.
 - Add an output clamp or limiter and NaN/Inf guard at the end of the chain.
 - Drive `PWR_HOLD` (pin 27) high early in boot. Enable the internal pull-up on `PWR_BTN` (pin 26, PA6). On a press (active low) while
@@ -289,7 +289,8 @@ USB stays on the Daisy's own connector.
 - **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J6 power is removed and restored with USB
   connected and audio playing. Record how long the input stays outside HPVSS − 0.3 V … HPVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
-- **Layout:** every part is placed. Next is routing.
+- **Layout:** placement, the GND vias and the analog routing are done (see "Passive placement"). Still to route: Daisy VIN, the
+  display feed through FB1, R18, the power board signals, the display UART and `HP_DETECT`. All are DC or slow.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
   the loss is ≈ 0.9 dB into 10k and grows below that.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
@@ -341,49 +342,69 @@ top-left corner. The jacks set the width. Laying the Daisy flat along the rear e
 
 | Part | Position | Why |
 |---|---|---|
-| J1 (guitar in), J2 (AUX), J4 (headphones) | Front edge, left to right | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right |
-| A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face U1. Pins 21–40 (power, controls, `HP_DETECT`) face the rear. A ~4.5 mm routing channel runs under its front row, where the audio pins are |
-| U1 (TLV9061) | At the end of the guitar row, below Daisy pin 16 | Short guitar input path |
-| U2 (TPA6132A2) | Next to J4 | Short SGND and output runs to J4 |
-| J6 (power board), J3 (display) | J6 at the rear right beside the Daisy, J3 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J3 and J6 without passing under U1, J1 or J2. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
-| J5 (speaker send) | Right side, near the front | The speaker-amp cable stays away from the guitar input. The old ¼" line out's spot on the front edge is now free: revisit the outline with the enclosure |
+| J1 (guitar in), J2 (AUX), J4 (headphones) | Front edge, left to right. J1 at x ≈ 2–19 mm, J2's sleeve at x = 41.9 mm, J4's at x = 58.0 mm | All panel jacks on one edge. The ¼" bodies sit flush with the edge and the threaded noses overhang. The SJ3 faces sit at the edge as drawn in the footprint. Inputs are on the left, outputs on the right. J2 lines its ring and tip up under the AUX block, and J4 lines its tip up under U2's OUTL |
+| A1 (Daisy) | Flat along the rear edge, rotated 90°, USB on the left edge | USB stays reachable for flashing. Pins 1–20 face the front, so audio pins 16–19 face the analog band. Pins 21–40 (power, controls, `HP_DETECT`) face the rear |
+| U1 (TLV9061) | At the end of the guitar row, beside J1's tip | The high-impedance guitar input stays short. U1's low-impedance output makes the long run to Daisy pin 16 |
+| U2 (TPA6132A2) | Above J4, rotated 180° | OUTL and SGND drop straight down to J4's tip and sleeve |
+| J6 (power board), J3 (display) | J6 at the rear right beside the Daisy, J3 on the right edge under the rear-right hole, with pin 4 (`DISPLAY_5V`) at the bottom | The display's return current flows between J3 and J6 without passing under U1, U2, J1 or J2. Daisy VIN (pin 39) is at the far left of the rear row, so run `+5V` to it under the Daisy, away from the analog section |
+| J5 (speaker send) | Just right of the Daisy's front-right corner, below the power entry | Short run from Daisy pin 19. J5's GND pin is the speaker amp's audio ground, so it sits in the power corner (see "Passive placement") |
 
 ### Passive placement
-All parts sit on the top side, in blocks next to the pins they serve. The analog section fills the band between the Daisy and the
-front jacks. Power, the display and the power board controls sit in the rear-right corner beside the Daisy.
+All parts sit on the top side, in blocks next to the pins they serve. Each filter or divider sits at its load. The long runs are
+then the low-impedance ones (a source output, the DAC output, an op-amp output), and every high-impedance node is a few mm long.
+The analog section fills the band between the Daisy and the front jacks, with every audio net on L1. Power, the display and the power
+board controls sit in the rear-right corner beside the Daisy, as far from J1, U1 and U2 as the board allows. The power board's
+regulators and class D amp are the noisiest things the carrier connects to.
 
-- **U1** (SOT-23-5) sits unrotated at the end of the guitar row: pin 3 (+) is 0.8 mm from R2, pin 1 (out) faces up toward Daisy pin 16,
-  and pin 2 (GND) takes a via to L2/L3. The follower feedback, pin 4 to pin 1, wraps around the right side of the body.
-- **Guitar input (most sensitive):** J1 tip → C1 → C2 → R1 → R2 → U1 pin 3 is one row about 15 mm long, with no node longer than 7 mm.
-  Route it all on L1 with no vias, and keep other signals off L1 next to it.
-- **R20** stands directly above U1 pin 1 (out). Its top pad is `AUDIO_IN_1`, which runs up to Daisy pin 16.
-- **AUX input:** R3/R4, R5 and C3 form a block above J1. `AUDIO_IN_2` runs from that block straight to Daisy pin 17, clear of U1.
-  J2's tip and ring reach the block on L4. They are driven by the source (a phone or laptop output), so the long run is harmless, and
-  L2/L3 shield them from the guitar row on L1.
-- **Headphone and speaker filters:** R10/C9 sit below-right of U1. R11/C16 sit above J5, with R12 beside J5 pin 1. `AUDIO_OUT_2` runs
-  from Daisy pin 19 to R11 as the low-impedance DAC output, so only the short R11 → J5 stretch is at 1k.
-  Route `AUDIO_OUT_1` from the Daisy on L4 where it crosses other paths. It is a DAC output, so it is low impedance.
-- **Decoupling:** C6 sits just right of U1 pin 5 (V+), 0.6 mm away, with its GND end away from the IC. C12 (VDD), C15 (HPVDD), C13 (flying cap) and C14 (HPVSS) surround U2 within 3 mm
-  of their pins. U2 is rotated so its inputs face C10/C11, the charge pump faces away from J4, and OUTR drops straight to J4's ring.
-  OUTL and SGND leave from the top edge. Take them to J4's tip and sleeve together on L4, so the output and its return run side by side.
-- **VREF:** R7, R6 and C7 sit below U1, near the middle of the `VREF` loads. C7 holds the node at low impedance, so the `VREF` trace can run on L4.
-- **Power entry:** Q1 sits between J6 pins 1–2 and Daisy VIN. C5 and C4 sit at Q1's output.
-- **U2 EN:** pin 13 sits next to VDD (pin 14). Join them with a short trace at the pads.
-- **`5V_SENSE`:** R18 and R19 stand side by side to the right of C5, between Q1 and R11. R18's top pad is `+5V`, R19's top pad is
-  GND, and their bottom pads form `5V_SENSE`. Route it to Daisy pin 22 (rear row, next to pin 21). It is a DC level, so the route isn't critical.
-- **Power board signals:** the series resistors R13, R16 and R14 sit in a row under J6 pins 5–7. Q2 and R17 sit under pin 8, and R15
-  sits at the end of the row, right of Q2. C17 and C18 sit just below them. Their nets reach Daisy pins 25–28 under the Daisy.
-- **Display:** FB1 sits beside J3 pin 4 and C8 just below J3. R8/R9 sit to their left, so the UART traces to J3 pins 2/3 pass
-  between R17 and FB1 or drop to L4.
-- **Test point:** TP1 (`HP_DETECT`) is by J4. Other nets are probed on part pads (see TEST_PLAN.md).
-- **ESD diodes:** each sits within a few mm of its jack contact, with its GND pad dropped straight to L2/L3 by a via. D1 is beside
-  J1's tip, between J1 and C1. D2 is right of J2, D3 left of it. D4 is right of J4, D5 left of it.
-  Route each jack contact to its diode before the signal goes on to the circuit, so the discharge current doesn't cross the board.
+- **Guitar input (most sensitive):** one straight row on L1 at the height of J1's tip: J1 tip → D1 → C1 → C2 → R2 → U1 pin 3, about
+  18 mm, with no vias. D1 and C1 hang below the row, with their GND vias on the far side. R1 rises from the C2/R2 node to `VREF`, so
+  the 1 MΩ node is about 4.5 mm of trace.
+- **U1** (SOT-23-5, rotated −90°): + top-left (from R2), GND top-middle (via straight up), out top-right, − bottom-left, V+
+  bottom-right. The follower feedback, pin 1 to pin 4, runs diagonally under the body. R20 stands just above pin 1. `AUDIO_IN_1` runs
+  from R20's top pad up the left side of the AUX block to Daisy pin 16.
+- **VREF:** R6, R7 and C7 form a square just above-left of R1, so `VREF` is a few mm of L1. R6's `+5V` arrives on L4.
+- **AUX input:** the AUX block sits right under Daisy pins 16–17. R4 and R3 stand over J2's ring and tip, R5 sits between them, and C3
+  sits on the trunk to pin 17. J2's ring and tip run straight up on L1, about 20 mm, driven by the source, so their impedance is low.
+  The ≈ 2 kΩ `AUDIO_IN_2` node is about 11 mm of trace. Nothing crosses the guitar row.
+- **Headphone path:** `AUDIO_OUT_1`, the DAC output, runs from pin 18 down past the AUX block and across to R10. R10, C11, C10 and C9 form a column on
+  U2's input side, so `HP_SOURCE` (3.3 kΩ) is about 7 mm long.
+- **U2** (rotated 180°): inputs on the right, charge pump on the left, OUTR and HPVSS on the top edge, EN, VDD, SGND and OUTL on the
+  bottom edge. OUTL drops straight down on L1 to J4's tip, and SGND runs beside it to J4's sleeve, as the datasheet asks. OUTR takes
+  one via to L4, with a GND return via beside it, and runs to J4's ring. J4's ring is on the left and its tip on the right, so no
+  rotation puts all three outputs on L1 without a crossing. This one keeps the OUTL/SGND pair on L1.
+- **Decoupling:** C6 sits right of U1, its `+5V` pad 0.8 mm from pin 5. Around U2: C13 (flying cap) left of pins 9 and 11, C14 (HPVSS)
+  above pin 8, C12 (VDD and EN) just below pins 13 and 14, each within 1 mm. C15 (HPVDD) sits below-left of pin 12, 1.9 mm away,
+  because HPVDD's trace has to clear C13. C12's `+5V` arrives on L4 through a via beside it.
+- **Analog `+5V`:** its own branch on L4 from C5 at the power entry, down past J5 to C12 at U2, left to C6 at U1, then up to R6. It
+  carries only the analog parts' current. The Daisy's and the display's current pulses never flow in it. L3 sits directly above it as
+  its return path, and a GND return via sits next to each layer change.
+- **Speaker send:** R11 sits right of Daisy pin 19, with C16 and R12 below the `LINE_OUT` trace and J5 straight after them.
+  `AUDIO_OUT_2` is about 6 mm long and the 1k `LINE_OUT` stretch 6 mm.
+- **J5 in the power corner:** J5's GND pin is the speaker amp's audio ground. Ground current between the power board's two connections,
+  J5 pin 2 and J6 pins 3–4, flows in the carrier's planes. With J5 directly below the power entry, that loop stays in the rear-right
+  corner, away from U1 and U2.
+- **ESD diodes:** each sits at its jack contact, with its GND pad dropped to L2/L3 by its own via. D2 and D3 sit above J2, D5 above J4's
+  ring, D4 right of J4's tip, and D1 between J1's tip and C1. The discharge path from contact to diode to via is a few mm.
+- **GND vias:** every SMD GND pad has its own 0.6/0.3 mm via, 1–1.6 mm from the pad on a short 0.4–0.5 mm stub, on the side away from
+  the signal routing. There are no vias in pads, so reflow doesn't wick solder away. U2's GND pins (2, 3, 6, 7 and 10) tie into its
+  exposed pad, which has four vias. SGND (pin 15) doesn't: it reaches GND only at J4's sleeve.
+- **Power entry:** J6 pins 1–2 → Q1 → C4 and C5 on short wide traces. C4's GND via sits near J6's GND pins. C5 is the `+5V` star:
+  the analog branch leaves from its pad on L4.
+- **`5V_SENSE`:** R18 and R19 stand side by side left of Q1, against the Daisy's right edge, with `5V_SENSE` on their top pads. It goes
+  to Daisy pin 22. It is a DC level, so the route isn't critical.
+- **Power board signals:** R13, R16, R14 and R15 stand in a row under J6 pins 5–7 at J6's 2.5 mm pitch. Q2 sits under pin 8 with R17
+  below its gate, and C17 and C18 sit under R13 and R16. Their Daisy-side nets go to pins 25–28 under the Daisy. J6's pins 5–8 run left
+  to right and Daisy pins 25–28 run right to left, so the four routes nest without crossing.
+- **Display:** FB1 and C8 sit below J3, routed to J3 pin 4. R8 and R9 sit below the power board block. Their J3-side nets can reach J3's
+  through-hole pins on L4.
+- **`HP_DETECT` and TP1:** TP1 sits left of J4, on a short trace to J4 pin 6. The net goes to Daisy pin 23, at the right end of the rear
+  row. It is a DC level, so the route isn't critical.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
-  trace fits between them. The exceptions are on purpose: C6 and R2 at U1's pins (0.58 and 0.80 mm) and C13 at U2 (0.90 mm). Making the
-  board shallower would mean breaking this rule in the rear-right corner.
-- **Silkscreen:** passive references are 0.8 mm. A few are placed by hand so none reads as a neighbour's label. The schematic's MPN
-  fields for C10/C11 are hidden on the board.
+  trace fits between them. Inside a block, the decoupling caps sit closer on purpose: C6 and R2 at U1's pins (0.80 and 0.83 mm), C12 and
+  C14 at U2 (0.60 mm), C13 and C10 at U2 (0.90 mm).
+- **Silkscreen:** references are 0.8 mm, horizontal, beside their parts and clear of pads, vias and other labels. In the power board
+  block, R13's label sits below R13, R16's below R16 (C18 has its own label to its right), and R14's and R15's are staggered below theirs.
+  The schematic's MPN fields for C10/C11 are hidden on the board.
 
 ### 3D models
 - **A1** uses `3dmodels/Electrosmith_Daisy_Seed_placeholder.step` on two stock `PinSocket_1x20_P2.54mm_Vertical` models (8.5 mm), at x = 0 and 15.24.
