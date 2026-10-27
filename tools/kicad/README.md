@@ -93,7 +93,10 @@ print(b.save())                                       # writes the file, then re
 - `FindNet()` is unreliable in the same way, so nets come from the pads, tracks and zones that use them. A net nothing uses yet
   can only be created through `set_pad_net`.
 - `pcbnew.ZONE_FILLER` crashes without a GUI, so `save()` refills zones with `kicad-cli pcb drc --refill-zones --save-board`.
-- `auto_labels` tests real silkscreen shapes, not bounding boxes. A label that finds no clear spot is reported in the return
-  value; place it with `label()`.
+- `auto_labels` tests real silkscreen shapes, not bounding boxes. A label that finds no clear spot keeps its old position
+  and is reported in the return value; place it with `label(ref, x, y)`. `label(ref, height=1.0, thickness=0.15)` resizes a
+  label where it is.
 
-Work on a copy or a clean git tree, then view and check the result before committing.
+Before editing, make sure the board isn't open in KiCad's PCB editor: the editor writes `~<board>.kicad_pcb.lck` beside an
+open board, and would overwrite a scripted change on its next save. Work on a copy or a clean git tree, then view and check
+the result before committing.

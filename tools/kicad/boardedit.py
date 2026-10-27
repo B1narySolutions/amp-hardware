@@ -169,9 +169,12 @@ class Board:
             raise ValueError("remove_tracks needs at least one filter; nets=['*'] matches every net")
         self._removes.append((nets, layers, region, vias, tracks))
 
-    def label(self, ref, x, y, height=None, thickness=None):
-        """Put a reference label at (x, y), horizontal."""
+    def label(self, ref, x=None, y=None, height=None, thickness=None):
+        """Put a reference label at (x, y), horizontal. Without x and y it stays where it is, so
+        label(ref, height=1.0, thickness=0.15) just resizes it."""
         self._fp(ref)
+        if (x is None) != (y is None):
+            raise ValueError("give both x and y, or neither")
         self._labels[ref] = (x, y, height, thickness)
 
     def auto_labels(self, refs=None, prefer=None, height=None, thickness=None):
@@ -179,7 +182,8 @@ class Board:
 
         refs defaults to every part moved with place(). prefer maps ref -> sides to try first, from
         "above", "below", "left", "right" (the four diagonals follow). height/thickness resize the
-        labels (JLC's legibility minimum is 1.0 / 0.15 mm); None keeps the current size.
+        labels (JLC's legibility minimum is 1.0 / 0.15 mm); None keeps the current size. A label that
+        finds no clear spot keeps its old position (at the new size) and is reported by save().
         """
         self._auto = (refs, prefer or {}, height, thickness)
 
@@ -236,8 +240,9 @@ class Board:
 
         for ref, (x, y, h, th) in self._labels.items():
             t = self.fps[ref].Reference()
+            keep = t.GetPosition()
             size(t, h, th)
-            t.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
+            t.SetPosition(keep if x is None else pcbnew.VECTOR2I(MM(x), MM(y)))
             rects.append(bb(t.GetBoundingBox()))
 
         unplaced = []
@@ -249,6 +254,7 @@ class Board:
             for ref in order:
                 fp = self.fps[ref]
                 t = fp.Reference()
+                old = t.GetPosition()
                 size(t, h, th)
                 cy = fp.GetCourtyard(pcbnew.B_CrtYd if fp.IsFlipped() else pcbnew.F_CrtYd)
                 l, tp, r, bt = bb(cy.BBox()) if cy.OutlineCount() else bb(fp.GetBoundingBox(False))
@@ -275,6 +281,7 @@ class Board:
                     t.SetPosition(pcbnew.VECTOR2I(MM(chosen[0]), MM(chosen[1])))
                     rects.append(chosen[2])
                 else:
+                    t.SetPosition(old)
                     unplaced.append(ref)
         return unplaced
 

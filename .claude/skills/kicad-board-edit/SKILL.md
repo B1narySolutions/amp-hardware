@@ -22,13 +22,14 @@ b.via(124.0, 82.0, "/SIG")                                 # dia 0.6 / drill 0.3
 b.gnd_via("C1", "2", dx=0, dy=1.4)                         # via plus 0.5 mm stub from the pad
 b.set_pad_net("U3", "7", "/NEW_NET")                       # creates the net if needed; None = unconnected
 b.remove_tracks(nets=["/SIG"], region=(110, 70, 130, 90))  # needs a filter; nets=["*"] = all nets
-b.auto_labels(["C1"], prefer={"C1": ["left"]})             # or b.label("C1", x, y)
+b.auto_labels(["C1"], prefer={"C1": ["left"]})             # or b.label("C1", x, y); b.label("J1", height=1.0) resizes in place
 print(b.save())                                            # writes the file, refills zones
 ```
 
 Rules that keep this safe:
-- **Before editing:** the board must not be open in KiCad, or KiCad will overwrite the change on its next save. Check
-  `pgrep -fl -i 'pcbnew|kicad.app'`, and ask the user to close it if it's open. Start from a clean git tree, or commit
+- **Before editing:** the board must not be open in KiCad's PCB editor, or KiCad will overwrite the change on its next save.
+  The editor writes a lock file `~<board>.kicad_pcb.lck` beside the board while it's open. If that file exists, ask the user
+  to close the board. A running KiCad with only the schematic open (`~<board>.kicad_sch.lck`) is fine for board-only edits. Start from a clean git tree, or commit
   first, so the edit is its own diff.
 - **One `Board` per process.** pcbnew objects break for the rest of the process once anything is added or removed, so
   after `save()` run a new script to edit again. Read pad positions with `b.pad()` before `save()`.
