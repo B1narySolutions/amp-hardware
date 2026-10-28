@@ -7424,7 +7424,7 @@
 	)
 	(wire
 		(pts
-			(xy 182.88 228.6) (xy 182.88 241.3)
+			(xy 182.88 228.6) (xy 182.88 233.68)
 		)
 		(stroke
 			(width 0)
@@ -7563,7 +7563,7 @@
 		(uuid "2d437b7b-418a-46d3-ba02-2b1961abafaa")
 	)
 	(label "DISPLAY_UART_RX"
-		(at 179.07 179.07 0)
+		(at 184.15 179.07 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7793,7 +7793,7 @@
 		(uuid "d06da33e-7673-4be5-855d-eb30ac48e444")
 	)
 	(label "BATT_SENSE"
-		(at 101.6 228.6 0)
+		(at 111.76 228.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8193,7 +8193,7 @@
 		)
 		(uuid "fd137606-5eb5-42d3-90fd-8858a9622356")
 	)
-	(text "Passive stereo-to-mono sum\nstraight into AUDIO_IN_2. The Seed3\ninput is AC-coupled (≈ 5 kΩ): no\nbuffer or coupling cap needed.\nR5 sets the level (≤ −8 dB even\nwith no Daisy load) and is the\nsource's DC return.\nC3: RF filter (≈ 110 kHz)."
+	(text "Passive stereo-to-mono sum\nstraight into AUDIO_IN_2. The Seed3\ninput is AC-coupled (≈ 5 kΩ): no\nbuffer or coupling cap needed.\nR5 sets the level (≈ −22 dB) and\nis the source's DC return. It keeps\nthe unpowered codec within ±0.3 V\nwhen a source plays with the board off.\nC3: RF filter (≈ 400 kHz)."
 		(exclude_from_sim no)
 		(at 93.98 81.28 0)
 		(effects
@@ -8237,9 +8237,9 @@
 		)
 		(uuid "562b185c-0f50-4716-95f7-9acaccca3ed2")
 	)
-	(text "J3: 3-way screw terminal. The display takes its power from the power board, so only the UART and its GND come here.\nR8/R9 (10k each) limit current if a wire is swapped or the display and Daisy power up at different times.\nKeep the UART at 230400 baud or less."
+	(text "J3: 3-way screw terminal. The display takes its power from the power board, so only the UART and its GND come here.\nR8/R9 (10k each) limit current if a wire is swapped or the display and Daisy power up at different times.\nR24 divides a 5 V wire on RX to ≤ 4.8 V, and holds RX low with no display: firmware reads that as no display.\nKeep the UART at 230400 baud or less. Leave PB7's internal pull-up off."
 		(exclude_from_sim no)
-		(at 144.78 187.96 0)
+		(at 144.78 191.77 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8281,7 +8281,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "J6 goes to the power board: a 4-way 3.5 mm screw terminal (two KF350-3.5-2P slid together).\nPin 3 (BATT_SENSE) must stay within 0–3.3 V: the power board's divider sets that.\nGND sits between 5V_IN and the signals, so a stray strand from 5V_IN can only reach GND.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nR13 limits current into an unpowered Daisy. The power switch is on the power board."
+	(text "J6 goes to the power board: a 4-way 3.5 mm screw terminal (two KF350-3.5-2P slid together).\nPin 3 (BATT_SENSE) must stay within 0–3.3 V: the power board's divider sets that. R13/R22 halve it for the ADC.\nA 5 V wire on BAT then stays below PA7's 4.0 V, and R23 limits Q2's current if 5 V lands on MUTE.\nGND sits between 5V_IN and the signals, so a stray strand from 5V_IN can only reach GND.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nThe power switch is on the power board."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -9467,7 +9467,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "3.3k"
+		(property "Value" "470"
 			(at 66.04 96.52 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9511,7 +9511,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26010"
+		(property "LCSC" "C17710"
 			(at 68.58 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -17204,6 +17204,498 @@
 	(no_connect
 		(at 173.99 76.2)
 		(uuid "7367436c-e0de-471f-bc2c-2c535a56f3eb")
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 109.22 231.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9fd8ec1b-b24f-480a-baf4-fa3143b9f0b8")
+		(property "Reference" "R22"
+			(at 111.76 229.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 111.76 232.41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17902"
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d8c702d4-5222-4e2c-8211-110832cefbf2")
+		)
+		(pin "2"
+			(uuid "f31865ca-f1fb-4353-a450-8db8bd54c472")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 109.22 233.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "589e3675-9d4b-475e-baea-2e2cd917b59b")
+		(property "Reference" "#PWR079"
+			(at 109.22 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 109.22 238.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 109.22 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6809bdb8-add6-4444-ac04-d154eea2ef91")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "#PWR079")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 101.6 228.6) (xy 109.22 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7a16321-3f3f-482e-8d68-1314ac11fb4c")
+	)
+	(wire
+		(pts
+			(xy 109.22 228.6) (xy 111.76 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6ecc730-fd80-461d-9aa2-e1af408a9fc9")
+	)
+	(junction
+		(at 109.22 228.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ce1a4565-436b-4773-b70f-fbaffaea6fa8")
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 182.88 236.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c5e2740e-de0b-49ee-ac30-55f535347d23")
+		(property "Reference" "R23"
+			(at 185.42 234.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "470"
+			(at 185.42 237.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17710"
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f0cd67d9-edc0-4e75-bffb-b78c174d6968")
+		)
+		(pin "2"
+			(uuid "b8476ebd-7877-42bc-97c0-68d7cde25d73")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 238.76) (xy 182.88 241.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "21946289-de90-4573-8a4c-be8b20574880")
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 181.61 181.61 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ab7417cd-352a-445c-be18-8bdf806b1501")
+		(property "Reference" "R24"
+			(at 184.15 180.34 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 184.15 182.88 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17900"
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "90057e21-58c7-4320-b825-9acf38c475c2")
+		)
+		(pin "2"
+			(uuid "54f0555e-a2eb-4c24-9e74-15deb9d7a2f1")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 181.61 184.15 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c1c07283-880a-4ebf-8eea-6bcd808a1382")
+		(property "Reference" "#PWR080"
+			(at 181.61 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 181.61 189.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 181.61 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 181.61 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 181.61 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "df972359-2476-431a-8c43-0e0146d8abdb")
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(reference "#PWR080")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 179.07 179.07) (xy 181.61 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d81d5bc8-c581-46e8-9043-a889372c611b")
+	)
+	(wire
+		(pts
+			(xy 181.61 179.07) (xy 184.15 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9368b50a-c18b-446a-843a-29459be24173")
+	)
+	(junction
+		(at 181.61 179.07)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9b496885-c6c9-47c6-8b9d-d5bbe82977b8")
 	)
 	(sheet_instances
 		(path "/"
