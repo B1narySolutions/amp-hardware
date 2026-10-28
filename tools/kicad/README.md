@@ -8,14 +8,18 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 | `board_view.py` | Renders a board to PNG: real pad shapes, tracks to scale, vias, silkscreen, labels and the ratsnest. Zooms to a window or to parts |
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
+| `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, without a simulator |
 
 Supporting files: `board_dump.py` exports a board to JSON for the viewer and checker; `jlcpcb.py` holds JLC's numbers, their sources and the KiCad rules built from them; `kicadenv.py` finds KiCad and resolves footprint libraries; `schnet.py` reads each part's footprint, fields, symbol link and pin nets from the schematic (through a kicad-cli netlist).
+The circuit check is `circuit_spec.py` (the spec format), `circuit_bounds.py` (the bound engine), `parts/` (part models
+and passive ratings, shared by every board) and `test_circuit_verify.py`.
 
 ## Requirements
 
 - KiCad 10 (tested with 10.0.5). The tools find its Python and `kicad-cli` in the default macOS install. Elsewhere, set
   `KICAD_PYTHON` (a Python that can `import pcbnew`; on Windows, KiCad's `bin\python.exe`) and `KICAD_CLI`.
-- `python3` with matplotlib for the viewer (`pip3 install matplotlib`). The checker only needs the standard library.
+- `python3` with matplotlib for the viewer (`pip3 install matplotlib`). The board checker only needs the standard
+  library; the circuit check needs numpy (`pip3 install numpy`).
 
 `board_view.py` and `board_check.py` run under the system `python3` and call KiCad's Python for anything that needs `pcbnew`.
 `boardedit.py` is imported by a script you run under KiCad's Python.
@@ -118,3 +122,64 @@ print(b.save())                                       # writes the file, then re
 Before editing, make sure the board isn't open in KiCad's PCB editor: the editor writes `~<board>.kicad_pcb.lck` beside an
 open board, and would overwrite a scripted change on its next save. Work on a copy or a clean git tree, then view and check
 the result before committing.
+
+## Circuit check
+
+```bash
+python3 tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch
+python3 tools/kicad/circuit_verify.py board.kicad_sch -v --case "on*" --nets --json report.json
+python3 tools/kicad/test_circuit_verify.py
+```
+
+DRC checks geometry; this checks electrical stress, the way a unit test checks code. It never modifies anything. The exit
+status is 1 when a check fails or can't be proven. It takes about 17 s on the Seed3 carrier.
+
+It needs three things, kept apart so each can be reused:
+
+1. **The schematic.** The netlist comes from `kicad-cli`, as in `schnet.py`. Resistors and capacitors are modelled from
+   their values; ratings come from the Value ("47uF 16V"), a Voltage/Power/Tolerance field, `parts/passives_lcsc.py` by
+   LCSC number, or the package.
+2. **Part models** in `parts/`, one file per part, shared by every board. Each has `MATCH` (Value or MPN patterns), `SOURCE`
+   (the datasheet and its sections) and `model(p)`, which describes the part with a few calls: `p.supply`, `p.limit` (absolute
+   and operating limits per pin, optionally with protection diodes and their injection rating), `p.opamp`/`p.amp`,
+   `p.clamp`/`p.tvs`, `p.switch` (MOSFETs), `p.drive` (outputs), `p.rail` and `p.min_load`. Use `p.powered` to model the
+   part switched off. A value read from a datasheet gets its section in `source=`. A value you had to assume gets
+   `assumed=True` and a reason, and `-v` lists every one.
+3. **A spec** next to the schematic, `<board>.verify.py`. It is Python that builds a `Spec` (see `circuit_spec.py`):
+   - `spec.rail(net, on)`: supply nets and their range while on (0 V while off).
+   - `spec.port(pin, nominal, misuse, exposed)`: what the outside world can put on each connector pin. Sources are
+     `dc(lo, hi)` (constant), `wave(lo, hi)` (any waveform, steps included), `tone(peak, band)` (a sine anywhere in the
+     band), `load(r)` and `open_()`, each with a source resistance `r=` and, for inputs at the far end, `clamp=` and `i_max=`.
+   - `spec.state(...)`: power states (rails on, parts powered another way, parts not fitted, port overrides).
+   - `spec.config(ref, ...)`: firmware pin modes for parts that need them (the Daisy's GPIO).
+   - `spec.claim(name, V(net) | I(part) | Gain(ports, net, f), lo, hi, cases)`: numbers the design depends on.
+   - `spec.waive(check, cases, reason)`: accepted failures, each with its reason.
+
+Each power state is checked with every port at its nominal source, then once per misuse alternative (one fault at a time).
+For each case it bounds every node and checks every pin limit, every protection-diode current, resistor power, capacitor
+voltage (and reverse voltage on electrolytics), MOSFET channel current, output loads, port currents and the claims. It
+also checks structure: parts with no model, exposed pins with no ESD diode on their net, and powered inputs with no DC path.
+
+### What the verdicts mean
+
+- **pass**: proven. No source inside the spec and no part inside its tolerance can break the limit.
+- **FAIL**: the bound is tight, so some combination of sources and tolerances really does reach it (or gets arbitrarily
+  close). Fix the circuit, change the spec if it is wrong, or waive the check with the reason.
+- **UNPROVEN**: the bound crosses the limit, but it goes through a node held by a conducting clamp or an amplifier at its
+  rail. There the check treats the node as any waveform inside the clamp's window, which is sound but can be far too
+  pessimistic. Settle these cases in simulation.
+
+### How the bounds are worked out
+
+A case becomes a linear circuit, and each quantity is a sum over its sources. A constant source contributes its DC gain.
+A tone contributes the largest |H(jω)| in its band. A `wave` contributes ∫|h(t)| dt, the impulse response's L1 norm: the exact
+worst case over every waveform inside the range. That is why a coupling cap followed by a resistor to a bias can swing
+twice the input's range (a long +U, then a step to −U), which no sine sweep shows. DC gains are evaluated at every corner of
+the resistor tolerances, which is exact because each node voltage is monotonic in each resistor. Dynamic gains are
+evaluated at every corner of up to 10 tolerant parts, and at 256 sampled corners beyond that (the report says so). Clamps
+and amplifier rails are handled by substitution. A MOSFET whose gate can sit either side of its threshold is checked in
+both states.
+
+Limits of this layer: it models what datasheets give, so a model is only as good as its numbers. ESD and surge pulses
+(kilovolts, nanoseconds) need layout parasitics, so they are only checked structurally. Clamp currents are worked out
+with the other diode clamps on the same circuit off, which mostly overstates them.
