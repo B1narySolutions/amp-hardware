@@ -191,7 +191,8 @@ class Group:
         self.inputs = self.fixed + [f"probe:{p}" for p in self.probes]
         self.tol_r = [e for e in elems if e.kind == "R" and e.tol > 0]
         self.tol_all = self.tol_r + [e for e in elems if e.kind == "C" and e.tol > 0]
-        self._dc = self._dyn = None
+        self._dc = self._dyn = self._stack = None
+        self._targets, self._bands = {}, {}
         self.exhaustive = True
 
     # -- matrices
@@ -269,31 +270,58 @@ class Group:
                     w[self.idx[b]] -= cond
         return w
 
+    def _wstack(self, terms, corners):
+        """A target's weights at every corner (corners × unknowns). Only resistor currents vary with the corner."""
+        nn = len(self.all_nodes)
+        w = np.zeros(nn + len(self.fixed))
+        varying = []
+        for kind, what, k in terms:
+            if kind == "v":
+                if what != self.gnd:
+                    w[self.idx[what]] += k
+            elif kind == "i":
+                w[nn + self.fixed.index(what)] += k
+            elif kind == "r":
+                varying.append((self.by_name[what], k))
+        W = np.repeat(w[None, :], len(corners), axis=0)
+        for e, k in varying:
+            cond = k / np.array([vals.get(e.name, e.value) for vals in corners])
+            if e.nodes[0] != self.gnd:
+                W[:, self.idx[e.nodes[0]]] += cond
+            if e.nodes[1] != self.gnd:
+                W[:, self.idx[e.nodes[1]]] -= cond
+        return W
+
     # -- DC: every resistor corner
 
     def _dc_data(self):
         if self._dc is None:
             corners, exact = _corners(self.tol_r, EXACT_DC, 4096, seed=1)
             self.exhaustive &= exact
-            data = []
+            Zs = []
             for vals in corners:
                 M, N = self._matrices(vals, with_caps=False)
-                Z = np.linalg.solve(M, N)
-                data.append((vals, Z[: len(self.all_nodes) + len(self.fixed)]))
-            self._dc = data
+                Zs.append(np.linalg.solve(M, N)[: len(self.all_nodes) + len(self.fixed)])
+            self._dc = (corners, np.array(Zs))                       # corners × unknowns × inputs
         return self._dc
+
+    def _target(self, terms):
+        """Everything worked out for one target, cached: it comes back in every case that shares this subcircuit."""
+        key = tuple(terms)
+        t = self._targets.get(key)
+        if t is None:
+            corners, Z = self._dc_data()
+            t = self._targets[key] = {"G": np.einsum("cz,czj->cj", self._wstack(terms, corners), Z)}
+        return t
 
     def dc_gains(self, targets):
         """corners × targets × inputs DC gains."""
-        out = []
-        for vals, Z in self._dc_data():
-            W = np.array([self._weights(t, vals) for t in targets])
-            out.append(W @ Z)
-        return np.array(out)
+        return np.stack([self._target(t)["G"] for t in targets], axis=1)
 
     # -- dynamics: state-space modes at each dynamic corner
 
     def _dyn_data(self):
+        """Per dynamic corner: (values, modes λ, C·V, V⁻¹·B, D), and the same stacked over corners in self._stack."""
         if self._dyn is None:
             corners, exact = _corners(self.tol_all, EXACT_DYN, SAMPLED, seed=2)
             self.exhaustive &= exact
@@ -325,38 +353,59 @@ class Group:
                 Vinv = np.linalg.inv(Vm)
                 data.append((vals, lam, Cz @ Vm, Vinv @ B, Dz))
             self._dyn = data
+            stacked = [np.array([d[k] for d in data]) if data[0][k] is not None else None for k in range(1, 5)]
+            self._stack = {"vals": [d[0] for d in data], "lam": stacked[0], "CzV": stacked[1], "VinvB": stacked[2],
+                           "Dz": stacked[3]}
         return self._dyn
+
+    def _dyn_target(self, terms):
+        """A target's modal residues at every dynamic corner: a (corners × modes) and d (corners × inputs)."""
+        t = self._target(terms)
+        if "d" not in t:
+            self._dyn_data()
+            st = self._stack
+            W = self._wstack(terms, st["vals"])
+            t["d"] = np.einsum("cz,czj->cj", W, st["Dz"])
+            t["a"] = None if st["lam"] is None else np.einsum("cz,czk->ck", W, st["CzV"])
+        return t
 
     def _modal(self, targets):
         """For each dynamic corner: (lam, a = targets × modes, b = modes × inputs, d = targets × inputs)."""
-        out = []
-        for vals, lam, CzV, VinvB, Dz in self._dyn_data():
-            W = np.array([self._weights(t, vals) for t in targets])
-            d = W @ Dz
-            if lam is None:
-                out.append((None, None, None, d))
-            else:
-                out.append((lam, W @ CzV, VinvB, d))
-        return out
+        self._dyn_data()
+        st = self._stack
+        ts = [self._dyn_target(t) for t in targets]
+        d = np.stack([t["d"] for t in ts], axis=1)
+        if st["lam"] is None:
+            return [(None, None, None, d[c]) for c in range(len(st["vals"]))]
+        a = np.stack([t["a"] for t in ts], axis=1)
+        return [(st["lam"][c], a[c], st["VinvB"][c], d[c]) for c in range(len(st["vals"]))]
 
     def l1(self, targets):
         """corners × targets × inputs: ∫|h(t)| dt, the worst-case peak gain for any bounded waveform."""
-        res = []
-        for lam, a, b, d in self._modal(targets):
-            if lam is None:
-                res.append(np.abs(d))
-                continue
-            rate = -lam.real
-            fast, slow = max(np.max(np.abs(lam)), 1e-30), max(np.min(rate), 1e-12)
-            t0, t1 = 1e-3 / fast, 40.0 / slow
-            t = np.geomspace(t0, t1, max(int(PER_DECADE * math.log10(t1 / t0)), 50))
-            E = np.exp(np.outer(lam, t))
-            h = np.real(np.einsum("tk,kj,kg->tjg", a, b, E))
-            f = np.abs(h) * t
-            lt = np.log(t)
-            integral = np.sum((f[:, :, 1:] + f[:, :, :-1]) * 0.5 * np.diff(lt), axis=2) + np.abs(h[:, :, 0]) * t0
-            res.append(np.abs(d) + integral)
-        return np.array(res)
+        out = []
+        for terms in targets:
+            t = self._dyn_target(terms)
+            if "L1" not in t:
+                st = self._stack
+                if st["lam"] is None:
+                    t["L1"] = np.abs(t["d"])
+                else:
+                    res = []
+                    for c in range(len(st["vals"])):
+                        lam, a, b, d = st["lam"][c], t["a"][c], st["VinvB"][c], t["d"][c]
+                        rate = -lam.real
+                        fast, slow = max(np.max(np.abs(lam)), 1e-30), max(np.min(rate), 1e-12)
+                        t0, t1 = 1e-3 / fast, 40.0 / slow
+                        tt = np.geomspace(t0, t1, max(int(PER_DECADE * math.log10(t1 / t0)), 50))
+                        # inputs × time. einsum, not @: macOS's BLAS raises spurious warnings when exp() underflows.
+                        h = np.real(np.einsum("k,kj,kg->jg", a, b, np.exp(np.outer(lam, tt))))
+                        f = np.abs(h) * tt
+                        integral = (np.sum((f[:, 1:] + f[:, :-1]) * 0.5 * np.diff(np.log(tt)), axis=1)
+                                    + np.abs(h[:, 0]) * t0)
+                        res.append(np.abs(d) + integral)
+                    t["L1"] = np.array(res)
+            out.append(t["L1"])
+        return np.stack(out, axis=1)
 
     def _freqs(self, band, lams):
         f1, f2 = band
@@ -365,43 +414,51 @@ class Group:
         f = np.concatenate([f, [x for x in res if f1 < x < f2]])
         return 2 * math.pi * f
 
+    def _resolvent(self, band):
+        """1 / (jω − λ) for every corner, mode and frequency in the band (each corner's resonances included): one
+        array per band, shared by every target."""
+        R = self._bands.get(band)
+        if R is None:
+            lam = self._stack["lam"]
+            w = self._freqs(band, list(lam))
+            R = self._bands[band] = 1.0 / (1j * w[None, None, :] - lam[:, :, None])
+        return R
+
+    def _h_band_target(self, terms, band, worst):
+        t = self._dyn_target(terms)
+        key = (worst, band)
+        if key not in t:
+            st = self._stack
+            if st["lam"] is None:
+                t[key] = np.abs(t["d"])
+            else:
+                H = t["d"][:, :, None] + np.einsum("ck,ckj,ckf->cjf", t["a"], st["VinvB"], self._resolvent(band))
+                t[key] = np.max(np.abs(H), axis=2) if worst == "max" else np.min(np.abs(H), axis=2)
+        return t[key]
+
     def h_band(self, targets, band):
         """corners × targets × inputs: max |H(jω)| over the band, the peak gain for a sine anywhere in it."""
-        res = []
-        for lam, a, b, d in self._modal(targets):
-            if lam is None:
-                res.append(np.abs(d))
-                continue
-            w = self._freqs(band, [lam])
-            R = 1.0 / (1j * w[None, :] - lam[:, None])
-            H = d[:, :, None] + np.einsum("tk,kj,kf->tjf", a, b, R)
-            res.append(np.max(np.abs(H), axis=2))
-        return np.array(res)
-
-    def h_at(self, targets, f):
-        """corners × targets × inputs: H(j2πf)."""
-        res = []
-        w = 2 * math.pi * f
-        for lam, a, b, d in self._modal(targets):
-            if lam is None:
-                res.append(d.astype(complex))
-                continue
-            R = 1.0 / (1j * w - lam)
-            res.append(d + np.einsum("tk,kj,k->tj", a, b, R))
-        return np.array(res)
+        self._dyn_data()
+        return np.stack([self._h_band_target(t, band, "max") for t in targets], axis=1)
 
     def h_band_min(self, targets, band):
         """corners × targets × inputs: min |H(jω)| over the band (an impedance's lowest point)."""
-        res = []
-        for lam, a, b, d in self._modal(targets):
-            if lam is None:
-                res.append(np.abs(d))
-                continue
-            w = self._freqs(band, [lam])
-            R = 1.0 / (1j * w[None, :] - lam[:, None])
-            H = d[:, :, None] + np.einsum("tk,kj,kf->tjf", a, b, R)
-            res.append(np.min(np.abs(H), axis=2))
-        return np.array(res)
+        self._dyn_data()
+        return np.stack([self._h_band_target(t, band, "min") for t in targets], axis=1)
+
+    def h_at(self, targets, f):
+        """corners × targets × inputs: H(j2πf)."""
+        self._dyn_data()
+        st = self._stack
+        out = []
+        for terms in targets:
+            t = self._dyn_target(terms)
+            if st["lam"] is None:
+                out.append(t["d"].astype(complex))
+            else:
+                R = 1.0 / (1j * 2 * math.pi * f - st["lam"])
+                out.append(t["d"] + np.einsum("ck,ckj,ck->cj", t["a"], st["VinvB"], R))
+        return np.stack(out, axis=1)
 
     def bounds(self, targets, stims, subs=frozenset()):
         """A Bound for each target, given the Stim on each fixed node. subs are the fixed nodes that stand in for
@@ -497,6 +554,7 @@ class Analysis:
         self.clamps = [e for e in circ.elems if e.kind == "D"]
         self.nodes = sorted({n for e in circ.elems for n in e.nodes} - {self.gnd})
         self.sampled = False
+        self._structs, self._by_name = {}, None
 
     # -- structure
 
@@ -517,25 +575,51 @@ class Analysis:
                 out.append(Elem("S", e.name, e.nodes[:2], e.r_on))
         return out
 
+    def _structure(self, fixed, sw, exclude=()):
+        """The linear subcircuits for one set of fixed nodes, switch states and exclusions, worked out once and kept:
+        the active elements, each free node's subcircuit (its root), and the elements touching each node."""
+        key = (frozenset(fixed), tuple(sorted(sw.items())), tuple(sorted(exclude)))
+        st = self._structs.get(key)
+        if st is None:
+            active = self._active(fixed, sw, exclude)
+            uf = _UF()
+            free = lambda n: n != self.gnd and n not in fixed
+            for e in active:
+                ns = [n for n in e.nodes if free(n)]
+                for n in ns:
+                    uf.find(n)
+                for a, b in zip(ns, ns[1:]):
+                    uf.union(a, b)
+            root = {n: uf.find(n) for n in list(uf.p)}
+            members, touch, elem_root = {}, {}, []
+            for n, r in root.items():
+                members.setdefault(r, set()).add(n)
+            for e in active:
+                elem_root.append(next((root[n] for n in e.nodes if free(n)), None))
+                for n in e.nodes:
+                    touch.setdefault(n, []).append(e)
+            st = self._structs[key] = {"active": active, "root": root, "members": members, "touch": touch,
+                                       "elem_root": elem_root, "groups": {}}
+        return st
+
     def _group(self, nodes, fixed, sw, extra_fixed=(), exclude=(), probes=()):
-        active = self._active(fixed, sw, exclude)
-        uf = _UF()
-        free = lambda n: n != self.gnd and n not in fixed
-        for e in active:
-            ns = [n for n in e.nodes if free(n)]
-            for n in ns:
-                uf.find(n)
-            for a, b in zip(ns, ns[1:]):
-                uf.union(a, b)
-        roots = {uf.find(n) for n in nodes if free(n)}
-        members = {n for n in uf.p if uf.find(n) in roots}
-        elems = [e for e in active if any(n in members for n in e.nodes)]
-        adj = {n for e in elems for n in e.nodes if n in fixed}
-        fx = sorted(adj | {n for n in extra_fixed if n in fixed})
-        key = (tuple(sorted(members)), tuple(fx), tuple(sorted(e.key() for e in elems)), tuple(probes))
-        g = self.cache.get(key)
+        st = self._structure(fixed, sw, exclude)
+        roots = frozenset(st["root"].get(n, n) for n in nodes if n != self.gnd and n not in fixed)
+        extra = tuple(sorted(n for n in extra_fixed if n in fixed))
+        gkey = (roots, extra, tuple(probes))
+        g = st["groups"].get(gkey)
         if g is None:
-            g = self.cache[key] = Group(members, fx, elems, self.gnd, probes)
+            members = set()
+            for r in roots:
+                members |= st["members"].get(r, {r})
+            elems = [e for e, r in zip(st["active"], st["elem_root"]) if r in roots]
+            adj = {n for e in elems for n in e.nodes if n in fixed}
+            fx = sorted(adj | set(extra))
+            key = (tuple(sorted(members)), tuple(fx), tuple(sorted(e.key() for e in elems)), tuple(probes))
+            g = self.cache.get(key)
+            if g is None:
+                g = self.cache[key] = Group(members, fx, elems, self.gnd, probes)
+            st["groups"][gkey] = g
         return g
 
     # -- bounds
@@ -550,7 +634,7 @@ class Analysis:
         fixed = self.fixed if fixed is None else fixed
         sw = self.sw if sw is None else sw
         subs = frozenset(n for n in fixed if n not in self.circ.fixed and n not in pinned)
-        active = self._active(fixed, sw)
+        touch = self._structure(fixed, sw)["touch"]
         terms_list = [self._merge(t) for t in terms_list]
         out = [None] * len(terms_list)
         groups = {}
@@ -561,10 +645,10 @@ class Analysis:
             extra = Bound(0.0, 0.0, "dc", False)
             for k_, f, k in terms:
                 if k_ == "i":
-                    for e in active:
-                        if e.kind == "R" and f in e.nodes and all(self._fx(n, fixed) for n in e.nodes):
+                    for e in touch.get(f, ()):
+                        if e.kind == "R" and all(self._fx(n, fixed) for n in e.nodes):
                             extra = self._add(extra, self._r_direct(e, k if e.nodes[1] == f else -k, fixed, subs))
-            nodes = set(self._term_nodes(terms, active, fixed))
+            nodes = set(self._term_nodes(terms, touch, fixed))
             free = [n for n in nodes if not self._fx(n, fixed)]
             if not free:
                 out[t] = self._add(self._direct(direct, fixed, subs), extra)
@@ -591,17 +675,22 @@ class Analysis:
     def _add(a, b):
         return Bound(a.lo + b.lo, a.hi + b.hi, "dc" if a.kind == b.kind == "dc" else "wave", a.loose or b.loose)
 
-    def _term_nodes(self, terms, active, fixed):
+    def _term_nodes(self, terms, touch, fixed):
         for kind, what, _ in terms:
             if kind == "v":
                 yield what
             elif kind == "r":
-                yield from self.circ.element(what).nodes[:2]
+                yield from self._elem(what).nodes[:2]
             elif kind == "i":
                 yield what
-                for e in active:
-                    if what in e.nodes and not (e.kind == "R" and all(self._fx(n, fixed) for n in e.nodes)):
+                for e in touch.get(what, ()):
+                    if not (e.kind == "R" and all(self._fx(n, fixed) for n in e.nodes)):
                         yield from e.nodes
+
+    def _elem(self, name):
+        if self._by_name is None:
+            self._by_name = {e.name: e for e in self.circ.elems}
+        return self._by_name[name]
 
     def _range(self, n, fixed, subs):
         if n == self.gnd:
@@ -624,7 +713,7 @@ class Analysis:
                 r = self._range(what, fixed, subs)
                 total = self._add(total, Bound(min(k * r.lo, k * r.hi), max(k * r.lo, k * r.hi), r.kind, r.loose))
             elif kind == "r":
-                total = self._add(total, self._r_direct(self.circ.element(what), k, fixed, subs))
+                total = self._add(total, self._r_direct(self._elem(what), k, fixed, subs))
         return total
 
     def gain(self, inputs, node, f):
@@ -655,7 +744,7 @@ class Analysis:
         tolerance corner. settle is the slowest time constant in the target's group, in seconds."""
         fixed = self.circ.fixed
         terms = self._merge(terms)
-        nodes = set(self._term_nodes(terms, self._active(fixed, sw), fixed))
+        nodes = set(self._term_nodes(terms, self._structure(fixed, sw)["touch"], fixed))
         free = [n for n in nodes if not self._fx(n, fixed)]
         if not free:
             return {}, {}, 0.0

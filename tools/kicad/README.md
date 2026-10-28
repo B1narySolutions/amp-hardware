@@ -136,7 +136,7 @@ python3 tools/kicad/test_circuit_verify.py
 ```
 
 DRC checks geometry; this checks electrical stress, the way a unit test checks code. It never modifies anything. The exit
-status is 1 when a check fails or can't be proven. It takes about 20 s on the Seed3 carrier, simulation included.
+status is 1 when a check fails or can't be proven. It takes about 3 s on the Seed3 carrier, simulation included.
 
 It needs three things, kept apart so each can be reused:
 
@@ -232,7 +232,8 @@ It injects one fault at a time:
   `board_dump.py`.
 
 For each fault it runs the circuit check in the spec's `fault_states`, with nominal sources and nominal part values (no
-tolerance corners or simulation, so about 30 s for 200 faults), and reports:
+tolerance corners or simulation), in parallel across `--jobs` processes (the cores, up to 8): about 3 s for 200
+faults on the carrier. It reports:
 - **Damage:** a check the fault newly breaks is an absolute maximum or rating. A fault that ties two supplies together is
   damage by itself. One between two outputs of the same part is "possible", since that's outside the part's model.
 - **Function only:** an operating range, a claim or a floating input.
@@ -245,6 +246,20 @@ connector or socket pin where it can. The exit status is 1 while a damaging faul
 
 Limits: a part's own internal supplies (a charge pump's rails) are ideal sources in its model. A fault that would stop a
 charge pump therefore doesn't move its rails, even though the powered test plan would see it.
+
+### Speed
+
+Almost none of the time goes into the numerical work itself (eigenvalues and solves on matrices of a few dozen rows). It
+goes into the bookkeeping around it, so the engine is organised to avoid repeating it:
+- **Per subcircuit:** each subcircuit keeps every tolerance corner stacked in one array. The worst-case gain for a sine
+  is one numpy call over all corners and frequencies, and each quantity's transfer data is cached. A case that shares a
+  subcircuit with an earlier one reuses it.
+- **Per clamp and switch state:** the grouping into subcircuits, and which elements touch each node, are worked out
+  once and kept, not redone for every quantity.
+- **Fault check:** faults run in separate processes.
+
+The real scaling limit is the number of tolerance corners: 2^n for n tolerant parts in one subcircuit. Exact
+enumeration stops at 14 resistors (DC) and 10 parts (dynamic). Beyond that it samples, and the report says so.
 
 ### How the simulation works
 

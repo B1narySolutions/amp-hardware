@@ -14,7 +14,7 @@ import ctypes
 import math
 import random
 import re
-import time
+import threading
 
 import numpy as np
 
@@ -57,8 +57,9 @@ class Ngspice:
         self.path = path
         self.lib = ctypes.CDLL(path)
         self.log = []
+        self._done = threading.Event()        # set by ngspice when its background thread finishes a run
         self._cb = (self._SendChar(self._char), self._SendStat(lambda *a: 0), self._Exit(self._exit),
-                    self._BgRun(lambda *a: 0))
+                    self._BgRun(self._bg))
         self.lib.ngSpice_Init.argtypes = [self._SendChar, self._SendStat, self._Exit, ctypes.c_void_p,
                                           ctypes.c_void_p, self._BgRun, ctypes.c_void_p]
         self.lib.ngSpice_Circ.argtypes = [ctypes.POINTER(ctypes.c_char_p)]
@@ -77,27 +78,25 @@ class Ngspice:
         self.log.append(f"ngspice exit {status}")
         return 0
 
+    def _bg(self, not_running, ident, user):
+        if not_running:
+            self._done.set()
+        return 0
+
     def run(self, lines, vectors):
         """Load a netlist, run it, and return the requested vectors as arrays."""
         self.log = []
         arr = (ctypes.c_char_p * (len(lines) + 1))(*[l.encode() for l in lines], None)
         if self.lib.ngSpice_Circ(arr) != 0:
             raise SimError("ngspice rejected the netlist:\n" + "".join(self.log[-20:]))
+        self._done.clear()
         self.lib.ngSpice_Command(b"bg_run")
-        start = time.time()
-        while not self.lib.ngSpice_running() and time.time() - start < 1.0:
-            if any("No. of Data Rows" in l or "aborted" in l for l in self.log):
-                break                                   # finished before we saw it start
-            time.sleep(0.001)
-        while self.lib.ngSpice_running():
-            if time.time() - start > RUN_TIMEOUT:
-                self.lib.ngSpice_Command(b"bg_halt")
-                while self.lib.ngSpice_running():
-                    time.sleep(0.01)
-                self.lib.ngSpice_Command(b"destroy all")
-                self.lib.ngSpice_Command(b"remcirc")
-                raise SimError(f"a simulation ran past {RUN_TIMEOUT:.0f} s and was stopped")
-            time.sleep(0.005)
+        if not self._done.wait(RUN_TIMEOUT):
+            self.lib.ngSpice_Command(b"bg_halt")
+            self._done.wait(5.0)
+            self.lib.ngSpice_Command(b"destroy all")
+            self.lib.ngSpice_Command(b"remcirc")
+            raise SimError(f"a simulation ran past {RUN_TIMEOUT:.0f} s and was stopped")
         self.runs += 1
         errors = [l for l in self.log if re.search(r"error|singular|too small|aborted", l, re.I)]
         out = {}

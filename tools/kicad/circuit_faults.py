@@ -22,11 +22,13 @@ import argparse
 import copy
 import json
 import math
+import multiprocessing
 import os
 import runpy
 import sys
 import tempfile
 import time
+from concurrent.futures import ProcessPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -210,73 +212,65 @@ def _worst(results):
     return w
 
 
-def run(spec_path, sch, board, gap, gap_part, states, verbose, progress=print):
+_ctx = {}     # what every fault is checked against: set up once per process (in workers by _setup)
+
+
+def _setup(spec_path, parts, states, base=None, fixed=None, healthy=None):
     spec = runpy.run_path(spec_path)["spec"]
-    parts = schnet.load(sch)
-    library = cv.load_library([cv.PARTS_DIR, os.path.join(os.path.dirname(spec_path), "parts")])
     gnd = getattr(spec, "ground", "GND")
     names = states or spec.fault_states or [spec.states[0].name]
-    cases = [c for c in expand_cases(spec) if c.kind == "nominal" and c.state.name in names]
     circuit_bounds.NOMINAL_ONLY = True
+    _ctx.update(spec=spec, parts=parts, gnd=gnd,
+                library=cv.load_library([cv.PARTS_DIR, os.path.join(os.path.dirname(spec_path), "parts")]),
+                cases=[c for c in expand_cases(spec) if c.kind == "nominal" and c.state.name in names],
+                base=base, fixed=fixed, healthy=healthy)
 
-    def check(p):
-        res, cache = [], {}
-        for case in cases:
-            try:
-                circ = cv.build(spec, p, library, case, gnd)
-            except ValueError as err:          # two sources on one net: a supply short that `fixed` didn't foresee
-                raise SupplyShort(str(err))
-            r, _ = cv.check_case(spec, circ, case, cache)
-            res += r
-        cv.apply_waivers(spec, res, {c.name: c for c in cases})
-        return _worst(res)
 
-    base = check(parts)
-    nets = {net for p in parts.values() for net in p["pins"].values()}
-    fixed = {gnd: "ground"}
+def _check(p):
+    """The worst status of every check on these parts, keyed (case, check id)."""
+    spec, library, gnd, cases = _ctx["spec"], _ctx["library"], _ctx["gnd"], _ctx["cases"]
+    res, cache = [], {}
     for case in cases:
-        circ = cv.build(spec, parts, library, case, gnd)
-        for n in circ.fixed:
-            if n in nets:
-                fixed[n] = circ.fixed_by[n].replace(" pin ", "'s pin ").replace("rail ", "the rail ")
-    readings = [(st, m) for st in spec.stages for m in st.checks]
-
-    def measure(p, rename):
-        out = {}
-        for st in spec.stages:
-            try:
-                out.update(cv.stage_readings(spec, p, library, st, gnd, rename))
-            except (KeyError, ValueError, RuntimeError):
-                pass                         # a stage this fault keeps from being built takes no readings
-        return out
-
-    healthy = measure(parts, {})
-    faults = part_faults(parts)
-    if board and os.path.isfile(board):
-        faults += bridge_faults(board, gap, gap_part)
-    outcomes = []
-    t0 = time.time()
-    for k, fault in enumerate(faults, 1):
-        o = Outcome(fault)
         try:
-            fp, rename = fault.apply(parts, fixed, gnd)
-            now = check(fp)
-            for key, r in now.items():
-                if r.status not in ("fail", "unproven"):
-                    continue
-                was = base.get(key)
-                if was is not None and was.status in ("fail", "unproven", "waived"):
-                    continue
-                (o.damage if r.damage else o.function).append(r)
-                o.possible |= r.status == "unproven"
-        except SupplyShort as err:
-            o.supply_short, o.possible = str(err), err.possible
-            fp, rename = fault.apply(parts, fixed, gnd, force=True)
-        except Exception as err:   # one fault the check can't model shouldn't stop the others
-            o.error = f"couldn't check it: {type(err).__name__}: {err}"
-            fp, rename = fault.apply(parts, fixed, gnd, force=True)
-        reads = measure(fp, rename)
-        for st, m in readings:
+            circ = cv.build(spec, p, library, case, gnd)
+        except ValueError as err:          # two sources on one net: a supply short that `fixed` didn't foresee
+            raise SupplyShort(str(err))
+        r, _ = cv.check_case(spec, circ, case, cache)
+        res += r
+    cv.apply_waivers(spec, res, {c.name: c for c in cases})
+    return _worst(res)
+
+
+def _measure(p, rename):
+    out = {}
+    for st in _ctx["spec"].stages:
+        try:
+            out.update(cv.stage_readings(_ctx["spec"], p, _ctx["library"], st, _ctx["gnd"], rename))
+        except (KeyError, ValueError, RuntimeError):
+            pass                             # a stage this fault keeps from being built takes no readings
+    return out
+
+
+def _evaluate(fault):
+    """Check one fault: what it newly breaks, and which test-plan readings it moves."""
+    parts, fixed, gnd, base, healthy = _ctx["parts"], _ctx["fixed"], _ctx["gnd"], _ctx["base"], _ctx["healthy"]
+    o = Outcome(fault)
+    try:
+        fp, rename = fault.apply(parts, fixed, gnd)
+        for key, r in _check(fp).items():
+            if r.status not in ("fail", "unproven") or base.get(key) in ("fail", "unproven", "waived"):
+                continue
+            (o.damage if r.damage else o.function).append(r)
+            o.possible |= r.status == "unproven"
+    except SupplyShort as err:
+        o.supply_short, o.possible = str(err), err.possible
+        fp, rename = fault.apply(parts, fixed, gnd, force=True)
+    except Exception as err:   # one fault the check can't model shouldn't stop the others
+        o.error = f"couldn't check it: {type(err).__name__}: {err}"
+        fp, rename = fault.apply(parts, fixed, gnd, force=True)
+    reads = _measure(fp, rename)
+    for st in _ctx["spec"].stages:
+        for m in st.checks:
             key = (m["id"], m["a"], m["b"])
             if key not in reads or key not in healthy:
                 continue
@@ -293,9 +287,40 @@ def run(spec_path, sch, board, gap, gap_part, states, verbose, progress=print):
                 seen = f"{_volts(h)} → {_volts(f)}"
             if moved and not any(c.startswith(f"{m['id']} (") for c in o.caught):
                 o.caught.append(f"{m['id']} ({seen})")
-        outcomes.append(o)
-        if verbose and progress:
-            progress(f"  [{k}/{len(faults)}] {fault.name}")
+    return o
+
+
+def run(spec_path, sch, board, gap, gap_part, states, verbose, jobs=1, progress=print):
+    parts = schnet.load(sch)
+    _setup(spec_path, parts, states)
+    spec, library, gnd, cases = _ctx["spec"], _ctx["library"], _ctx["gnd"], _ctx["cases"]
+    base = {key: r.status for key, r in _check(parts).items()}
+    nets = {net for p in parts.values() for net in p["pins"].values()}
+    fixed = {gnd: "ground"}
+    for case in cases:
+        circ = cv.build(spec, parts, library, case, gnd)
+        for n in circ.fixed:
+            if n in nets:
+                fixed[n] = circ.fixed_by[n].replace(" pin ", "'s pin ").replace("rail ", "the rail ")
+    healthy = _measure(parts, {})
+    _ctx.update(base=base, fixed=fixed, healthy=healthy)
+    faults = part_faults(parts)
+    if board and os.path.isfile(board):
+        faults += bridge_faults(board, gap, gap_part)
+    t0 = time.time()
+    if jobs > 1 and len(faults) > jobs:
+        # Every fault is independent. Workers are spawned (forking a process that has numpy's threads running isn't
+        # safe on macOS), so each sets up its own copy of the spec and part models once.
+        ctx = multiprocessing.get_context("spawn")
+        with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_setup,
+                                 initargs=(spec_path, parts, states, base, fixed, healthy)) as pool:
+            outcomes = list(pool.map(_evaluate, faults, chunksize=max(1, len(faults) // (jobs * 4))))
+    else:
+        outcomes = []
+        for k, fault in enumerate(faults, 1):
+            outcomes.append(_evaluate(fault))
+            if verbose and progress:
+                progress(f"  [{k}/{len(faults)}] {fault.name}")
     suggestions = suggest(spec, parts, library, gnd, fixed, outcomes)
     return spec, faults, outcomes, cases, time.time() - t0, suggestions
 
@@ -437,6 +462,8 @@ def main(argv=None):
     ap.add_argument("--bridge-gap-part", type=float, default=1.0,
                     help="mm between pads of the same part, such as socket or IC pins (default 1.0)")
     ap.add_argument("--state", action="append", help="power state(s) to check faults in (default: the spec's)")
+    ap.add_argument("-j", "--jobs", type=int, default=min(os.cpu_count() or 1, 8),
+                    help="processes to check faults in (default: the cores, up to 8)")
     ap.add_argument("-v", "--verbose", action="store_true", help="every fault and everything it breaks")
     ap.add_argument("--json", help="write every outcome to this file")
     args = ap.parse_args(argv)
@@ -444,7 +471,8 @@ def main(argv=None):
     spec_path = args.spec or os.path.splitext(sch)[0] + ".verify.py"
     board = args.board or os.path.splitext(sch)[0] + ".kicad_pcb"
     spec, faults, outcomes, cases, elapsed, suggestions = run(spec_path, sch, board, args.bridge_gap,
-                                                              args.bridge_gap_part, args.state, args.verbose)
+                                                              args.bridge_gap_part, args.state, args.verbose,
+                                                              args.jobs)
     n_readings = sum(len(st.checks) for st in spec.stages)
     text, missed = report(sch, faults, outcomes, cases, elapsed, args.verbose, args.bridge_gap, args.bridge_gap_part,
                           n_readings, suggestions)

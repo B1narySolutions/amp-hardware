@@ -16,7 +16,7 @@ python3 tools/kicad/test_circuit_verify.py                         # the engine'
 
 It needs `<board>.verify.py` next to the schematic (the spec) and a model in `tools/kicad/parts/` for every part that isn't
 a resistor, capacitor or connector. `tools/kicad/README.md` ("Circuit check") documents both. It never modifies anything.
-Exit status 1 means at least one FAIL or UNPROVEN. It takes about 20 s on the Seed3 carrier; `--no-sim` skips the
+Exit status 1 means at least one FAIL or UNPROVEN. It takes about 3 s on the Seed3 carrier (the fault check about 3 s too); `--no-sim` skips the
 simulation.
 
 Reading the result:
