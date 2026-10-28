@@ -26,8 +26,9 @@ class Stim:
       "wave"  any waveform inside lo..hi, steps and DC included (a fault, a pedal, a logic output);
       "tone"  a sine of any frequency in `band` around a fixed offset, lo..hi being offset -/+ peak (an audio source);
       "open"  nothing connected.
-    r is the source's output resistance. clamp=(lo, hi) adds the far end's protection diodes, which hold the pin inside
-    lo..hi and take the excess current; i_max limits the current in or out of the port (through r and the clamp).
+    r is the source's output resistance, or a (min, max) range when it isn't known exactly (checked at both ends, like a
+    part tolerance). clamp=(lo, hi) adds the far end's protection diodes, which hold the pin inside lo..hi and take the
+    excess current; i_max limits the current in or out of the port (through r and the clamp).
     """
 
     def __init__(self, kind, lo=0.0, hi=0.0, r=0.0, band=None, clamp=None, i_max=None, label=""):
@@ -35,7 +36,12 @@ class Stim:
             raise ValueError(f"unknown source kind {kind!r}")
         if hi < lo:
             raise ValueError(f"source range {lo}..{hi} is upside down")
-        self.kind, self.lo, self.hi, self.r = kind, float(lo), float(hi), float(r)
+        self.kind, self.lo, self.hi = kind, float(lo), float(hi)
+        if isinstance(r, (tuple, list)):
+            r_lo, r_hi = max(float(r[0]), 1.0), float(r[1])     # 1 Ω floor: a corner can't be a short
+            self.r, self.r_tol, self.r_range = (r_lo + r_hi) / 2, (r_hi - r_lo) / (r_hi + r_lo), (float(r[0]), r_hi)
+        else:
+            self.r, self.r_tol, self.r_range = float(r), 0.0, None
         self.band = tuple(band) if band else None
         self.clamp, self.i_max, self.label = clamp, i_max, label
 
@@ -52,7 +58,8 @@ class Stim:
             return self.label
         if self.kind == "open":
             return "open"
-        r = f", {fmt(self.r, 'Ω')}" if self.r else ""
+        r = (f", {fmt(self.r_range[0], 'Ω')}..{fmt(self.r_range[1], 'Ω')}" if self.r_range else
+             f", {fmt(self.r, 'Ω')}" if self.r else "")
         if self.kind == "tone":
             off = f" on {fmt(self.mid, 'V')}" if self.mid else ""
             return f"sine ≤ {fmt(self.amp, 'V')} peak{off}, {fmt(self.band[0], 'Hz')}–{fmt(self.band[1], 'Hz')}{r}"
@@ -111,7 +118,8 @@ class I:
 
 
 class Gain:
-    """The gain in dB from one or more port sources, driven together in phase, to a net, at frequency f."""
+    """The gain in dB from one or more sources, driven together in phase, to a net, at frequency f. A source is a port
+    ("J2.3") or a model's own source node ("A1:out18.src")."""
 
     def __init__(self, ports, net, f):
         self.ports = [ports] if isinstance(ports, str) else list(ports)
@@ -155,6 +163,9 @@ class Spec:
         self.states = []      # power states, each checked on its own
         self.configs = {}     # ref -> firmware pin modes and other model options
         self.claims, self.waivers = [], []
+        self.provided = []    # (Interface, {signal: pin}) this board drives
+        self.stages = []      # unpowered resistance checks from the test plan
+        self.fault_states = None  # power states the fault check runs in (default: the first)
         self.warn_ratio = 0.8  # stress above this fraction of a rating is a warning
 
     def rail(self, net, on):
@@ -187,6 +198,73 @@ class Spec:
     def waive(self, check, cases, reason):
         """Accept a failing check (fnmatch pattern on its id) in matching cases, and say why."""
         self.waivers.append(Waiver(check, cases, reason))
+
+    def provides(self, iface, pins, cases="nominal"):
+        """This board drives these signals of a contract ({signal: pin}): check, in the matching cases (the states in
+        which it drives them), that each pin stays inside the contract's range and that its source resistance stays
+        under the contract's maximum."""
+        self.provided.append((iface, dict(pins), cases))
+
+    def test_stage(self, name, absent=(), rails=None, ports=None):
+        """A bring-up test stage (see Stage). The circuit check verifies each expected value against the schematic;
+        the fault check works out which assembly faults each reading catches."""
+        st = Stage(name, absent, rails, ports)
+        self.stages.append(st)
+        return st
+
+
+class Interface:
+    """A connector between two boards, as a contract both boards' specs load. For each signal it says which board drives
+    it and what that board promises: a source (range, kind, and source resistance, often a range). The receiving
+    board's spec takes its port assumption from it, with iface.source(name). The driving board's spec checks its own
+    output against it with spec.provides(iface, {name: pin}). When either side changes the contract, both checks see it.
+
+        iface = Interface("carrier–power board")
+        iface.signal("BAT", by="power board", source=dc(0, 3.3, r=(0, 10e3)), note="README: Battery level")
+    """
+
+    def __init__(self, name):
+        self.name, self.signals = name, {}
+
+    def signal(self, name, by, source, note=""):
+        self.signals[name] = {"by": by, "source": source, "note": note}
+
+    def source(self, name):
+        return self.signals[name]["source"]
+
+    @staticmethod
+    def load(path):
+        """The Interface named `interface` in a contract file (a path relative to the calling spec works)."""
+        import inspect
+        import os
+        import runpy
+        if not os.path.isabs(path):
+            caller = inspect.stack()[1].frame.f_globals.get("__file__", "")
+            path = os.path.join(os.path.dirname(os.path.abspath(caller)), path)
+        return runpy.run_path(path)["interface"]
+
+
+class Stage:
+    """A stage of the bring-up test plan: DMM checks made with some parts not fitted. Unpowered, it takes resistance
+    readings; with rails (net -> Stim, the bench supply) it takes DC voltage readings, the ports set by `ports`
+    (pin -> Stim) and every other port open."""
+
+    def __init__(self, name, absent, rails=None, ports=None):
+        self.name, self.absent, self.checks = name, set(absent), []
+        self.rails, self.ports = dict(rails or {}), dict(ports or {})
+
+    def measure(self, id, a, b, expect=None, note=""):
+        """A DMM resistance check from a to b (each a pin "J2.3", "A1.25" or a net name). expect: ohms (±10 %),
+        (lo, hi), "open" (≥ 10 MΩ) or "short" (≤ 1 Ω). Without expect it only counts toward fault coverage."""
+        if self.rails:
+            raise ValueError(f"{self.name} is powered: take voltage readings with voltage()")
+        self.checks.append({"id": id, "a": a, "b": b, "expect": expect, "note": note, "kind": "ohms"})
+
+    def voltage(self, id, a, expect=None, b="GND", note=""):
+        """A DMM DC voltage check at a (against b, GND by default) in a powered stage. expect: (lo, hi) in volts."""
+        if not self.rails:
+            raise ValueError(f"{self.name} is unpowered: take resistance readings with measure()")
+        self.checks.append({"id": id, "a": a, "b": b, "expect": expect, "note": note, "kind": "volts"})
 
 
 class Case:

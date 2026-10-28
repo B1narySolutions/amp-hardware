@@ -8,11 +8,13 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 | `board_view.py` | Renders a board to PNG: real pad shapes, tracks to scale, vias, silkscreen, labels and the ratsnest. Zooms to a window or to parts |
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
-| `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, then simulation for the results the bounds can't settle |
+| `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, then simulation for the results the bounds can't settle. Also checks interface contracts between boards and the test plan's expected readings |
+| `circuit_faults.py` | Injects assembly faults one at a time (opens, shorts, wrong values, missing parts, solder bridges from the PCB) and reports what each damages and whether the test plan catches it |
 
 Supporting files: `board_dump.py` exports a board to JSON for the viewer and checker; `jlcpcb.py` holds JLC's numbers, their sources and the KiCad rules built from them; `kicadenv.py` finds KiCad and resolves footprint libraries; `schnet.py` reads each part's footprint, fields, symbol link and pin nets from the schematic (through a kicad-cli netlist).
 The circuit check is `circuit_spec.py` (the spec format), `circuit_bounds.py` (the bound engine), `circuit_sim.py` (the
 simulator search), `parts/` (part models and passive ratings, shared by every board) and `test_circuit_verify.py`.
+Contracts between boards live in `/interfaces/`.
 
 ## Requirements
 
@@ -156,6 +158,10 @@ It needs three things, kept apart so each can be reused:
    - `spec.config(ref, ...)`: firmware pin modes for parts that need them (the Daisy's GPIO).
    - `spec.claim(name, V(net) | I(part) | Gain(ports, net, f), lo, hi, cases)`: numbers the design depends on.
    - `spec.waive(check, cases, reason)`: accepted failures, each with its reason.
+   - `spec.provides(iface, {signal: pin}, cases)`: signals this board drives under an interface contract (below).
+   - `spec.test_stage(name, absent, rails, ports)`: a bring-up test stage, with its readings: `measure(id, a, b, expect)`
+     for resistance on an unpowered stage, `voltage(id, a, expect)` on a powered one (`rails` is the bench supply).
+   - `spec.fault_states`: the power states the fault check runs in.
 
 Each power state is checked with every port at its nominal source, then once per misuse alternative (one fault at a time).
 For each case it bounds every node and checks every pin limit, every protection-diode current, resistor power, capacitor
@@ -186,6 +192,59 @@ the resistor tolerances, which is exact because each node voltage is monotonic i
 evaluated at every corner of up to 10 tolerant parts, and at 256 sampled corners beyond that (the report says so). Clamps
 and amplifier rails are handled by substitution. A MOSFET whose gate can sit either side of its threshold is checked in
 both states.
+
+### Contracts between boards
+
+A connector between two boards is a contract file in `/interfaces/` (`interfaces/carrier-power.py` for the Seed3 carrier
+and the power board). For each signal it records which board drives it and what that board promises: a source with its
+range and its source resistance, often as a range such as `r=(0, 10e3)`. A source-resistance range is checked at both
+ends, like a part tolerance. Both boards' specs load the same file with `Interface.load(path)`:
+
+- The receiving board uses `iface.source(name)` as its port assumption, so it checks itself against exactly what the
+  other board promises.
+- The driving board lists the signal in `spec.provides(...)`. The check then confirms, in the given cases, that the pin
+  stays inside the promised range and that its source resistance (the highest |Z| looking into the board, the receiver
+  removed) stays under the promised maximum.
+
+When either side changes a number, rerunning both checks shows which board no longer holds its side.
+
+### Test-plan readings
+
+A spec can carry the bring-up test plan's DMM checks. Each reading with an `expect` is worked out from the schematic and
+reported under "test plan", so a test plan that falls behind the schematic shows up as a FAIL. Resistance readings use the
+resistors only: capacitors are charged, diodes and MOSFETs are off, nothing is powered. Voltage readings use the bound
+engine in the stage's powered state. The schematic doesn't model a jack's internal switch, so a reading that depends on
+one belongs in the stage only with the switch open.
+
+### Fault check
+
+```bash
+python3 tools/kicad/circuit_faults.py audio-board/rev2/seed3-carrier.kicad_sch
+python3 tools/kicad/circuit_faults.py board.kicad_sch -v --bridge-gap 0.3 --json faults.json
+```
+
+It injects one fault at a time:
+- **Two-pin parts:** open or shorted.
+- **Resistors:** a decade off (×10, ÷10).
+- **Multi-pin parts:** missing.
+- **Solder bridges:** between pads of different nets on the same copper layer, within `--bridge-gap` (0.4 mm) across
+  parts or `--bridge-gap-part` (1.0 mm) within one part. These come from the `.kicad_pcb` next to the schematic, through
+  `board_dump.py`.
+
+For each fault it runs the circuit check in the spec's `fault_states`, with nominal sources and nominal part values (no
+tolerance corners or simulation, so about 30 s for 200 faults), and reports:
+- **Damage:** a check the fault newly breaks is an absolute maximum or rating. A fault that ties two supplies together is
+  damage by itself. One between two outputs of the same part is "possible", since that's outside the part's model.
+- **Function only:** an operating range, a claim or a floating input.
+- **No effect found.**
+- **Caught by:** the test-plan readings the fault moves. A resistance moving by more than 10 %, or between open and
+  connected, counts. So does a voltage leaving its expected band.
+
+For each damaging fault nothing catches, it suggests one unpowered reading that would catch it, probed at a test point,
+connector or socket pin where it can. The exit status is 1 while a damaging fault goes uncaught.
+
+Limits: a part's own internal supplies (a charge pump's rails) are ideal sources in its model. A fault that would stop a
+charge pump therefore doesn't move its rails, even though the powered test plan would see it.
 
 ### How the simulation works
 

@@ -52,6 +52,7 @@ EXACT_DC = 14         # resistor tolerances enumerated exactly up to this many
 EXACT_DYN = 10        # resistor + capacitor tolerances enumerated exactly up to this many
 SAMPLED = 256
 PER_DECADE = 40
+NOMINAL_ONLY = False   # skip tolerance corners (the fault check screens gross faults, where ±1 % doesn't matter)
 
 
 class Elem:
@@ -78,8 +79,8 @@ class Elem:
 class Circuit:
     """One case's circuit: elements, fixed nodes (sources) and everything the checks need to know about the parts."""
 
-    def __init__(self, gnd):
-        self.gnd = gnd
+    def __init__(self, gnd, strict=True):
+        self.gnd, self.strict = gnd, strict
         self.elems = []
         self.fixed = {}       # node -> Stim
         self.fixed_by = {}    # node -> what drives it
@@ -93,8 +94,12 @@ class Circuit:
 
     def fix(self, node, stim, what):
         if node == self.gnd:
+            if not self.strict:
+                return
             raise ValueError(f"{what} drives GND")
         if node in self.fixed:
+            if not self.strict:
+                return          # a resistance reading ignores sources, so two on one net don't matter
             raise ValueError(f"{node} is driven by both {self.fixed_by[node]} and {what}")
         self.fixed[node], self.fixed_by[node] = stim, what
 
@@ -134,6 +139,8 @@ def _corners(elems, exact, sampled, seed):
     """Part values at tolerance corners. Returns (list of {name: value}, exhaustive?)."""
     def at(bits):
         return {e.name: e.value * (1 + e.tol if b else 1 - e.tol) for e, b in zip(elems, bits)}
+    if NOMINAL_ONLY:
+        return [{e.name: e.value for e in elems}], True
     if len(elems) <= exact:
         return [at(bits) for bits in itertools.product((0, 1), repeat=len(elems))], True
     rng = random.Random(seed)
@@ -504,7 +511,7 @@ class Analysis:
                 if not all(n in fixed or n == self.gnd for n in e.nodes):
                     out.append(e)
             elif e.kind == "E":
-                if e.nodes[0] not in fixed:
+                if e.nodes[0] not in fixed and e.nodes[0] != self.gnd:
                     out.append(e)
             elif e.kind == "S" and sw.get(e.name) == "on":
                 out.append(Elem("S", e.name, e.nodes[:2], e.r_on))
@@ -629,12 +636,14 @@ class Analysis:
         self.sampled |= not g.exhaustive
         return float(np.min(mag)), float(np.max(mag))
 
-    def impedance(self, node, exclude, band):
-        """The lowest |Z| seen at a node over a band, with the given elements removed and every source at 0 V."""
+    def impedance(self, node, exclude, band, worst="min"):
+        """|Z| seen at a node over a band, with the given elements removed and every source at 0 V: the lowest (an
+        output's load) or, with worst="max", the highest (a source's output resistance), over band and corners."""
         g = self._group([node], self.fixed, self.sw, exclude=exclude, probes=[node])
-        Hmin = g.h_band_min([[("v", node, 1)]], band)[:, 0, len(g.fixed)]
         self.sampled |= not g.exhaustive
-        return float(np.min(Hmin))
+        if worst == "max":
+            return float(np.max(g.h_band([[("v", node, 1)]], band)[:, 0, len(g.fixed)]))
+        return float(np.min(g.h_band_min([[("v", node, 1)]], band)[:, 0, len(g.fixed)]))
 
     def worst_input(self, terms, side, sw):
         """What drives a target furthest one way in the linear circuit (no clamp conducting): the starting point for
@@ -793,6 +802,7 @@ class Analysis:
         if depth > 4:
             raise RuntimeError("too many switches with an undetermined gate")
         sw = {s.name: forced.get(s.name, "off") for s in self.switches}
+        seen = []
         for _ in range(10):
             fixed, subs = self._clamp_fixpoint(sw)
             ranges = self._node_ranges_cache
@@ -814,6 +824,15 @@ class Analysis:
                 self.branches.append({"fixed": fixed, "subs": subs, "sw": dict(sw), "ranges": ranges,
                                       "forced": dict(forced)})
                 return
+            if new in seen:
+                # The states cycle: a switch turning on turns itself off again. Check both states of each one
+                # that changes along the cycle, which covers whatever it settles to.
+                cycle = seen[seen.index(new):] + [sw]
+                flip = sorted({k for st in cycle for k in st if st[k] != new[k]})
+                for combo in itertools.product(("on", "off"), repeat=len(flip)):
+                    self._explore(dict(forced, **dict(zip(flip, combo))), depth + 1)
+                return
+            seen.append(sw)
             sw = new
         raise RuntimeError("switch states didn't settle")
 

@@ -6,9 +6,11 @@ This directory is where we will put the KiCad project for the power board.
 
 The audio board (the Seed3 carrier, `../audio-board/rev2/`) connects to the power board through three screw terminals. This list
 collects everything the carrier expects from the power board. `../audio-board/rev2/DESIGN.md` gives the reasons ("Power board
-connector (J6)", "Output mute", "Speaker send", "Display connector (J3)"). `../audio-board/rev2/seed3-carrier.verify.py` encodes the
-same assumptions for the circuit check. If the power board's design departs from any of them, update that spec and rerun
-`tools/kicad/circuit_verify.py` on the carrier.
+connector (J6)", "Output mute", "Speaker send", "Display connector (J3)"). `../interfaces/carrier-power.py` encodes the same
+numbers as a contract that both boards' circuit-check specs load: the carrier takes its J6/J5 assumptions from it and
+checks the signals it drives against it, and the power board's spec will do the same once it has a schematic. If the
+power board's design departs from any of them, change the contract and rerun `tools/kicad/circuit_verify.py` on both
+boards.
 
 ### Connections
 

@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from circuit_bounds import Analysis, Circuit, Elem  # noqa: E402
-from circuit_spec import Spec, dc, expand_cases, parse_passive, parse_value, tone, wave  # noqa: E402
+from circuit_spec import Spec, dc, expand_cases, load, open_, parse_passive, parse_value, tone, wave  # noqa: E402
 import circuit_verify as cv  # noqa: E402
 
 
@@ -141,6 +141,86 @@ def test_spec_end_to_end():
     assert status["on"]["U1.1 abs hi"] == "pass"
     assert status["on + J1.1: 5 V"]["U1.1 abs hi"] == "pass"     # (5 − 3.6) V / 1 kΩ = 1.4 mA ≤ 5 mA
     assert status["on + J1.1: 12 V"]["U1.1 abs hi"] == "fail"    # 8.4 mA
+
+
+# --- contracts, test-plan readings and faults
+
+def _two_board_parts():
+    """J1.1 → R1 (1k) → /OUT → R2 (1k) → GND, with J1.2 on GND."""
+    return {
+        "J1": {"value": "CONN", "footprint": "", "fields": {}, "dnp": False, "pins": {"1": "/IN", "2": "GND"}},
+        "R1": {"value": "1k", "footprint": "R_0603_1608Metric", "fields": {}, "dnp": False,
+               "pins": {"1": "/IN", "2": "/OUT"}},
+        "R2": {"value": "1k", "footprint": "R_0603_1608Metric", "fields": {}, "dnp": False,
+               "pins": {"1": "/OUT", "2": "GND"}},
+        "J2": {"value": "CONN", "footprint": "", "fields": {}, "dnp": False, "pins": {"1": "/OUT", "2": "GND"}},
+    }
+
+
+def test_source_resistance_range_covers_both_ends():
+    # A source of 0..10 V through 0..10 kΩ into 10 kΩ: the pin spans 0..10 V (r at its low end).
+    from circuit_spec import Interface
+    iface = Interface("test")
+    iface.signal("SIG", by="other board", source=dc(0, 10, r=(0, 10e3)))
+    spec = Spec()
+    spec.port("J1.1", nominal=iface.source("SIG"))
+    spec.port("J2.1", nominal=load(1e6))
+    spec.state("on")
+    case = expand_cases(spec)[0]
+    circ = cv.build(spec, _two_board_parts(), ([], {}), case, "GND")
+    a = analyse(circ)
+    b = a.bound([[("v", "/IN", 1)]])[0]
+    assert near(b.lo, 0.0) and b.hi > 9.9
+
+
+def test_contract_checks_range_and_source_resistance():
+    from circuit_spec import Interface
+    iface = Interface("test")
+    iface.signal("OUT", by="this board", source=dc(0, 3, r=(0, 600)))
+    for r_limit, want in ((600, "pass"), (400, "fail")):
+        iface.signals["OUT"]["source"] = dc(0, 3, r=(0, r_limit))
+        spec = Spec()
+        spec.port("J1.1", nominal=dc(5.0, r=0.01))
+        spec.port("J2.1", nominal=load(1e6))
+        spec.provides(iface, {"OUT": "J2.1"})
+        spec.state("on")
+        case = expand_cases(spec)[0]
+        circ = cv.build(spec, _two_board_parts(), ([], {}), case, "GND")
+        res, _ = cv.check_case(spec, circ, case, {})
+        status = {r.id: r.status for r in res}
+        assert status["contract test: OUT"] == "pass"                 # 2.5 V, inside 0..3 V
+        assert status["contract test: OUT source resistance"] == want  # 500 Ω (1k ‖ 1k)
+
+
+def test_stage_readings_and_their_expectations():
+    spec = Spec()
+    spec.port("J1.1", nominal=open_())
+    spec.port("J2.1", nominal=open_())
+    spec.state("on")
+    st = spec.test_stage("stage 1")
+    st.measure("1", "J1.1", "GND", expect=2e3)
+    st.measure("2", "J2.1", "J1.1", expect=1e3)
+    st.measure("3", "J1.1", "GND", expect="open")
+    res = {r.id.split()[2]: r.status for r in cv.check_stages(spec, _two_board_parts(), ([], {}), "GND")}
+    assert res == {"1": "pass", "2": "pass", "3": "fail"}
+
+
+def test_fault_check_finds_and_catches_a_short():
+    import circuit_faults as cf
+    parts = _two_board_parts()
+    faults = cf.part_faults(parts)
+    assert {f.name for f in faults} >= {"R1 open", "R1 shorted", "R2 open", "R2 shorted"}
+    short = next(f for f in faults if f.name == "R2 shorted")
+    fp, rename = short.apply(parts, {"GND": "ground"}, "GND")
+    assert rename == {"/OUT": "GND"} and fp["R1"]["pins"]["2"] == "GND"
+    spec = Spec()
+    spec.port("J1.1", nominal=open_())
+    spec.port("J2.1", nominal=open_())
+    st = spec.test_stage("stage 1")
+    st.measure("1", "J1.1", "GND", expect=2e3)
+    before = cv.stage_readings(spec, parts, ([], {}), st, "GND")
+    after = cv.stage_readings(spec, fp, ([], {}), st, "GND", rename)
+    assert near(before[("1", "J1.1", "GND")], 2e3) and near(after[("1", "J1.1", "GND")], 1e3)
 
 
 # --- the simulator (skipped when ngspice can't be found)

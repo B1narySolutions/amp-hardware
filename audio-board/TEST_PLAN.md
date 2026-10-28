@@ -81,7 +81,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.2 | J6.1 → GND | High; diode mode shows Q1's body diode into the `+5V` rail, not a short | Q1 shorted or bridged |
 | 1.3 | J6.2 → GND, J3.1 → GND | ≈ 0 Ω | J6/J3 joint open |
 | 1.4 | `VREF` (C7) → GND | 5–10 kΩ (R7, in parallel with R6 through the unpowered `+5V` rail) | < 1 kΩ = C7 shorted; > 10 kΩ = R7 open or wrong |
-| 1.5 | J3.2/J3.3 → GND | Open | UART pins shorted to GND |
+| 1.5 | J3.2 → GND; J3.3 → GND | Open; ≈ 110 kΩ (R9 + R24) | UART pins shorted to GND; ≈ 100 kΩ = R9 shorted, open = R9 or R24 open |
 | 1.6 | HPVDD (C15) → `+5V` (C5 `+`) | High (no short) | U2.13 (EN, on `+5V`) bridged to U2.12 (HPVDD) |
 | 1.7 | A1.33 and A1.38 → GND and → `+5V` | Open (not connected on the carrier) | Stray copper or a socket bridge |
 | 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V` | High (no short), not < 100 Ω | QFN bridge: OUTL (16)/SGND (15), OUTR (5)/G0 (6) or INR− (4) |

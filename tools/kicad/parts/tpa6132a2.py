@@ -30,7 +30,7 @@ def model(p):
     for inn, inp, out in (("1", "2", "16"), ("4", "3", "5")):
         p.res(inn, inp, r_in, tol=0.2, name=f"Rin{inn}")
         if on:
-            p.amp(out, inp, inn, gain, lo="8", hi="12", name=f"amp{out}")
+            p.amp(out, inp, inn, gain, lo="8", hi="12", name=f"amp{out}", short_ok=True)   # §7.1 short protection
         for pin in (inn, inp):
             p.limit(pin, abs=(("8", -0.3), ("12", 0.3)), clamp=True)
         if not on:

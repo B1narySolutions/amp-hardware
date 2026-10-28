@@ -15,6 +15,8 @@ For every case (a power state, with each port's nominal source, then each misuse
   ports    current in or out of a connector pin, where the spec gives a limit
   claims   the numbers the design depends on
   structure  parts without a model, exposed pins without an ESD clamp, floating inputs
+  contracts  signals this board drives to another, against the shared contract in /interfaces/
+  test plan  each bring-up reading the spec lists, against what the schematic gives
 
 A result the bounds can't settle (UNPROVEN: the bound goes through a conducting clamp) is then simulated in ngspice
 (circuit_sim.py), searching for an input that breaks it. It becomes a FAIL with that input, or SEARCHED with the worst
@@ -32,6 +34,8 @@ import re
 import runpy
 import sys
 import time
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -136,20 +140,21 @@ class Builder:
             self.circ.drives.append((e, i_max, source or self.source, assumed))
         return e
 
-    def amp(self, out, inp, inn, gain, lo=None, hi=None, swing=0.0, name=None, gbw=1e6):
+    def amp(self, out, inp, inn, gain, lo=None, hi=None, swing=0.0, name=None, gbw=1e6, short_ok=False):
         """V(out) = gain × (V(inp) − V(inn)), its output held within swing of the lo and hi rails. gbw (Hz) only
-        matters to the simulator, for op-amps."""
+        matters to the simulator, for op-amps. short_ok: the datasheet says the output survives a short to a rail."""
         nm = self._name(name, "amp")
         o = self.node(out)
-        e = self.circ.add(Elem("E", nm, (o, self.node(inp), self.node(inn)), gain, owner=self.ref, gbw=gbw))
+        e = self.circ.add(Elem("E", nm, (o, self.node(inp), self.node(inn)), gain, owner=self.ref, gbw=gbw,
+                               short_ok=short_ok))
         if hi is not None:
             self.clamp(out, hi, -swing, name=f"{nm.split(':', 1)[1]}.hi", report=False, limiter=True, amp=nm)
         if lo is not None:
             self.clamp(lo, out, -swing, name=f"{nm.split(':', 1)[1]}.lo", report=False, limiter=True, amp=nm)
         return e
 
-    def opamp(self, out, inp, inn, lo, hi, swing=0.0, name=None, gbw=1e6):
-        return self.amp(out, inp, inn, 1e6, lo, hi, swing, name, gbw)
+    def opamp(self, out, inp, inn, lo, hi, swing=0.0, name=None, gbw=1e6, short_ok=False):
+        return self.amp(out, inp, inn, 1e6, lo, hi, swing, name, gbw, short_ok)
 
     def clamp(self, a, b, v_on, r_dyn=0.0, i_max=None, name=None, report=True, source=None, assumed=False,
               limiter=False, amp=None):
@@ -298,12 +303,14 @@ def port_net(parts, pin):
     return parts[ref]["pins"][num]
 
 
-def build(spec, parts, library, case, gnd):
-    """The circuit for one case: rails, ports, then every part's model."""
+def build(spec, parts, library, case, gnd, strict=True, rail_values=None):
+    """The circuit for one case: rails, ports, then every part's model. strict=False lets two sources share a net
+    (for resistance readings, which ignore sources). rail_values overrides the spec's rails (a bench supply)."""
     models, catalog = library
-    circ = Circuit(gnd)
+    circ = Circuit(gnd, strict)
     circ.ratings, circ.ports, circ.unmodelled = [], {}, []
     for net, on in spec.rails.items():
+        on = (rail_values or {}).get(net, on)
         circ.fix(net, on if net in case.state.rails else dc(0.0), f"rail {net}")
     for pin, stim in case.stims.items():
         net = port_net(parts, pin)
@@ -311,7 +318,7 @@ def build(spec, parts, library, case, gnd):
         if stim.kind != "open":
             if stim.r > 0:
                 circ.fix(f"{pin}:src", stim, f"port {pin}")
-                circ.add(Elem("R", f"{pin}:r", (f"{pin}:src", net), stim.r, owner=pin))
+                circ.add(Elem("R", f"{pin}:r", (f"{pin}:src", net), stim.r, stim.r_tol, owner=pin))
             else:
                 circ.fix(net, stim, f"port {pin}")
         if stim.clamp:
@@ -351,6 +358,7 @@ class Result:
         self.rel = margin / scale if scale else margin     # margin as a fraction of the limit, for ranking
         self.waiver = ""
         self.probe, self.case_key, self.forced = None, None, {}   # for simulating an unproven result
+        self.owner, self.damage = None, False    # the part it stresses, and whether breaking it means damage
 
 
 def _vterms(node, ref, gnd):
@@ -401,12 +409,13 @@ def _check_branch(spec, circ, case, a, branch, label):
             cur[name] = a.clamp_current(clamps[name])
         return cur[name]
 
-    def add(id, group, ok, loose, text, margin, source="", note="", assumed=False, scale=1.0, probe=None):
+    def add(id, group, ok, loose, text, margin, source="", note="", assumed=False, scale=1.0, probe=None, owner=None,
+            damage=False):
         status = _verdict(ok, loose)
         if status == "unproven" and not note:
             note = LOOSE_NOTE
         r = Result(id, group, status, text, margin, label, source, note, assumed, scale)
-        r.probe = probe
+        r.probe, r.owner, r.damage = probe, owner, damage
         out.append(r)
 
     def across(a_, b_):
@@ -432,7 +441,8 @@ def _check_branch(spec, circ, case, a, branch, label):
                 note = f"protection diodes take up to {fmt(i, 'A')} ({rating})" + (f"; {LOOSE_NOTE}" if loose else "")
         terms, side = _vterms(l.node, l.ref, gnd), (1 if l.side == "hi" else -1)
         probe = Probe(terms, side, l.offset, [(terms, side)], clamp=l.clamp, inject=l.inject)
-        add(f"{l.id} {l.side}", "limit", ok, loose, text, margin, l.source, note, l.assumed, scale, probe)
+        add(f"{l.id} {l.side}", "limit", ok, loose, text, margin, l.source, note, l.assumed, scale, probe, l.owner,
+            l.kind == "abs")
 
     # clamps with their own rating (ESD diodes), and the clamps standing for a port's protection diodes
     for c in clamps.values():
@@ -447,7 +457,8 @@ def _check_branch(spec, circ, case, a, branch, label):
             continue
         probe = Probe([("clamp", c.name, 1.0)], 1, c.i_max, [(across(*c.nodes), 1)], unit="A")
         add(f"{c.name} current", "clamp", i <= c.i_max, loose, f"{fmt(i, 'A')} through {c.name} "
-            f"(max {fmt(c.i_max, 'A')})", c.i_max - i, c.source, assumed=c.assumed, scale=c.i_max, probe=probe)
+            f"(max {fmt(c.i_max, 'A')})", c.i_max - i, c.source, assumed=c.assumed, scale=c.i_max, probe=probe,
+            owner=c.owner, damage=True)
 
     # passive ratings
     rated = [r for r in circ.ratings if r[2]]
@@ -469,6 +480,7 @@ def _check_branch(spec, circ, case, a, branch, label):
                    note=LOOSE_NOTE if status == "unproven" else "")
         r.probe = Probe(terms, 0, rating, [(terms, 1), (terms, -1)], unit="W" if kind == "power" else "V",
                         square=e.value * (1 - e.tol) if kind == "power" else None)
+        r.owner, r.damage = e.name, True
         out.append(r)
 
     # switches that are on: channel current
@@ -479,7 +491,15 @@ def _check_branch(spec, circ, case, a, branch, label):
         probe = Probe([("switch", s.name, 1.0)], 0, s.i_max, [(terms, 1), (terms, -1)], unit="A")
         add(f"{s.name} current", "switch", i <= s.i_max, b.loose,
             f"{fmt(i, 'A')} through {s.name}'s channel when on (max {fmt(s.i_max, 'A')})", s.i_max - i, s.source,
-            assumed=s.assumed, scale=s.i_max, probe=probe)
+            assumed=s.assumed, scale=s.i_max, probe=probe, owner=s.owner, damage=True)
+
+    # amplifier outputs tied straight to a rail or GND (a fault)
+    for e in circ.elems:
+        if e.kind == "E" and (e.nodes[0] == gnd or e.nodes[0] in circ.fixed):
+            ok = getattr(e, "short_ok", False)
+            add(f"{e.name} output short", "switch", ok, False,
+                f"{e.name}'s output is tied to {_short(e.nodes[0])}" + (" (rated for it)" if ok else ""), 0, owner=e.owner,
+                damage=True)
 
     # driver output currents
     for e, i_max, src, assumed in circ.drives:
@@ -488,7 +508,7 @@ def _check_branch(spec, circ, case, a, branch, label):
         terms = [("r", e.name, 1.0)]
         add(f"{e.name} current", "drive", i <= i_max, b.loose, f"{fmt(i, 'A')} out of {e.name} (max {fmt(i_max, 'A')})",
             i_max - i, src, assumed=assumed, scale=i_max, probe=Probe(terms, 0, i_max, [(terms, 1), (terms, -1)],
-                                                                      unit="A"))
+                                                                      unit="A"), owner=e.owner, damage=True)
 
     # port currents
     for pin, (net, stim) in circ.ports.items():
@@ -507,16 +527,43 @@ def _check_branch(spec, circ, case, a, branch, label):
                  if stim.kind != "open" and stim.r > 0 else None)
         add(f"port {pin} current", "port", i <= stim.i_max, loose,
             f"{fmt(i, 'A')} in or out of {pin} (max {fmt(stim.i_max, 'A')}: {stim.describe()})", stim.i_max - i, "spec",
-            scale=stim.i_max, probe=probe)
+            scale=stim.i_max, probe=probe, owner=pin, damage=True)
 
     # output loads: the lowest impedance each output sees, wherever the ports are
     for ref, node, ohms, excl, band, src, assumed in circ.loads:
-        if node in a.fixed:
+        if node in a.fixed or node == gnd:
             continue
         z = a.impedance(node, [excl], band)
         add(f"{_short(node)} load", "load", z >= ohms, False, f"{_short(node)} sees ≥ {fmt(z, 'Ω')} over "
             f"{fmt(band[0], 'Hz')}–{fmt(band[1], 'Hz')} (min load {fmt(ohms, 'Ω')})", (z - ohms) / ohms, src,
-            assumed=assumed)
+            assumed=assumed, owner=ref, damage=True)
+
+    # contracts this board drives: range and source resistance at the connector
+    for iface, pins, cases in spec.provided:
+        if not matches(cases, case):
+            continue
+        if True:
+            for name, pin in pins.items():
+                c = iface.signals[name]["source"]
+                net = circ.ports[pin][0] if pin in circ.ports else None
+                if net is None:
+                    continue
+                b = a.bound([[("v", net, 1.0)]])[0]
+                ok = b.lo >= c.lo - 1e-9 and b.hi <= c.hi + 1e-9
+                add(f"contract {iface.name}: {name}", "contract", ok, b.loose,
+                    f"{pin} ({name}) spans {fmt(b.lo, 'V')}..{fmt(b.hi, 'V')} (promised {fmt(c.lo, 'V')}..{fmt(c.hi, 'V')})",
+                    min(b.lo - c.lo, c.hi - b.hi), iface.signals[name]["note"], owner=pin,
+                    probe=Probe([("v", net, 1.0)], 1 if b.hi - c.hi >= c.lo - b.lo else -1,
+                                c.hi if b.hi - c.hi >= c.lo - b.lo else c.lo,
+                                [([("v", net, 1.0)], 1), ([("v", net, 1.0)], -1)]))
+                r_max = c.r_range[1] if c.r_range else c.r
+                if r_max and net not in a.fixed and net != gnd:
+                    band = c.band or ((1.0, 10.0) if c.kind == "dc" else (1.0, 20e3))
+                    excl = [e.name for e in circ.elems if e.owner == pin]
+                    z = a.impedance(net, excl, band, worst="max")
+                    add(f"contract {iface.name}: {name} source resistance", "contract", z <= r_max, False,
+                        f"{pin} ({name}) has a source resistance up to {fmt(z, 'Ω')} (promised ≤ {fmt(r_max, 'Ω')})",
+                        (r_max - z) / r_max, iface.signals[name]["note"], owner=pin)
 
     # claims
     for cl in spec.claims:
@@ -540,7 +587,8 @@ def _check_branch(spec, circ, case, a, branch, label):
                                       f"{q.describe()}: not linear here, a clamp or rail holds {q.net}", 0, label,
                                       cl.source))
                     continue
-                srcs = [f"{p}:src" if circ.ports[p][1].r > 0 else circ.ports[p][0] for p in q.ports]
+                srcs = [(f"{p}:src" if circ.ports[p][1].r > 0 else circ.ports[p][0]) if p in circ.ports else p
+                        for p in q.ports]
                 g_lo, g_hi = a.gain(srcs, q.net, q.f)
                 lo, hi = 20 * math.log10(max(g_lo, 1e-15)), 20 * math.log10(max(g_hi, 1e-15))
                 unit = "dB"
@@ -621,6 +669,124 @@ def structure(spec, parts, circ_on):
         else:
             out.append(Result(f"port {pin} ESD", "structure", "fail",
                               f"{pin} ({_short(net)}) is exposed but has no ESD diode on its net", 0, "all"))
+    return out
+
+
+# ------------------------------------------------------------------------------------------------- test-plan checks
+
+OPEN = 10e6      # a DMM reading above this counts as open
+SHORT = 1.0      # and below this as a short
+
+
+def resolve(parts, x):
+    """A pin ("J2.3", "A1.25") or a net name, as a net."""
+    ref, _, num = x.partition(".")
+    if ref in parts and num in parts[ref]["pins"]:
+        return parts[ref]["pins"][num]
+    if any(x in p["pins"].values() for p in parts.values()):
+        return x
+    raise KeyError(f"{x} is neither a pin nor a net in the schematic")
+
+
+def stage_circuit(spec, parts, library, stage, gnd):
+    """The board as a test stage sees it, some parts not fitted: unpowered with every connector open, or on the stage's
+    bench supply with its port settings and every other connector open. When a fault puts two sources on one net, the
+    first one built wins: the bench supply and ports before any part's own outputs, as a stiff supply would."""
+    from circuit_spec import Case, State, open_
+    st = State(f"test: {stage.name}", rails=stage.rails.keys(), powered=(), unpowered=(), absent=stage.absent,
+               ports=None, misuse=False, note="")
+    stims = {pin: stage.ports.get(pin, open_()) for pin in spec.ports}
+    return build(spec, parts, library, Case(st, "nominal", stims), gnd, strict=False, rail_values=stage.rails)
+
+
+def stage_readings(spec, parts, library, stage, gnd, rename=None):
+    """Every reading a stage takes on these parts, keyed (id, a, b): ohms for an unpowered stage, a (lo, hi) range of
+    volts for a powered one. rename maps nets a fault has joined into others. Raises KeyError for an unknown pin or
+    net, and ValueError when a powered stage can't be built (two sources on one net)."""
+    rename = rename or {}
+    circ = stage_circuit(spec, parts, library, stage, gnd)
+    out = {}
+    if stage.rails:
+        a = Analysis(circ, {})
+        branches = a.run()
+    for m in stage.checks:
+        x, y = (resolve(parts, rename.get(n, n)) for n in (m["a"], m["b"]))
+        key = (m["id"], m["a"], m["b"])
+        if not stage.rails:
+            out[key] = resistance(circ, x, y)
+            continue
+        lo, hi = math.inf, -math.inf
+        for br in branches:
+            a.use(br)
+            b = a.bound([[("v", x, 1.0), ("v", y, -1.0)]])[0]
+            lo, hi = min(lo, b.lo), max(hi, b.hi)
+        out[key] = (lo, hi)
+    return out
+
+
+def resistance(circ, a, b):
+    """What a DMM reads from net a to net b on an unpowered board: resistors only (capacitors charged, diodes and
+    MOSFETs off, so the meter's small test voltage turns nothing on). inf when nothing connects them."""
+    if a == b:
+        return 0.0
+    res = [e for e in circ.elems if e.kind == "R"]
+    nodes = sorted({n for e in res for n in e.nodes} | {a, b})
+    idx = {n: i for i, n in enumerate(nodes)}
+    G = np.zeros((len(nodes), len(nodes)))
+    for e in res:
+        i, j, g = idx[e.nodes[0]], idx[e.nodes[1]], 1.0 / max(e.value, 1e-9)
+        G[i, i] += g
+        G[j, j] += g
+        G[i, j] -= g
+        G[j, i] -= g
+    keep = [i for i in range(len(nodes)) if i != idx[b]]
+    M = G[np.ix_(keep, keep)] + 1e-15 * np.eye(len(keep))
+    rhs = np.zeros(len(keep))
+    rhs[keep.index(idx[a])] = 1.0
+    r = float(np.linalg.solve(M, rhs)[keep.index(idx[a])])
+    return math.inf if r > 1e9 else r
+
+
+def fmt_ohms(r):
+    return "open" if r >= OPEN else fmt(r, "Ω")
+
+
+def expectation(expect, r):
+    """(meets, what the test plan says) for one reading."""
+    if expect == "open":
+        return r >= OPEN, "open"
+    if expect == "short":
+        return r <= SHORT, "≈ 0 Ω"
+    if isinstance(expect, (tuple, list)):
+        lo, hi = expect
+        return (lo is None or r >= lo) and (hi is None or r <= hi), \
+            f"{fmt_ohms(lo) if lo is not None else ''}..{fmt_ohms(hi) if hi is not None else ''}"
+    return abs(r - expect) <= 0.1 * expect, f"≈ {fmt_ohms(expect)}"
+
+
+def check_stages(spec, parts, library, gnd):
+    """Each test-plan reading that states what to expect, against the schematic."""
+    out = []
+    for st in spec.stages:
+        try:
+            readings = stage_readings(spec, parts, library, st, gnd)
+        except KeyError as err:
+            out.append(Result(f"test plan {st.name}", "test plan", "fail", f"{st.name}: {err.args[0]}", 0, st.name))
+            continue
+        for m in st.checks:
+            if m["expect"] is None:
+                continue
+            r = readings[(m["id"], m["a"], m["b"])]
+            if m["kind"] == "ohms":
+                ok, want = expectation(m["expect"], r)
+                text = f"{m['id']}: {m['a']} → {m['b']} reads {fmt_ohms(r)} (test plan: {want})"
+            else:
+                lo, hi = m["expect"]
+                ok = r[0] >= lo - 1e-9 and r[1] <= hi + 1e-9
+                text = (f"{m['id']}: {m['a']} reads {fmt(r[0], 'V')}..{fmt(r[1], 'V')} "
+                        f"(test plan: {fmt(lo, 'V')}..{fmt(hi, 'V')})")
+            out.append(Result(f"test plan {m['id']} {m['a']} → {m['b']}", "test plan", "pass" if ok else "fail",
+                              text, 0, st.name, note=m["note"]))
     return out
 
 
@@ -790,6 +956,7 @@ def main(argv=None):
         if args.nets and case.kind == "nominal":
             tables.append((case.name, net_table(circ, a, a.branches[0])))
     results += structure(spec, parts, first)
+    results += check_stages(spec, parts, library, gnd)
     apply_waivers(spec, results, {c.name: c for c in cases})
     worst, counts = summarize(results)
     sim_note = ""
