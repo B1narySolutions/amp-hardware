@@ -12,8 +12,9 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   pickups only: active pickups are out of scope, so there is no pad.
 - **Rev 1 R5 removed.** R1 biases U1A+ through R2, so rev 1 R5 only sat in parallel and lowered the guitar load to ≈ 0.91 MΩ.
 - **AUX input added (J2 → passive sum → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.
-  No buffer: the Seed3's AC-coupled input loads the R3/R4 sum directly. R5 (3.3k to GND) sets the level whatever the module's
-  unpublished input impedance is, so a 2 Vrms source can't exceed the Daisy's full scale, and is the DC return.
+  No buffer: the Seed3's AC-coupled input loads the R3/R4 sum directly. R5 (470 Ω to GND) sets the level whatever the module's
+  unpublished input impedance is, and is the DC return. It is low enough that a source left playing with the board off can't drive the
+  unpowered codec's input past its ±0.3 V rating.
 
 ## Outputs
 - **Headphone amp: TPA6111A2 → TPA6132A2 (DirectPath).** It removes rev 1 C14/C15 (470 µF output caps, the two largest parts in the
@@ -31,7 +32,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 
 ## Power and control
 - **J6: 2-pin 5 V header → 4-way 3.5 mm screw terminal to the power board:** 5V, GND, battery sense and the speaker mute. Adds R13,
-  C17, Q2 and R17. Q1 still provides reverse-polarity protection. The power switch and low-battery cutoff are on the power board.
+  R22, C17, Q2, R17 and R23. Q1 still provides reverse-polarity protection. The power switch and low-battery cutoff are on the power board.
 - **Screw terminals for every board-to-board connection (J3, J5, J6),** so prototype wiring needs no crimping. Each terminal's function
   is printed on the silkscreen.
 - **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
@@ -44,6 +45,9 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **Display: J3 carries only the UART and GND.** The display takes its power from the power board, so its current pulses stay off
   the carrier's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
   different times.
+- **R22, R23 and R24 added against a 5 V wire on a signal terminal.** R13/R22 halve BAT, so Daisy pin 25 (a 4.0 V pin with no clamp)
+  stays below 2.65 V. R23 limits Q2's current to ≈ 11 mA if 5 V lands on MUTE while Q2 is on. R24 divides RX with R9 to ≤ 4.78 V, and
+  lets the firmware tell when no display is connected.
 - **Rev 1 C9 removed.** It sat on the same node as C5 and C4.
 - **Rev 1 TP5, TP9, TP10 removed.** Each duplicated an easy-to-probe pad. TP1 (`HP_DETECT`) is the only test point.
 
@@ -52,8 +56,8 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **New layout:** 4-layer with ground in the middle, 90 × 56.5 mm, with the Daisy flat along the rear edge and every panel jack on the
   front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
 - **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.
-- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1) and R21 (J5's LINE−) were added
-  afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
+- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1), R21 (J5's LINE−) and R22–R24 (the
+  wrong-terminal protection) were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
   power board), which leaves gaps in the designators.
 
 ## Designators

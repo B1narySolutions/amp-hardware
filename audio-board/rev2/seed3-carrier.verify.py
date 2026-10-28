@@ -74,13 +74,13 @@ spec.state("reversed", ports={"J6.1": dc(-5.25, -4.75, r=0.05, label="5 V and GN
 
 # ------------------------------------------------------------------------------------------------------------ claims
 
-spec.claim("AUX peak at the Daisy", V("/AUDIO_IN_2"), lo=-1.15, hi=1.15, cases=["on", "daisy out"],
-           source="DESIGN.md AUX input: 'R5 sets the level, whatever the Daisy's input impedance is': ±1.13 V nominal, "
-                  "±1.14 V with 1 % resistors")
-spec.claim("AUX level, both channels", Gain(["J2.3", "J2.2"], "/AUDIO_IN_2", 1e3), lo=-11.7, hi=-10.3, cases="on",
-           source="DESIGN.md AUX input, Level: −11.5 / −10.9 / −10.5 dB with the codec at 4k / 5k / 6k")
-spec.claim("AUX level, one channel", Gain("J2.3", "/AUDIO_IN_2", 1e3), lo=-17.7, hi=-16.2, cases="on",
-           source="DESIGN.md AUX input, Level: one channel alone, a gain of 0.14 (−16.9 dB)")
+spec.claim("AUX peak at the Daisy", V("/AUDIO_IN_2"), lo=-0.25, hi=0.25, cases=["on", "daisy out"],
+           source="DESIGN.md AUX input: 'R5 sets the level, whatever the Daisy's input impedance is': ±0.24 V nominal, "
+                  "±0.25 V with 1 % resistors")
+spec.claim("AUX level, both channels", Gain(["J2.3", "J2.2"], "/AUDIO_IN_2", 1e3), lo=-22.5, hi=-21.6, cases="on",
+           source="DESIGN.md AUX input, Level: −22.2 / −22.0 / −21.9 dB with the codec at 4k / 5k / 6k")
+spec.claim("AUX level, one channel", Gain("J2.3", "/AUDIO_IN_2", 1e3), lo=-28.5, hi=-27.6, cases="on",
+           source="DESIGN.md AUX input, Level: one channel alone, a gain of 0.040 (−28.0 dB)")
 spec.claim("Guitar loss to the codec", Gain("J1.T", "A1:in16", 1e3), lo=-1.2, hi=-0.6, cases="on",
            source="DESIGN.md Guitar input: 'R20 costs ≈ 0.8 dB'")
 spec.claim("5V_SENSE reading", V("/5V_SENSE"), lo=2.30, hi=2.70, cases="on",
