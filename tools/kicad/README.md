@@ -8,18 +8,19 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 | `board_view.py` | Renders a board to PNG: real pad shapes, tracks to scale, vias, silkscreen, labels and the ratsnest. Zooms to a window or to parts |
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
-| `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, without a simulator |
+| `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, then simulation for the results the bounds can't settle |
 
 Supporting files: `board_dump.py` exports a board to JSON for the viewer and checker; `jlcpcb.py` holds JLC's numbers, their sources and the KiCad rules built from them; `kicadenv.py` finds KiCad and resolves footprint libraries; `schnet.py` reads each part's footprint, fields, symbol link and pin nets from the schematic (through a kicad-cli netlist).
-The circuit check is `circuit_spec.py` (the spec format), `circuit_bounds.py` (the bound engine), `parts/` (part models
-and passive ratings, shared by every board) and `test_circuit_verify.py`.
+The circuit check is `circuit_spec.py` (the spec format), `circuit_bounds.py` (the bound engine), `circuit_sim.py` (the
+simulator search), `parts/` (part models and passive ratings, shared by every board) and `test_circuit_verify.py`.
 
 ## Requirements
 
 - KiCad 10 (tested with 10.0.5). The tools find its Python and `kicad-cli` in the default macOS install. Elsewhere, set
   `KICAD_PYTHON` (a Python that can `import pcbnew`; on Windows, KiCad's `bin\python.exe`) and `KICAD_CLI`.
 - `python3` with matplotlib for the viewer (`pip3 install matplotlib`). The board checker only needs the standard
-  library; the circuit check needs numpy (`pip3 install numpy`).
+  library; the circuit check needs numpy (`pip3 install numpy`). Its simulator is KiCad's own ngspice library
+  (`libngspice`), loaded directly. Set `NGSPICE_LIB` to use another copy.
 
 `board_view.py` and `board_check.py` run under the system `python3` and call KiCad's Python for anything that needs `pcbnew`.
 `boardedit.py` is imported by a script you run under KiCad's Python.
@@ -128,11 +129,12 @@ the result before committing.
 ```bash
 python3 tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch
 python3 tools/kicad/circuit_verify.py board.kicad_sch -v --case "on*" --nets --json report.json
+python3 tools/kicad/circuit_verify.py board.kicad_sch --sim-out /tmp/counterexamples   # keep each failing run's netlist
 python3 tools/kicad/test_circuit_verify.py
 ```
 
 DRC checks geometry; this checks electrical stress, the way a unit test checks code. It never modifies anything. The exit
-status is 1 when a check fails or can't be proven. It takes about 17 s on the Seed3 carrier.
+status is 1 when a check fails or can't be proven. It takes about 20 s on the Seed3 carrier, simulation included.
 
 It needs three things, kept apart so each can be reused:
 
@@ -167,7 +169,12 @@ also checks structure: parts with no model, exposed pins with no ESD diode on th
   close). Fix the circuit, change the spec if it is wrong, or waive the check with the reason.
 - **UNPROVEN**: the bound crosses the limit, but it goes through a node held by a conducting clamp or an amplifier at its
   rail. There the check treats the node as any waveform inside the clamp's window, which is sound but can be far too
-  pessimistic. Settle these cases in simulation.
+  pessimistic. The simulator then searches for a counterexample (below). A result stays UNPROVEN only with `--no-sim`,
+  when ngspice isn't found, or when the quantity can't be simulated.
+- **FAIL** with "simulation breaks it": the simulator found an input inside the spec that breaks the limit. The note
+  gives the input and value, and `--sim-out` saves the run as a SPICE netlist you can open.
+- **SEARCHED**: no simulated input broke the limit, and the note gives the worst one reached. This is evidence, not proof,
+  so the static bound stays as the only guarantee. It doesn't fail the exit status.
 
 ### How the bounds are worked out
 
@@ -180,6 +187,22 @@ evaluated at every corner of up to 10 tolerant parts, and at 256 sampled corners
 and amplifier rails are handled by substitution. A MOSFET whose gate can sit either side of its threshold is checked in
 both states.
 
-Limits of this layer: it models what datasheets give, so a model is only as good as its numbers. ESD and surge pulses
-(kilovolts, nanoseconds) need layout parasitics, so they are only checked structurally. Clamp currents are worked out
-with the other diode clamps on the same circuit off, which mostly overstates them.
+### How the simulation works
+
+`circuit_sim.py` writes the case's circuit as a SPICE netlist from the same elements, keeping only the part connected to
+the quantity, cut at rails and sources. Clamps become diodes behind an offset source, and switches become
+voltage-controlled switches. Op-amps become a transconductance into R ‖ C, giving their open-loop gain and gain-bandwidth
+product (`gbw=` in the part model), then a soft limit at the model's rails. ngspice runs it through its C API.
+
+Each unproven result gets a search. The seeds come from `Analysis.worst_input`, which says what drives the quantity
+furthest in the linear circuit: the bang-bang waveform that reaches the L1 bound for `wave` sources, the worst frequency
+with every tone peaking together, the extreme of each constant, and the worst tolerance corner. Around each seed it then
+tries random variants (`--sim-budget`, default 12 per case): other frequencies, phases and amplitudes, square waves and
+steps, other tolerance corners, and clamps at both ends of their voltage window. Tone runs start short and are
+lengthened until the peak stops moving from one period to the next. A run that doesn't converge is retried with other
+solver settings. Identical subcircuits in different switch branches share one search.
+
+Limits: it models what datasheets give, so a model is only as good as its numbers. ESD and surge pulses
+(kilovolts, nanoseconds) need layout parasitics, so they are only checked structurally. Static clamp currents are worked out
+with the other diode clamps on the same circuit off, which mostly overstates them. A search only tries the inputs above,
+so SEARCHED means no counterexample was found, not that none exists.

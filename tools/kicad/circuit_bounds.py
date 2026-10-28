@@ -442,6 +442,41 @@ class Group:
         return out
 
 
+def _bang_bang(lam, a, b, d, j, st, side, max_edges=400):
+    """The input inside st's range that drives the output furthest at time T: u(T − τ) = mid ± amp × sign(h(τ)).
+    Returns PWL points; the output reaches the L1 bound at the last one."""
+    if lam is None:
+        level = st.mid + st.amp * (1 if side * d[0, j].real > 0 else -1)
+        return [(0.0, level), (1e-6, level)]
+    rate = -lam.real
+    t0, t1 = 1e-3 / max(np.max(np.abs(lam)), 1e-30), 40.0 / max(np.min(rate), 1e-12)
+    tau = np.geomspace(t0, t1, max(int(PER_DECADE * 4 * math.log10(t1 / t0)), 200))
+    h = np.real(np.einsum("k,k,kg->g", a[0], b[:, j], np.exp(np.outer(lam, tau))))
+    # The horizon: where 99.9 % of ∫|h| has arrived.
+    f = np.abs(h) * tau
+    cum = np.concatenate([[0.0], np.cumsum((f[1:] + f[:-1]) * 0.5 * np.diff(np.log(tau)))])
+    T = float(tau[min(int(np.searchsorted(cum, 0.999 * cum[-1])) + 1, len(tau) - 1)]) if cum[-1] > 0 else t0
+    keep = tau <= T
+    tau, h = tau[keep], h[keep]
+    first = d[0, j].real if abs(d[0, j]) > 1e-12 else (h[0] if len(h) else 1.0)
+    sign = np.sign(np.concatenate([[first], h]))
+    sign[sign == 0] = 1
+    taus = np.concatenate([[0.0], tau])
+    level = lambda s: st.mid + st.amp * side * s
+    # Walk from the oldest input (τ = T, t = 0) to the newest (τ = 0, t = T).
+    pts, cur = [(0.0, level(sign[-1]))], sign[-1]
+    edge = max(T * 1e-9, 1e-12)
+    for k in range(len(taus) - 2, -1, -1):
+        if sign[k] != cur:
+            t = T - taus[k + 1]
+            pts += [(t, level(cur)), (t + edge, level(sign[k]))]
+            cur = sign[k]
+    pts.append((T, level(cur)))
+    if len(pts) > 2 * max_edges:
+        pts = pts[:1] + pts[-2 * max_edges:]
+    return pts
+
+
 # ---------------------------------------------------------------------------------------------------------- analysis
 
 
@@ -600,6 +635,65 @@ class Analysis:
         Hmin = g.h_band_min([[("v", node, 1)]], band)[:, 0, len(g.fixed)]
         self.sampled |= not g.exhaustive
         return float(np.min(Hmin))
+
+    def worst_input(self, terms, side, sw):
+        """What drives a target furthest one way in the linear circuit (no clamp conducting): the starting point for
+        a simulation that looks for a real counterexample. side is +1 (push the target up) or −1.
+
+        Returns (inputs, values, settle). inputs maps each source that reaches the target to ("dc", v),
+        ("tone", f, phase in degrees) or ("pwl", [(t, v), ...]); a pwl input is the bang-bang waveform that reaches
+        the bound at its last point, and every tone peaks together. values are the part values at the worst
+        tolerance corner. settle is the slowest time constant in the target's group, in seconds."""
+        fixed = self.circ.fixed
+        terms = self._merge(terms)
+        nodes = set(self._term_nodes(terms, self._active(fixed, sw), fixed))
+        free = [n for n in nodes if not self._fx(n, fixed)]
+        if not free:
+            return {}, {}, 0.0
+        g = self._group(free, fixed, sw, extra_fixed=[n for n in nodes if n in fixed])
+        J = len(g.fixed)
+        stims = [fixed[f] for f in g.fixed]
+        modal = g._modal([terms])
+        L = g.l1([terms])[:, 0, :J]
+        bands = {s.band for s in stims if s.kind == "tone"}
+        Hb = {band: g.h_band([terms], band)[:, 0, :J] for band in bands}
+        scores, h0s = [], []
+        for c, (lam, a, b, d) in enumerate(modal):
+            h0 = d[0, :J].real if lam is None else (d[0, :J] - (a[0][:, None] * b[:, :J] / lam[:, None]).sum(0)).real
+            h0s.append(h0)
+            score = 0.0
+            for j, st in enumerate(stims):
+                k = side * h0[j]
+                if st.kind == "dc":
+                    score += max(k * st.lo, k * st.hi)
+                elif st.kind == "wave":
+                    score += k * st.mid + L[c, j] * st.amp
+                else:
+                    score += k * st.mid + Hb[st.band][c, j] * st.amp
+            scores.append(score)
+        c = int(np.argmax(scores))
+        vals, lam, a, b, d = (g._dyn_data()[c][0],) + modal[c]
+        h0 = h0s[c]
+        inputs = {}
+        tones = [j for j, st in enumerate(stims) if st.kind == "tone" and st.amp > 0]
+        if tones:
+            band = (min(stims[j].band[0] for j in tones), max(stims[j].band[1] for j in tones))
+            w = g._freqs(band, [lam])
+            if lam is None:
+                H = np.repeat(d[0, :J, None], len(w), axis=1)
+            else:
+                H = d[0, :J, None] + np.einsum("k,kj,kf->jf", a[0], b[:, :J], 1.0 / (1j * w[None, :] - lam[:, None]))
+            best = int(np.argmax(sum(np.abs(H[j]) * stims[j].amp for j in tones)))
+            for j in tones:
+                phase = 90.0 - math.degrees(np.angle(H[j, best])) + (0.0 if side > 0 else 180.0)
+                inputs[g.fixed[j]] = ("tone", float(w[best] / (2 * math.pi)), phase % 360.0)
+        for j, st in enumerate(stims):
+            if st.kind == "dc" and st.hi > st.lo and abs(h0[j]) > 1e-12:
+                inputs[g.fixed[j]] = ("dc", st.hi if side * h0[j] > 0 else st.lo)
+            elif st.kind == "wave" and st.amp > 0 and (L[c, j] > 1e-12 or abs(h0[j]) > 1e-12):
+                inputs[g.fixed[j]] = ("pwl", _bang_bang(lam, a, b, d, j, st, side))
+        settle = 0.0 if lam is None else 1.0 / max(np.min(-lam.real), 1e-12)
+        return inputs, vals, settle
 
     # -- the nonlinear iteration
 

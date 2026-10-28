@@ -16,7 +16,11 @@ For every case (a power state, with each port's nominal source, then each misuse
   claims   the numbers the design depends on
   structure  parts without a model, exposed pins without an ESD clamp, floating inputs
 
-It never modifies anything. The exit status is 1 when a check fails, so it can gate a commit.
+A result the bounds can't settle (UNPROVEN: the bound goes through a conducting clamp) is then simulated in ngspice
+(circuit_sim.py), searching for an input that breaks it. It becomes a FAIL with that input, or SEARCHED with the worst
+value reached.
+
+It never modifies anything. The exit status is 1 when a check fails or stays unproven, so it can gate a commit.
 """
 import argparse
 import fnmatch
@@ -33,7 +37,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import schnet  # noqa: E402
+import circuit_sim  # noqa: E402
 from circuit_bounds import Analysis, Circuit, Elem, _UF  # noqa: E402
+from circuit_sim import Probe  # noqa: E402
 from circuit_spec import Gain, I, V, dc, expand_cases, fmt, matches, parse_passive, parse_value, tone, wave  # noqa: E402
 
 PARTS_DIR = os.path.join(HERE, "parts")
@@ -130,22 +136,23 @@ class Builder:
             self.circ.drives.append((e, i_max, source or self.source, assumed))
         return e
 
-    def amp(self, out, inp, inn, gain, lo=None, hi=None, swing=0.0, name=None):
-        """V(out) = gain × (V(inp) − V(inn)), its output held within swing of the lo and hi rails."""
+    def amp(self, out, inp, inn, gain, lo=None, hi=None, swing=0.0, name=None, gbw=1e6):
+        """V(out) = gain × (V(inp) − V(inn)), its output held within swing of the lo and hi rails. gbw (Hz) only
+        matters to the simulator, for op-amps."""
         nm = self._name(name, "amp")
         o = self.node(out)
-        e = self.circ.add(Elem("E", nm, (o, self.node(inp), self.node(inn)), gain, owner=self.ref))
+        e = self.circ.add(Elem("E", nm, (o, self.node(inp), self.node(inn)), gain, owner=self.ref, gbw=gbw))
         if hi is not None:
-            self.clamp(out, hi, -swing, name=f"{nm.split(':', 1)[1]}.hi", report=False, limiter=True)
+            self.clamp(out, hi, -swing, name=f"{nm.split(':', 1)[1]}.hi", report=False, limiter=True, amp=nm)
         if lo is not None:
-            self.clamp(lo, out, -swing, name=f"{nm.split(':', 1)[1]}.lo", report=False, limiter=True)
+            self.clamp(lo, out, -swing, name=f"{nm.split(':', 1)[1]}.lo", report=False, limiter=True, amp=nm)
         return e
 
-    def opamp(self, out, inp, inn, lo, hi, swing=0.0, name=None):
-        return self.amp(out, inp, inn, 1e6, lo, hi, swing, name)
+    def opamp(self, out, inp, inn, lo, hi, swing=0.0, name=None, gbw=1e6):
+        return self.amp(out, inp, inn, 1e6, lo, hi, swing, name, gbw)
 
     def clamp(self, a, b, v_on, r_dyn=0.0, i_max=None, name=None, report=True, source=None, assumed=False,
-              limiter=False):
+              limiter=False, amp=None):
         """A diode-like clamp from a to b that conducts once V(a) − V(b) passes v_on (a number, or (min, max)).
         a or b may be a number: a clamp to a fixed level."""
         vmin, vmax = (v_on, v_on) if isinstance(v_on, (int, float)) else v_on
@@ -153,7 +160,7 @@ class Builder:
         nb = self.circ.level(b) if isinstance(b, float) else self.node(b)
         return self.circ.add(Elem("D", self._name(name, "D"), (na, nb), owner=self.ref, vmin=vmin, vmax=vmax,
                                   r_dyn=r_dyn, i_max=i_max, report=report, source=source or self.source,
-                                  assumed=assumed, limiter=limiter))
+                                  assumed=assumed, limiter=limiter, amp=amp))
 
     def tvs(self, a, b, vbr, r_dyn=1.0, i_max=None, name=None, source=None, assumed=False):
         """A bidirectional TVS between a and b, conducting at vbr = (min, max) either way."""
@@ -343,6 +350,7 @@ class Result:
         self.case, self.source, self.note, self.assumed = case, source, note, assumed
         self.rel = margin / scale if scale else margin     # margin as a fraction of the limit, for ranking
         self.waiver = ""
+        self.probe, self.case_key, self.forced = None, None, {}   # for simulating an unproven result
 
 
 def _vterms(node, ref, gnd):
@@ -359,7 +367,9 @@ def check_case(spec, circ, case, cache):
     for branch in a.run():
         a.use(branch)
         label = case.name + _branch_label(branch)
-        results += _check_branch(spec, circ, case, a, branch, label)
+        for r in _check_branch(spec, circ, case, a, branch, label):
+            r.case_key, r.forced = case.name, branch["forced"]
+            results.append(r)
     results += _structure_case(spec, circ, case, a)
     return results, a
 
@@ -375,7 +385,8 @@ def _verdict(ok, loose):
     return "pass" if ok else "unproven" if loose else "fail"
 
 
-LOOSE_NOTE = "the bound goes through a node a clamp or amplifier rail holds, so it may be pessimistic; simulate it"
+LOOSE_NOTE = ("the bound goes through a node a clamp or amplifier rail holds, so it may be pessimistic; a simulation "
+              "can settle it")
 
 
 def _check_branch(spec, circ, case, a, branch, label):
@@ -390,11 +401,16 @@ def _check_branch(spec, circ, case, a, branch, label):
             cur[name] = a.clamp_current(clamps[name])
         return cur[name]
 
-    def add(id, group, ok, loose, text, margin, source="", note="", assumed=False, scale=1.0):
+    def add(id, group, ok, loose, text, margin, source="", note="", assumed=False, scale=1.0, probe=None):
         status = _verdict(ok, loose)
         if status == "unproven" and not note:
             note = LOOSE_NOTE
-        out.append(Result(id, group, status, text, margin, label, source, note, assumed, scale))
+        r = Result(id, group, status, text, margin, label, source, note, assumed, scale)
+        r.probe = probe
+        out.append(r)
+
+    def across(a_, b_):
+        return [("v", a_, 1.0), ("v", b_, -1.0)]
 
     # pin limits
     lims = [l for l in circ.limits if l.kind == "abs" or (nominal and l.powered)]
@@ -414,7 +430,9 @@ def _check_branch(spec, circ, case, a, branch, label):
             else:
                 rating = f"rating {fmt(l.inject, 'A')}" if l.inject is not None else "no injection rating known"
                 note = f"protection diodes take up to {fmt(i, 'A')} ({rating})" + (f"; {LOOSE_NOTE}" if loose else "")
-        add(f"{l.id} {l.side}", "limit", ok, loose, text, margin, l.source, note, l.assumed, scale)
+        terms, side = _vterms(l.node, l.ref, gnd), (1 if l.side == "hi" else -1)
+        probe = Probe(terms, side, l.offset, [(terms, side)], clamp=l.clamp, inject=l.inject)
+        add(f"{l.id} {l.side}", "limit", ok, loose, text, margin, l.source, note, l.assumed, scale, probe)
 
     # clamps with their own rating (ESD diodes), and the clamps standing for a port's protection diodes
     for c in clamps.values():
@@ -427,8 +445,9 @@ def _check_branch(spec, circ, case, a, branch, label):
             out.append(Result(f"{c.name} current", "clamp", "info", f"{fmt(i, 'A')} through {c.name}", 0, label,
                               c.source))
             continue
+        probe = Probe([("clamp", c.name, 1.0)], 1, c.i_max, [(across(*c.nodes), 1)], unit="A")
         add(f"{c.name} current", "clamp", i <= c.i_max, loose, f"{fmt(i, 'A')} through {c.name} "
-            f"(max {fmt(c.i_max, 'A')})", c.i_max - i, c.source, assumed=c.assumed, scale=c.i_max)
+            f"(max {fmt(c.i_max, 'A')})", c.i_max - i, c.source, assumed=c.assumed, scale=c.i_max, probe=probe)
 
     # passive ratings
     rated = [r for r in circ.ratings if r[2]]
@@ -445,23 +464,31 @@ def _check_branch(spec, circ, case, a, branch, label):
         status = _verdict(ratio <= 1, b.loose)
         if status == "pass" and ratio > spec.warn_ratio:
             status = "warn"
-        out.append(Result(f"{e.name} {kind}", "rating", status, text, 1 - ratio, label,
-                          note=LOOSE_NOTE if status == "unproven" else ""))
+        terms = across(*e.nodes)
+        r = Result(f"{e.name} {kind}", "rating", status, text, 1 - ratio, label,
+                   note=LOOSE_NOTE if status == "unproven" else "")
+        r.probe = Probe(terms, 0, rating, [(terms, 1), (terms, -1)], unit="W" if kind == "power" else "V",
+                        square=e.value * (1 - e.tol) if kind == "power" else None)
+        out.append(r)
 
     # switches that are on: channel current
     for s in [e for e in circ.elems if e.kind == "S" and branch["sw"].get(e.name) == "on" and e.i_max]:
         b = a.bound([[("v", s.nodes[0], 1.0), ("v", s.nodes[1], -1.0)]])[0]
         i = max(abs(b.lo), abs(b.hi)) / s.r_on
+        terms = across(*s.nodes[:2])
+        probe = Probe([("switch", s.name, 1.0)], 0, s.i_max, [(terms, 1), (terms, -1)], unit="A")
         add(f"{s.name} current", "switch", i <= s.i_max, b.loose,
             f"{fmt(i, 'A')} through {s.name}'s channel when on (max {fmt(s.i_max, 'A')})", s.i_max - i, s.source,
-            assumed=s.assumed, scale=s.i_max)
+            assumed=s.assumed, scale=s.i_max, probe=probe)
 
     # driver output currents
     for e, i_max, src, assumed in circ.drives:
         b = a.bound([[("r", e.name, 1.0)]])[0]
         i = max(abs(b.lo), abs(b.hi))
+        terms = [("r", e.name, 1.0)]
         add(f"{e.name} current", "drive", i <= i_max, b.loose, f"{fmt(i, 'A')} out of {e.name} (max {fmt(i_max, 'A')})",
-            i_max - i, src, assumed=assumed, scale=i_max)
+            i_max - i, src, assumed=assumed, scale=i_max, probe=Probe(terms, 0, i_max, [(terms, 1), (terms, -1)],
+                                                                      unit="A"))
 
     # port currents
     for pin, (net, stim) in circ.ports.items():
@@ -475,9 +502,12 @@ def _check_branch(spec, circ, case, a, branch, label):
             if f"{pin}:clamp{side}" in clamps:
                 ci, cl = clamp_i(f"{pin}:clamp{side}")
                 i, loose = max(i, ci), loose or cl
+        terms = [("r", f"{pin}:r", 1.0)]
+        probe = (Probe(terms, 0, stim.i_max, [(terms, 1), (terms, -1)], unit="A")
+                 if stim.kind != "open" and stim.r > 0 else None)
         add(f"port {pin} current", "port", i <= stim.i_max, loose,
             f"{fmt(i, 'A')} in or out of {pin} (max {fmt(stim.i_max, 'A')}: {stim.describe()})", stim.i_max - i, "spec",
-            scale=stim.i_max)
+            scale=stim.i_max, probe=probe)
 
     # output loads: the lowest impedance each output sees, wherever the ports are
     for ref, node, ohms, excl, band, src, assumed in circ.loads:
@@ -529,8 +559,16 @@ def _check_branch(spec, circ, case, a, branch, label):
             rng = f"{fmt(lo, unit)}..{fmt(hi, unit)}"
             want = "..".join(fmt(x, unit) if x is not None else "" for x in (cl.lo, cl.hi))
         scale = max(abs(x) for x in (cl.lo, cl.hi) if x is not None)
+        probe = None
+        if unit != "dB":
+            terms = (_vterms(q.net, q.ref, gnd) if isinstance(q, V) else
+                     [("clamp", q.ref, 1.0)] if q.ref in clamps else [("r", q.ref, 1.0)])
+            seed = across(*clamps[q.ref].nodes) if isinstance(q, I) and q.ref in clamps else terms
+            hi_side = cl.lo is None or (cl.hi is not None and hi - cl.hi >= cl.lo - lo)
+            probe = Probe(terms, 1 if hi_side else -1, cl.hi if hi_side else cl.lo, [(seed, 1 if hi_side else -1)],
+                          unit=unit)
         add(f"claim: {cl.name}", "claim", ok, loose, f"{q.describe()} = {rng} (want {want})", margin, cl.source,
-            scale=scale or 1.0)
+            scale=scale or 1.0, probe=probe)
     return out
 
 
@@ -602,7 +640,7 @@ def apply_waivers(spec, results, cases_by_name):
 
 def summarize(results):
     """The worst result per check id (failures first, then the smallest margin)."""
-    order = {"fail": 0, "unproven": 1, "warn": 2, "waived": 3, "info": 4, "pass": 5}
+    order = {"fail": 0, "unproven": 1, "searched": 2, "warn": 3, "waived": 4, "info": 5, "pass": 6}
     worst, counts = {}, {}
     for r in results:
         counts[r.id] = counts.get(r.id, 0) + 1
@@ -617,8 +655,9 @@ def report(title, cases, worst, sampled, verbose, n_parts, elapsed, assumed_n):
              f"  {len({c.state.name for c in cases})} power states, {len(cases)} cases, {n_parts} parts modelled; "
              f"{'every tolerance corner' if not sampled else 'tolerance corners sampled for large groups'}"
              f"; {elapsed:.1f} s", ""]
-    tag = {"fail": "FAIL", "unproven": "UNPROVEN", "warn": "WARN", "waived": "waived", "info": "info", "pass": "ok"}
-    shown = [r for r in worst if r.status in ("fail", "unproven", "warn", "waived")]
+    tag = {"fail": "FAIL", "unproven": "UNPROVEN", "searched": "SEARCHED", "warn": "WARN", "waived": "waived",
+           "info": "info", "pass": "ok"}
+    shown = [r for r in worst if r.status in ("fail", "unproven", "searched", "warn", "waived")]
     for r in shown:
         lines.append(f"{tag[r.status]:8s} {r.id}")
         lines.append(f"         {r.text}")
@@ -660,6 +699,54 @@ def net_table(circ, a, branch):
     return rows
 
 
+def simulate(unproven, kept, budget, out_dir):
+    """Search for counterexamples to the unproven results, one search per case and switch branch. A result whose
+    limit a run breaks becomes a FAIL with that input; the rest become SEARCHED with the worst value reached."""
+    todo = [r for r in unproven if r.probe is not None]
+    if not todo:
+        return ""
+    if circuit_sim.engine() is None:
+        return "ngspice not found (install KiCad, or set NGSPICE_LIB): unproven results were not simulated."
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+    groups = {}
+    for r in todo:
+        groups.setdefault((r.case_key, tuple(sorted(r.forced.items()))), []).append(r)
+    runs = 0
+    for (case_key, forced), rs in groups.items():
+        a = kept[case_key]
+        branch = next(b for b in a.branches if b["forced"] == dict(forced))
+        save = (lambda k: os.path.join(out_dir, re.sub(r"[^A-Za-z0-9.+-]+", "_", rs[k].id) + ".cir")) if out_dir else None
+        try:
+            outcomes = circuit_sim.search(a, branch, [r.probe for r in rs], budget=budget, save=save)
+        except circuit_sim.SimError as err:
+            for r in rs:
+                r.note += f"; simulation failed: {str(err).splitlines()[0]}"
+            continue
+        for r, o in zip(rs, outcomes):
+            runs = max(runs, o.runs)
+            if o.value is None:
+                r.note += f"; no simulation ran ({o.note})" if o.note else "; no simulation ran"
+                continue
+            p = o.probe
+            reached = f"{fmt(o.value, p.unit)} (limit {fmt(p.limit, p.unit)})"
+            if o.max_current is not None and o.max_current > 1e-9:
+                rating = f"rated {fmt(p.inject, 'A')}" if p.inject is not None else "no rating known"
+                reached += f"; its protection diodes took up to {fmt(o.max_current, 'A')} over the runs ({rating})"
+            if o.broken:
+                r.status = "fail"
+                r.note = f"simulation breaks it: {reached}, with {o.what}"
+            else:
+                r.status = "searched"
+                r.note = (f"no counterexample in {o.runs} simulations: the worst reached {reached}, with {o.what}. "
+                          f"The static bound stays as the guarantee")
+            if o.note:
+                r.note += f" ({o.note})"
+    sim = circuit_sim.engine()
+    return (f"Simulated {len(todo)} unproven result(s) in {len(groups)} case(s) with ngspice ({sim.runs} runs). "
+            "SEARCHED means no input tried broke the limit: evidence, not proof.")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("schematic", help="the .kicad_sch to check")
@@ -668,6 +755,9 @@ def main(argv=None):
     ap.add_argument("--nets", action="store_true", help="print every net's range in each nominal case")
     ap.add_argument("-v", "--verbose", action="store_true", help="list every check, not just problems")
     ap.add_argument("--json", help="write every result to this file")
+    ap.add_argument("--no-sim", action="store_true", help="don't simulate the results the bounds can't prove")
+    ap.add_argument("--sim-budget", type=int, default=12, help="random variants per case simulated (default 12)")
+    ap.add_argument("--sim-out", help="write each counterexample's SPICE netlist into this folder")
     args = ap.parse_args(argv)
 
     sch = os.path.abspath(args.schematic)
@@ -688,23 +778,30 @@ def main(argv=None):
         cases = [c for c in cases if fnmatch.fnmatch(c.name, args.case)]
     cache, results, sampled = {}, [], False
     first = None
-    tables = []
+    tables, kept = [], {}
     for case in cases:
         circ = build(spec, parts, library, case, gnd)
         if first is None:
             first = circ
         res, a = check_case(spec, circ, case, cache)
         results += res
+        kept[case.name] = a
         sampled |= a.sampled
         if args.nets and case.kind == "nominal":
             tables.append((case.name, net_table(circ, a, a.branches[0])))
     results += structure(spec, parts, first)
     apply_waivers(spec, results, {c.name: c for c in cases})
     worst, counts = summarize(results)
+    sim_note = ""
+    if not args.no_sim:
+        sim_note = simulate([r for r in results if r.status == "unproven"], kept, args.sim_budget, args.sim_out)
+        worst, counts = summarize(results)
     n_parts = len([r for r in parts if not r.startswith(NOT_MODELLED)]) - len(first.unmodelled)
     assumed_n = len({r.id for r in results if r.assumed})
     title = f"Circuit check: {os.path.relpath(sch)} (spec {os.path.basename(spec_path)})"
     print(report(title, cases, worst, sampled, args.verbose, n_parts, time.time() - t0, assumed_n))
+    if sim_note:
+        print("\n" + sim_note)
     if args.verbose:
         assumed = sorted({(r.id, r.source) for r in results if r.assumed})
         if assumed:

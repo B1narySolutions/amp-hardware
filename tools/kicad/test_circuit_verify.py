@@ -143,6 +143,75 @@ def test_spec_end_to_end():
     assert status["on + J1.1: 12 V"]["U1.1 abs hi"] == "fail"    # 8.4 mA
 
 
+# --- the simulator (skipped when ngspice can't be found)
+
+import circuit_sim  # noqa: E402
+from circuit_sim import Probe  # noqa: E402
+
+
+def simulate(c, probe, budget=4):
+    a = Analysis(c, {})
+    branch = a.run()[0]
+    a.use(branch)
+    return circuit_sim.search(a, branch, [probe], budget=budget)[0]
+
+
+def needs_ngspice(f):
+    def run():
+        if circuit_sim.engine() is None:
+            print(f"skip {f.__name__}: no ngspice")
+            return
+        f()
+    run.__name__ = f.__name__
+    return run
+
+
+@needs_ngspice
+def test_sim_finds_the_coupling_cap_worst_case():
+    # The bound engine's bang-bang seed: hold +1 V, step to −1 V. The simulator reaches the bound's −2 V.
+    o = simulate(hpf(wave(-1, 1)), Probe([("v", "n", 1)], -1, -1.9, [([("v", "n", 1)], -1)]))
+    assert o.broken and near(o.value, -2.0, 1e-2)
+
+
+@needs_ngspice
+def test_sim_settles_a_clamp_the_bound_cannot():
+    # Behind a ±6 V clamp, the bound treats the clamped node as any waveform in ±6 V: m ≤ 12 V, loose. A real
+    # square wave through the clamp gets there, so the simulator turns it into a counterexample.
+    c = Circuit("GND")
+    c.fix("src", wave(-10, 10), "test")
+    c.add(Elem("R", "Rs", ("src", "n"), 1e3))
+    for name, ab in (("Dp", ("n", "GND")), ("Dn", ("GND", "n"))):
+        c.add(Elem("D", name, ab, vmin=6.0, vmax=6.0, r_dyn=0.0, i_max=None, limiter=False))
+    c.add(Elem("C", "C2", ("n", "m"), 1e-6))
+    c.add(Elem("R", "R2", ("m", "GND"), 1e6))
+    o = simulate(c, Probe([("v", "m", 1)], 1, 10.0, [([("v", "m", 1)], 1)]), budget=8)
+    assert o.broken and 10.0 < o.value < 12.5
+
+
+@needs_ngspice
+def test_sim_clamp_current_matches_ohms_law():
+    c = Circuit("GND")
+    c.fix("src", wave(-10, 10), "test")
+    c.add(Elem("R", "Rs", ("src", "n"), 1e3))
+    c.add(Elem("D", "Dp", ("n", "GND"), vmin=6.0, vmax=6.0, r_dyn=0.0, i_max=None, limiter=False))
+    o = simulate(c, Probe([("clamp", "Dp", 1)], 1, 1e-3, [([("v", "n", 1)], 1)], unit="A"))
+    assert o.broken and near(o.value, 4e-3, 0.05)       # (10 − 6) V / 1 kΩ, less the diode's soft knee
+
+
+@needs_ngspice
+def test_sim_op_amp_clips_at_its_rails():
+    c = Circuit("GND")
+    c.fix("src", tone(4.0, offset=2.5), "test")
+    c.fix("vp", dc(5.0), "rail")
+    c.add(Elem("R", "Rin", ("src", "inp"), 1e3))
+    c.add(Elem("E", "U1", ("out", "inp", "out"), 1e6, gbw=10e6))
+    c.add(Elem("D", "U1.hi", ("out", "vp"), vmin=-0.02, vmax=-0.02, r_dyn=0, i_max=None, limiter=True, amp="U1"))
+    c.add(Elem("D", "U1.lo", ("GND", "out"), vmin=-0.02, vmax=-0.02, r_dyn=0, i_max=None, limiter=True, amp="U1"))
+    c.add(Elem("R", "Rl", ("out", "GND"), 10e3))
+    o = simulate(c, Probe([("v", "out", 1)], 1, 5.0, [([("v", "out", 1)], 1)]))
+    assert not o.broken and 4.95 < o.value <= 4.98
+
+
 if __name__ == "__main__":
     tests = [(n, f) for n, f in sorted(globals().items()) if n.startswith("test_")]
     for name, f in tests:
