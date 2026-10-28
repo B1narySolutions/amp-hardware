@@ -248,7 +248,7 @@ The power switch is on the power board, which cuts the 5 V output itself.
   its 4.0 V rating.
 - With C17 the filter corner is ≈ 320 Hz (10k ‖ 10k), far above battery changes. C17 also supplies the ADC's sampling charge.
 
-**Power board requirements**
+**Power board requirements** (`../../power-board/README.md` collects these with everything else the carrier needs from the power board)
 - Keep `BATT_SENSE_CONN` within 0–3.3 V.
 - Keep the `BATT_SENSE` divider's source impedance at 10 kΩ or less, and record its ratio and impedance here. The carrier loads it with
   20k (R13 + R22), so the reading is at least a third of BAT and the firmware needs both numbers to convert it.
