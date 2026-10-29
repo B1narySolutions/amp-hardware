@@ -223,6 +223,38 @@ def test_fault_check_finds_and_catches_a_short():
     assert near(before[("1", "J1.1", "GND")], 2e3) and near(after[("1", "J1.1", "GND")], 1e3)
 
 
+def test_fault_check_stops_at_two_amp_outputs_joined():
+    # Two followers in one package, outputs bridged: two ideal sources on one net would leave the bound engine's
+    # equations singular, so the fault is reported as the part's own outputs tied together instead.
+    import circuit_faults as cf
+    parts = {
+        "J1": {"value": "CONN", "footprint": "", "fields": {}, "dnp": False, "pins": {"1": "/IN", "2": "GND"}},
+        "U1": {"value": "TESTAMP", "footprint": "", "fields": {}, "dnp": False,
+               "pins": {"1": "/OUTA", "2": "/IN", "3": "/OUTB", "4": "+5V", "5": "GND"}},
+    }
+
+    def model(p):
+        p.opamp(out="1", inp="2", inn="1", lo="5", hi="4")
+        p.opamp(out="3", inp="2", inn="3", lo="5", hi="4")
+
+    library = ([{"match": ["TESTAMP"], "model": model, "source": "test", "file": "test"}], {})
+    spec = Spec()
+    spec.rail("+5V", dc(5.0))
+    spec.port("J1.1", nominal=wave(0, 5))
+    spec.state("on", rails=["+5V"])
+    circ = cv.build(spec, parts, library, expand_cases(spec)[0], "GND")
+    amps = cf.amp_outputs(circ, parts)
+    assert amps == {"/OUTA": "U1's pin 1", "/OUTB": "U1's pin 3"}
+    bridge = cf.Fault("bridge", "bridge U1.1–U1.3", ["U1"], nets=("/OUTA", "/OUTB"))
+    try:
+        bridge.apply(parts, {"GND": "ground", "+5V": "the rail +5V"}, "GND", amps=amps)
+        assert False, "joining two amplifier outputs should stop before the bound engine"
+    except cf.SupplyShort as err:
+        assert err.possible and "U1's own outputs" in str(err)
+    fp, rename = bridge.apply(parts, {"GND": "ground"}, "GND", force=True, amps=amps)   # readings still get a board
+    assert rename == {"/OUTB": "/OUTA"}
+
+
 # --- the simulator (skipped when ngspice can't be found)
 
 import circuit_sim  # noqa: E402

@@ -54,9 +54,9 @@ class Fault:
         self.kind, self.name, self.refs, self.nets, self.factor = kind, name, refs, nets, factor
         self.pads = pads or []
 
-    def apply(self, parts, fixed, gnd, force=False):
+    def apply(self, parts, fixed, gnd, force=False, amps=None):
         """(the faulted parts, {net: the net it was joined into}). Raises SupplyShort when the fault joins two nets that
-        are both held by a supply, unless force."""
+        are both held by a supply, or two amplifier outputs (amps, from amp_outputs), unless force."""
         out, rename = copy.deepcopy(parts), {}
         if self.kind in ("open", "missing"):
             out[self.refs[0]]["dnp"] = True
@@ -72,6 +72,15 @@ class Fault:
                     raise SupplyShort(f"ties two of {own[0]}'s own outputs together ({_short(a)}, {_short(b)}); how "
                                       f"{own[0]} copes is outside its model", possible=True)
                 raise SupplyShort(f"ties {_short(a)} ({fixed[a]}) to {_short(b)} ({fixed[b]}): two sources fight")
+            if amps and a in amps and b in amps and not force:
+                # Two ideal amplifier outputs on one net leave the bound engine's equations singular. Whether the
+                # parts survive depends on their output current limits, which the models don't hold.
+                own = {amps[n].split("'s pin")[0] for n in (a, b)}
+                if len(own) == 1:
+                    raise SupplyShort(f"ties two of {own.pop()}'s own outputs together ({_short(a)}, {_short(b)}); "
+                                      f"how it copes is outside its model", possible=True)
+                raise SupplyShort(f"ties {_short(a)} ({amps[a]}) to {_short(b)} ({amps[b]}): two amplifier outputs "
+                                  f"fight; how they cope is outside their models", possible=True)
             rank = lambda n: (n != gnd, n not in fixed, n)      # keep GND, then a supply, then the first name
             keep, drop = sorted((a, b), key=rank)
             rename[drop] = keep
@@ -80,6 +89,18 @@ class Fault:
                     if net == drop:
                         part["pins"][pin] = keep
         return out, rename
+
+
+def amp_outputs(circ, parts):
+    """{net: "<ref>'s pin <n>"} for every amplifier output the built circuit drives."""
+    out = {}
+    for e in circ.elems:
+        if e.kind != "E" or e.nodes[0] in out:
+            continue
+        pin = next((p for p, n in parts.get(e.owner, {}).get("pins", {}).items() if n == e.nodes[0]), None)
+        if pin is not None:
+            out[e.nodes[0]] = f"{e.owner}'s pin {pin}"
+    return out
 
 
 def _value_text(v):
@@ -215,7 +236,7 @@ def _worst(results):
 _ctx = {}     # what every fault is checked against: set up once per process (in workers by _setup)
 
 
-def _setup(spec_path, parts, states, base=None, fixed=None, healthy=None):
+def _setup(spec_path, parts, states, base=None, fixed=None, healthy=None, amps=None):
     spec = runpy.run_path(spec_path)["spec"]
     gnd = getattr(spec, "ground", "GND")
     names = states or spec.fault_states or [spec.states[0].name]
@@ -223,7 +244,7 @@ def _setup(spec_path, parts, states, base=None, fixed=None, healthy=None):
     _ctx.update(spec=spec, parts=parts, gnd=gnd,
                 library=cv.load_library([cv.PARTS_DIR, os.path.join(os.path.dirname(spec_path), "parts")]),
                 cases=[c for c in expand_cases(spec) if c.kind == "nominal" and c.state.name in names],
-                base=base, fixed=fixed, healthy=healthy)
+                base=base, fixed=fixed, healthy=healthy, amps=amps)
 
 
 def _check(p):
@@ -256,7 +277,7 @@ def _evaluate(fault):
     parts, fixed, gnd, base, healthy = _ctx["parts"], _ctx["fixed"], _ctx["gnd"], _ctx["base"], _ctx["healthy"]
     o = Outcome(fault)
     try:
-        fp, rename = fault.apply(parts, fixed, gnd)
+        fp, rename = fault.apply(parts, fixed, gnd, amps=_ctx["amps"])
         for key, r in _check(fp).items():
             if r.status not in ("fail", "unproven") or base.get(key) in ("fail", "unproven", "waived"):
                 continue
@@ -296,14 +317,15 @@ def run(spec_path, sch, board, gap, gap_part, states, verbose, jobs=1, progress=
     spec, library, gnd, cases = _ctx["spec"], _ctx["library"], _ctx["gnd"], _ctx["cases"]
     base = {key: r.status for key, r in _check(parts).items()}
     nets = {net for p in parts.values() for net in p["pins"].values()}
-    fixed = {gnd: "ground"}
+    fixed, amps = {gnd: "ground"}, {}
     for case in cases:
         circ = cv.build(spec, parts, library, case, gnd)
+        amps.update(amp_outputs(circ, parts))
         for n in circ.fixed:
             if n in nets:
                 fixed[n] = circ.fixed_by[n].replace(" pin ", "'s pin ").replace("rail ", "the rail ")
     healthy = _measure(parts, {})
-    _ctx.update(base=base, fixed=fixed, healthy=healthy)
+    _ctx.update(base=base, fixed=fixed, healthy=healthy, amps=amps)
     faults = part_faults(parts)
     if board and os.path.isfile(board):
         faults += bridge_faults(board, gap, gap_part)
@@ -313,7 +335,7 @@ def run(spec_path, sch, board, gap, gap_part, states, verbose, jobs=1, progress=
         # safe on macOS), so each sets up its own copy of the spec and part models once.
         ctx = multiprocessing.get_context("spawn")
         with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_setup,
-                                 initargs=(spec_path, parts, states, base, fixed, healthy)) as pool:
+                                 initargs=(spec_path, parts, states, base, fixed, healthy, amps)) as pool:
             outcomes = list(pool.map(_evaluate, faults, chunksize=max(1, len(faults) // (jobs * 4))))
     else:
         outcomes = []
