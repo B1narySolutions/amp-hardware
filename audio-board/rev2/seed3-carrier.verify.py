@@ -123,6 +123,8 @@ stage1.measure("1.21", "J3.3", "A1.15", expect=10e3)
 stage1.measure("1.21", "A1.15", "GND", expect=100e3)
 stage1.measure("1.21a", "A1.22", "GND", expect=(1.0, 100e3), note="below 100 kΩ, not ≈ 0 Ω")
 stage1.measure("1.21b", "A1.16", "U1.1", expect=470)
+stage1.measure("1.22", "A1.17", "A1.18", expect="open", note="AUDIO_IN_2 to AUDIO_OUT_1")
+stage1.measure("1.22", "A1.18", "A1.19", expect="open", note="AUDIO_OUT_1 to AUDIO_OUT_2")
 
 # Stage 2: 5.0 V from a bench supply on J6, the Daisy out, a 10k pull-up to 3.3 V on J6.4 for 2.10.
 stage2 = spec.test_stage("TEST_PLAN stage 2", absent=["A1"], rails={"+5V": dc(4.95, 5.0)},
@@ -170,3 +172,6 @@ for pin in ("16", "10"):
 spec.waive("U2.* abs *", "usb only",
            "DESIGN.md 'Running from USB alone': the firmware keeps both outputs at digital silence while 5V_SENSE "
            "reads low, so pin 18 is quiet whenever U2 is unpowered. The check assumes full scale on pin 18.")
+spec.waive("A1.in16 abs *", "* + J1.T: 18 V boost*",
+           "DESIGN.md 'Guitar input': boost pedals are out of scope, and R20 limits the current into the pin's "
+           "protection to ≈ 1–2 mA when U1 swings past the ±1.8 V absolute maximum.")
