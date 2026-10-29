@@ -54,7 +54,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 ## Board
 - **ESD diodes added (D1–D5, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring.
 - **New layout:** 2-layer, 90 × 56.5 mm, with GND pours on both sides tied by stitching vias, so it fits a free capstone fab (2 layers,
-  under 100 × 100 mm). Every audio net stays on the top layer, over an unbroken ground pour. The Daisy lies flat along the rear edge and
+  under 100 × 100 mm). Every audio net stays on the top layer, over the back ground pour. The Daisy lies flat along the rear edge and
   every panel jack sits on the front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
 - **Every part hand-solderable with an iron:** 0805 and larger passives on hand-solder pads, SOT-23, SOD-323 and the TSSOP U2.
 - **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.

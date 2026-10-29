@@ -374,13 +374,25 @@ Breadboard and PCB Design* (Artech House, 2021).
 | F.Cu (top) | Every part and nearly all routing, with a GND pour filling the space around it |
 | B.Cu (bottom) | A GND pour over the whole board. Its only traces are a few short hops (below) and the display UART along the rear edge |
 
-- **The bottom is the ground plane.** Every audio net stays on F.Cu from end to end and never changes layer, so each has unbroken B.Cu
-  ground under its whole length, 1.5 mm below. Where two top-layer traces have to cross, the one that doesn't carry audio drops to B.Cu
-  for a few mm: the analog `+5V` branch (six hops, 2–5 mm each), the `+5V` link between U2's SVDD pins (2.6 mm, under U2),
-  `HP_DETECT` (4 mm and 5.7 mm) and the display UART.
+- **The bottom is the ground plane.** Every audio net stays on F.Cu from end to end and never changes layer, with B.Cu ground 1.5 mm
+  below. Where two top-layer traces have to cross, the one that doesn't carry audio drops to B.Cu for a few mm: the analog `+5V` branch
+  (six hops, about 2–3 mm each), the `+5V` link between U2's SVDD pins (2.6 mm, under U2), `HP_DETECT` (4 mm and 5.7 mm) and the
+  display UART.
+- **The hops cut the back pour under some audio traces.** Each hop leaves a slot about 1 mm wide (the trace and its clearance) right
+  under the audio trace it crosses: `+5V` under `AUDIO_IN_1`, `AUX_TIP`, `AUX_RING`, `AUDIO_OUT_1`, `AUDIO_OUT_2` and `HP_SOURCE`, and
+  `HP_DETECT` under `AUDIO_OUT_1` and `AUDIO_OUT_2`. No hop crosses the 1 MΩ guitar node between J1 and U1. The slots don't matter:
+  - **Return path:** the front pour runs beside each audio trace across the slot, with a stitching via 1.7–2.7 mm from each hop, so
+    return current goes around it. The detour adds about 1 nH, ≈ 0.1 mΩ at 20 kHz. These nets carry under 1 mA, so the ground shift
+    is about 0.1 µV.
+  - **Coupling from `+5V`:** each crossing is at most about 20 fF through the 1.5 mm board. Into the highest-impedance crossed net
+    (`HP_SOURCE`, ≈ 2 kΩ) that couples about −106 dB at 20 kHz: 50 mV of ripple on `+5V` becomes ≈ 0.25 nV, against U2's 6 µVrms
+    output noise.
+  - **Fast edges:** a 3 mm slot only matters at many GHz, and the ESD diodes sit at the jacks, ahead of every hop.
+  - **Bridging the crossings** with 0 Ω resistors on F.Cu would keep the back pour whole, at the cost of seven parts for no measurable
+    gain.
 - **Why the hops are on the supply and DC nets:** at audio frequencies return current spreads under its trace by resistance, so a short
-  slot costs almost nothing, but with the audio nets whole none of them depends on that. The `+5V` hops sit upstream of the decoupling
-  at each load (C6, C12, C15, R6's C7 filter), and the UART's long B.Cu run hugs the rear edge, where it cuts nothing.
+  slot costs almost nothing, and a layer change on an audio net would add two vias to its path. The `+5V` hops sit upstream of the
+  decoupling at each load (C6, C12, C15, R6's C7 filter), and the UART's long B.Cu run hugs the rear edge, where it cuts nothing.
 - **Front pour:** GND on F.Cu around the routing (0.3 mm clearance), tied to the back pour by about 160 stitching vias (0.6/0.3 mm,
   every 5 mm or so wherever there's room) and by the GND via beside every SMD ground pad. Between neighbouring audio traces it's a
   guard: there is a stitching via between `AUDIO_IN_2` and `AUDIO_OUT_1` below the Daisy, between INR− and OUTR and between INL− and
@@ -397,7 +409,7 @@ Breadboard and PCB Design* (Artech House, 2021).
   - Put J6 (power in) and J3 (display) side by side, so the display return current that comes back through J3's GND doesn't pass
     under U1, U2, J1 or J2.
   - U2's PGND and SGND each drop to the pours through their own via under its body. The datasheet asks for them to meet at a single
-    point; with solid ground on both layers under the part, that point is the plane right under U2.
+    point; with ground on both layers under the part (cut only by the 2.6 mm SVDD hop), that point is the plane right under U2.
 - **Why 1.6 mm:** the ¼" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
 - **No controlled impedance.** USB doesn't leave the Daisy, and the module handles it itself.
 

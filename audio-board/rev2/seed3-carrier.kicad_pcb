@@ -188,11 +188,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C398358"
-			(at 0 0 270)
+		(property "MPN" "TLV9061QDBVRQ1"
+			(at 135.6 90.69 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "923095b7-014f-489d-b3b7-efd0bf6fca30")
+			(uuid "1eed7739-980f-4185-a14d-7f1f7804c594")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 135.6 90.69 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a9139ac7-b107-4a61-be0b-ccb98a536b9b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "296-TLV9061QDBVRQ1CT-ND"
+			(at 135.6 90.69 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fa6b02da-8b29-4127-a9fb-5ff3d7b0b78c")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -551,7 +575,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -585,11 +609,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 270)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 127.86 79.4 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "74a9338b-64b0-4481-a166-2f0474612c46")
+			(uuid "78ef33f7-9f33-48ae-a8b3-b33b3fa9bff6")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -597,7 +622,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 127.86 79.4 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "98aa1a13-8ee4-4cb7-8c80-ce2fd2585627")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 127.86 79.4 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f87cabf9-43aa-41a1-802a-77a9b4deabb4")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/e504d3f8-021c-442d-9550-63224c4bad8e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -721,7 +769,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -755,11 +803,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 90)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 174 63.2 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "48d7d703-034b-4d80-b6cb-7ed4ff497dca")
+			(uuid "4f31bd63-3989-4304-a5b7-9bc554c6b33a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -767,7 +816,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 174 63.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2f6a00f3-aa32-4973-ab4d-d1712585b3c6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 174 63.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "108b25a2-470f-4680-abb5-f31b17c6105f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/8e2e02bc-5362-4824-9457-72fcb5bb67a7")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -891,7 +963,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -925,11 +997,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
-			(at 0 0 0)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 160.85 69.3 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "5781c3e6-d9cb-49e7-98e0-41281530c8e6")
+			(uuid "7ec48115-d165-4171-9413-7beb9619b0d0")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -937,7 +1010,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 160.85 69.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d29542b8-f147-46d1-9ff1-306f6d3a1ca6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 160.85 69.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "af4597f7-7abe-4955-87d8-260cd63da342")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
+			(at 160.85 69.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "dd24eedc-0877-45d1-b69c-1a3a2aa9bc92")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/7d0f4741-4800-4312-bd5d-cdcf6c5df4bb")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1061,7 +1169,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://resources.jrhelec.com/documents/datasheets/Neutrik-nrj4hf-JRH.pdf"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1088,6 +1196,42 @@
 			)
 		)
 		(property ki_fp_filters "Jack*")
+		(property "MPN" "NRJ4HF"
+			(at 116.66 89.55 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ab948c7f-0ced-45d9-a3c1-7a8187397735")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Neutrik"
+			(at 116.66 89.55 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "622340fc-cc22-4371-a7ff-97f27c8611dd")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "3937-NRJ4HF-ND"
+			(at 116.66 89.55 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "79ba02e7-0ec6-419e-9bc5-032d25a6647a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/038615b7-b6f0-443e-b4e8-e46c6bcc4a58")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1402,7 +1546,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/8942/490_Chip_Multilayer_CAT2021_MLCC.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -1436,11 +1580,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C77101"
-			(at 0 0 90)
+		(property ki_fp_filters "C_*")
+		(property "MPN" "GRM32ER61C476KE15L"
+			(at 124.6 84.6 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "149d056f-dc3a-4a84-a33e-4393f7cf1af7")
+			(uuid "15f09620-4f46-4f75-93d7-cb92d637ea1f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1448,7 +1593,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "Manufacturer" "Murata Electronics"
+			(at 124.6 84.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4e7675fd-2278-44da-b88d-6df251fc8429")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "490-6539-1-ND"
+			(at 124.6 84.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2d27ab4a-2702-40d9-b93f-ce25866cce39")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/1133131a-c6af-4f84-8d6e-4981a7744317")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1572,7 +1740,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -1606,11 +1774,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "MPN" "RC0805FR-13470RL"
+			(at 157.35 62.55 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "b6ffdea1-abed-4aef-86a0-e4b82d10e9e3")
+			(uuid "751dba56-36e0-472e-add9-c52269ce2c9a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 157.35 62.55 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "055cd76d-3609-4b74-b1eb-3444725af8e2")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
+			(at 157.35 62.55 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9a82edf2-63d9-4e12-bb6d-cdee966bb044")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1735,7 +1927,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -1769,11 +1961,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC0805FR-13470RL"
+			(at 142.9 74.5 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "79695c1c-c887-4acc-9889-9921b769a498")
+			(uuid "1418a41d-5d11-486a-8404-27f2e43ad53b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1781,7 +1974,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 142.9 74.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "91248418-ee3f-45eb-a75f-45a319fcf195")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
+			(at 142.9 74.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f403d5a4-82be-4bcf-88c6-cc4517c367d6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/18b7b852-a182-4840-90c5-9ca6304e4a81")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1905,7 +2121,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -1939,11 +2155,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C1885"
-			(at 0 0 270)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 143.079999 71.2 180)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "857daaa7-6995-490a-80a1-1d75635910c0")
+			(uuid "2866debf-ef81-4615-a88f-442277bc7d90")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1951,7 +2168,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "C1206C102J5GACTU"
+			(at 143.079999 71.2 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8832bb46-bb28-4e39-bf7b-4f9046c1e56a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 143.079999 71.2 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "48edaf7b-5379-44bb-9f57-4137e3f7e510")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C102J5GACTUCT-ND"
+			(at 143.079999 71.2 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "677463b5-dfe5-4be2-98e9-f17217d21805")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/7eb0fb59-5016-4c97-b149-d3d3228d3868")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2075,7 +2327,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -2109,11 +2361,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 90)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 140.3 75.05 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "d385277f-9842-45ed-bb22-1eb50c6ce79d")
+			(uuid "42c3ebbb-aa3d-46c2-b6ae-c296a3e89d34")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2121,7 +2374,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 140.3 75.05 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2921772a-8162-4367-81e8-ef8a6b693480")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 140.3 75.05 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "477f5fde-fd24-492e-96c4-9be1227b1eaa")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/1218a41d-f66b-42a2-9293-d76e1aba579e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2245,7 +2521,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -2279,11 +2555,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C26010"
-			(at 0 0 180)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC0805FR-073K3L"
+			(at 163 78.2 180)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b0c823ca-1b12-4ce4-aa72-3acfe2cf59f0")
+			(uuid "f565ae4c-0557-4116-beac-8c7a6798a639")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2291,7 +2568,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 163 78.2 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "462a89f1-3e12-4dd1-beb3-81d9e3493666")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-3.30KCRCT-ND"
+			(at 163 78.2 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "63dcf3cc-432f-4b22-9f36-01fc8fa9c7e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/431cba57-4302-40e9-87d8-1fb6a8e4ed9e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2415,7 +2715,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.samsungsem.com/resources/file/global/support/product_catalog/MLCC_2512.pdf"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -2449,7 +2749,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A475KAQNNNE"
+		(property "MPN" "CL21A475KACLRNC"
 			(at 0 0 270)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2461,11 +2761,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "Voltage" "25V"
+			(at 166.2 84.2 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "688c61e4-cf01-40f3-874b-39e1de93626a")
+			(uuid "1f15a5d1-3ddc-4f27-9bbd-568aaaa34ef5")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 166.2 84.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c85bb1a3-76f2-44e1-907a-b729851ff950")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-2415-1-ND"
+			(at 166.2 84.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bb709829-f585-4270-95a6-4af6816e0594")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2590,7 +2914,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -2624,11 +2948,47 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "Voltage" "50V"
+			(at 176.4 81.3 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "112ffd4c-1f1e-4a77-b354-c2631406b775")
+			(uuid "934982e6-0021-46dd-a2f0-342bf5ed2c54")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 176.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5619d800-d075-47a1-a292-398941fb91e3")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 176.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4cfa5f0d-feec-49b6-a7fe-273766ea36e2")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 176.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "03da9fe4-2236-4577-afaf-e1c7f9576840")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2753,7 +3113,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -2787,11 +3147,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 0)
-			(layer "F.SilkS")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 166.5 74.4 0)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "835b2978-dac7-421b-b166-425c039fe12f")
+			(uuid "2504b0d3-ca84-4423-876a-3267a14957e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 166.5 74.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5123ce67-930d-43a8-af84-515e7b59b829")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 166.5 74.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "82c5783b-fe1b-4fe1-875a-e56a6325cd55")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2916,7 +3300,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2942,11 +3326,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
-			(at 0 0 0)
+		(property "MPN" "PESD5V0S1BAF"
+			(at 120.4 90.6 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "31fc2c4f-6d6e-4dc6-ae15-39da1c8901a1")
+			(uuid "9c84c297-ad48-443a-b5b3-b780817dad7b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 120.4 90.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ce9f129e-6922-431d-840d-8132a63a98f8")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
+			(at 120.4 90.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ef4c3f6f-63bf-4aef-ad00-02a45e6d0cfe")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3199,7 +3607,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3225,11 +3633,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
-			(at 0 0 270)
+		(property "MPN" "PESD5V0S1BAF"
+			(at 155.35 93.4 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "a0bfb4a8-e598-461d-a844-10ce1d59b9b7")
+			(uuid "c4206324-c4f7-4454-93b8-03ad16834fcd")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 155.35 93.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f41e9ce3-a7be-499c-bd8d-1617a20d7a17")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
+			(at 155.35 93.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8c83ce4a-1d03-433c-94e9-1c9350aa66af")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3482,7 +3914,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -3516,11 +3948,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
-			(at 0 0 90)
-			(layer "F.SilkS")
+		(property "MPN" "RC0805FR-0710KL"
+			(at 175.8 91.6 90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "d3d9e80d-8fff-4e9b-a7fd-6df3d91f0dc3")
+			(uuid "c5aa8e44-fee3-4f5e-a625-c911be578ad1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 175.8 91.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "015ee0c4-c325-4854-a41c-0df23929ca59")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
+			(at 175.8 91.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "755670af-18ad-4df1-8c9f-45de1f93e35b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3645,7 +4101,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3671,11 +4127,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
-			(at 0 0 90)
+		(property "MPN" "PESD5V0S1BAF"
+			(at 146.55 93.4 180)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "afbb7e73-29e7-44b3-8ace-f83dd6dcbb9d")
+			(uuid "69dd198a-3fb1-408b-a69a-5455c3eea0c5")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 146.55 93.4 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5c4231be-8be4-4c7c-8cae-5a432c102210")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
+			(at 146.55 93.4 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8644743e-3dde-45c7-ac62-79c0481be14b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4069,11 +4549,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
-			(at 0 0 0)
+		(property ki_fp_filters "SOT?23*")
+		(property "MPN" "AO3401A"
+			(at 167.85 62.7 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "a761d2b0-73f3-4b1a-bada-6277f73d9b15")
+			(uuid "2b978a88-7220-4b75-af3d-bd628ee39a4a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4081,7 +4562,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "SOT?23*")
+		(property "Manufacturer" "Alpha & Omega Semiconductor Inc."
+			(at 167.85 62.7 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "47748d44-fcda-4bb6-8f30-d247b222d9c8")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "785-1001-1-ND"
+			(at 167.85 62.7 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d152fff7-6d76-47a2-a7fe-3f1a0dae8e66")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/ad6c7b58-4dd0-4e05-8681-e92fea439d48")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -4429,7 +4933,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4455,11 +4959,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
-			(at 0 0 90)
+		(property "MPN" "PESD5V0S1BAF"
+			(at 164.7 99.1 180)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1e951a7c-6477-494e-8255-bc3c3c439455")
+			(uuid "8d12bfed-e42c-424b-b63d-5d497431f24d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 164.7 99.1 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e13a8649-2681-4062-8969-5990ddbfb2ca")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
+			(at 164.7 99.1 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cc22e16c-ab7c-403d-8c40-b1060eff4440")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4712,7 +5240,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -4746,11 +5274,47 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "Voltage" "50V"
+			(at 178.4 81.3 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "ebba4d4d-ae46-4b04-8bd1-49722ff39e46")
+			(uuid "7ce3fd20-14b4-40ed-87b7-f553a36a60e0")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 178.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b56a9922-3711-4fa6-b9f8-4521c356358b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 178.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "53937083-54f7-4f32-b99c-4b8fca62ae8b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 178.4 81.3 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "62aacb8c-7fd1-4c6b-9fec-33e51940c673")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4875,7 +5439,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -4909,11 +5473,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 90)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 177.5 63.2 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "677d731f-3247-46ba-b06b-de53c3ca2d1a")
+			(uuid "714767a7-6734-469a-83a8-499dd347a3fe")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4921,7 +5486,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 177.5 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "da428c93-e5a3-4d8a-9e61-7c4a56067911")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 177.5 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "17141784-dfed-4e20-815d-0fad7c8f7e05")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/422d8852-0783-4511-bb0d-061d0a7ea875")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -5045,7 +5633,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -5079,11 +5667,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
-			(at 0 0 0)
-			(layer "F.SilkS")
+		(property "MPN" "RC1206FR-071KL"
+			(at 179.3 66.9 0)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "d96cc1a3-d45a-4c75-82bc-8043de0e0607")
+			(uuid "d43f6175-ea09-4acf-bdd8-cf6485391117")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 179.3 66.9 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d1ce9666-134b-4cd1-a695-d5c808bb058e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
+			(at 179.3 66.9 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1134307d-b74c-4281-9565-4ad01fc050b2")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5313,7 +5925,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -5347,11 +5959,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C474893"
-			(at 0 0 180)
-			(layer "F.SilkS")
+		(property "MPN" "1984620"
+			(at 180.25 54.6 180)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "8ba659de-1c4d-47ad-9445-9bce5a21fefb")
+			(uuid "5dafd05a-56bf-483a-9153-7192a0e16e83")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 180.25 54.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "17fa6913-b44c-46d2-9662-6e2ca69436da")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "277-1722-ND"
+			(at 180.25 54.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "33aff1c9-3f9d-4303-963a-7af4173efe6f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5700,7 +6336,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -5734,11 +6370,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17927"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-071ML"
+			(at 127.86 85.4 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "7474996a-e8d5-4bf8-b4be-16ccdd5bd02f")
+			(uuid "f5d3d575-dccf-42fa-a8a4-5e6bef00b21d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5746,7 +6383,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 127.86 85.4 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "13f654aa-70f0-4c1c-8467-344d3a256028")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00MFRCT-ND"
+			(at 127.86 85.4 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "361cde16-fd25-4a0c-949c-21d588af6806")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/6742b632-a2d3-4260-8f31-61431bff09bc")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -5870,7 +6530,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -5904,11 +6564,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
-			(at 0 0 270)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-07100KL"
+			(at 156.4 72.8 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "087cf3d4-d788-4d72-83cb-b800bea17d46")
+			(uuid "dbe89cf7-582b-468a-ae41-484e37d08ec3")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5916,7 +6577,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 156.4 72.8 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "16002d4c-6409-4983-baae-c5bc5b0e2582")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
+			(at 156.4 72.8 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d3fc427f-1fcb-4ef5-a071-8091245344a5")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/7035fa5a-0d9c-4d8e-b5f3-0523e68df441")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -6149,7 +6833,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -6183,11 +6867,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 90)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 145.5 75.05 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "219a1769-2004-4229-9aeb-09afe123c348")
+			(uuid "5db1c0de-9486-4d3a-8040-d0004257ec81")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6195,7 +6880,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 145.5 75.05 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8cffe9e1-fea7-4d85-9aa2-107edcafe973")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 145.5 75.05 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "616ebb24-2855-402e-901f-ccf4ee221805")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/2b742b23-aa93-462f-8935-cbd8da6d0ffc")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -6319,7 +7027,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/860010472005.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -6353,11 +7061,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C2835642"
-			(at 0 0 0)
+		(property ki_fp_filters "CP_*")
+		(property "MPN" "860010472005"
+			(at 167.85 68.6 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "60ada4a5-06f8-4467-974a-80d0fa0b19ea")
+			(uuid "3d8e6438-1aa7-430e-b66d-3e718aa5343b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6365,7 +7074,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "CP_*")
+		(property "Manufacturer" "Würth Elektronik"
+			(at 167.85 68.6 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8e4ea1ed-04de-4553-a862-effee67b550a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "732-8628-1-ND"
+			(at 167.85 68.6 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5e522d08-ee44-4886-a505-72857e47f712")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/247e8e49-3cd1-46c7-9300-f20256fd3a4a")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -7693,7 +8425,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -7727,11 +8459,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
-			(at 0 0 90)
-			(layer "F.SilkS")
+		(property "MPN" "RC0805FR-0710KL"
+			(at 168.2 91.6 90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "eb2e5f12-ccf9-4446-bdcf-d69fd716743d")
+			(uuid "f1cee66d-4448-47e7-a715-3afcb1ab3dcd")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 168.2 91.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "376b02c3-03ec-4d06-b884-2067b363cdba")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
+			(at 168.2 91.6 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "63b71f1f-8585-41f6-8641-7aa6d548d7df")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7856,7 +8612,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -7890,11 +8646,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
-			(at 0 0 0)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 170.85 63.2 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "78ded72e-9623-4eca-9019-3d12046bd49f")
+			(uuid "387ebee1-626a-4d67-913d-bbe32f4c0c89")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7902,7 +8659,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 170.85 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7db8cb11-c679-4fcd-a0a1-f27cf17f1ae1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 170.85 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d95417c7-de28-4e30-94d8-39f879907b8b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
+			(at 170.85 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a44d0338-09d9-4c62-be45-b5e5dfbccb76")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/5a660e79-a32e-4a5a-be22-46b5b52c1883")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -8026,7 +8818,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -8060,11 +8852,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
-			(at 0 0 180)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-07100KL"
+			(at 164.35 68.25 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b6b29bb7-d731-4ae3-9c03-52bced219f10")
+			(uuid "2baee695-bdfb-4add-9ee4-26b472ef92c6")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8072,7 +8865,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 164.35 68.25 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2d15c86d-2dcc-4856-815f-6d1ed1c362b7")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
+			(at 164.35 68.25 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bde46639-d8ed-4219-abde-edc0e31e1fa2")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/a9dd8a09-18a7-4881-91be-dc53966f2c6c")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -8196,7 +9012,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -8222,11 +9038,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
-			(at 0 0 90)
+		(property "MPN" "PESD5V0S1BAF"
+			(at 142 93.4 180)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "21ee0e95-f766-434f-a848-f97d7b6ce380")
+			(uuid "62186b10-c993-4beb-83de-5788c4080779")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 142 93.4 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9a6e6845-02ee-46a9-816c-f42ec11d84b8")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
+			(at 142 93.4 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "65484659-0b83-428a-8d9d-f01108eb2222")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8479,7 +9319,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -8513,11 +9353,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-071KL"
+			(at 131.32 89.55 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "0d031984-0c68-4dbd-9ed4-aa1342bbb02b")
+			(uuid "de92f792-82b3-445d-b0cf-e7dea0b7918b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8525,7 +9366,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 131.32 89.55 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cc4570c1-2bba-4fa6-a5ab-487b7ad95003")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
+			(at 131.32 89.55 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "830528c9-42da-47e4-83e1-19f155bf2847")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/4e582ee3-8486-4abf-9b21-3b14f545f075")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -8865,7 +9729,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -8899,11 +9763,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "MPN" "RC0805FR-0710KL"
+			(at 180.6 88.5 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "0c3fdb02-488d-4a92-98e6-62cc1a5cf562")
+			(uuid "7d3e7e32-bdd0-475f-8ec1-2b37f83a1e78")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 180.6 88.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "88dfdc95-9ddb-41b6-8bc5-3bda5c8c8ceb")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
+			(at 180.6 88.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ac0a31d4-d6a2-4b4a-ae29-48960f45d14e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9028,7 +9916,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -9062,11 +9950,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "MPN" "RC1206FR-07100KL"
+			(at 172.9 68.25 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "b4426e6f-4c7e-47b3-ba56-06a0fab129ed")
+			(uuid "552bb9ad-1c9b-4525-83ea-5361f39775fa")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 172.9 68.25 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "022892ee-19ff-4b0c-bbcb-3b8b71bd62f6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
+			(at 172.9 68.25 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b147e910-447f-47e5-95a8-8fe829a7f6f5")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9191,7 +10103,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -9225,11 +10137,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C474892"
-			(at 0 0 180)
-			(layer "F.SilkS")
+		(property "MPN" "1984633"
+			(at 167.85 54.6 180)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "04ed3418-9881-4da5-8616-a9ffe9bcd809")
+			(uuid "ff2c4985-46af-4d0f-9151-0af727483ef0")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 167.85 54.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "90abc010-1879-41f9-a90f-479bf918f1b3")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "277-1860-ND"
+			(at 167.85 54.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0cd4d7a4-7b3d-4382-9c19-363d3f81a2ab")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9618,7 +10554,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -9652,11 +10588,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC0805FR-13470RL"
+			(at 136.95 85.899999 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "127a52dc-5020-4112-901d-482ba2a42d02")
+			(uuid "30ca3b46-4694-4eed-b71c-89987a1b31fb")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9664,7 +10601,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 136.95 85.899999 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3c67ee51-2cfd-404d-bb96-40a7700030b6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
+			(at 136.95 85.899999 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "264eb6ba-1767-4cdb-b32c-4f5337a15b4c")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/46a90ad0-26ed-441d-a031-242723145eb9")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -9788,7 +10748,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -9822,11 +10782,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C1885"
-			(at 0 0 270)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 163.6 82 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8937b328-1919-4a62-a75c-280d8614dcb4")
+			(uuid "f6294282-0030-428c-a362-7425258f7ba0")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9834,7 +10795,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "C1206C102J5GACTU"
+			(at 163.6 82 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "756ce7fd-8f48-4f4f-8e32-423bab9c3e44")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 163.6 82 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0794bad0-d591-4dfe-82ec-84e6c52e552d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C102J5GACTUCT-ND"
+			(at 163.6 82 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6f5b4986-d8cd-4721-b98b-1a0a2ad3ee2f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/e6f9a13b-2f80-46f1-ba8e-4f42cbf1c034")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -10066,7 +11062,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -10100,11 +11096,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-07100KL"
+			(at 164.35 63.2 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "7f5653e9-c9a8-4d84-af9d-d8ea1bbe5e25")
+			(uuid "2743f040-2770-42a8-a6a7-e31b0e2a6b2d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10112,7 +11109,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 164.35 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "da5117a9-fd1d-4bde-9584-bc4d15821fa6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
+			(at 164.35 63.2 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ed73bc93-12e6-4732-8a04-c760348d2c04")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/27d5bd96-fa90-4991-96b3-e2b94d6ee108")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -10236,7 +11256,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -10270,11 +11290,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-07100KL"
+			(at 178 74.3 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8c03209f-1397-42ce-bafa-136bb80dd12f")
+			(uuid "fe20fc52-7301-4e15-8674-7d87b0491882")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10282,7 +11303,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 178 74.3 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a93987c7-d51b-484d-8ee8-ba94c286648b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
+			(at 178 74.3 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "87d74cc4-9c58-4d6c-9198-aeaba183dd5d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/3cc8ab6b-cd53-4cbb-bbea-b3b8eb5cf9c8")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -10406,7 +11450,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -10440,11 +11484,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "MPN" "RC0805FR-0710KL"
+			(at 166.2 88.5 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "06b6cafc-3553-4e54-8199-449223effbae")
+			(uuid "73ea2d7e-1597-43c3-b4bb-772b99560e2d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 166.2 88.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a7d37779-4359-4eb7-b605-86f39cf62feb")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
+			(at 166.2 88.5 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7895f2ec-298c-4c86-9277-8bb8946d0df0")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10706,6 +11774,42 @@
 			(effects
 				(font
 					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "MAX9722AEUE+"
+			(at 172 86 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b87e7222-7ef0-4981-9f22-434453a9c057")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Analog Devices Inc./Maxim Integrated"
+			(at 172 86 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6fbdfa6f-e663-49b0-9a2c-82ce014db696")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "MAX9722AEUE+-ND"
+			(at 172 86 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e103c671-b48a-4e3d-b4c3-37274b4f43f6")
+			(effects
+				(font
+					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11091,7 +12195,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -11125,11 +12229,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
-			(at 0 0 0)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 138.55 90.69 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "2a787378-e8f4-4f54-9d08-957396de52e3")
+			(uuid "3a808386-6cd6-4b7f-a630-106fc848947e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11137,7 +12242,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 138.55 90.69 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cf148710-59fe-4fc1-85d2-3dcd6e767f35")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 138.55 90.69 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b21a961b-e442-48be-866c-2289001f409d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
+			(at 138.55 90.69 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8267d4ce-e210-4beb-bce9-1f0ce75bb2d6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/811c7c71-274c-4986-8eed-36fa0c437700")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -11295,11 +12435,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C8545"
-			(at 0 0 0)
+		(property ki_fp_filters "SOT?23*")
+		(property "MPN" "2N7002NXAKR"
+			(at 157.35 66.5 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ddd611a1-74ed-45a6-b326-2af6bf43c51b")
+			(uuid "8a46a1fc-dc71-4588-92fd-f534cb28bc50")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11307,7 +12448,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "SOT?23*")
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 157.35 66.5 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8038b309-c1dd-4505-a897-cf945ce4682f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1727-8643-1-ND"
+			(at 157.35 66.5 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c76e1434-84ef-4053-b894-b475efefb669")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/9860448e-8f5c-4f32-a12a-3cd3e9615b02")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -11655,7 +12819,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -11689,11 +12853,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C474892"
-			(at 0 0 90)
-			(layer "F.SilkS")
+		(property "MPN" "1984617"
+			(at 185.4 69 90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "eb44f800-6b2d-4d3a-a5c2-82baf65a2e9a")
+			(uuid "66c75a99-6596-4616-bd50-02068c2862cb")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 185.4 69 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4da1086a-5691-4fa1-89f3-70882b23f678")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
+			(at 185.4 69 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d99bfb16-98c3-4dcd-b7e9-f28150d9211d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12002,7 +13190,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -12036,11 +13224,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C486355"
-			(at 0 0 270)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 180.7 73.6 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "d21935eb-b7d7-47dd-b2a3-483686d51556")
+			(uuid "fca66463-d6b1-4f20-b223-153c8b96382b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12048,7 +13237,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "C0805C332J5GACTU"
+			(at 180.7 73.6 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "16fac821-5bd7-43c9-84d8-b09671446ffc")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 180.7 73.6 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b2568453-bf6b-4b20-91b3-5e47cd2e1acf")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C332J5GACTUCT-ND"
+			(at 180.7 73.6 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e96eafbf-0aed-43c0-96ba-75eaf01bedff")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/9cc6747b-0813-4611-b55d-7af24b3f6554")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -12172,7 +13396,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -12206,11 +13430,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 90)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 124.6 79 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "3b801e27-c8e4-45a3-aabe-b95467f6dad0")
+			(uuid "e4043f5b-aed6-4c8c-830d-fdd30679f3d1")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12218,7 +13443,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 124.6 79 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "01768151-9621-4531-a4dc-ba0af64b1033")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 124.6 79 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8ff37e42-33d7-4367-bb33-ad2914ab0f02")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/24ac9444-fd87-4743-b13d-6f420408e594")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -12342,7 +13590,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -12376,11 +13624,47 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
-			(at 0 0 180)
-			(layer "F.SilkS")
+		(property "Voltage" "50V"
+			(at 172.2 80.6 180)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "0254a45d-a768-4a65-be7a-f2c9238eff24")
+			(uuid "5d22cb42-3429-414e-8afe-d4f28cada3fc")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 172.2 80.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "46adbd48-8850-4501-9aaf-7ad006109bef")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 172.2 80.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "216ae5aa-1c2e-46d2-a70c-d17fd384ace3")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 172.2 80.6 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "222d1af1-8dfb-48df-9edb-4dd5283548af")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12527,11 +13811,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C39461671"
-			(at 0 0 0)
+		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
+		(property "MPN" "SJ3-35063AG"
+			(at 141.9 104.1 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b87e1a4b-d10b-450c-a359-e0cc80af28c8")
+			(uuid "686a470c-0109-4980-89bb-89d2560a0bef")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12539,7 +13824,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
+		(property "Manufacturer" "Same Sky (Formerly CUI Devices)"
+			(at 141.9 104.1 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5b966ac9-0d81-4e47-8c5d-e658bffade28")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "2223-SJ3-35063AG-ND"
+			(at 141.9 104.1 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4a11deea-0edb-46cf-b7ac-098b8cdbe3f6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/951e8776-cffd-43bf-9e80-31e1b45ef481")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -12795,7 +14103,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -12829,11 +14137,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
-			(at 0 0 0)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-0710KL"
+			(at 160.85 63.2 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1d44b2b8-8ce4-4d2e-a0ef-1f99e7bf5192")
+			(uuid "21de457f-a9c9-45ed-abad-9955d57827cd")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12841,7 +14150,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 160.85 63.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6efa145b-43e0-45f4-81ea-d45a296e4a57")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
+			(at 160.85 63.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a314d015-6b09-49c0-a481-8d74140ad17e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/67ef532b-328e-41a3-a135-0d3629d6931e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -12965,7 +14297,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -12999,11 +14331,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
-			(at 0 0 180)
+		(property ki_fp_filters "R_*")
+		(property "MPN" "RC1206FR-071KL"
+			(at 179.3 70.4 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "55edf5ad-f22a-45ea-a9a5-6adce65d9d32")
+			(uuid "1764bad6-ee91-4e74-b209-25a9f2640ce0")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13011,7 +14344,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
+		(property "Manufacturer" "YAGEO"
+			(at 179.3 70.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f3ad7290-957d-412f-896c-86c98cda500d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
+			(at 179.3 70.4 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d71e52d2-3db5-45cf-b532-2715f6d1f750")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/c3fb2314-3f8e-4d06-9f58-0f4850fd15e2")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13135,7 +14491,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/609/CL21C101JBANNNC_Spec.pdf"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -13169,11 +14525,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C1790"
-			(at 0 0 0)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 122.5 90.59 -90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "9c83648f-0b79-40b6-88c7-ef475d0b62eb")
+			(uuid "016e4d07-2066-4893-9cba-2819ec6f3afa")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13181,7 +14538,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "CL21C101JBANNNC"
+			(at 122.5 90.59 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b1b454ad-e0d3-46d3-aea2-0d9efc74152e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 122.5 90.59 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "afa2d78f-5a1d-4b75-b545-1b8c01a8b03a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1014-1-ND"
+			(at 122.5 90.59 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "532a5324-7f51-4ef7-8033-f9ca6eb9e57e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/62222231-6db0-4560-8c42-59a90cecde28")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13305,7 +14697,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -13339,11 +14731,47 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
-			(at 0 0 90)
-			(layer "F.SilkS")
+		(property "Voltage" "50V"
+			(at 168.25 82 90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "07fd14b2-e810-44d8-9411-2091e5f66f21")
+			(uuid "7b7b287e-398f-4114-b149-e8e4c2a604c2")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 168.25 82 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d4370c97-5d7d-446b-bdee-d19287bece03")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 168.25 82 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7ac23825-6fab-474c-974f-879a56e344e7")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 168.25 82 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b42c1109-c6f9-4556-8d45-169e77e17223")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13490,11 +14918,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C39461671"
-			(at 0 0 0)
+		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
+		(property "MPN" "SJ3-35063AG"
+			(at 158 104.1 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b96815f1-aa44-4471-901e-4307412a3b5e")
+			(uuid "0b8c53c2-bd24-49a8-9fa1-d67d0679011f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13502,7 +14931,30 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
+		(property "Manufacturer" "Same Sky (Formerly CUI Devices)"
+			(at 158 104.1 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e530e402-8c54-482e-a1e6-830777202282")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "2223-SJ3-35063AG-ND"
+			(at 158 104.1 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "91d8c0ab-5cad-405d-9350-3282c62d0595")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/a599f556-32df-4903-867b-be59bf299371")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13758,7 +15210,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.samsungsem.com/resources/file/global/support/product_catalog/MLCC_2512.pdf"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -13792,7 +15244,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A475KAQNNNE"
+		(property "MPN" "CL21A475KACLRNC"
 			(at 0 0 270)
 			(layer "F.SilkS")
 			(hide yes)
@@ -13804,11 +15256,35 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
-			(at 0 0 270)
-			(layer "F.SilkS")
+		(property "Voltage" "25V"
+			(at 180.6 84.2 -90)
+			(layer "F.Fab")
 			(hide yes)
-			(uuid "65557508-a412-42bf-be2c-d6182f9a2001")
+			(uuid "06f735bd-69f5-4963-9172-25f781c67cee")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 180.6 84.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d57a046e-02ba-483f-b3ca-6fd68064c7a7")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "1276-2415-1-ND"
+			(at 180.6 84.2 -90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "97781932-b25b-41c0-8d15-41267669e3fb")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14728,7 +16204,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -14762,11 +16238,12 @@
 				)
 			)
 		)
-		(property "LCSC" "C1848"
-			(at 0 0 0)
+		(property ki_fp_filters "C_*")
+		(property "Voltage" "50V"
+			(at 126.3 89.55 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "eb55cb46-9008-47f4-876f-c54426713206")
+			(uuid "06439508-14a4-4ea9-94d2-8b5e79afc0cc")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14774,7 +16251,42 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
+		(property "MPN" "C1206C105K5RACTU"
+			(at 126.3 89.55 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d12b12a9-dfcf-4da4-b0b6-7bc462810e5f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 126.3 89.55 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a16c3115-03ba-4a46-a1e1-ab03be3522ae")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C105K5RACTUCT-ND"
+			(at 126.3 89.55 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "26b985ab-1f85-47fe-a290-54e2de7ccc50")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/ce7ea65b-a911-4ce5-9a8e-ba46c7ca6d55")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
