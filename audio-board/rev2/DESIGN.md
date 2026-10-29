@@ -245,7 +245,7 @@ which cuts the 5 V output itself.
 | 4 | MUTE | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`) via Q2 and R23 | Open-drain speaker-amp mute (see "Output mute") |
 
 - **Pin order:** seen from the wire side, the terminals read 5V, GND, BAT, MUTE from left to right. GND sits between 5V and the signals.
-- **One 5 V and one GND pin:** the carrier draws well under 1 A now that the display has its own supply, and a PT 1,5 contact is rated
+- **One 5 V and one GND pin:** the carrier draws well under 1 A (the display has its own supply), and a PT 1,5 contact is rated
   17.5 A. A single GND is fine because the speaker amp's input is differential and LINE− connects only to the amp's IN− (see "Speaker
   send"), so no supply current returns through J5.
 - **R13/R22 (10k/10k) halve the battery level:** 0–3.3 V on BAT reads as 0–1.65 V on pin 25, and a 5 V wire on BAT reaches only
@@ -265,7 +265,7 @@ which cuts the 5 V output itself.
 - Pull `SPK_MUTE` up on the amp side, with 4.7 kΩ or more to at most 5 V, so the amp is muted when this board is unpowered or
   unplugged. Q2 pulls it low through R23 (470 Ω): ≈ 0.24 V against 10k, ≈ 0.5 V against 4.7k. The amp's mute input has to read that
   as low.
-- Provide the power switch and a low-battery cutoff: the carrier can no longer turn the power off itself.
+- Provide the power switch and a low-battery cutoff: the carrier has no way to turn the power off.
 - Supply the display's 5 V directly, with its own wire pair.
 
 ### Display connector (J3)
@@ -279,7 +279,7 @@ different times, and add a little ESD margin.
   current stays in the rear-right corner.
 - **R8 is 10k:** with the Daisy on USB alone and the power board off (see "Running from USB alone"), its TX idles high into an
   unpowered display. 10k keeps the current into the display's RX protection diode to ≈ 0.27 mA.
-- **R9 is 10k too:** the display and the Daisy both run from the power board, but they no longer share a supply rail, so their power-up
+- **R9 is 10k too:** the display and the Daisy both run from the power board, but from different supply rails, so their power-up
   order isn't fixed. 10k limits the current from a powered display into an unpowered Daisy's RX pin the same way.
 - **R24 (100k) pulls `DISPLAY_UART_RX` to GND.** With R9 it divides a 5 V wire on RX to at most 4.78 V at pin 15 (PB7), inside the
   Seed3's 0–5 V GPIO rating. The STM32 itself allows VDD + 4 V there while powered, but the module is rated 0–5 V. The display's 3.3 V
@@ -349,13 +349,13 @@ USB stays on the Daisy's own connector.
 - **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J6 power is removed and restored with USB
   connected and audio playing. Record how long the input stays outside SVSS − 0.3 V … SVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
-- **Layout:** placement and routing are done (see "Passive placement" and "Routing under the Daisy"). The board check finds no
-  unrouted connections.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
   the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
 - **U2 stock:** check DigiKey's stock of the MAX9722AEUE+ before ordering boards (see "Parts sourcing").
 - **Soldering U2:** the TSSOP's 0.65 mm pitch takes flux and a fine tip or drag soldering. TEST_PLAN 0.1, 1.6a and 1.8 catch bridges.
-- **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
+- **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing. The Seed3's
+  USB-C overhangs the PCB by 1.55 mm and stands 3.25 mm tall (Seed3 datasheet, page 8); the board's 3D placeholder is the original
+  Seed's outline, so allow for the difference.
 - **Front panel thickness:** under 3 mm, Neutrik's limit for the NRJ4HF's nut. The SJ3 noses stand 3.0 mm proud of their faces, so a
   panel up to 3 mm also takes them.
 
@@ -431,106 +431,54 @@ board controls sit in the rear-right corner beside the Daisy, as far from J1, U1
 regulators and class D amp are the noisiest things the carrier connects to.
 
 - **Guitar input (most sensitive):** one straight row on F.Cu at the height of J1's tip: J1 tip → D1 → C1 → C2 → R2 → U1 pin 3, about
-  18 mm, with no vias. D1 and C1 hang below the row, with their GND vias on the far side. R1 rises from the C2/R2 node to `VREF`, so
-  the 1 MΩ node is about 4.5 mm of trace.
-- **U1** (SOT-23-5, rotated −90°): + top-left (from R2), GND top-middle (via straight up), out top-right, − bottom-left, V+
-  bottom-right. The follower feedback, pin 1 to pin 4, runs diagonally under the body. R20 stands just above pin 1. `AUDIO_IN_1` runs
-  from R20's top pad up the left side of the AUX block to Daisy pin 16.
-- **VREF:** R6, R7 and C7 form a square just above-left of R1, so `VREF` is a few mm of F.Cu. R6's `+5V` arrives from a B.Cu hop under `AUDIO_IN_1` (see "Analog `+5V`").
-- **AUX input:** the AUX block sits right under Daisy pins 16–17. R4 and R3 stand over J2's ring and tip, R5 sits between them, and C3
-  sits on the trunk to pin 17. J2's ring and tip run straight up on F.Cu, about 20 mm, driven by the source, so their impedance is low.
-  The ≈ 2 kΩ `AUDIO_IN_2` node is about 11 mm of trace. Nothing crosses the guitar row.
-- **Headphone path:** `AUDIO_OUT_1`, the DAC output, runs from pin 18 down past the AUX block and along y ≈ 78 mm to R10.
-  `HP_SOURCE` runs on from R10 above U2 to C9 (beside R10), C11 (the R channel, left of U2) and C10 (the L channel, right of U2). It's
-  ≈ 2 kΩ (R10 into the 5k of R25 ‖ R27) and about 17 mm long: the cost of reaching both sides of U2 without a layer change. Each input
-  then runs down its own side, C11 → R27 → INR− on the left and C10 → R25 → INL− on the right, with R28/R26 from each input to its output
-  just below U2.
-- **U2** (TSSOP-16, rotated −90°): supplies and charge pump on the top row, inputs and outputs on the bottom row. OUTR (pin 12) and
-  OUTL (pin 14) leave straight down through R28's and R26's output pads and run left to J4: OUTR along y ≈ 92.6 mm to D5 and the ring,
-  OUTL along y ≈ 94.4 mm to the tip and D4. INR− (pin 10) and INL− (pin 16) leave down and turn outward into R28/R27 and R26/R25 above
-  the outputs, so nothing crosses. Under the body, SVSS (pin 13) joins PVSS (pin 7) and SVDD (pin 15) joins PVDD (pin 3) on F.Cu. SVDD
-  (pin 11) reaches them through a 2.6 mm B.Cu hop, because the SVSS link sits between them. PGND, SGND, INL+ and INR+ each drop to the
-  pours through their own via under the body.
-- **Decoupling:** C6 sits right of U1, its `+5V` pad on top, toward the feed, 1.5 mm from pin 5. Around U2: C13 (flying cap) right
-  above pins 4–6 and C14 (PVSS) left of pin 7, each within 2 mm. C12 (PVDD) and C15 (SVDD) sit to the upper right on the `+5V` feed,
-  4–6 mm along it from the pins. PVDD and SVDD are tied at the device, so they work as one 2 µF bypass.
-- **Analog `+5V`:** its own branch from C5's `+5V` pad (through R18's `+5V` pad), down between R22's pads and along y ≈ 75.75 mm above
-  `AUDIO_OUT_2`. To U2 it hops on B.Cu under `AUDIO_OUT_2` and `HP_SOURCE` (5 mm) and lands at C12/C15. To U1 and R6 it hops under
-  `AUDIO_OUT_2`, runs between `AUDIO_OUT_2` and `AUDIO_OUT_1` over `HP_DETECT`'s hop, hops under `AUDIO_OUT_1`, then crosses `AUX_TIP`,
-  `AUX_RING` and `AUDIO_IN_1` on B.Cu hops of 2–3 mm to C6/U1 and R6. It carries only the analog parts' current: the Daisy's and the
-  display's current pulses never flow in it.
-- **Speaker send:** R11, C16 and R12 sit next to J5, and R21 next to J5's LINE− pin. `AUDIO_OUT_2`, the low-impedance DAC output,
-  makes the long run from Daisy pin 19 along the bottom of the power corner, below R22 and the analog `+5V` branch (about 30 mm on F.Cu), so the 1k `LINE_OUT` and `LINE_REF`
-  stretches are only about 5 mm each.
+  18 mm, with no vias. R1 rises from the C2/R2 node to `VREF`, so the 1 MΩ node is about 4.5 mm of trace. U1's output, through R20,
+  makes the long run to Daisy pin 16. R6, R7 and C7 sit just above-left of R1, so `VREF` is a few mm of F.Cu.
+- **AUX input:** the AUX block sits right under Daisy pins 16–17. J2's ring and tip run about 20 mm, but the source drives them, so their
+  impedance is low. The ≈ 2 kΩ `AUDIO_IN_2` node is about 11 mm of trace. Nothing crosses the guitar row.
+- **Headphone path:** `AUDIO_OUT_1`, the DAC output, makes the long run to R10. `HP_SOURCE` (≈ 2 kΩ: R10 into the 5k of R25 ‖ R27) is
+  then about 17 mm, the cost of reaching both sides of U2 without a layer change. Each channel's input cap and resistors sit on its own
+  side of U2, and the outputs leave straight down and run left to J4, so nothing crosses.
+- **Decoupling:** C6 is 1.5 mm from U1's pin 5. C13 (flying cap) and C14 (PVSS) are each within 2 mm of U2's pins. C12 (PVDD) and C15
+  (SVDD) sit 4–6 mm along the `+5V` feed; PVDD and SVDD are tied at the device, so they work as one 2 µF bypass.
+- **Analog `+5V`:** its own branch from C5, the `+5V` star, to U1, R6 and U2, crossing the audio nets on short B.Cu hops (see
+  "Stackup"). It carries only the analog parts' current: the Daisy's and the display's current pulses never flow in it.
+- **Speaker send:** R11, C16 and R12 sit next to J5, and R21 next to J5's LINE− pin. `AUDIO_OUT_2`, the low-impedance DAC output, makes
+  the long run (about 30 mm on F.Cu), so the 1k `LINE_OUT` and `LINE_REF` stretches are only about 5 mm each.
 - **Screw terminals:** J6 and J3 sit on the rear edge and J5 on the right edge, with their wire openings facing out and the screws on
   top. Each terminal's function is printed on the silkscreen next to it (5V, GND, BAT, MUTE; RX, TX, GND; LINE+, LINE−), because
   nothing else stops a wire landing on the wrong terminal.
-- **ESD diodes:** each sits at its jack contact, with its GND pad dropped to the pours by its own via. D2 and D3 sit above J2, D5 above J4's
-  ring, D4 right of J4's tip, and D1 between J1's tip and C1. The discharge path from contact to diode to via is a few mm.
+- **Power corner:** under J6 and J3, each terminal's parts sit in a column straight below it, so its label, references and parts read
+  top to bottom. Power enters at J6 pin 1 → Q1 → C4 and C5 on short wide traces. `5V_SENSE`, `BATT_SENSE`, `SPK_EN`, the display UART
+  and `HP_DETECT` are DC levels or slow logic, so their routes aren't critical (see "Routing under the Daisy").
+- **ESD diodes:** each sits at its jack contact, with its GND pad dropped to the pours by its own via. The discharge path from contact
+  to diode to via is a few mm.
 - **GND vias:** every SMD GND pad has its own 0.6/0.3 mm via, 1–1.6 mm from the pad on a short 0.4–0.5 mm stub, on the side away from
   the signal routing. There are no vias in pads, so reflow doesn't wick solder away. U2's PGND, SGND, INL+ and INR+ each have
   their own via under its body. On F.Cu the GND pour joins every SMD ground pad through thermal spokes, so an iron can still heat it.
-- **Under J6 and J3, one column per terminal:** each column's first part sits straight below the terminal it serves, with its reference
-  just above it and the terminal's function label above that. Under MUTE: R23, then Q2, then R17 below Q2's gate. Under BAT: R13, then
-  C17. Under GND: R19, then R18. Under 5V: Q1, with C4 beside it and C5 below. Under RX: R9, then R24. Under TX: R8. R22 (BAT's half
-  of the divider) lies across the band below R18 and C5, fed from the R13/C17 node down the gap between the MUTE and BAT columns.
-- **Power entry:** J6 pin 1 → Q1 → C4 and C5 on short wide traces. C5 is the `+5V` star: the analog branch leaves it on F.Cu. The Daisy's VIN leaves from C4, beside Q1 (see "Routing under the Daisy").
-- **`5V_SENSE`:** R19 (GND end up) and R18 (`+5V` end down, next to C5) stand in one column, with `5V_SENSE` between them. It goes to
-  Daisy pin 22. It is a DC level, so the route isn't critical.
-- **Power board signals:** R13/C17/R22 (`BATT_SENSE`) and Q2/R17 (`SPK_EN`) connect to Daisy pins 25 and 28 under the Daisy. The
-  display UART reaches pins 14/15 the same way from R8 and R9/R24. All are slow. They run on F.Cu between the Daisy's socket rows (see "Routing under the Daisy").
-- **`HP_DETECT` and TP1:** TP1 sits left of J4, on a short trace to J4 pin 6. The net goes to Daisy pin 23, at the right end of the rear
-  row. It is a DC level, so the route isn't critical.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
   trace fits between them. Inside a block, the decoupling caps sit closer on purpose: C6 and R2 at U1's pins (0.80 and 0.83 mm), C14 and
   U2's pin 8 (0.55 mm), C12 and C15 (0.55 mm).
-- **Mounting holes:** three M2.5 holes (non-plated, MountingHole_2.7mm_M2.5), plus J1's panel nut at the front-left corner:
-  - H2 at the rear-right and H3 at the front-right corner, each 4 mm in from both edges.
-  - H1 at the rear-left, in the gap between the Daisy's front socket row and J1's back face (centre 4 mm from the left edge,
-    y = 27.9 mm). It supports the Daisy's end of the board when the module is pressed into its sockets or USB is plugged in.
-  - All three are M2.5, so the enclosure takes one screw size.
-  - The rear-left corner itself and the left edge behind the Daisy have no room for a hole.
-- **Fiducials:** three global fiducials for JLC's assembly camera, 1 mm copper dots with 2 mm mask openings (Fiducial_1mm_Mask2mm),
-  at FID1 beside H1, FID2 under H2 and FID3 near H3. They're asymmetric, so the camera can tell the board's orientation. Like the holes,
-  they're board-only footprints: no schematic symbol, not in the BOM or the placement file.
-- **Silkscreen:** references are 1.0 mm high with 0.15 mm strokes, JLC's minimum for legible text. They're horizontal, beside their
-  parts, and clear of pads, vias and other labels. Under J6 and J3 the references sit in a row between the terminal labels and their
-  parts. J6's own reference sits at the end of its terminal labels, next to 5V.
-  The schematic's MPN fields for C10/C11 are hidden on the board.
+- **Mounting holes:** three M2.5 holes (non-plated), so the enclosure takes one screw size, plus J1's panel nut at the front-left corner.
+  H2 and H3 sit 4 mm in from the rear-right and front-right corners. H1 sits in the gap between the Daisy's front socket row and J1's
+  back face (centre 4 mm from the left edge, y = 27.9 mm), where it supports the board when the module is pressed into its sockets or
+  USB is plugged in. The rear-left corner has no room for a hole.
+- **Fiducials:** FID1–FID3, 1 mm copper dots with 2 mm mask openings, placed asymmetrically so an assembly camera can tell the board's
+  orientation. They only matter for machine assembly.
+- **Silkscreen:** references are 1.0 mm high with 0.15 mm strokes, JLC's minimum for legible text, beside their parts and clear of
+  pads and vias.
 
 ### Routing under the Daisy
+`5V_SENSE`, `BATT_SENSE`, `SPK_EN` and the display UART reach the Daisy on F.Cu between its two socket rows, in lanes that never
+cross, away from the analog band.
 
-The power board signals, the display UART and `HP_DETECT` reach the Daisy on F.Cu between its two socket rows, in lanes that never
-cross:
-
-| Lane (top to bottom) | From | To |
-|---|---|---|
-| `5V_SENSE` | R19/R18, up between J6's BAT and GND terminals, along the rear edge and down beside the Daisy | Pin 22 |
-| `BATT_SENSE` | R13/C17, up between J6's MUTE and BAT terminals, then the same way | Pin 25 |
-| `SPK_EN` | Q2's gate, up beside R23 | Pin 28 |
-| `DISPLAY_UART_TX` | R8, up through J3's TX/GND gap, B.Cu along the rear edge and down beside the Daisy | Pin 14 |
-| `DISPLAY_UART_RX` | R9/R24, up through J3's RX/TX gap, then the same way | Pin 15 |
-
-- **The order:** lanes that end on the rear row (pins 22, 25, 28) sit above those that end on the front row (14, 15), and within each
-  group the lane that runs farthest sits nearest the middle. That fixes the order in the table.
-- **Daisy VIN (`+5V`, 0.6 mm)** doesn't use the lanes. It leaves C4 beside Q1, goes up between J6's 5V terminal and J3, and runs along
-  the rear edge above the Daisy's rear socket row to pin 39. The Daisy's supply current never shares copper with the analog `+5V`
-  branch, which leaves C5. The 60 mm run at 0.6 mm drops ≈ 15 mV at 250 mA.
+- **Daisy VIN (`+5V`, 0.6 mm)** leaves C4 beside Q1 and runs along the rear edge, above the Daisy's rear socket row, to pin 39. The
+  Daisy's supply current never shares copper with the analog `+5V` branch, which leaves C5. The 60 mm run at 0.6 mm drops ≈ 15 mV at
+  250 mA.
 - **Why the display UART uses B.Cu:** J3 is on the far side of J6, so on F.Cu TX and RX would have to cross every J6 column. They go up
   through J3's pin gaps instead, drop to B.Cu, run along the rear edge above J6 and J3 (a strip of the back pour that carries nothing),
-  and come back up beside the Daisy below `SPK_EN`. They're slow logic behind 10k resistors.
-- **`HP_DETECT`:** from TP1 up on F.Cu, onto B.Cu for 4 mm under `AUDIO_OUT_1` and `AUDIO_OUT_2`, up on F.Cu between pins 19 and 20,
-  and onto B.Cu again for the last 5.7 mm to pin 23, under the lanes. It's a switch to GND read by a GPIO, so neither hop matters.
-- **The J6 and J3 columns:** each terminal reaches the top part of its column on F.Cu, and the parts in a column join on F.Cu.
-  R22 is fed from C17 down the gap between the MUTE and BAT columns, and R18 reaches C5 on a 0.5 mm trace.
-
-### 3D models
-- **A1** uses `3dmodels/Electrosmith_Daisy_Seed_placeholder.step` on two stock `PinSocket_1x20_P2.54mm_Vertical` models (8.5 mm), at x = 0 and 15.24.
-  **J1** uses `3dmodels/Neutrik_NRJ4HF_placeholder.step`. KiCad ships no model for either part, so the board points at these
-  placeholders from `make_placeholders.py`. Re-running "Update footprints from library" on A1 or J1 resets the paths to KiCad's missing models.
-- **The Daisy placeholder is the original Seed's outline** (micro-USB, ~1 mm overhang, 3 mm tall). The Seed3's USB-C overhangs the
-  PCB by 1.55 mm and stands 3.25 mm tall (Seed3 datasheet, page 8). Allow for that when checking the enclosure.
-- **J2/J4** use `3dmodels/SameSky_SJ3-35063AG_placeholder.step`, set in the project footprint itself, so a footprint update keeps it.
+  and come back up beside the Daisy. They're slow logic behind 10k resistors.
+- **`HP_DETECT`** hops onto B.Cu twice, for 4 mm under `AUDIO_OUT_1` and `AUDIO_OUT_2` and for the last 5.7 mm to pin 23. It's a
+  switch to GND read by a GPIO, so neither hop matters.
 
 ### U2 (TSSOP-16)
 - U2's footprint is `Package_SO:TSSOP-16_4.4x5mm_P0.65mm`: 0.65 mm pitch and no exposed pad, so it's soldered with an iron (flux, a
@@ -578,43 +526,6 @@ DigiKey. Each part's symbol has `MPN`, `Manufacturer`, `DigiKey` and `Datasheet`
 `seed3-carrier-digikey.csv` is the order (DigiKey's BOM upload format, one line per part number). Part numbers are as of 2026-10-29;
 check stock before ordering.
 
-**SMD**
-
-| DigiKey | Part | Refs |
-|---|---|---|
-| 311-1.00KFRCT-ND | 1k 1% 1206 (YAGEO RC1206FR-071KL) | R2 R11 R21 |
-| 13-RC0805FR-13470RLCT-ND | 470 Ω 1% 0805 (YAGEO RC0805FR-13470RL) | R5 R20 R23 |
-| 311-3.30KCRCT-ND | 3.3k 1% 0805 (YAGEO RC0805FR-073K3L) | R10 |
-| 311-100KFRCT-ND | 100k 1% 1206 (YAGEO RC1206FR-07100KL) | R12 R17 R18 R19 R24 |
-| 311-1.00MFRCT-ND | 1M 1% 1206 (YAGEO RC1206FR-071ML) | R1 |
-| 311-10.0KFRCT-ND | 10k 1% 1206 (YAGEO RC1206FR-0710KL) | R3 R4 R6 R7 R8 R9 R13 R22 |
-| 311-10.0KCRCT-ND | 10k 1% 0805 (YAGEO RC0805FR-0710KL) | R25 R26 R27 R28 |
-| 1276-1014-1-ND | 100 pF 50 V C0G 0805 (Samsung CL21C101JBANNNC) | C1 |
-| 399-C1206C102J5GACTUCT-ND | 1 nF 50 V C0G 1206 (KEMET C1206C102J5GACTU) | C3 C9 |
-| 399-C0805C332J5GACTUCT-ND | 3.3 nF 50 V C0G 0805 (KEMET C0805C332J5GACTU) | C16 |
-| 399-C1206C105K5RACTUCT-ND | 1 µF 50 V X7R 1206 (KEMET C1206C105K5RACTU) | C2 |
-| 1276-1017-1-ND | 100 nF 50 V X7R 1206 (Samsung CL31B104KBCNNNC) | C4 C6 C17 |
-| 490-6539-1-ND | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 |
-| 1276-2415-1-ND | 4.7 µF 25 V X5R 0805 (Samsung CL21A475KACLRNC) | C10 C11 |
-| 399-C0805C105K5RACTUCT-ND | 1 µF 50 V X7R 0805 (KEMET C0805C105K5RACTU) | C12 C13 C14 C15 |
-| 1727-PESD5V0S1BAFCT-ND | PESD5V0S1BAF bidirectional ESD, SOD-323 (Nexperia) | D1 D2 D3 D4 D5 |
-| 785-1001-1-ND | AO3401A P-MOSFET, SOT-23 (Alpha & Omega) | Q1 |
-| 1727-8643-1-ND | 2N7002NXAKR N-MOSFET, SOT-23 (Nexperia) | Q2 |
-| 296-TLV9061QDBVRQ1CT-ND | TLV9061QDBVRQ1, SOT-23-5 (Texas Instruments) | U1 |
-| MAX9722AEUE+-ND | MAX9722AEUE+, TSSOP-16 (Analog Devices) | U2 |
-
-**Through hole**
-
-| DigiKey | Part | Refs |
-|---|---|---|
-| 732-8628-1-ND | 47 µF 16 V radial electrolytic (Würth 860010472005) | C5 |
-| 3937-NRJ4HF-ND | Neutrik NRJ4HF ¼" jack | J1 |
-| 2223-SJ3-35063AG-ND | Same Sky SJ3-35063AG 3.5 mm jack | J2 J4 |
-| 277-1722-ND | Phoenix Contact PT 1,5/3-3,5-H (1984620), 3-way 3.5 mm screw terminal | J3 |
-| 277-1721-ND | Phoenix Contact PT 1,5/2-3,5-H (1984617), 2-way 3.5 mm screw terminal | J5 |
-| 277-1860-ND | Phoenix Contact PT 1,5/4-3,5-H (1984633), 4-way 3.5 mm screw terminal | J6 |
-| — | 1×20 2.54 mm female header, 8.5 mm | 2 per board, for the Daisy (A1). Not in the DigiKey CSV yet |
-
 - **U2:** the EUE suffix is the TSSOP; the ETE is the QFN. Don't substitute the MAX9722B: it has a fixed −2 V/V gain, and R25–R28
   assume the A.
 - **U1** is the automotive-grade TLV9061-Q1 in the same SOT-23-5 (DBV) package. The symbol's Value still reads TLV9061IDBVR; either
@@ -623,9 +534,10 @@ check stock before ordering.
   which adds distortion.
 - **16 V for C7 and C5:** C7's 16 V part derates better under DC bias than a 10 V part. C5 is 16 V too.
 - **Screw terminals:** J3, J5 and J6 are the Phoenix PT 1,5 blocks the footprints are drawn for, so J6 is a single 4-way block.
-- **R5, R10, R20, R23, R25–R28, C1, C10 and C11 are 0805.** They were picked when the parts came from JLC's basic library, which
-  stocks them in 0805, and R25–R28 had to fit around U2. C10/C11 sit at ≈ 0 V DC, so a 25 V X5R part loses no capacitance to DC bias.
-  C12–C15 are 1 µF, the value the MAX9722A datasheet uses for all four charge-pump and supply caps.
+- **0805 and 1206:** both solder easily with an iron. R25–R28 are 0805 to fit around U2. C10/C11 sit at ≈ 0 V DC, so a 25 V X5R
+  0805 part loses no capacitance to DC bias. C12–C15 are 1 µF, the value the MAX9722A datasheet uses for all four charge-pump and
+  supply caps.
 - **TP1** is a bare 2 mm copper pad, not a part, so it has nothing to order.
-- **JLC assembly:** the schematic no longer has LCSC part numbers, so a JLC assembly order would need them added back. The last
-  version that had them is commit c8d6067, with JLC stock and basic/extended types as of 2026-10-25.
+- **Daisy sockets:** two 1×20 2.54 mm female headers, 8.5 mm tall, aren't in the DigiKey CSV yet.
+- **JLC assembly:** the schematic has no LCSC part numbers, so a JLC assembly order would need them added. Commit c8d6067 has a set,
+  with JLC stock as of 2026-10-25.
