@@ -26,7 +26,7 @@ All three are 3.5 mm screw terminals on the carrier. Seen from the wire side, J6
 - 5.0 V ± 5 % (4.75–5.25 V) at J6, never above 5.5 V: the carrier's op-amp (U1) and headphone amp (U2) run straight from it.
   The carrier's Q1 drops tens of mV, and its firmware won't start audio below 4.7 V or keep it running below 4.4 V.
 - The carrier draws well under 1 A. The Daisy takes roughly 100–200 mA.
-- One 5 V wire and one GND wire on J6 (a KF350 contact is rated 10 A). The display's ground returns with its own power pair, though
+- One 5 V wire and one GND wire on J6 (a Phoenix PT 1,5 contact is rated 17.5 A). The display's ground returns with its own power pair, though
   some of its return current comes back through J3's GND and across to J6, which sit side by side on the carrier.
 - The carrier has reverse-polarity protection (Q1), but nothing else on the power board should rely on it.
 
