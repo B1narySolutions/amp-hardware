@@ -6,9 +6,9 @@ description: Check a KiCad PCB against its own DRC, schematic parity and JLCPCB'
 # Check a KiCad board for JLCPCB
 
 ```bash
-python3 tools/kicad/board_check.py <board.kicad_pcb>                      # Economic PCBA, green mask
-python3 tools/kicad/board_check.py <board.kicad_pcb> --allow-unrouted     # mid-layout: unrouted becomes a warning
-python3 tools/kicad/board_check.py <board.kicad_pcb> --assembly standard --mask-color black -v --json <scratch>/report.json
+uv run tools/kicad/board_check.py <board.kicad_pcb>                      # Economic PCBA, green mask
+uv run tools/kicad/board_check.py <board.kicad_pcb> --allow-unrouted     # mid-layout: unrouted becomes a warning
+uv run tools/kicad/board_check.py <board.kicad_pcb> --assembly standard --mask-color black -v --json <scratch>/report.json
 ```
 
 It never modifies the board and takes about 6 s. Exit status 1 means errors (`--strict` counts warnings too).

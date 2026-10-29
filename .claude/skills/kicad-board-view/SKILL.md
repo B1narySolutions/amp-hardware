@@ -5,13 +5,13 @@ description: Render a KiCad PCB (.kicad_pcb) to a PNG you can look at, whole or 
 
 # View a KiCad board
 
-Render with `tools/kicad/board_view.py` (system `python3`, needs matplotlib; it calls KiCad's Python itself), then
+Render with `tools/kicad/board_view.py` (through `uv run`, which supplies matplotlib; it calls KiCad's Python itself), then
 open the PNG with the Read tool. Write PNGs to your scratchpad, not the repo.
 
 ```bash
-python3 tools/kicad/board_view.py <board.kicad_pcb> -o <scratch>/board.png                  # whole board
-python3 tools/kicad/board_view.py <board.kicad_pcb> --around U2,C9 --margin 2 -o <scratch>/u2.png
-python3 tools/kicad/board_view.py <board.kicad_pcb> --zoom X0,X1,Y0,Y1 --net-names -o <scratch>/area.png
+uv run tools/kicad/board_view.py <board.kicad_pcb> -o <scratch>/board.png                  # whole board
+uv run tools/kicad/board_view.py <board.kicad_pcb> --around U2,C9 --margin 2 -o <scratch>/u2.png
+uv run tools/kicad/board_view.py <board.kicad_pcb> --zoom X0,X1,Y0,Y1 --net-names -o <scratch>/area.png
 ```
 
 Reading the image:

@@ -6,12 +6,12 @@ description: Check a KiCad schematic's electrical stress and design claims with 
 # Check a schematic against its parts' limits and the design's claims
 
 ```bash
-python3 tools/kicad/circuit_verify.py <board>.kicad_sch            # problems first, then the checks closest to failing
-python3 tools/kicad/circuit_verify.py <board>.kicad_sch -v         # every check, plus each assumed datasheet value
-python3 tools/kicad/circuit_verify.py <board>.kicad_sch --case "on*" --nets   # one state's cases and every net's range
-python3 tools/kicad/circuit_verify.py <board>.kicad_sch --sim-out <scratch>/cx  # save each counterexample as SPICE
-python3 tools/kicad/circuit_faults.py <board>.kicad_sch           # assembly faults: damage and test-plan coverage
-python3 tools/kicad/test_circuit_verify.py                         # the engine's and simulator's own tests
+uv run tools/kicad/circuit_verify.py <board>.kicad_sch            # problems first, then the checks closest to failing
+uv run tools/kicad/circuit_verify.py <board>.kicad_sch -v         # every check, plus each assumed datasheet value
+uv run tools/kicad/circuit_verify.py <board>.kicad_sch --case "on*" --nets   # one state's cases and every net's range
+uv run tools/kicad/circuit_verify.py <board>.kicad_sch --sim-out <scratch>/cx  # save each counterexample as SPICE
+uv run tools/kicad/circuit_faults.py <board>.kicad_sch           # assembly faults: damage and test-plan coverage
+uv run tools/kicad/test_circuit_verify.py                         # the engine's and simulator's own tests
 ```
 
 It needs `<board>.verify.py` next to the schematic (the spec) and a model in `tools/kicad/parts/` for every part that isn't

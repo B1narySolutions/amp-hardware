@@ -18,14 +18,17 @@ Contracts between boards live in `/interfaces/`.
 
 ## Requirements
 
-- KiCad 10 (tested with 10.0.5). The tools find its Python and `kicad-cli` in the default macOS install. Elsewhere, set
-  `KICAD_PYTHON` (a Python that can `import pcbnew`; on Windows, KiCad's `bin\python.exe`) and `KICAD_CLI`.
-- `python3` with matplotlib for the viewer (`pip3 install matplotlib`). The board checker only needs the standard
-  library; the circuit check needs numpy (`pip3 install numpy`). Its simulator is KiCad's own ngspice library
-  (`libngspice`), loaded directly. Set `NGSPICE_LIB` to use another copy.
+- [uv](https://docs.astral.sh/uv/getting-started/installation/). The repo root is a uv project: `pyproject.toml` lists
+  the Python packages (matplotlib for the viewer, numpy for the circuit check), `uv.lock` pins their versions and
+  `.python-version` pins Python. Run every tool from anywhere in the repo as `uv run tools/kicad/<tool>.py ...`. The first
+  run downloads Python if needed and builds `.venv`; later runs reuse it. Any `python3` with matplotlib and numpy works too.
+- KiCad 10 (tested with 10.0.5), installed separately: `pcbnew`, `kicad-cli` and ngspice come with it, not from PyPI.
+  The tools find them in the default macOS and Windows installs and in Linux distro packages. Elsewhere, set
+  `KICAD_PYTHON` (a Python that can `import pcbnew`; on Windows, KiCad's `bin\python.exe`), `KICAD_CLI` and, for the
+  circuit check's simulator, `NGSPICE_LIB` (KiCad's `libngspice`).
 
-`board_view.py` and `board_check.py` run under the system `python3` and call KiCad's Python for anything that needs `pcbnew`.
-`boardedit.py` is imported by a script you run under KiCad's Python.
+`board_view.py`, `board_check.py` and the circuit checks run in the uv environment and call KiCad's Python for anything
+that needs `pcbnew`. `boardedit.py` is imported by a script you run under KiCad's Python.
 
 ## Coordinates
 
@@ -36,9 +39,9 @@ pad 2 and at −90° above it.
 ## View
 
 ```bash
-python3 tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb -o /tmp/board.png
-python3 tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 --margin 2 -o /tmp/u2.png
-python3 tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --zoom 150,190,50,80 --net-names
+uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb -o /tmp/board.png
+uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 --margin 2 -o /tmp/u2.png
+uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --zoom 150,190,50,80 --net-names
 ```
 
 Pads: GND green, power red (a net class named like "Power", or `+5V`-style names), other nets yellow, no net grey.
@@ -49,8 +52,8 @@ The thin coloured lines are KiCad's own unrouted connections, taken from DRC. `-
 ## Check
 
 ```bash
-python3 tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb
-python3 tools/kicad/board_check.py board.kicad_pcb --assembly standard --mask-color black -v --json report.json
+uv run tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb
+uv run tools/kicad/board_check.py board.kicad_pcb --assembly standard --mask-color black -v --json report.json
 ```
 
 It never modifies the board. It runs four passes:
@@ -129,10 +132,10 @@ the result before committing.
 ## Circuit check
 
 ```bash
-python3 tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch
-python3 tools/kicad/circuit_verify.py board.kicad_sch -v --case "on*" --nets --json report.json
-python3 tools/kicad/circuit_verify.py board.kicad_sch --sim-out /tmp/counterexamples   # keep each failing run's netlist
-python3 tools/kicad/test_circuit_verify.py
+uv run tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch
+uv run tools/kicad/circuit_verify.py board.kicad_sch -v --case "on*" --nets --json report.json
+uv run tools/kicad/circuit_verify.py board.kicad_sch --sim-out /tmp/counterexamples   # keep each failing run's netlist
+uv run tools/kicad/test_circuit_verify.py
 ```
 
 DRC checks geometry; this checks electrical stress, the way a unit test checks code. It never modifies anything. The exit
@@ -219,8 +222,8 @@ one belongs in the stage only with the switch open.
 ### Fault check
 
 ```bash
-python3 tools/kicad/circuit_faults.py audio-board/rev2/seed3-carrier.kicad_sch
-python3 tools/kicad/circuit_faults.py board.kicad_sch -v --bridge-gap 0.3 --json faults.json
+uv run tools/kicad/circuit_faults.py audio-board/rev2/seed3-carrier.kicad_sch
+uv run tools/kicad/circuit_faults.py board.kicad_sch -v --bridge-gap 0.3 --json faults.json
 ```
 
 It injects one fault at a time:

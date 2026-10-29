@@ -1,6 +1,6 @@
 """Find KiCad's Python and kicad-cli, and run them.
 
-The tools run under the system python3 (which has matplotlib). Anything that needs `import pcbnew`
+The tools run in the repo's uv environment (`uv run`, which has matplotlib). Anything that needs `import pcbnew`
 runs in a subprocess under KiCad's own Python, found here.
 
 Override the search with the KICAD_PYTHON and KICAD_CLI environment variables.

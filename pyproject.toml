@@ -1,0 +1,10 @@
+# The Python environment for tools/kicad. Run a tool with `uv run tools/kicad/<tool>.py ...`: uv builds .venv from
+# uv.lock on first use. KiCad itself (pcbnew, kicad-cli, ngspice) isn't on PyPI; tools/kicad/kicadenv.py finds it.
+[project]
+name = "amp-hardware-tools"
+version = "0"
+requires-python = ">=3.9"
+dependencies = ["matplotlib", "numpy"]
+
+[tool.uv]
+package = false

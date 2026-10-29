@@ -15,26 +15,26 @@ Hardware for a capstone guitar amp, in KiCad 10:
 
 ## Commands
 
-The tools run under the system `python3`, which needs matplotlib and numpy. They find KiCad 10 at `/Applications/KiCad`
-themselves. `kicad-cli` isn't on PATH, and `pcbnew` only imports under KiCad's bundled Python:
+The tools run through `uv run`, which builds `.venv` from `pyproject.toml` and `uv.lock` (matplotlib and numpy) on first
+use. They find KiCad 10 at `/Applications/KiCad` themselves. `kicad-cli` isn't on PATH, and `pcbnew` only imports under KiCad's bundled Python:
 `/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3`.
 
 ```bash
 # Board: project DRC, schematic parity and JLC fab limits. The carrier is hand-assembled, so skip JLC's assembly rules.
-python3 tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb --assembly none
+uv run tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb --assembly none
 
 # Render the board to a PNG (write it to the scratchpad, not the repo)
-python3 tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 -o <scratch>/u2.png
+uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 -o <scratch>/u2.png
 
 # Circuit check: worst-case stress, design claims, the interface contract and the test plan's expected readings
-python3 tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch        # -v lists every check
+uv run tools/kicad/circuit_verify.py audio-board/rev2/seed3-carrier.kicad_sch        # -v lists every check
 
 # Assembly faults (opens, shorts, wrong values, solder bridges from the PCB): damage and test-plan coverage
-python3 tools/kicad/circuit_faults.py audio-board/rev2/seed3-carrier.kicad_sch
+uv run tools/kicad/circuit_faults.py audio-board/rev2/seed3-carrier.kicad_sch
 
 # The circuit checker's own tests, all or one
-python3 tools/kicad/test_circuit_verify.py
-python3 -c "import sys; sys.path.insert(0, 'tools/kicad'); import test_circuit_verify as t; t.test_values()"
+uv run tools/kicad/test_circuit_verify.py
+uv run python -c "import sys; sys.path.insert(0, 'tools/kicad'); import test_circuit_verify as t; t.test_values()"
 ```
 
 Every checker exits 1 on a failure. Scripted board edits import `tools/kicad/boardedit.py` and run under KiCad's Python.
