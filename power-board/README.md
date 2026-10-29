@@ -35,6 +35,10 @@ and the display's ESP32-S3, wired straight to the display. The power board only 
 - The carrier has reverse-polarity protection (Q1), but nothing else on the power board should rely on it.
 
 ### Power switch and battery
+- **The battery:** a 3S lithium pack sold as "3S 12V 8300mAh" ([eBay listing](https://www.ebay.com/itm/278396464326)), so 9.0 V
+  empty to 12.6 V full, 11.1 V nominal. The listing couldn't be read, so its cell type, protection board (BMS) and discharge rating are
+  unconfirmed. Check them on the pack, and fuse the battery lead on the power board either way: a pack this size can deliver far more
+  current than any wire here is rated for.
 - Put the power switch and the low-battery cutoff on the power board. The carrier can't turn the power off itself, and its firmware
   assumes the power can disappear at any time.
 - **Battery level (J6.3, BAT):** a voltage proportional to the battery, scaled to 0–3.3 V.
@@ -43,6 +47,7 @@ and the display's ESP32-S3, wired straight to the display. The power board only 
   - Record the divider's ratio and source impedance in the carrier's DESIGN.md ("Open items"), so the firmware can convert the
     reading to volts.
   - Switch the divider off with the 5 V output, so it doesn't drain the battery while the amp is off.
+  - For the 3S pack, 30 kΩ over 10 kΩ would do: a ratio of 0.25 (3.15 V at 12.6 V) from a 7.5 kΩ source.
 
 ### Speaker amp
 - **Input (J5):** wire LINE+ to the amp's IN+ and LINE− to its IN− **only**, never to the amp's GND as well. LINE− is the carrier's
@@ -57,7 +62,12 @@ and the display's ESP32-S3, wired straight to the display. The power board only 
     booting, reset or unplugged.
   - Low (speaker on) is ≈ 0.24 V against a 10 kΩ pull-up and ≈ 0.5 V against 4.7 kΩ. The amp's mute or shutdown input has to read that
     as "play" and a pulled-up line as "mute". If the chosen amp's pin works the other way, invert it on the power board.
-- **Speakers:** the speaker wiring is on the power board. The cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects. Most
+- **The speakers:** 10" 4 Ω cones, interchangeable, one at a time:
+  - Guitar-voiced: Jensen MOD10-50, 4 Ω version ([Amplified Parts](https://www.amplifiedparts.com/products/speaker-jensen-mod-10-mod10-50-50w)).
+    50 W rated, ≈ 95 dB at 1 W / 1 m, 3.08 Ω DC resistance (distributor figures; the product page couldn't be read). The amp's
+    ≈ 17 W maximum is well inside its rating, and gives roughly 105–107 dB at 1 m.
+  - "Flat" response: a 10" 4 Ω speaker, model not yet recorded. Its link was the same as the Jensen's, so the right one is still needed.
+- **Speaker wiring:** the speaker wiring is on the power board. The cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects. Most
   class D amps have a bridged output, so neither speaker wire may be grounded.
 
 #### The amp: TI TPA3118D2
@@ -68,11 +78,16 @@ The power board uses the TPA3118D2 (TPA3116D2/TPA3118D2/TPA3130D2 datasheet, SLO
 - **Input:** fully differential. LINE+ goes to the IN+ pin and LINE− to the IN− pin, each through its own coupling cap (the inputs
   sit at an internal bias). Use the same type and value on both legs so they stay matched; the datasheet suggests 1.5 µF at 20 dB.
 - **Gain and input impedance:** the gain is set by the GAIN/SLV divider, and the input impedance falls as the gain rises, from 60 kΩ
-  at 20 dB to 9 kΩ at 36 dB, ±20 %. Use 32 dB or less: 36 dB breaks the 10 kΩ-per-leg minimum. Start at 20 dB (60 kΩ, so the
-  carrier's 1 kΩ legs cost ≈ 0.15 dB), and settle it once the battery and speaker are chosen.
-- **Supply:** 4.5–26 V, straight from the battery. The battery voltage and speaker impedance are still open; they set the gain and
-  the output power.
-- **Output:** bridged, or one channel in PBTL for a single speaker. Neither speaker wire may be grounded.
+  at 20 dB to 9 kΩ at 36 dB, ±20 %. Use 32 dB or less: 36 dB breaks the 10 kΩ-per-leg minimum.
+- **Use 20 dB, the lowest setting.** The carrier's full scale (1 Vrms, ≈ 0.98 Vrms after its 1 kΩ legs into 60 kΩ) becomes
+  ≈ 9.8 Vrms, which already clips on the 3S battery: ≈ 1.5 dB below full scale on a full pack, ≈ 2.5 dB at 11.1 V and ≈ 4.5 dB near
+  9 V. The firmware should cap the speaker level about 5 dB below full scale (or use the PLIMIT pin). A higher gain would only clip sooner.
+- **Supply:** 4.5–26 V, straight from the 3S battery (9.0–12.6 V). AVCC is then always above 5 V, so the MUTE pull-up can go to the
+  5 V rail.
+- **Output:** bridged, or both channels in PBTL for the single speaker (PBTL halves each output stage's current, so it runs cooler).
+  Neither speaker wire may be grounded. Into 4 Ω, expect roughly 17 W at clipping on a full pack, 13 W at 11.1 V and 9 W near 9 V
+  (estimated from the supply, allowing ≈ 0.3 Ω for the output switches and filter inductors). That draws up to ≈ 1.6 A from the
+  battery on loud peaks, far less on average.
 - **Package:** HTSSOP-32 with its thermal pad underneath. Lay the pad out with vias that can be soldered from the back, or use hot air.
 
 ### Display
