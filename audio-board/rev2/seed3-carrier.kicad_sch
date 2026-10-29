@@ -10014,6 +10014,7 @@
 		)
 		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/860010472005.pdf"
 			(at 93.98 137.16 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11712,6 +11713,7 @@
 		)
 		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 81.28 137.16 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
