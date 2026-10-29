@@ -8819,7 +8819,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://resources.jrhelec.com/documents/datasheets/Neutrik-nrj4hf-JRH.pdf"
 			(at 35.56 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -8831,6 +8831,39 @@
 			)
 		)
 		(property "Description" "Audio Jack, 2 Poles (Mono / TS), Switched Pole (Normalling)"
+			(at 35.56 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "NRJ4HF"
+			(at 35.56 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Neutrik"
+			(at 35.56 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "3937-NRJ4HF-ND"
 			(at 35.56 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -9217,7 +9250,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/8942/490_Chip_Multilayer_CAT2021_MLCC.pdf"
 			(at 74.93 191.77 0)
 			(hide yes)
 			(show_name no)
@@ -9239,7 +9272,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C77101"
+		(property "MPN" "GRM32ER61C476KE15L"
+			(at 74.93 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Murata Electronics"
+			(at 74.93 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "490-6539-1-ND"
 			(at 74.93 191.77 0)
 			(hide yes)
 			(show_name no)
@@ -9385,7 +9440,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 55.88 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -9407,7 +9462,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 55.88 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 55.88 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 55.88 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -9477,7 +9554,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 387.35 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -9499,7 +9576,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C474892"
+		(property "MPN" "1984617"
+			(at 387.35 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 387.35 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
 			(at 387.35 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -9569,7 +9668,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 68.58 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -9591,7 +9690,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
+		(property "MPN" "RC0805FR-13470RL"
+			(at 68.58 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 68.58 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
 			(at 68.58 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -9891,7 +10012,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/860010472005.pdf"
 			(at 93.98 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9911,7 +10032,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C2835642"
+		(property "MPN" "860010472005"
+			(at 93.98 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Würth Elektronik"
+			(at 93.98 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "732-8628-1-ND"
 			(at 93.98 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -9982,7 +10125,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 64.77 191.77 0)
 			(hide yes)
 			(show_name no)
@@ -10004,7 +10147,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 64.77 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 64.77 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 64.77 191.77 0)
 			(hide yes)
 			(show_name no)
@@ -10072,7 +10237,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 55.88 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -10094,7 +10259,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 55.88 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 55.88 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 55.88 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -10317,7 +10504,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.samsungsem.com/resources/file/global/support/product_catalog/MLCC_2512.pdf"
 			(at 330.2 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -10338,7 +10525,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A475KAQNNNE"
+		(property "MPN" "CL21A475KACLRNC"
 			(at 330.2 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -10349,7 +10536,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
+		(property "Voltage" "25V"
+			(at 330.2 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 330.2 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-2415-1-ND"
 			(at 330.2 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -10577,7 +10786,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 346.71 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -10599,7 +10808,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "MPN" "RC1206FR-07100KL"
+			(at 346.71 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 346.71 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
 			(at 346.71 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -10742,7 +10973,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 173.99 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -10764,7 +10995,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 173.99 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 173.99 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 173.99 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -10834,7 +11087,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 299.72 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -10856,7 +11109,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C26010"
+		(property "MPN" "RC0805FR-073K3L"
+			(at 299.72 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 299.72 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-3.30KCRCT-ND"
 			(at 299.72 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -10924,7 +11199,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.samsungsem.com/resources/file/global/support/product_catalog/MLCC_2512.pdf"
 			(at 330.2 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -10945,7 +11220,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A475KAQNNNE"
+		(property "MPN" "CL21A475KACLRNC"
 			(at 330.2 60.96 90)
 			(hide yes)
 			(show_name no)
@@ -10956,7 +11231,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
+		(property "Voltage" "25V"
+			(at 330.2 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 330.2 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-2415-1-ND"
 			(at 330.2 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11027,7 +11324,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 38.1 233.68 0)
 			(hide yes)
 			(show_name no)
@@ -11049,7 +11346,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C474892"
+		(property "MPN" "1984633"
+			(at 38.1 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 38.1 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1860-ND"
 			(at 38.1 233.68 0)
 			(hide yes)
 			(show_name no)
@@ -11201,7 +11520,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 64.77 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -11223,7 +11542,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
+		(property "MPN" "RC1206FR-071KL"
+			(at 64.77 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 64.77 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
 			(at 64.77 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -11369,7 +11710,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 81.28 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11389,7 +11730,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
+		(property "Voltage" "50V"
+			(at 81.28 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 81.28 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 81.28 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
 			(at 81.28 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -11460,7 +11834,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/609/CL21C101JBANNNC_Spec.pdf"
 			(at 46.99 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -11482,7 +11856,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C1790"
+		(property "Voltage" "50V"
+			(at 46.99 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL21C101JBANNNC"
+			(at 46.99 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 46.99 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1014-1-ND"
 			(at 46.99 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -11552,7 +11959,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 59.69 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -11574,7 +11981,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17927"
+		(property "MPN" "RC1206FR-071ML"
+			(at 59.69 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 59.69 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00MFRCT-ND"
 			(at 59.69 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -11642,7 +12071,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 88.9 228.6 0)
 			(hide yes)
 			(show_name no)
@@ -11664,7 +12093,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 88.9 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 88.9 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 88.9 228.6 0)
 			(hide yes)
 			(show_name no)
@@ -11734,7 +12185,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 172.72 248.92 0)
 			(hide yes)
 			(show_name no)
@@ -11756,7 +12207,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "MPN" "RC1206FR-07100KL"
+			(at 172.72 248.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 172.72 248.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
 			(at 172.72 248.92 0)
 			(hide yes)
 			(show_name no)
@@ -11826,7 +12299,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 350.52 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -11848,7 +12321,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "Voltage" "50V"
+			(at 350.52 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 350.52 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 350.52 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
 			(at 350.52 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -11918,7 +12424,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 96.52 231.14 0)
 			(hide yes)
 			(show_name no)
@@ -11940,7 +12446,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
+		(property "Voltage" "50V"
+			(at 96.52 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 96.52 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 96.52 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
 			(at 96.52 231.14 0)
 			(hide yes)
 			(show_name no)
@@ -12087,7 +12626,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 73.66 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -12109,7 +12648,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C1885"
+		(property "Voltage" "50V"
+			(at 73.66 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C1206C102J5GACTU"
+			(at 73.66 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 73.66 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C102J5GACTUCT-ND"
 			(at 73.66 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -12180,7 +12752,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1256/CL31B104KBCNNNC_Spec.pdf"
 			(at 25.4 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -12202,7 +12774,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C24497"
+		(property "Voltage" "50V"
+			(at 25.4 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL31B104KBCNNNC"
+			(at 25.4 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 25.4 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-1017-1-ND"
 			(at 25.4 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -12425,7 +13030,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 173.99 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -12447,7 +13052,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 173.99 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 173.99 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 173.99 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -12540,7 +13167,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C39461671"
+		(property "MPN" "SJ3-35063AG"
+			(at 40.64 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Same Sky (Formerly CUI Devices)"
+			(at 40.64 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "2223-SJ3-35063AG-ND"
 			(at 40.64 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -12716,7 +13365,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C8545"
+		(property "MPN" "2N7002NXAKR"
+			(at 180.34 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 180.34 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-8643-1-ND"
 			(at 180.34 246.38 0)
 			(hide yes)
 			(show_name no)
@@ -12866,7 +13537,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 299.72 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -12888,7 +13559,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C486355"
+		(property "Voltage" "50V"
+			(at 299.72 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0805C332J5GACTU"
+			(at 299.72 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 299.72 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C332J5GACTUCT-ND"
 			(at 299.72 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -13037,7 +13741,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
 			(at 168.91 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -13059,7 +13763,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C474893"
+		(property "MPN" "1984620"
+			(at 168.91 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Phoenix Contact"
+			(at 168.91 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1722-ND"
 			(at 168.91 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -13231,7 +13957,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C39461671"
+		(property "MPN" "SJ3-35063AG"
+			(at 391.16 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Same Sky (Formerly CUI Devices)"
+			(at 391.16 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "2223-SJ3-35063AG-ND"
 			(at 391.16 143.51 0)
 			(hide yes)
 			(show_name no)
@@ -13490,7 +14238,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "MPN" "AO3401A"
+			(at 30.48 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Alpha & Omega Semiconductor Inc."
+			(at 30.48 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "785-1001-1-ND"
 			(at 30.48 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -13716,7 +14486,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 292.1 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -13738,7 +14508,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
+		(property "MPN" "RC1206FR-071KL"
+			(at 292.1 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 292.1 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
 			(at 292.1 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -13831,7 +14623,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C398358"
+		(property "MPN" "TLV9061QDBVRQ1"
+			(at 43.18 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 43.18 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "296-TLV9061QDBVRQ1CT-ND"
 			(at 43.18 191.77 0)
 			(hide yes)
 			(show_name no)
@@ -13931,7 +14745,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C398358"
+		(property "MPN" "TLV9061QDBVRQ1"
+			(at 93.98 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 93.98 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "296-TLV9061QDBVRQ1CT-ND"
 			(at 93.98 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -14022,6 +14858,39 @@
 			)
 		)
 		(property "Description" "130mW stereo DirectDrive headphone amplifier, differential inputs, gain set by external resistors, TSSOP-16"
+			(at 363.22 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "MAX9722AEUE+"
+			(at 363.22 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Analog Devices Inc./Maxim Integrated"
+			(at 363.22 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "MAX9722AEUE+-ND"
 			(at 363.22 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -14131,7 +15000,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 340.36 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -14153,7 +15022,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
+		(property "MPN" "RC0805FR-0710KL"
+			(at 340.36 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 340.36 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
 			(at 340.36 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -14221,7 +15112,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 340.36 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -14243,7 +15134,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
+		(property "MPN" "RC0805FR-0710KL"
+			(at 340.36 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 340.36 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
 			(at 340.36 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -14311,7 +15224,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 340.36 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -14333,7 +15246,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
+		(property "MPN" "RC0805FR-0710KL"
+			(at 340.36 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 340.36 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
 			(at 340.36 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -14401,7 +15336,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 340.36 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -14423,7 +15358,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17414"
+		(property "MPN" "RC0805FR-0710KL"
+			(at 340.36 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 340.36 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KCRCT-ND"
 			(at 340.36 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -14492,7 +15449,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -14514,7 +15471,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C1848"
+		(property "Voltage" "50V"
+			(at 55.88 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C1206C105K5RACTU"
+			(at 55.88 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 55.88 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C105K5RACTUCT-ND"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -14857,7 +15847,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 375.92 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -14879,7 +15869,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "Voltage" "50V"
+			(at 375.92 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 375.92 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 375.92 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
 			(at 375.92 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -15105,7 +16128,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 381 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -15127,7 +16150,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "Voltage" "50V"
+			(at 381 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 381 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 381 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
 			(at 381 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -15198,7 +16254,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 64.77 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -15220,7 +16276,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 64.77 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 64.77 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 64.77 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -15292,7 +16370,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 307.34 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15314,7 +16392,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C1885"
+		(property "Voltage" "50V"
+			(at 307.34 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C1206C102J5GACTU"
+			(at 307.34 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 307.34 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C1206C102J5GACTUCT-ND"
 			(at 307.34 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15462,7 +16573,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 381 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -15484,7 +16595,40 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "Voltage" "50V"
+			(at 381 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0805C105K5RACTU"
+			(at 381 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 381 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
 			(at 381 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -16096,7 +17240,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 311.15 228.6 0)
 			(hide yes)
 			(show_name no)
@@ -16118,7 +17262,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "MPN" "RC1206FR-07100KL"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
 			(at 311.15 228.6 0)
 			(hide yes)
 			(show_name no)
@@ -16188,7 +17354,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 311.15 236.22 0)
 			(hide yes)
 			(show_name no)
@@ -16210,7 +17376,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "MPN" "RC1206FR-07100KL"
+			(at 311.15 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 311.15 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
 			(at 311.15 236.22 0)
 			(hide yes)
 			(show_name no)
@@ -16434,7 +17622,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 109.22 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -16456,7 +17644,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
+		(property "MPN" "RC0805FR-13470RL"
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 109.22 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
 			(at 109.22 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -16527,7 +17737,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 213.36 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -16549,7 +17759,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
+		(property "MPN" "PESD5V0S1BAF"
+			(at 213.36 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 213.36 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
 			(at 213.36 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -16697,7 +17929,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 227.33 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -16719,7 +17951,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
+		(property "MPN" "PESD5V0S1BAF"
+			(at 227.33 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 227.33 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
 			(at 227.33 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -16867,7 +18121,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 241.3 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -16889,7 +18143,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
+		(property "MPN" "PESD5V0S1BAF"
+			(at 241.3 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 241.3 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
 			(at 241.3 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -17037,7 +18313,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 255.27 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -17059,7 +18335,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
+		(property "MPN" "PESD5V0S1BAF"
+			(at 255.27 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 255.27 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
 			(at 255.27 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -17207,7 +18505,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0S1BA.pdf"
 			(at 269.24 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -17229,7 +18527,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C19224"
+		(property "MPN" "PESD5V0S1BAF"
+			(at 269.24 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Nexperia USA Inc."
+			(at 269.24 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1727-PESD5V0S1BAFCT-ND"
 			(at 269.24 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -17388,7 +18708,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 365.76 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -17410,7 +18730,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C4410"
+		(property "MPN" "RC1206FR-071KL"
+			(at 365.76 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 365.76 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-1.00KFRCT-ND"
 			(at 365.76 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -17518,7 +18860,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 109.22 231.14 0)
 			(hide yes)
 			(show_name no)
@@ -17540,7 +18882,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17902"
+		(property "MPN" "RC1206FR-0710KL"
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 109.22 231.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-10.0KFRCT-ND"
 			(at 109.22 231.14 0)
 			(hide yes)
 			(show_name no)
@@ -17713,7 +19077,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 182.88 236.22 0)
 			(hide yes)
 			(show_name no)
@@ -17735,7 +19099,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17710"
+		(property "MPN" "RC0805FR-13470RL"
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 182.88 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
 			(at 182.88 236.22 0)
 			(hide yes)
 			(show_name no)
@@ -17815,7 +19201,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 181.61 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -17837,7 +19223,29 @@
 				)
 			)
 		)
-		(property "LCSC" "C17900"
+		(property "MPN" "RC1206FR-07100KL"
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 181.61 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-100KFRCT-ND"
 			(at 181.61 181.61 0)
 			(hide yes)
 			(show_name no)

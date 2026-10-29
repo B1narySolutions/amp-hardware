@@ -54,10 +54,11 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 ## Board
 - **ESD diodes added (D1–D5, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring.
 - **New layout:** 2-layer, 90 × 56.5 mm, with GND pours on both sides tied by stitching vias, so it fits a free capstone fab (2 layers,
-  under 100 × 100 mm). Every audio net stays on the top layer, over an unbroken ground pour. The Daisy lies flat along the rear edge and
+  under 100 × 100 mm). Every audio net stays on the top layer, over the back ground pour. The Daisy lies flat along the rear edge and
   every panel jack sits on the front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
 - **Every part hand-solderable with an iron:** 0805 and larger passives on hand-solder pads, SOT-23, SOD-323 and the TSSOP U2.
-- **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.
+- **Parts sourced from DigiKey:** `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields in the schematic, and
+  `seed3-carrier-digikey.csv` as the order.
 - **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1), R21 (J5's LINE−), R22–R24 (the
   wrong-terminal protection) and R25–R28 (U2's gain resistors) were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
   power board), which leaves gaps in the designators.

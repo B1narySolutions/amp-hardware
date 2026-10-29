@@ -129,7 +129,7 @@ through the Daisy's USB-C.
   into 10k (with R12) it costs ≈ 1.7 dB (≈ 0.83 Vrms at full scale), and ≈ 3.0 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
   cable. If `LINE_OUT` is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load. A lower R11 would cut that margin.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V with nothing plugged in.
-- **J5** is a 2-way 3.5 mm screw terminal (KF350-3.5-2P) on the right edge: pin 1 LINE+ (`LINE_OUT`), pin 2 LINE− (`LINE_REF`),
+- **J5** is a 2-way 3.5 mm screw terminal (Phoenix PT 1,5/2-3,5-H) on the right edge: pin 1 LINE+ (`LINE_OUT`), pin 2 LINE− (`LINE_REF`),
   marked on the silkscreen. It feeds the speaker amp on the power board (or an off-the-shelf class D module while prototyping). Use a
   short twisted pair routed away from the guitar input and speaker wires.
 - **Pseudo-differential output for a differential amp input.** The Daisy has one output pin per channel, so LINE− is the carrier's
@@ -202,7 +202,7 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   GND sits between 5V and the signals on J6, so a stray strand from the 5 V wire can only reach GND. Check every terminal against its
   silkscreen label before powering up. `tools/kicad/circuit_verify.py` checks each of these cases against the spec in
   `seed3-carrier.verify.py`.
-- **Bulk at the power entry:** C5 (47 µF low-ESR electrolytic) and C4 (100 nF) at Q1's output. C5's ESR damps the ringing between the
+- **Bulk at the power entry:** C5 (47 µF electrolytic) and C4 (100 nF) at Q1's output. C5's ESR damps the ringing between the
   wiring's inductance and the ceramics. C4 is the only ceramic at the entry, and the Seed3 datasheet recommends extra filtering on VIN.
 - **Local decoupling:** C6 at U1 pin 5, and C12 (PVDD) and C15 (SVDD) at U2.
 - **Display supply:** the power board feeds the display directly. Its current pulses (ESP32 Wi-Fi, backlight PWM) never flow through
@@ -233,9 +233,9 @@ Daisy output that is high then pushes current into an unpowered part on the carr
 ## Connectors
 
 ### Power board connector (J6)
-J6 is a 4-way 3.5 mm screw terminal on the rear edge, made of two KF350-3.5-2P blocks slid together (LCSC has no 4-way KF350). Wires
-screw in, so there's nothing to crimp and a damaged wire is quick to replace. It carries power, the battery level and the speaker mute.
-The power switch is on the power board, which cuts the 5 V output itself.
+J6 is a 4-way 3.5 mm screw terminal (Phoenix PT 1,5/4-3,5-H) on the rear edge. Wires screw in, so there's nothing to crimp and a
+damaged wire is quick to replace. It carries power, the battery level and the speaker mute. The power switch is on the power board,
+which cuts the 5 V output itself.
 
 | Pin | Silkscreen | Net | Direction | Daisy pin | Use |
 |---|---|---|---|---|---|
@@ -245,8 +245,8 @@ The power switch is on the power board, which cuts the 5 V output itself.
 | 4 | MUTE | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`) via Q2 and R23 | Open-drain speaker-amp mute (see "Output mute") |
 
 - **Pin order:** seen from the wire side, the terminals read 5V, GND, BAT, MUTE from left to right. GND sits between 5V and the signals.
-- **One 5 V and one GND pin:** the carrier draws well under 1 A now that the display has its own supply, and a KF350 contact is rated
-  10 A. A single GND is fine because the speaker amp's input is differential and LINE− connects only to the amp's IN− (see "Speaker
+- **One 5 V and one GND pin:** the carrier draws well under 1 A now that the display has its own supply, and a PT 1,5 contact is rated
+  17.5 A. A single GND is fine because the speaker amp's input is differential and LINE− connects only to the amp's IN− (see "Speaker
   send"), so no supply current returns through J5.
 - **R13/R22 (10k/10k) halve the battery level:** 0–3.3 V on BAT reads as 0–1.65 V on pin 25, and a 5 V wire on BAT reaches only
   2.65 V (see "Wires on the wrong terminal"). It also keeps the top of the range clear of the ADC's: the ADC reads up to its own 3.3 V
@@ -269,7 +269,7 @@ The power switch is on the power board, which cuts the 5 V output itself.
 - Supply the display's 5 V directly, with its own wire pair.
 
 ### Display connector (J3)
-J3 is a 3-way 3.5 mm screw terminal (KF350-3.5-3P) on the rear edge next to J6: 1 GND, 2 `UART_TX_CONN` (TX), 3 `UART_RX_CONN` (RX),
+J3 is a 3-way 3.5 mm screw terminal (Phoenix PT 1,5/3-3,5-H) on the rear edge next to J6: 1 GND, 2 `UART_TX_CONN` (TX), 3 `UART_RX_CONN` (RX),
 marked on the silkscreen. The display takes its power from the power board, so only the UART and its ground reference come here.
 R8 (10k, Daisy TX) and R9 (10k, Daisy RX) sit in series with the UART between J3 and Daisy USART1 (pins 14/15,
 `DISPLAY_UART_TX`/`DISPLAY_UART_RX`). They limit current if a wire lands on the wrong terminal or the display and the Daisy power up at
@@ -330,8 +330,6 @@ USB stays on the Daisy's own connector.
   mute/shutdown pin matches, or invert it on the power board.
 - **`BATT_SENSE` divider:** the power board sets the ratio and source impedance, and R13/R22 then halve it (less with a high source
   impedance). Record both here so the firmware can convert the reading to volts.
-- **J6 fit:** J6 is two KF350-3.5-2P blocks slid together on a 4-position footprint. Check that the interlocked pair keeps the 3.5 mm
-  pitch across the joint before soldering, or buy a true 4-way 3.5 mm block elsewhere.
 - **Wire ends:** use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** full scale is ≈ 0.60 Vrms per channel (TEST_PLAN 7.8). If that's too loud, or the hiss is audible with
@@ -355,8 +353,7 @@ USB stays on the Daisy's own connector.
   unrouted connections.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
   the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
-- **U2 sourcing:** LCSC and JLC don't list the MAX9722AEUE+ (searched 2026-10-29). Buy it from DigiKey or Mouser and check stock
-  before ordering boards (see "Parts sourcing").
+- **U2 stock:** check DigiKey's stock of the MAX9722AEUE+ before ordering boards (see "Parts sourcing").
 - **Soldering U2:** the TSSOP's 0.65 mm pitch takes flux and a fine tip or drag soldering. TEST_PLAN 0.1, 1.6a and 1.8 catch bridges.
 - **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing.
 - **Front panel thickness:** under 3 mm, Neutrik's limit for the NRJ4HF's nut. The SJ3 noses stand 3.0 mm proud of their faces, so a
@@ -374,13 +371,25 @@ Breadboard and PCB Design* (Artech House, 2021).
 | F.Cu (top) | Every part and nearly all routing, with a GND pour filling the space around it |
 | B.Cu (bottom) | A GND pour over the whole board. Its only traces are a few short hops (below) and the display UART along the rear edge |
 
-- **The bottom is the ground plane.** Every audio net stays on F.Cu from end to end and never changes layer, so each has unbroken B.Cu
-  ground under its whole length, 1.5 mm below. Where two top-layer traces have to cross, the one that doesn't carry audio drops to B.Cu
-  for a few mm: the analog `+5V` branch (six hops, 2–5 mm each), the `+5V` link between U2's SVDD pins (2.6 mm, under U2),
-  `HP_DETECT` (4 mm and 5.7 mm) and the display UART.
+- **The bottom is the ground plane.** Every audio net stays on F.Cu from end to end and never changes layer, with B.Cu ground 1.5 mm
+  below. Where two top-layer traces have to cross, the one that doesn't carry audio drops to B.Cu for a few mm: the analog `+5V` branch
+  (six hops, about 2–3 mm each), the `+5V` link between U2's SVDD pins (2.6 mm, under U2), `HP_DETECT` (4 mm and 5.7 mm) and the
+  display UART.
+- **The hops cut the back pour under some audio traces.** Each hop leaves a slot about 1 mm wide (the trace and its clearance) right
+  under the audio trace it crosses: `+5V` under `AUDIO_IN_1`, `AUX_TIP`, `AUX_RING`, `AUDIO_OUT_1`, `AUDIO_OUT_2` and `HP_SOURCE`, and
+  `HP_DETECT` under `AUDIO_OUT_1` and `AUDIO_OUT_2`. No hop crosses the 1 MΩ guitar node between J1 and U1. The slots don't matter:
+  - **Return path:** the front pour runs beside each audio trace across the slot, with a stitching via 1.7–2.7 mm from each hop, so
+    return current goes around it. The detour adds about 1 nH, ≈ 0.1 mΩ at 20 kHz. These nets carry under 1 mA, so the ground shift
+    is about 0.1 µV.
+  - **Coupling from `+5V`:** each crossing is at most about 20 fF through the 1.5 mm board. Into the highest-impedance crossed net
+    (`HP_SOURCE`, ≈ 2 kΩ) that couples about −106 dB at 20 kHz: 50 mV of ripple on `+5V` becomes ≈ 0.25 nV, against U2's 6 µVrms
+    output noise.
+  - **Fast edges:** a 3 mm slot only matters at many GHz, and the ESD diodes sit at the jacks, ahead of every hop.
+  - **Bridging the crossings** with 0 Ω resistors on F.Cu would keep the back pour whole, at the cost of seven parts for no measurable
+    gain.
 - **Why the hops are on the supply and DC nets:** at audio frequencies return current spreads under its trace by resistance, so a short
-  slot costs almost nothing, but with the audio nets whole none of them depends on that. The `+5V` hops sit upstream of the decoupling
-  at each load (C6, C12, C15, R6's C7 filter), and the UART's long B.Cu run hugs the rear edge, where it cuts nothing.
+  slot costs almost nothing, and a layer change on an audio net would add two vias to its path. The `+5V` hops sit upstream of the
+  decoupling at each load (C6, C12, C15, R6's C7 filter), and the UART's long B.Cu run hugs the rear edge, where it cuts nothing.
 - **Front pour:** GND on F.Cu around the routing (0.3 mm clearance), tied to the back pour by about 160 stitching vias (0.6/0.3 mm,
   every 5 mm or so wherever there's room) and by the GND via beside every SMD ground pad. Between neighbouring audio traces it's a
   guard: there is a stitching via between `AUDIO_IN_2` and `AUDIO_OUT_1` below the Daisy, between INR− and OUTR and between INL− and
@@ -397,7 +406,7 @@ Breadboard and PCB Design* (Artech House, 2021).
   - Put J6 (power in) and J3 (display) side by side, so the display return current that comes back through J3's GND doesn't pass
     under U1, U2, J1 or J2.
   - U2's PGND and SGND each drop to the pours through their own via under its body. The datasheet asks for them to meet at a single
-    point; with solid ground on both layers under the part, that point is the plane right under U2.
+    point; with ground on both layers under the part (cut only by the 2.6 mm SVDD hop), that point is the plane right under U2.
 - **Why 1.6 mm:** the ¼" jacks, the SJ3 jacks and the Daisy sockets take force at every plug-in. It is also the cheapest thickness.
 - **No controlled impedance.** USB doesn't leave the Daisy, and the module handles it itself.
 
@@ -564,59 +573,59 @@ per-class ranges, including the maximums. All values are within JLC's standard 2
 - **Fiducials:** the "Fiducial pour clearance" rule keeps both pours 1 mm from FID1–FID3.
 
 ## Parts sourcing
-Build plan: a 2-layer board from the capstone's free fab (or JLC), with every part hand-soldered with an iron. JLC can still assemble
-the SMD parts (Economic, top side): every part except U2 has its LCSC number in an `LCSC` field in the schematic, copied to the board.
-Stock is JLC's, checked 2026-10-25 unless dated. For a JLC assembly order, basic parts have no loading fee, each extended part adds about
-$3 per order (4 here: C19224, C1885, C486355 and C77101, about $12, or more if C398358 turns out to be extended), and U2 would have to be
-sent as a consigned part or fitted by hand.
+Build plan: a 2-layer board from the capstone's free fab (or JLC), with every part hand-soldered with an iron. Every part comes from
+DigiKey. Each part's symbol has `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields, copied to the board, and
+`seed3-carrier-digikey.csv` is the order (DigiKey's BOM upload format, one line per part number). Part numbers are as of 2026-10-29;
+check stock before ordering.
 
-**SMD** (hand-soldered, or assembled by JLC)
+**SMD**
 
-| LCSC | Part | Refs | Type | Stock |
-|---|---|---|---|---|
-| C4410 | 1k 1% 1206 (UNI-ROYAL) | R2 R11 R21 | Basic | 1.9M |
-| C17710 | 470 Ω 1% 0805 (UNI-ROYAL 0805W8F4700T5E) | R5 R20 R23 | Basic | 2.3M (2026-10-27) |
-| C19224 | PESD5V0S1BA bidirectional ESD, SOD-323 (Nexperia) | D1 D2 D3 D4 D5 | Extended | 46k (2026-10-26) |
-| C26010 | 3.3k 1% 0805 (UNI-ROYAL 0805W8F3301T5E) | R10 | Basic | 1.7M (2026-10-27) |
-| C17900 | 100k 1% 1206 (UNI-ROYAL) | R12 R17 R18 R19 R24 | Basic | 1.0M |
-| C17927 | 1M 1% 1206 (UNI-ROYAL) | R1 | Basic | 3.8M |
-| C17902 | 10k 1% 1206 (UNI-ROYAL) | R3 R4 R6 R7 R8 R9 R13 R22 | Basic | 2.5M |
-| C17414 | 10k 1% 0805 (UNI-ROYAL 0805W8F1002T5E) | R25 R26 R27 R28 | Basic | 8.8M (2026-10-29) |
-| C1790 | 100 pF 50 V C0G 0805 (Samsung CL21C101JBANNNC) | C1 | Basic | 647k (2026-10-27) |
-| C1885 | 1 nF 50 V C0G 1206 (FH) | C3 C9 | Extended | 4.4k |
-| C486355 | 3.3 nF 50 V C0G 0805 (FH 0805CG332J500NT) | C16 | Extended | 3.9k (2026-10-26) |
-| C1848 | 1 µF 50 V X7R 1206 (Samsung) | C2 | Basic | 551k |
-| C24497 | 100 nF 50 V X7R 1206 (Samsung) | C4 C6 C17 | Basic | 1.6M |
-| C77101 | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 | Extended | 164k |
-| C1779 | 4.7 µF 25 V X5R 0805 (Samsung CL21A475KAQNNNE) | C10 C11 | Basic | 2.0M (2026-10-27) |
-| C28323 | 1 µF 50 V X7R 0805 (Samsung) | C12 C13 C14 C15 | Basic | 1.9M |
-| C15127 | AO3401A | Q1 | Basic | 642k |
-| C8545 | 2N7002 | Q2 | Basic | 2.9M |
-| C398358 | TLV9061IDBVR | U1 | Check | Check (LCSC lists 283k) |
-| — | MAX9722AEUE+ (Analog Devices, TSSOP-16) | U2 | Not at LCSC | Order from DigiKey or Mouser |
+| DigiKey | Part | Refs |
+|---|---|---|
+| 311-1.00KFRCT-ND | 1k 1% 1206 (YAGEO RC1206FR-071KL) | R2 R11 R21 |
+| 13-RC0805FR-13470RLCT-ND | 470 Ω 1% 0805 (YAGEO RC0805FR-13470RL) | R5 R20 R23 |
+| 311-3.30KCRCT-ND | 3.3k 1% 0805 (YAGEO RC0805FR-073K3L) | R10 |
+| 311-100KFRCT-ND | 100k 1% 1206 (YAGEO RC1206FR-07100KL) | R12 R17 R18 R19 R24 |
+| 311-1.00MFRCT-ND | 1M 1% 1206 (YAGEO RC1206FR-071ML) | R1 |
+| 311-10.0KFRCT-ND | 10k 1% 1206 (YAGEO RC1206FR-0710KL) | R3 R4 R6 R7 R8 R9 R13 R22 |
+| 311-10.0KCRCT-ND | 10k 1% 0805 (YAGEO RC0805FR-0710KL) | R25 R26 R27 R28 |
+| 1276-1014-1-ND | 100 pF 50 V C0G 0805 (Samsung CL21C101JBANNNC) | C1 |
+| 399-C1206C102J5GACTUCT-ND | 1 nF 50 V C0G 1206 (KEMET C1206C102J5GACTU) | C3 C9 |
+| 399-C0805C332J5GACTUCT-ND | 3.3 nF 50 V C0G 0805 (KEMET C0805C332J5GACTU) | C16 |
+| 399-C1206C105K5RACTUCT-ND | 1 µF 50 V X7R 1206 (KEMET C1206C105K5RACTU) | C2 |
+| 1276-1017-1-ND | 100 nF 50 V X7R 1206 (Samsung CL31B104KBCNNNC) | C4 C6 C17 |
+| 490-6539-1-ND | 47 µF 16 V X5R 1210 (Murata GRM32ER61C476KE15L) | C7 |
+| 1276-2415-1-ND | 4.7 µF 25 V X5R 0805 (Samsung CL21A475KACLRNC) | C10 C11 |
+| 399-C0805C105K5RACTUCT-ND | 1 µF 50 V X7R 0805 (KEMET C0805C105K5RACTU) | C12 C13 C14 C15 |
+| 1727-PESD5V0S1BAFCT-ND | PESD5V0S1BAF bidirectional ESD, SOD-323 (Nexperia) | D1 D2 D3 D4 D5 |
+| 785-1001-1-ND | AO3401A P-MOSFET, SOT-23 (Alpha & Omega) | Q1 |
+| 1727-8643-1-ND | 2N7002NXAKR N-MOSFET, SOT-23 (Nexperia) | Q2 |
+| 296-TLV9061QDBVRQ1CT-ND | TLV9061QDBVRQ1, SOT-23-5 (Texas Instruments) | U1 |
+| MAX9722AEUE+-ND | MAX9722AEUE+, TSSOP-16 (Analog Devices) | U2 |
 
-**Through hole, hand-soldered (order from LCSC)**
+**Through hole**
 
-| LCSC | Part | Refs | Stock |
-|---|---|---|---|
-| C2835642 | 47 µF 16 V radial 5 × 11 mm, 2 mm pitch, low ESR (SamYoung NXB) | C5 | 8.0k |
-| C39461671 | Same Sky SJ3-35063AG | J2 J4 | 100 |
-| C474892 | Cixi Kefa KF350-3.5-2P, 2-way 3.5 mm screw terminal | J5, and 2 slid together for J6 (3 per board) | 17.2k (2026-10-27) |
-| C474893 | Cixi Kefa KF350-3.5-3P, 3-way 3.5 mm screw terminal | J3 | 1.5k (2026-10-27) |
-| C2905423 | 1×20 2.54 mm female header, 8.5 mm | 2 per board, for the Daisy (A1) | 15.9k |
-| — | Neutrik NRJ4HF | J1 | Not at LCSC: order from Mouser, DigiKey or a Neutrik distributor |
+| DigiKey | Part | Refs |
+|---|---|---|
+| 732-8628-1-ND | 47 µF 16 V radial electrolytic (Würth 860010472005) | C5 |
+| 3937-NRJ4HF-ND | Neutrik NRJ4HF ¼" jack | J1 |
+| 2223-SJ3-35063AG-ND | Same Sky SJ3-35063AG 3.5 mm jack | J2 J4 |
+| 277-1722-ND | Phoenix Contact PT 1,5/3-3,5-H (1984620), 3-way 3.5 mm screw terminal | J3 |
+| 277-1721-ND | Phoenix Contact PT 1,5/2-3,5-H (1984617), 2-way 3.5 mm screw terminal | J5 |
+| 277-1860-ND | Phoenix Contact PT 1,5/4-3,5-H (1984633), 4-way 3.5 mm screw terminal | J6 |
+| — | 1×20 2.54 mm female header, 8.5 mm | 2 per board, for the Daisy (A1). Not in the DigiKey CSV yet |
 
-- **U2:** LCSC and JLC don't list the MAX9722AEUE+ (searched 2026-10-29), so order it from DigiKey or Mouser. The EUE suffix is the
-  TSSOP; the ETE is the QFN. Don't substitute the MAX9722B: it has a fixed −2 V/V gain, and R25–R28 assume the A.
-- **C0G for the filter caps.** C1, C9, C16 and C3 set the RC filters. X7R would be a basic part, but its capacitance changes with voltage,
-  which adds distortion. C3/C9 (C1885) and C16 (C486355) have the thinnest stock of the passives. The 50 V Yageo CC1206JRNPO9BN102 (C113881) is the
-  fallback for C1885. JLC had no 3.3 nF C0G in 1206 in stock on 2026-10-26, so C16 is 0805.
+- **U2:** the EUE suffix is the TSSOP; the ETE is the QFN. Don't substitute the MAX9722B: it has a fixed −2 V/V gain, and R25–R28
+  assume the A.
+- **U1** is the automotive-grade TLV9061-Q1 in the same SOT-23-5 (DBV) package. The symbol's Value still reads TLV9061IDBVR; either
+  part fits.
+- **C0G for the filter caps.** C1, C9, C16 and C3 set the RC filters. X7R would be cheaper, but its capacitance changes with voltage,
+  which adds distortion.
 - **16 V for C7 and C5:** C7's 16 V part derates better under DC bias than a 10 V part. C5 is 16 V too.
-- **Screw terminals:** the footprints are KiCad's Phoenix PT 1,5/x-3,5-H, the standard 3.5 mm pattern the KF350 blocks fit. LCSC
-  has no 4-way KF350 or DG350, so J6 is two 2-ways; KF350 blocks dovetail together at the same pitch.
-- **R5, R10, R20, R23, R25–R28, C1, C10 and C11 are 0805** because that is the size JLC stocks them in as basic parts (no loading fee),
-  and R25–R28 had to fit around U2. C10/C11 sit at ≈ 0 V DC, so a 25 V X5R part loses no capacitance to DC bias. C12–C15 are the basic
-  1 µF 0805 X7R (C28323), the value the MAX9722A datasheet uses for all four charge-pump and supply caps.
-- **TP1** is a bare 2 mm copper pad, not a part, so it has no LCSC number and nothing to order.
-- **Generating the JLC BOM/CPL:** only send the SMD parts. The through-hole parts also have LCSC numbers, for ordering, so filter them
-  out (or leave them unselected in JLC's BOM step) unless JLC is meant to fit them.
+- **Screw terminals:** J3, J5 and J6 are the Phoenix PT 1,5 blocks the footprints are drawn for, so J6 is a single 4-way block.
+- **R5, R10, R20, R23, R25–R28, C1, C10 and C11 are 0805.** They were picked when the parts came from JLC's basic library, which
+  stocks them in 0805, and R25–R28 had to fit around U2. C10/C11 sit at ≈ 0 V DC, so a 25 V X5R part loses no capacitance to DC bias.
+  C12–C15 are 1 µF, the value the MAX9722A datasheet uses for all four charge-pump and supply caps.
+- **TP1** is a bare 2 mm copper pad, not a part, so it has nothing to order.
+- **JLC assembly:** the schematic no longer has LCSC part numbers, so a JLC assembly order would need them added back. The last
+  version that had them is commit c8d6067, with JLC stock and basic/extended types as of 2026-10-25.
