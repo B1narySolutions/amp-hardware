@@ -100,6 +100,7 @@ for pin in ("A1.33", "A1.38"):
 stage1.measure("1.8", "J4.3", "GND", expect="open")
 stage1.measure("1.8", "J4.2", "GND", expect="open")
 stage1.measure("1.8", "J4.2", "+5V", expect="open")
+stage1.measure("1.8", "J4.3", "J4.2", expect="open", note="OUTL to OUTR")
 stage1.measure("1.8a", "J4.3", "C10.2", expect=20e3, note="R26 + R25")
 stage1.measure("1.8a", "J4.2", "C11.2", expect=20e3, note="R28 + R27")
 stage1.measure("1.10", "J1.T", "GND", expect="open", note="plug in J1, so the tip switch is open")

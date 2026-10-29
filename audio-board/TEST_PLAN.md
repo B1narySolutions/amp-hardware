@@ -85,7 +85,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.6 | PVSS (C14 pad 1) → GND and → `+5V` (C5 `+`) | High (no short) | C14 shorted; U2.7 (PVSS) bridged to U2.8 (SGND) |
 | 1.6a | U2 charge-pump pins: C13 pad 1 (C1P) → C13 pad 2 (C1N), → `+5V` and → GND; C13 pad 2 → GND and → C14 pad 1 (PVSS) | High (no short) on all five | C13 shorted; U2 pins 3–4 (PVDD/C1P), 4–5 (C1P/PGND), 5–6 (PGND/C1N) or 6–7 (C1N/PVSS) bridged |
 | 1.7 | A1.33 and A1.38 → GND and → `+5V` | Open (not connected on the carrier) | Stray copper or a socket bridge |
-| 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V` | High (no short), not < 100 Ω | TSSOP bridge: OUTR (12) to SVDD (11), or an output to SVSS (13) |
+| 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V`, J4 tip → J4 ring | High (no short), not < 100 Ω | TSSOP bridge: OUTR (12) to SVDD (11), an output to SVSS (13), or OUTR (12) to OUTL (14) |
 | 1.8a | J4 tip → C10 pad 2; J4 ring → C11 pad 2 | ≈ 20 kΩ (R26 + R25; R28 + R27) | A gain resistor missing, open or the wrong value |
 | 1.9 | J1 tip → GND, no plug | ≈ 0 Ω (tip-normal shorts to GND) | J1 switch / footprint issue |
 | 1.10 | J1 tip → GND, plug inserted (other end open) | Open once C1 and C2 charge (both block DC); not ≈ 0 Ω | ≈ 0 Ω = plug not lifting the switch |
