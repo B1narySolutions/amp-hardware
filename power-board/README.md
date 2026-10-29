@@ -60,6 +60,21 @@ and the display's ESP32-S3, wired straight to the display. The power board only 
 - **Speakers:** the speaker wiring is on the power board. The cone's spade tabs (6.3 mm / 4.8 mm) take crimped quick-disconnects. Most
   class D amps have a bridged output, so neither speaker wire may be grounded.
 
+#### The amp: TI TPA3118D2
+The power board uses the TPA3118D2 (TPA3116D2/TPA3118D2/TPA3130D2 datasheet, SLOS708G). It meets each point above as follows:
+- **Mute:** its MUTE pin is active high (high = outputs Hi-Z, low = outputs on) with TTL levels, so `SPK_MUTE` wires straight to it
+  with the pull-up above and no inverter. MUTE's levels are compliant with AVCC, so pull it up to a rail no higher than AVCC. Use SDZ
+  (active low) for the power board's own power-up and power-down sequencing.
+- **Input:** fully differential. LINE+ goes to the IN+ pin and LINE− to the IN− pin, each through its own coupling cap (the inputs
+  sit at an internal bias). Use the same type and value on both legs so they stay matched; the datasheet suggests 1.5 µF at 20 dB.
+- **Gain and input impedance:** the gain is set by the GAIN/SLV divider, and the input impedance falls as the gain rises, from 60 kΩ
+  at 20 dB to 9 kΩ at 36 dB, ±20 %. Use 32 dB or less: 36 dB breaks the 10 kΩ-per-leg minimum. Start at 20 dB (60 kΩ, so the
+  carrier's 1 kΩ legs cost ≈ 0.15 dB), and settle it once the battery and speaker are chosen.
+- **Supply:** 4.5–26 V, straight from the battery. The battery voltage and speaker impedance are still open; they set the gain and
+  the output power.
+- **Output:** bridged, or one channel in PBTL for a single speaker. Neither speaker wire may be grounded.
+- **Package:** HTSSOP-32 with its thermal pad underneath. Lay the pad out with vias that can be soldered from the back, or use hot air.
+
 ### Display
 - Supply the display's 5 V directly from the power board, with its own wire pair, so its current pulses (ESP32-S3 Wi-Fi, backlight PWM)
   never flow through the carrier's `+5V`.

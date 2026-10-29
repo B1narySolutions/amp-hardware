@@ -326,8 +326,8 @@ USB stays on the Daisy's own connector.
 
 ## Open items
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and J5 go silent and `SPK_MUTE` mutes within ~10 ms.
-- **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). Check that the chosen amp's
-  mute/shutdown pin matches, or invert it on the power board.
+- **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). The power board's amp is the
+  TPA3118D2, whose MUTE pin is active high, so it matches with no inverter (see power-board/README.md). Check it on the built boards.
 - **`BATT_SENSE` divider:** the power board sets the ratio and source impedance, and R13/R22 then halve it (less with a high source
   impedance). Record both here so the firmware can convert the reading to volts.
 - **Wire ends:** use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
@@ -349,8 +349,9 @@ USB stays on the Daisy's own connector.
 - **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J6 power is removed and restored with USB
   connected and audio playing. Record how long the input stays outside SVSS − 0.3 V … SVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
-- **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
-  the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
+- **Line-out level:** with no buffer, R11 (1k) is the output impedance. The loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below
+  that. The TPA3118D2's input impedance depends on its gain setting: ≈ 60k at 20 dB (≈ 0.15 dB loss), down to 9k at 36 dB, which the
+  power board must not use. Recheck once its gain is set.
 - **U2 stock:** check DigiKey's stock of the MAX9722AEUE+ before ordering boards (see "Parts sourcing").
 - **Soldering U2:** the TSSOP's 0.65 mm pitch takes flux and a fine tip or drag soldering. TEST_PLAN 0.1, 1.6a and 1.8 catch bridges.
 - **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing. The Seed3's
