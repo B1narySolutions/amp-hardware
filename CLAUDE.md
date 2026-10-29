@@ -20,6 +20,9 @@ use. They find KiCad 10 at `/Applications/KiCad` themselves. `kicad-cli` isn't o
 `/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3`.
 
 ```bash
+# Everything below on every board, one summary line per check (failing reports printed in full)
+uv run tools/check_all.py
+
 # Board: project DRC, schematic parity and JLC fab limits. The carrier is hand-assembled, so skip JLC's assembly rules.
 uv run tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb --assembly none
 
@@ -79,8 +82,9 @@ board outside `rev2/` reports `lib_footprint_issues`.
 
 ## Working rules
 
-- **After a schematic or board change,** run the board check, the circuit check and the fault check, and put their
-  results in the commit message: errors, pass/fail counts, and anything new that's waived or failing.
+- **After a schematic or board change,** run the board check, the circuit check and the fault check
+  (`uv run tools/check_all.py` runs all three), and put their results in the commit message: errors, pass/fail counts,
+  and anything new that's waived or failing.
 - **Don't add a waiver on your own.** Add one only when the user agrees, or when DESIGN.md already records the decision.
   Don't change a port's assumed environment in the spec to make a check pass.
 - **Before a scripted board edit,** make sure the board isn't open in KiCad: an open board has a

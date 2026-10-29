@@ -27,6 +27,10 @@ Contracts between boards live in `/interfaces/`.
   `KICAD_PYTHON` (a Python that can `import pcbnew`; on Windows, KiCad's `bin\python.exe`), `KICAD_CLI` and, for the
   circuit check's simulator, `NGSPICE_LIB` (KiCad's `libngspice`).
 
+`uv run tools/check_all.py` runs the board check on every board, the circuit and fault checks on every schematic with a
+spec, and the circuit checker's tests, and prints one summary line each. Per-board board-check options (such as
+`--assembly none` for the hand-soldered carrier) are in its `BOARD_CHECK_ARGS`.
+
 `board_view.py`, `board_check.py` and the circuit checks run in the uv environment and call KiCad's Python for anything
 that needs `pcbnew`. `boardedit.py` is imported by a script you run under KiCad's Python.
 
