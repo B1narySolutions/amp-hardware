@@ -44,3 +44,8 @@
 	(condition "A.Type == 'Via' && A.NetClass == 'Power'")
 	(constraint via_diameter (min 0.6mm) (opt 0.8mm) (max 0.8mm))
 	(constraint hole_size (min 0.3mm) (opt 0.4mm) (max 0.4mm)))
+
+# The ground pours stay 1 mm clear of the fiducials, so no copper shows inside their 2 mm mask openings.
+(rule "Fiducial pour clearance"
+	(condition "A.memberOfFootprint('FID*') && B.Type == 'Zone'")
+	(constraint clearance (min 1.0mm)))

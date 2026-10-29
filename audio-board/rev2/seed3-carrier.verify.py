@@ -90,13 +90,18 @@ stage1.measure("1.3", "J3.1", "GND", expect="short")
 stage1.measure("1.4", "/VREF", "GND", expect=(5e3, 10e3))
 stage1.measure("1.5", "J3.2", "GND", expect="open")
 stage1.measure("1.5", "J3.3", "GND", expect=110e3, note="R9 + R24")
-stage1.measure("1.6", "C15.1", "+5V", expect="open")
+stage1.measure("1.6", "C14.1", "GND", expect="open", note="PVSS")
+stage1.measure("1.6", "C14.1", "+5V", expect="open", note="PVSS")
+for a, b in (("C13.1", "C13.2"), ("C13.1", "+5V"), ("C13.1", "GND"), ("C13.2", "GND"), ("C13.2", "C14.1")):
+    stage1.measure("1.6a", a, b, expect="open", note="U2 charge-pump pins")
 for pin in ("A1.33", "A1.38"):
     stage1.measure("1.7", pin, "GND", expect="open")
     stage1.measure("1.7", pin, "+5V", expect="open")
 stage1.measure("1.8", "J4.3", "GND", expect="open")
 stage1.measure("1.8", "J4.2", "GND", expect="open")
 stage1.measure("1.8", "J4.2", "+5V", expect="open")
+stage1.measure("1.8a", "J4.3", "C10.2", expect=20e3, note="R26 + R25")
+stage1.measure("1.8a", "J4.2", "C11.2", expect=20e3, note="R28 + R27")
 stage1.measure("1.10", "J1.T", "GND", expect="open", note="plug in J1, so the tip switch is open")
 stage1.measure("1.11", "J2.3", "J2.2", expect=20e3)
 stage1.measure("1.12", "J2.3", "GND", expect=10.5e3)
@@ -127,10 +132,9 @@ stage2.voltage("2.3", "/VREF", expect=(2.45, 2.55))
 stage2.voltage("2.4", "U1.1", expect=(2.4, 2.6))
 stage2.voltage("2.4", "A1.16", expect=(2.4, 2.6))
 stage2.voltage("2.5", "U1.3", expect=(2.4, 2.6))
-stage2.voltage("2.6", "C15.1", expect=(1.0, 2.0), note="HPVDD positive")
-stage2.voltage("2.6", "C14.1", expect=(-2.0, -1.0), note="HPVSS negative")
-stage2.voltage("2.7", "J4.3", expect=(-0.005, 0.005))
-stage2.voltage("2.7", "J4.2", expect=(-0.005, 0.005))
+stage2.voltage("2.6", "C14.1", expect=(-5.0, -4.2), note="PVSS: the inverted supply")
+stage2.voltage("2.7", "J4.3", expect=(-0.01, 0.01))
+stage2.voltage("2.7", "J4.2", expect=(-0.01, 0.01))
 stage2.voltage("2.8", "J5.1", expect=(-0.05, 0.05))
 stage2.voltage("2.9", "A1.39", expect=(4.9, 5.0))
 stage2.voltage("2.9", "A1.22", expect=(2.4, 2.6))
@@ -148,18 +152,18 @@ spec.claim("AUX level, one channel", Gain("J2.3", "/AUDIO_IN_2", 1e3), lo=-28.5,
 spec.claim("Guitar loss to the codec", Gain("J1.T", "A1:in16", 1e3), lo=-1.2, hi=-0.6, cases="on",
            source="DESIGN.md Guitar input: 'R20 costs ≈ 0.8 dB'")
 for net in ("/HP_L", "/HP_R"):
-    spec.claim(f"Headphone level, {net[4:]}", Gain("A1:out18.src", net, 1e3), lo=-8.6, hi=-7.4, cases="on",
-               source="DESIGN.md Headphone output, Level: full scale (1 Vrms) puts ≈ 0.40 Vrms on each output")
+    spec.claim(f"Headphone level, {net[4:]}", Gain("A1:out18.src", net, 1e3), lo=-4.9, hi=-3.9, cases="on",
+               source="DESIGN.md Headphone output, Level: full scale (1 Vrms) puts ≈ 0.60 Vrms on each output")
 spec.claim("5V_SENSE reading", V("/5V_SENSE"), lo=2.30, hi=2.70, cases="on",
            source="DESIGN.md Firmware requirements: reads ≈ 2.4–2.5 V with +5V at 4.85–5.0 V")
 spec.claim("VREF", V("/VREF"), lo=2.30, hi=2.70, cases=["on", "daisy out"],
            source="DESIGN.md Mid-rail reference: VREF ≈ 2.5 V")
 spec.claim("Display RX current, display off", I("R8"), lo=-0.35e-3, hi=0.35e-3, cases="usb only",
            source="DESIGN.md Display connector: R8 keeps the current into the display's RX diode to ≈ 0.27 mA")
-for pin in ("1", "4"):
+for pin in ("16", "10"):
     for side in "+-":
         spec.claim(f"U2.{pin} protection current, USB only", I(f"U2:{pin}.prot{side}"), hi=0.5e-3, cases="usb only",
-                   source="DESIGN.md Running from USB alone: R10 limits the current into U2's protection to ≈ 0.3 mA")
+                   source="DESIGN.md Running from USB alone: R10 and R25/R27 limit the current into U2's protection to ≈ 0.1 mA")
 
 # ----------------------------------------------------------------------------------------------------------- waivers
 
