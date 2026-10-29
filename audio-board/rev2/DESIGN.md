@@ -351,7 +351,7 @@ USB stays on the Daisy's own connector.
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. The loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below
   that. The TPA3118D2's input impedance depends on its gain setting: ≈ 60k at 20 dB (≈ 0.15 dB loss), down to 9k at 36 dB, which the
-  power board must not use. It runs at 20 dB from a 3S battery, where full scale clips the speaker, so the firmware caps the speaker
+  power board must not use. It runs at 20 dB from the 12 V power bank, where full scale clips the speaker, so the firmware caps the speaker
   level about 5 dB below full scale (see power-board/README.md, "The amp: TI TPA3118D2").
 - **U2 stock:** check DigiKey's stock of the MAX9722AEUE+ before ordering boards (see "Parts sourcing").
 - **Soldering U2:** the TSSOP's 0.65 mm pitch takes flux and a fine tip or drag soldering. TEST_PLAN 0.1, 1.6a and 1.8 catch bridges.
