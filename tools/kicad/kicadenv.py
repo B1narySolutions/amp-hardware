@@ -59,6 +59,28 @@ def kicad_cli():
     sys.exit("Can't find kicad-cli. Set KICAD_CLI to its path.")
 
 
+_NGSPICE_CANDIDATES = [
+    "/Applications/KiCad/KiCad.app/Contents/Frameworks/libngspice.0.dylib",
+    r"C:\Program Files\KiCad\10.0\bin\ngspice.dll",
+    r"C:\Program Files\KiCad\9.0\bin\ngspice.dll",
+    "/usr/lib/x86_64-linux-gnu/libngspice.so.0",
+    "/usr/lib/libngspice.so.0",
+    "/opt/homebrew/lib/libngspice.dylib",
+    "/usr/local/lib/libngspice.dylib",
+]
+
+
+def ngspice_lib():
+    """The ngspice shared library KiCad's simulator uses (or NGSPICE_LIB). None if there isn't one."""
+    env = os.environ.get("NGSPICE_LIB")
+    if env:
+        return env
+    for p in _NGSPICE_CANDIDATES:
+        if os.path.exists(p):
+            return p
+    return None
+
+
 _FOOTPRINT_DIRS = [
     "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints",
     r"C:\Program Files\KiCad\10.0\share\kicad\footprints",
