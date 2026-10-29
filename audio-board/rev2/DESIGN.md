@@ -341,10 +341,8 @@ USB stays on the Daisy's own connector.
 - **USB-alone power transitions:** TEST_PLAN 5.18 scopes U2's input and rails while J6 power is removed and restored with USB
   connected and audio playing. Record how long the input stays outside HPVSS − 0.3 V … HPVDD + 0.3 V. If it is more than a few ms at
   full scale, raise the firmware's 2.2 V threshold or shorten the audio block.
-- **Layout:** placement, the GND vias and the analog routing are done (see "Passive placement"). Still to route: Daisy VIN, R18,
-  the power board signals (J6 to R13 and R23, R23 to Q2, Q2 to R17, R13 to C17 and R22, then on to the Daisy), the display UART (J3 to
-  R8/R9, R9 to R24, then to the Daisy) and `HP_DETECT`.
-  All are DC or slow.
+- **Layout:** placement and routing are done (see "Passive placement" and "Routing under the Daisy"). The board check finds no
+  unrouted connections.
 - **Line-out level:** with no buffer, R11 (1k) is the output impedance. Once the speaker amp is chosen, check its input impedance:
   the loss is ≈ 1.7 dB into 10k (R11 + R21) and grows below that.
 - **U2 stock:** JLC had only 65 TPA6132A2RTER on 2026-10-25. Recheck before ordering (see "Parts sourcing").
@@ -472,6 +470,31 @@ regulators and class D amp are the noisiest things the carrier connects to.
   parts, and clear of pads, vias and other labels. Under J6 and J3 the references sit in a row between the terminal labels and their
   parts. J6's own reference sits at the end of its terminal labels, next to 5V.
   The schematic's MPN fields for C10/C11 are hidden on the board.
+
+### Routing under the Daisy
+
+The power board signals, the display UART and Daisy VIN run on L4 between the Daisy's two header rows. Nothing else is routed
+there, so the lanes don't cross:
+
+| Lane on L4 (top to bottom) | From | To |
+|---|---|---|
+| `5V_SENSE` | R19/R18 node, via left of R19 | Pin 22 |
+| `BATT_SENSE` | R13/C17 node, via left of R13 | Pin 25 |
+| `SPK_EN` | Q2 gate, via left of R23 | Pin 28 |
+| `DISPLAY_UART_TX` | R8, via between R9 and R8 | Via above pin 14, then L1 down to it |
+| `DISPLAY_UART_RX` | R9/R24 node, via left of R24 | Via above pin 15, then L1 down to it |
+| `+5V` (1 mm) | C5's `+5V` pad, straight on L4 | Pin 39 (VIN) |
+
+- **Why TX and RX finish on L1:** VIN (pin 39) is at the far left of the rear row, so its lane passes pins 14 and 15. The UART
+  lanes run above it and drop to those pins on L1.
+- **Why VIN leaves C5 on L4:** C5's `+5V` pad is plated through, so the Daisy's lane starts there, apart from the analog branch,
+  which leaves the same pad towards U1 and U2. The Daisy's current pulses don't share copper with the analog supply.
+- **The J6 and J3 columns:** each terminal reaches the top part of its column on L1, and the parts in a column join on L1.
+  R22 is fed from C17 down the gap between the MUTE and BAT columns, and R18 reaches C5 on a 0.5 mm trace.
+- **`HP_DETECT`:** from TP1 up on L1, onto L4 for 4 mm under `AUDIO_OUT_1` and `AUDIO_OUT_2`, and back on L1 between pins 19
+  and 20 to pin 23. It's the only trace on L1 under the Daisy.
+- **Return vias:** every signal via between L1 and L4 has a GND via within about 1.3 mm. The two UART vias above pins 14 and 15
+  share one.
 
 ### 3D models
 - **A1** uses `3dmodels/Electrosmith_Daisy_Seed_placeholder.step` on two stock `PinSocket_1x20_P2.54mm_Vertical` models (8.5 mm), at x = 0 and 15.24.
