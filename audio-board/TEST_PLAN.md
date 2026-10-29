@@ -103,7 +103,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.21a | A1.22 (`5V_SENSE`) → GND | Below 100 kΩ (R19, with R18 through the `+5V` loads); not ≈ 0 Ω | R18/R19 missing or shorted |
 | 1.21b | A1.16 (`AUDIO_IN_1`) → U1.1 | ≈ 470 Ω (R20) | Open = R20 open; ≈ 0 Ω = shorted |
 | 1.21c | ESD diodes: J1 tip, J2 tip, J2 ring, J4 tip, J4 ring → GND, in DMM diode mode both ways | No conduction below ≈ 5 V either way (bidirectional TVS; the meter reads open) | A reading = D1–D5 shorted, fitted wrong, or a solder bridge |
-| 1.22 | Daisy socket (A1) adjacent pins | Spot-check no shorts between neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge — **5 V into 3V3_D would damage the Daisy** |
+| 1.22 | Daisy socket (A1) adjacent pins: A1.17 (`AUDIO_IN_2`) → A1.18 (`AUDIO_OUT_1`); A1.18 → A1.19 (`AUDIO_OUT_2`); then spot-check the rest | Open on both (C9–C11 block DC on `AUDIO_OUT_1`); no shorts between other neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge. A1.17–A1.18 loads the DAC output below its 600 Ω minimum (R5); A1.18–A1.19 ties the two DAC outputs together; **A1.39–A1.38 puts 5 V into 3V3_D and would damage the Daisy** |
 
 ## Stage 2 — First power-up, Daisy **removed**
 
