@@ -17,9 +17,9 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   unpowered codec's input past its ±0.3 V rating.
 
 ## Outputs
-- **Headphone amp: TPA6111A2 → TPA6132A2 (DirectPath).** It removes rev 1 C14/C15 (470 µF output caps, the two largest parts in the
-  headphone section), rev 1 R9–R16 and rev 1 C16, flattens the bass and adds click-and-pop suppression. Its gain is −6 dB (G0 and G1 to GND), so full
-  scale doesn't clip 16 Ω headphones.
+- **Headphone amp: TPA6111A2 → MAX9722A (DirectDrive, TSSOP-16).** It removes rev 1 C14/C15 (470 µF output caps, the two largest parts
+  in the headphone section), rev 1 R9–R16 and rev 1 C16, flattens the bass and adds click-and-pop suppression. R25–R28 (10k) set its gain
+  to −1: full scale is ≈ 0.6 Vrms, inside its 70 mW rating into 16 Ω. The TSSOP has no exposed pad, so the board solders with an iron.
 - **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's outputs drive U2 through R10 directly.
 - **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
 - **Speaker send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer; with R11 and R21 at 1k each, it loses ≈ 1.7 dB into a 10k differential input) instead of
@@ -37,11 +37,11 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
   is printed on the silkscreen.
 - **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
   stop with it, so its DAC powers down and both outputs go silent. R17 holds the speaker amp off whenever the Daisy is absent, booting or reset.
-- **U2's EN tied to `+5V`.** The headphone amp has no hardware mute, as in rev 1 (whose TPA6111A2 had SHUTDOWN tied to GND). The
-  codec does the muting, as it does for the speaker send. Driving EN from the Daisy would need a level translator, because the Daisy can run from
-  USB while `+5V` is off.
+- **U2's SHDN tied to `+5V`.** The headphone amp has no hardware mute, as in rev 1 (whose TPA6111A2 had SHUTDOWN tied to GND). The
+  codec does the muting, as it does for the speaker send. Driving SHDN from the Daisy would need a level translator, because the Daisy can
+  run from USB while `+5V` is off.
 - **R18/R19 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`).** On USB alone, `+5V` and U2's rails are off, and pin 18's audio would
-  reach U2's inputs through C10/C11. The firmware keeps the outputs silent while `5V_SENSE` is low.
+  reach U2's inputs through C10/C11 and R25/R27. The firmware keeps the outputs silent while `5V_SENSE` is low.
 - **Display: J3 carries only the UART and GND.** The display takes its power from the power board, so its current pulses stay off
   the carrier's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
   different times.
@@ -53,11 +53,13 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 
 ## Board
 - **ESD diodes added (D1–D5, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring.
-- **New layout:** 4-layer with ground in the middle, 90 × 56.5 mm, with the Daisy flat along the rear edge and every panel jack on the
-  front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
+- **New layout:** 2-layer, 90 × 56.5 mm, with GND pours on both sides tied by stitching vias, so it fits a free capstone fab (2 layers,
+  under 100 × 100 mm). Every audio net stays on the top layer, over an unbroken ground pour. The Daisy lies flat along the rear edge and
+  every panel jack sits on the front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
+- **Every part hand-solderable with an iron:** 0805 and larger passives on hand-solder pads, SOT-23, SOD-323 and the TSSOP U2.
 - **LCSC part numbers** in the schematic for JLC assembly of the SMD parts.
-- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1), R21 (J5's LINE−) and R22–R24 (the
-  wrong-terminal protection) were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
+- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1), R21 (J5's LINE−), R22–R24 (the
+  wrong-terminal protection) and R25–R28 (U2's gain resistors) were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
   power board), which leaves gaps in the designators.
 
 ## Designators
