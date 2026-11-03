@@ -1,0 +1,106 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-03T11:56:26",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/6d2d39fa-4de3-4bcd-81a6-1f5d512061b9",
+            "violations": [
+                {
+                    "description": "Pins of type Output and Output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 27 [OUTNR, Output, Line]",
+                            "pos": {
+                                "x": 139.7,
+                                "y": 201.93
+                            },
+                            "uuid": "4937804f-4aca-4a05-b48f-2ce48392f08f"
+                        },
+                        {
+                            "description": "Symbol U1 Pin 29 [OUTPR, Output, Line]",
+                            "pos": {
+                                "x": 139.7,
+                                "y": 196.85
+                            },
+                            "uuid": "a50e3a39-4f7a-4767-a26c-7d0cee99de76"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Output and Output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 21 [OUTNL, Output, Line]",
+                            "pos": {
+                                "x": 139.7,
+                                "y": 217.17
+                            },
+                            "uuid": "3b9a0b94-6927-4ed8-a75d-66176dd22b18"
+                        },
+                        {
+                            "description": "Symbol U1 Pin 23 [OUTPL, Output, Line]",
+                            "pos": {
+                                "x": 139.7,
+                                "y": 212.09
+                            },
+                            "uuid": "07916d19-a6e4-4e83-b3f7-a538172f283e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Local and global labels have same name",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR02 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 96.52,
+                                "y": 58.42
+                            },
+                            "uuid": "05d91d46-56ad-49a8-a1ab-e3f29ca10739"
+                        },
+                        {
+                            "description": "Label 'GND'",
+                            "pos": {
+                                "x": 273.05,
+                                "y": 50.8
+                            },
+                            "uuid": "044b23fe-024a-4e9c-bc4d-19474f320c38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "same_local_global_label"
+                }
+            ]
+        }
+    ],
+    "source": "Rev1_Power_Board.kicad_sch"
+}
