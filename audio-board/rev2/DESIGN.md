@@ -392,7 +392,7 @@ Breadboard and PCB Design* (Artech House, 2021).
 - **Why the hops are on the supply and DC nets:** at audio frequencies return current spreads under its trace by resistance, so a short
   slot costs almost nothing, and a layer change on an audio net would add two vias to its path. The `+5V` hops sit upstream of the
   decoupling at each load (C6, C12, C15, R6's C7 filter), and the UART's long B.Cu run hugs the rear edge, where it cuts nothing.
-- **Front pour:** GND on F.Cu around the routing (0.3 mm clearance), tied to the back pour by about 160 stitching vias (0.6/0.3 mm,
+- **Front pour:** GND on F.Cu around the routing (0.3 mm clearance), tied to the back pour by about 160 stitching vias (0.6/0.35 mm,
   every 5 mm or so wherever there's room) and by the GND via beside every SMD ground pad. Between neighbouring audio traces it's a
   guard: there is a stitching via between `AUDIO_IN_2` and `AUDIO_OUT_1` below the Daisy, between INR− and OUTR and between INL− and
   OUTL at U2. Bogatin's warning about pours on signal layers (pp. 461–464) is about poorly stitched ones. Islands no via reaches are
@@ -454,7 +454,7 @@ regulators and class D amp are the noisiest things the carrier connects to.
   and `HP_DETECT` are DC levels or slow logic, so their routes aren't critical (see "Routing under the Daisy").
 - **ESD diodes:** each sits at its jack contact, with its GND pad dropped to the pours by its own via. The discharge path from contact
   to diode to via is a few mm.
-- **GND vias:** every SMD GND pad has its own 0.6/0.3 mm via, 1–1.6 mm from the pad on a short 0.4–0.5 mm stub, on the side away from
+- **GND vias:** every SMD GND pad has its own 0.6/0.35 mm via, 1–1.6 mm from the pad on a short 0.4–0.5 mm stub, on the side away from
   the signal routing. There are no vias in pads, so reflow doesn't wick solder away. U2's PGND, SGND, INL+ and INR+ each have
   their own via under its body. On F.Cu the GND pour joins every SMD ground pad through thermal spokes, so an iron can still heat it.
 - **Spacing:** parts from different blocks keep at least 1 mm of copper between pads, so they can be soldered with an iron and a 0.2 mm
@@ -502,20 +502,22 @@ per-class ranges, including the maximums. All values are within JLC's standard 2
 | Power track (`Power` class) | 0.5 mm | 1 mm | 2 mm |
 | Power track inside U1's courtyard | 0.3 mm | 0.5 mm | 2 mm |
 | Power track inside U2's courtyard | 0.2 mm | 0.25 mm | 2 mm |
-| Via, Default class | 0.6 / 0.3 mm | 0.6 / 0.3 mm | 0.8 / 0.4 mm |
-| Via, `Power` class | 0.6 / 0.3 mm | 0.8 / 0.4 mm | 0.8 / 0.4 mm |
+| Via, Default class | 0.6 / 0.35 mm | 0.6 / 0.35 mm | 0.8 / 0.4 mm |
+| Via, `Power` class | 0.6 / 0.35 mm | 0.8 / 0.4 mm | 0.8 / 0.4 mm |
 | Clearance (both classes) | 0.2 mm | | |
 | Copper to board edge | 0.5 mm | | |
 | Hole to hole, hole clearance | 0.25 mm | | |
-| Via annular ring | 0.15 mm | | |
+| Via annular ring | 0.125 mm | | |
 
+- **Via drill:** the capstone fab needs every hole to be at least 13 mil (0.33 mm), so the smallest via drill is 0.35 mm. The
+  0.6 mm via pad is kept, so clearances don't change, which leaves a 0.125 mm annular ring (JLC's minimum is 0.075 mm).
 - **`Power` class:** `+5V`, `/5V_IN` (the class also lists `/3V3_A`, which is unused on the carrier).
   GND stays in Default and mostly drops straight to the pours through vias.
 - **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.4 mm pads (0.65 mm pitch) or U1 pin 5 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin
   begins narrow. Switch to the 1 mm preset once outside the courtyard. Anywhere else a Power trace under 0.5 mm fails DRC. Rules later in
   `seed3-carrier.kicad_dru` win, so the neck-down rules come after "Power track width".
-- **Presets:** tracks 0.2, 0.25, 0.3, 0.5 and 1.0 mm; vias 0.6/0.3 and 0.8/0.4 mm.
+- **Presets:** tracks 0.2, 0.25, 0.3, 0.5 and 1.0 mm; vias 0.6/0.35 and 0.8/0.4 mm.
 - **Thermal reliefs:** every pad joins the GND pours with 0.5 mm spokes and a 0.5 mm gap, SMD pads included, because every part is
   hand-soldered with an iron and a pad tied solidly into a pour (jack sleeves, J3/J6 GND, the Daisy's GND pins, C5, the 0805 ground pads)
   would not heat up enough. Vias stay solid. Both GND zones use thermal reliefs for all pads, and the "Thermal reliefs on through-hole

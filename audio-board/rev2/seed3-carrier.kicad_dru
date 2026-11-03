@@ -26,11 +26,11 @@
 	(condition "A.Type == 'Track' && A.NetClass == 'Power' && A.intersectsCourtyard('U2')")
 	(constraint track_width (min 0.2mm) (opt 0.25mm) (max 2mm)))
 
-# Only the two via sizes in the presets: 0.6/0.3 and 0.8/0.4.
+# Only the two via sizes in the presets: 0.6/0.35 and 0.8/0.4. The capstone fab needs holes of at least 13 mil (0.33 mm).
 (rule "Via size"
 	(condition "A.Type == 'Via'")
 	(constraint via_diameter (min 0.6mm) (max 0.8mm))
-	(constraint hole_size (min 0.3mm) (max 0.4mm)))
+	(constraint hole_size (min 0.35mm) (max 0.4mm)))
 
 # Through-hole pads join copper zones with thermal-relief spokes so an iron can heat them (jack sleeves, GND pins
 # on J3/J6/J7, the Daisy sockets). SMD pads and vias stay solid. Applies to every zone, including ones added later.
@@ -43,7 +43,7 @@
 (rule "Power via size"
 	(condition "A.Type == 'Via' && A.NetClass == 'Power'")
 	(constraint via_diameter (min 0.6mm) (opt 0.8mm) (max 0.8mm))
-	(constraint hole_size (min 0.3mm) (opt 0.4mm) (max 0.4mm)))
+	(constraint hole_size (min 0.35mm) (opt 0.4mm) (max 0.4mm)))
 
 # The ground pours stay 1 mm clear of the fiducials, so no copper shows inside their 2 mm mask openings.
 (rule "Fiducial pour clearance"
