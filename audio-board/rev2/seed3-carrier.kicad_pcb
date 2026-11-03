@@ -189,7 +189,7 @@
 			)
 		)
 		(property "MPN" "TLV9061QDBVRQ1"
-			(at 135.6 90.69 -90)
+			(at 135.6 90.69 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1eed7739-980f-4185-a14d-7f1f7804c594")
@@ -201,7 +201,7 @@
 			)
 		)
 		(property "Manufacturer" "Texas Instruments"
-			(at 135.6 90.69 -90)
+			(at 135.6 90.69 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a9139ac7-b107-4a61-be0b-ccb98a536b9b")
@@ -213,7 +213,7 @@
 			)
 		)
 		(property "DigiKey" "296-TLV9061QDBVRQ1CT-ND"
-			(at 135.6 90.69 -90)
+			(at 135.6 90.69 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "fa6b02da-8b29-4127-a9fb-5ff3d7b0b78c")
@@ -609,9 +609,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
-			(at 127.86 79.4 -90)
+			(at 127.86 79.4 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "78ef33f7-9f33-48ae-a8b3-b33b3fa9bff6")
@@ -623,7 +622,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 127.86 79.4 -90)
+			(at 127.86 79.4 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "98aa1a13-8ee4-4cb7-8c80-ce2fd2585627")
@@ -635,7 +634,7 @@
 			)
 		)
 		(property "DigiKey" "311-10.0KFRCT-ND"
-			(at 127.86 79.4 -90)
+			(at 127.86 79.4 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f87cabf9-43aa-41a1-802a-77a9b4deabb4")
@@ -646,6 +645,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/e504d3f8-021c-442d-9550-63224c4bad8e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -803,9 +803,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
-			(at 174 63.2 -90)
+			(at 174 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4f31bd63-3989-4304-a5b7-9bc554c6b33a")
@@ -817,7 +816,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 174 63.2 -90)
+			(at 174 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2f6a00f3-aa32-4973-ab4d-d1712585b3c6")
@@ -829,7 +828,7 @@
 			)
 		)
 		(property "DigiKey" "311-10.0KFRCT-ND"
-			(at 174 63.2 -90)
+			(at 174 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "108b25a2-470f-4680-abb5-f31b17c6105f")
@@ -840,6 +839,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/8e2e02bc-5362-4824-9457-72fcb5bb67a7")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -997,9 +997,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
-			(at 160.85 69.3 -90)
+			(at 160.85 69.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "7ec48115-d165-4171-9413-7beb9619b0d0")
@@ -1011,7 +1010,7 @@
 			)
 		)
 		(property "MPN" "CL31B104KBCNNNC"
-			(at 160.85 69.3 -90)
+			(at 160.85 69.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d29542b8-f147-46d1-9ff1-306f6d3a1ca6")
@@ -1023,7 +1022,7 @@
 			)
 		)
 		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 160.85 69.3 -90)
+			(at 160.85 69.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "af4597f7-7abe-4955-87d8-260cd63da342")
@@ -1035,7 +1034,7 @@
 			)
 		)
 		(property "DigiKey" "1276-1017-1-ND"
-			(at 160.85 69.3 -90)
+			(at 160.85 69.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "dd24eedc-0877-45d1-b69c-1a3a2aa9bc92")
@@ -1046,6 +1045,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/7d0f4741-4800-4312-bd5d-cdcf6c5df4bb")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1195,9 +1195,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Jack*")
 		(property "MPN" "NRJ4HF"
-			(at 116.66 89.55 -90)
+			(at 116.66 89.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ab948c7f-0ced-45d9-a3c1-7a8187397735")
@@ -1209,7 +1208,7 @@
 			)
 		)
 		(property "Manufacturer" "Neutrik"
-			(at 116.66 89.55 -90)
+			(at 116.66 89.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "622340fc-cc22-4371-a7ff-97f27c8611dd")
@@ -1221,7 +1220,7 @@
 			)
 		)
 		(property "DigiKey" "3937-NRJ4HF-ND"
-			(at 116.66 89.55 -90)
+			(at 116.66 89.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "79ba02e7-0ec6-419e-9bc5-032d25a6647a")
@@ -1232,6 +1231,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "Jack*")
 		(path "/038615b7-b6f0-443e-b4e8-e46c6bcc4a58")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1580,7 +1580,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "MPN" "GRM32ER61C476KE15L"
 			(at 124.6 84.6 90)
 			(layer "F.Fab")
@@ -1617,6 +1616,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/1133131a-c6af-4f84-8d6e-4981a7744317")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -1775,7 +1775,7 @@
 			)
 		)
 		(property "MPN" "RC0805FR-13470RL"
-			(at 157.35 62.55 -90)
+			(at 157.35 62.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "751dba56-36e0-472e-add9-c52269ce2c9a")
@@ -1787,7 +1787,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 157.35 62.55 -90)
+			(at 157.35 62.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "055cd76d-3609-4b74-b1eb-3444725af8e2")
@@ -1799,7 +1799,7 @@
 			)
 		)
 		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
-			(at 157.35 62.55 -90)
+			(at 157.35 62.55 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9a82edf2-63d9-4e12-bb6d-cdee966bb044")
@@ -1961,9 +1961,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC0805FR-13470RL"
-			(at 142.9 74.5 -90)
+			(at 142.9 74.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1418a41d-5d11-486a-8404-27f2e43ad53b")
@@ -1975,7 +1974,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 142.9 74.5 -90)
+			(at 142.9 74.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "91248418-ee3f-45eb-a75f-45a319fcf195")
@@ -1987,7 +1986,7 @@
 			)
 		)
 		(property "DigiKey" "13-RC0805FR-13470RLCT-ND"
-			(at 142.9 74.5 -90)
+			(at 142.9 74.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f403d5a4-82be-4bcf-88c6-cc4517c367d6")
@@ -1998,6 +1997,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/18b7b852-a182-4840-90c5-9ca6304e4a81")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2155,7 +2155,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
 			(at 143.079999 71.2 180)
 			(layer "F.Fab")
@@ -2204,6 +2203,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/7eb0fb59-5016-4c97-b149-d3d3228d3868")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2361,7 +2361,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
 			(at 140.3 75.05 90)
 			(layer "F.Fab")
@@ -2398,6 +2397,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/1218a41d-f66b-42a2-9293-d76e1aba579e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2555,7 +2555,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC0805FR-073K3L"
 			(at 163 78.2 180)
 			(layer "F.Fab")
@@ -2592,6 +2591,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/431cba57-4302-40e9-87d8-1fb6a8e4ed9e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -2762,7 +2762,7 @@
 			)
 		)
 		(property "Voltage" "25V"
-			(at 166.2 84.2 -90)
+			(at 166.2 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1f15a5d1-3ddc-4f27-9bbd-568aaaa34ef5")
@@ -2774,7 +2774,7 @@
 			)
 		)
 		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 166.2 84.2 -90)
+			(at 166.2 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c85bb1a3-76f2-44e1-907a-b729851ff950")
@@ -2786,7 +2786,7 @@
 			)
 		)
 		(property "DigiKey" "1276-2415-1-ND"
-			(at 166.2 84.2 -90)
+			(at 166.2 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bb709829-f585-4270-95a6-4af6816e0594")
@@ -2949,7 +2949,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 176.4 81.3 -90)
+			(at 176.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "934982e6-0021-46dd-a2f0-342bf5ed2c54")
@@ -2961,7 +2961,7 @@
 			)
 		)
 		(property "MPN" "C0805C105K5RACTU"
-			(at 176.4 81.3 -90)
+			(at 176.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "5619d800-d075-47a1-a292-398941fb91e3")
@@ -2973,7 +2973,7 @@
 			)
 		)
 		(property "Manufacturer" "KEMET"
-			(at 176.4 81.3 -90)
+			(at 176.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4cfa5f0d-feec-49b6-a7fe-273766ea36e2")
@@ -2985,7 +2985,7 @@
 			)
 		)
 		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
-			(at 176.4 81.3 -90)
+			(at 176.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "03da9fe4-2236-4577-afaf-e1c7f9576840")
@@ -4549,7 +4549,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "SOT?23*")
 		(property "MPN" "AO3401A"
 			(at 167.85 62.7 90)
 			(layer "F.Fab")
@@ -4586,6 +4585,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "SOT?23*")
 		(path "/ad6c7b58-4dd0-4e05-8681-e92fea439d48")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -5275,7 +5275,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 178.4 81.3 -90)
+			(at 178.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "7ce3fd20-14b4-40ed-87b7-f553a36a60e0")
@@ -5287,7 +5287,7 @@
 			)
 		)
 		(property "MPN" "C0805C105K5RACTU"
-			(at 178.4 81.3 -90)
+			(at 178.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b56a9922-3711-4fa6-b9f8-4521c356358b")
@@ -5299,7 +5299,7 @@
 			)
 		)
 		(property "Manufacturer" "KEMET"
-			(at 178.4 81.3 -90)
+			(at 178.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "53937083-54f7-4f32-b99c-4b8fca62ae8b")
@@ -5311,7 +5311,7 @@
 			)
 		)
 		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
-			(at 178.4 81.3 -90)
+			(at 178.4 81.3 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "62aacb8c-7fd1-4c6b-9fec-33e51940c673")
@@ -5473,7 +5473,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
 			(at 177.5 63.2 90)
 			(layer "F.Fab")
@@ -5510,6 +5509,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/422d8852-0783-4511-bb0d-061d0a7ea875")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -6370,7 +6370,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-071ML"
 			(at 127.86 85.4 90)
 			(layer "F.Fab")
@@ -6407,6 +6406,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/6742b632-a2d3-4260-8f31-61431bff09bc")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -6564,9 +6564,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-07100KL"
-			(at 156.4 72.8 -90)
+			(at 156.4 72.8 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "dbe89cf7-582b-468a-ae41-484e37d08ec3")
@@ -6578,7 +6577,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 156.4 72.8 -90)
+			(at 156.4 72.8 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "16002d4c-6409-4983-baae-c5bc5b0e2582")
@@ -6590,7 +6589,7 @@
 			)
 		)
 		(property "DigiKey" "311-100KFRCT-ND"
-			(at 156.4 72.8 -90)
+			(at 156.4 72.8 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d3fc427f-1fcb-4ef5-a071-8091245344a5")
@@ -6601,6 +6600,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/7035fa5a-0d9c-4d8e-b5f3-0523e68df441")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -6867,7 +6867,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
 			(at 145.5 75.05 90)
 			(layer "F.Fab")
@@ -6904,6 +6903,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/2b742b23-aa93-462f-8935-cbd8da6d0ffc")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -7061,7 +7061,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "CP_*")
 		(property "MPN" "860010472005"
 			(at 167.85 68.6 0)
 			(layer "F.Fab")
@@ -7098,6 +7097,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "CP_*")
 		(path "/247e8e49-3cd1-46c7-9300-f20256fd3a4a")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -8646,7 +8646,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
 			(at 170.85 63.2 90)
 			(layer "F.Fab")
@@ -8695,6 +8694,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/5a660e79-a32e-4a5a-be22-46b5b52c1883")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -8852,7 +8852,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-07100KL"
 			(at 164.35 68.25 90)
 			(layer "F.Fab")
@@ -8889,6 +8888,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/a9dd8a09-18a7-4881-91be-dc53966f2c6c")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -9353,7 +9353,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-071KL"
 			(at 131.32 89.55 0)
 			(layer "F.Fab")
@@ -9390,6 +9389,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/4e582ee3-8486-4abf-9b21-3b14f545f075")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -9764,7 +9764,7 @@
 			)
 		)
 		(property "MPN" "RC0805FR-0710KL"
-			(at 180.6 88.5 -90)
+			(at 180.6 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "7d3e7e32-bdd0-475f-8ec1-2b37f83a1e78")
@@ -9776,7 +9776,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 180.6 88.5 -90)
+			(at 180.6 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "88dfdc95-9ddb-41b6-8bc5-3bda5c8c8ceb")
@@ -9788,7 +9788,7 @@
 			)
 		)
 		(property "DigiKey" "311-10.0KCRCT-ND"
-			(at 180.6 88.5 -90)
+			(at 180.6 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ac0a31d4-d6a2-4b4a-ae29-48960f45d14e")
@@ -9951,7 +9951,7 @@
 			)
 		)
 		(property "MPN" "RC1206FR-07100KL"
-			(at 172.9 68.25 -90)
+			(at 172.9 68.25 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "552bb9ad-1c9b-4525-83ea-5361f39775fa")
@@ -9963,7 +9963,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 172.9 68.25 -90)
+			(at 172.9 68.25 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "022892ee-19ff-4b0c-bbcb-3b8b71bd62f6")
@@ -9975,7 +9975,7 @@
 			)
 		)
 		(property "DigiKey" "311-100KFRCT-ND"
-			(at 172.9 68.25 -90)
+			(at 172.9 68.25 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b147e910-447f-47e5-95a8-8fe829a7f6f5")
@@ -10588,7 +10588,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC0805FR-13470RL"
 			(at 136.95 85.899999 90)
 			(layer "F.Fab")
@@ -10625,6 +10624,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/46a90ad0-26ed-441d-a031-242723145eb9")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -10782,9 +10782,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
-			(at 163.6 82 -90)
+			(at 163.6 82 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f6294282-0030-428c-a362-7425258f7ba0")
@@ -10796,7 +10795,7 @@
 			)
 		)
 		(property "MPN" "C1206C102J5GACTU"
-			(at 163.6 82 -90)
+			(at 163.6 82 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "756ce7fd-8f48-4f4f-8e32-423bab9c3e44")
@@ -10808,7 +10807,7 @@
 			)
 		)
 		(property "Manufacturer" "KEMET"
-			(at 163.6 82 -90)
+			(at 163.6 82 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0794bad0-d591-4dfe-82ec-84e6c52e552d")
@@ -10820,7 +10819,7 @@
 			)
 		)
 		(property "DigiKey" "399-C1206C102J5GACTUCT-ND"
-			(at 163.6 82 -90)
+			(at 163.6 82 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6f5b4986-d8cd-4721-b98b-1a0a2ad3ee2f")
@@ -10831,6 +10830,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/e6f9a13b-2f80-46f1-ba8e-4f42cbf1c034")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -11096,7 +11096,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-07100KL"
 			(at 164.35 63.2 90)
 			(layer "F.Fab")
@@ -11133,6 +11132,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/27d5bd96-fa90-4991-96b3-e2b94d6ee108")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -11290,7 +11290,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-07100KL"
 			(at 178 74.3 90)
 			(layer "F.Fab")
@@ -11327,6 +11326,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/3cc8ab6b-cd53-4cbb-bbea-b3b8eb5cf9c8")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -11485,7 +11485,7 @@
 			)
 		)
 		(property "MPN" "RC0805FR-0710KL"
-			(at 166.2 88.5 -90)
+			(at 166.2 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "73ea2d7e-1597-43c3-b4bb-772b99560e2d")
@@ -11497,7 +11497,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 166.2 88.5 -90)
+			(at 166.2 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a7d37779-4359-4eb7-b605-86f39cf62feb")
@@ -11509,7 +11509,7 @@
 			)
 		)
 		(property "DigiKey" "311-10.0KCRCT-ND"
-			(at 166.2 88.5 -90)
+			(at 166.2 88.5 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "7895f2ec-298c-4c86-9277-8bb8946d0df0")
@@ -11779,7 +11779,7 @@
 			)
 		)
 		(property "MPN" "MAX9722AEUE+"
-			(at 172 86 -90)
+			(at 172 86 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b87e7222-7ef0-4981-9f22-434453a9c057")
@@ -11791,7 +11791,7 @@
 			)
 		)
 		(property "Manufacturer" "Analog Devices Inc./Maxim Integrated"
-			(at 172 86 -90)
+			(at 172 86 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6fbdfa6f-e663-49b0-9a2c-82ce014db696")
@@ -11803,7 +11803,7 @@
 			)
 		)
 		(property "DigiKey" "MAX9722AEUE+-ND"
-			(at 172 86 -90)
+			(at 172 86 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e103c671-b48a-4e3d-b4c3-37274b4f43f6")
@@ -12229,7 +12229,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
 			(at 138.55 90.69 90)
 			(layer "F.Fab")
@@ -12278,6 +12277,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/811c7c71-274c-4986-8eed-36fa0c437700")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -12435,7 +12435,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "SOT?23*")
 		(property "MPN" "2N7002NXAKR"
 			(at 157.35 66.5 90)
 			(layer "F.Fab")
@@ -12472,6 +12471,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "SOT?23*")
 		(path "/9860448e-8f5c-4f32-a12a-3cd3e9615b02")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13224,9 +13224,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
-			(at 180.7 73.6 -90)
+			(at 180.7 73.6 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "fca66463-d6b1-4f20-b223-153c8b96382b")
@@ -13238,7 +13237,7 @@
 			)
 		)
 		(property "MPN" "C0805C332J5GACTU"
-			(at 180.7 73.6 -90)
+			(at 180.7 73.6 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "16fac821-5bd7-43c9-84d8-b09671446ffc")
@@ -13250,7 +13249,7 @@
 			)
 		)
 		(property "Manufacturer" "KEMET"
-			(at 180.7 73.6 -90)
+			(at 180.7 73.6 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b2568453-bf6b-4b20-91b3-5e47cd2e1acf")
@@ -13262,7 +13261,7 @@
 			)
 		)
 		(property "DigiKey" "399-C0805C332J5GACTUCT-ND"
-			(at 180.7 73.6 -90)
+			(at 180.7 73.6 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e96eafbf-0aed-43c0-96ba-75eaf01bedff")
@@ -13273,6 +13272,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/9cc6747b-0813-4611-b55d-7af24b3f6554")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13430,7 +13430,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
 			(at 124.6 79 90)
 			(layer "F.Fab")
@@ -13467,6 +13466,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/24ac9444-fd87-4743-b13d-6f420408e594")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -13811,7 +13811,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
 		(property "MPN" "SJ3-35063AG"
 			(at 141.9 104.1 90)
 			(layer "F.Fab")
@@ -13848,6 +13847,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
 		(path "/951e8776-cffd-43bf-9e80-31e1b45ef481")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -14137,9 +14137,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-0710KL"
-			(at 160.85 63.2 -90)
+			(at 160.85 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "21de457f-a9c9-45ed-abad-9955d57827cd")
@@ -14151,7 +14150,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 160.85 63.2 -90)
+			(at 160.85 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6efa145b-43e0-45f4-81ea-d45a296e4a57")
@@ -14163,7 +14162,7 @@
 			)
 		)
 		(property "DigiKey" "311-10.0KFRCT-ND"
-			(at 160.85 63.2 -90)
+			(at 160.85 63.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a314d015-6b09-49c0-a481-8d74140ad17e")
@@ -14174,6 +14173,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/67ef532b-328e-41a3-a135-0d3629d6931e")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -14331,7 +14331,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "R_*")
 		(property "MPN" "RC1206FR-071KL"
 			(at 179.3 70.4 0)
 			(layer "F.Fab")
@@ -14368,6 +14367,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_*")
 		(path "/c3fb2314-3f8e-4d06-9f58-0f4850fd15e2")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -14525,9 +14525,8 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
-			(at 122.5 90.59 -90)
+			(at 122.5 90.59 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "016e4d07-2066-4893-9cba-2819ec6f3afa")
@@ -14539,7 +14538,7 @@
 			)
 		)
 		(property "MPN" "CL21C101JBANNNC"
-			(at 122.5 90.59 -90)
+			(at 122.5 90.59 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b1b454ad-e0d3-46d3-aea2-0d9efc74152e")
@@ -14551,7 +14550,7 @@
 			)
 		)
 		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 122.5 90.59 -90)
+			(at 122.5 90.59 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "afa2d78f-5a1d-4b75-b545-1b8c01a8b03a")
@@ -14563,7 +14562,7 @@
 			)
 		)
 		(property "DigiKey" "1276-1014-1-ND"
-			(at 122.5 90.59 -90)
+			(at 122.5 90.59 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "532a5324-7f51-4ef7-8033-f9ca6eb9e57e")
@@ -14574,6 +14573,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/62222231-6db0-4560-8c42-59a90cecde28")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -14918,7 +14918,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
 		(property "MPN" "SJ3-35063AG"
 			(at 158 104.1 90)
 			(layer "F.Fab")
@@ -14955,6 +14954,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "Jack*3.5mm*SJ3-35063*")
 		(path "/a599f556-32df-4903-867b-be59bf299371")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -15257,7 +15257,7 @@
 			)
 		)
 		(property "Voltage" "25V"
-			(at 180.6 84.2 -90)
+			(at 180.6 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "06f735bd-69f5-4963-9172-25f781c67cee")
@@ -15269,7 +15269,7 @@
 			)
 		)
 		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 180.6 84.2 -90)
+			(at 180.6 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d57a046e-02ba-483f-b3ca-6fd68064c7a7")
@@ -15281,7 +15281,7 @@
 			)
 		)
 		(property "DigiKey" "1276-2415-1-ND"
-			(at 180.6 84.2 -90)
+			(at 180.6 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "97781932-b25b-41c0-8d15-41267669e3fb")
@@ -16238,7 +16238,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "C_*")
 		(property "Voltage" "50V"
 			(at 126.3 89.55 0)
 			(layer "F.Fab")
@@ -16287,6 +16286,7 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C_*")
 		(path "/ce7ea65b-a911-4ce5-9a8e-ba46c7ca6d55")
 		(sheetname "/")
 		(sheetfile "seed3-carrier.kicad_sch")
@@ -16563,6 +16563,42 @@
 				(size 1 1)
 				(thickness 0.15)
 			)
+		)
+	)
+	(gr_text "ECEN 4610 · 2026-11-03"
+		(at 119 65.55 0)
+		(layer "B.SilkS")
+		(uuid "049a8379-62e6-4f77-ac75-0f246cf80192")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(gr_text "Designed by Rocco Antoniou"
+		(at 119 61.2 0)
+		(layer "B.SilkS")
+		(uuid "6dd08b29-13c5-4a3f-af14-c69fdff5c70c")
+		(effects
+			(font
+				(size 1.2 1.2)
+				(thickness 0.18)
+			)
+			(justify mirror)
+		)
+	)
+	(gr_text "B1NARY SOLUTIONS"
+		(at 119 56.2 0)
+		(layer "B.SilkS")
+		(uuid "eb97857b-0be6-4a98-8c40-8fa56277f085")
+		(effects
+			(font
+				(size 1.8 1.8)
+				(thickness 0.27)
+			)
+			(justify mirror)
 		)
 	)
 	(segment
