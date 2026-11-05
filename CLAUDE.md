@@ -8,7 +8,8 @@ Hardware for a capstone guitar amp, in KiCad 10:
 - `audio-board/rev2/` is the Seed3 carrier: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs, the headphone
   amp (U2, MAX9722A) and screw terminals to the power board and display. It is a 2-layer board, hand-soldered with an
   iron, with every part from DigiKey (`seed3-carrier-digikey.csv` is the order). Rev 2 has been ordered.
-- `power-board/` has no KiCad project yet. Its README is the contract with the carrier: everything the carrier expects
+- `power-board/` is the power board, rev 1 (`Rev1_Power_Board.kicad_pro`, designed by a teammate; its order is
+  `DigiKey_Import.csv`). Its README is the contract with the carrier: everything the carrier expects
   from it, and what the carrier promises back.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces

@@ -1,6 +1,6 @@
 # Power board
 
-This directory is where we will put the KiCad project for the power board.
+This directory holds the power board's KiCad project, rev 1 (`Rev1_Power_Board.kicad_pro`).
 
 ## What the audio board needs from it
 
