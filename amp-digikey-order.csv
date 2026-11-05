@@ -41,7 +41,7 @@ YAG1232CT-ND,RC2512JK-070RL,YAGEO,1,,R5,0R 2512,2A jumper; low-current experimen
 BZT52C12-TPMSCT-ND,BZT52C12-TP,Micro Commercial Co,1,,D1,12V zener SOD-123,Substitute for BZT52C12-7-F (out of stock). Same 12V 500mW SOD-123
 IRF4905PBF-ND,IRF4905PBF,Infineon Technologies,1,,Q1,IRF4905 TO-220,
 296-38572-1-ND,TPA3118D2DAPR,Texas Instruments,1,,U1,TPA3118D2,
-296-17196-1-ND,TPS3808G50DBVR,Texas Instruments,1,,U3,TPS3808G50 4.65V supervisor,"OUT OF STOCK at DigiKey in every package, so this line backorders. Buy it from Mouser or TI instead, or drop this line"
+296-TPS3808EG50DBVRCT-ND,TPS3808EG50DBVR,Texas Instruments,1,,U3,TPS3808EG50 4.65V supervisor,"Substitute for TPS3808G50DBVR (none at DigiKey). TI's drop-in successor: same SOT-23-6 pinout, 4.65V threshold, open-drain RESET, 90k MR pull-up, 20ms delay with CT open. VDD is rated 6V (abs max 6.5V), not 6.5V (7V)"
 445-MPZ1608S221ATA00CT-ND,MPZ1608S221ATA00,TDK,2,,FB1 FB2,220R at 100MHz 0603,
 SRP1038A-100MCT-ND,SRP1038A-100M,Bourns,2,,L1 L2,10uH,
 CP-102AH-ND,PJ-102AH,Same Sky (Formerly CUI Devices),1,,J1,DC jack 5A,
