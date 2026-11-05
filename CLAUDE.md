@@ -13,10 +13,12 @@ Hardware for a capstone guitar amp, in KiCad 10:
   from it, and what the carrier promises back.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
-(`kicad-cli`, jobsets, the IPC API), following the user-level skills in `~/.claude/skills/`: `kicad-view`,
-`kicad-check`, `kicad-board-edit`, `kicad-placement`, `kicad-schematic`, `kicad-fab-export` and
-`kicad-design-review`. The user doesn't open KiCad: Claude launches and quits the PCB editor itself when an edit
-needs it.
+(`kicad-cli`, jobsets, the IPC API), following the skills from
+[roccoagain/kicad-agent-skills](https://github.com/roccoagain/kicad-agent-skills) (cloned at `~/dev/kicad-agent-skills`
+and linked into `~/.claude/skills/`; its README has the install steps): `kicad-view`, `kicad-check`,
+`kicad-board-edit`, `kicad-placement`, `kicad-schematic`, `kicad-fab-export` and `kicad-design-review`. Improve a
+skill in that repo, not here. The user doesn't open KiCad: Claude launches and quits the PCB editor itself when an
+edit needs it.
 
 ## Commands
 
