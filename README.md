@@ -7,7 +7,7 @@ The circuit boards for our capstone guitar amp, designed in KiCad 10.
 | Board | Folder | Status |
 |---|---|---|
 | Audio board (Seed3 carrier) | `audio-board/rev2/` | Rev 2, ordered |
-| Power board | `power-board/` | Rev 1 |
+| Power board | `power-board/` | Rev 1, ordered |
 
 **Audio board.** Holds the Daisy Seed3 that does the audio processing, the guitar and AUX inputs, the headphone amp, and
 screw terminals to the power board and the display. It's a 2-layer board, hand-soldered, with every part from DigiKey.
