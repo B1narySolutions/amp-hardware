@@ -7,6 +7,8 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 |---|---|
 | `board_view.py` | Renders a board to PNG: real pad shapes, tracks to scale, vias, silkscreen, labels and the ratsnest. Zooms to a window or to parts |
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
+| `sch_view.py` | Renders a schematic to PNG (KiCad's own plot), whole or zoomed to symbols or a window, and lists a part's pin nets |
+| `gerber_view.py` | Renders a fab zip as the fab will make it (top and bottom composites, each layer) and checks its files fit together |
 | `fab_export.py` | Checks a board, then writes the zip of Gerbers and drill files for JLCPCB with fixed export settings; `--check` says whether a committed zip still matches the board |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
 | `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, then simulation for the results the bounds can't settle. Also checks interface contracts between boards and the test plan's expected readings |
@@ -20,7 +22,7 @@ Contracts between boards live in `/interfaces/`.
 ## Requirements
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/). The repo root is a uv project: `pyproject.toml` lists
-  the Python packages (matplotlib for the viewer, numpy for the circuit check), `uv.lock` pins their versions and
+  the Python packages (matplotlib for the viewer, numpy for the circuit check, pypdfium2 for the schematic view, pygerber for the Gerber view), `uv.lock` pins their versions and
   `.python-version` pins Python. Run every tool from anywhere in the repo as `uv run tools/kicad/<tool>.py ...`. The first
   run downloads Python if needed and builds `.venv`; later runs reuse it. Any `python3` with matplotlib and numpy works too.
 - KiCad 10 (tested with 10.0.5), installed separately: `pcbnew`, `kicad-cli` and ngspice come with it, not from PyPI.
@@ -33,7 +35,7 @@ spec, whether each committed fab zip still matches its board, and the circuit ch
 line each. Per-board settings are at its top: board-check options (such as `--assembly none` for the hand-soldered
 carrier) in `BOARD_CHECK_ARGS`, and each board's fab zip in `FAB_ZIPS`.
 
-`board_view.py`, `board_check.py` and the circuit checks run in the uv environment and call KiCad's Python for anything
+`board_view.py`, `board_check.py`, `sch_view.py`, `gerber_view.py`, `fab_export.py` and the circuit checks run in the uv environment and call KiCad's Python for anything
 that needs `pcbnew`. `boardedit.py` is imported by a script you run under KiCad's Python.
 
 ## Coordinates
@@ -82,6 +84,19 @@ The JLC numbers live in `jlcpcb.py` with their sources and the date they were re
 them before ordering, and update `jlcpcb.py` when they change. Outer copper weight comes from the stackup (2 oz tightens the
 track, space and annular limits).
 
+## Schematic view
+
+```bash
+uv run tools/kicad/sch_view.py audio-board/rev2/seed3-carrier.kicad_sch -o /tmp/sheet.png
+uv run tools/kicad/sch_view.py audio-board/rev2/seed3-carrier.kicad_sch --around U2,C13 -o /tmp/u2.png
+uv run tools/kicad/sch_view.py audio-board/rev2/seed3-carrier.kicad_sch --pins U2
+```
+
+It plots the schematic to PDF with `kicad-cli` and rasterises it with pypdfium2, so the image is KiCad's own drawing.
+Coordinates are sheet mm from the top-left, y down. `--around` frames symbols by their body, pins and visible fields,
+read from the root sheet's file; `--zoom x0,x1,y0,y1` takes a window; `--page` picks a sheet of a hierarchical design.
+`--pins REF` prints each pin's net from KiCad's netlist (through `schnet.py`), which is how to check a connection.
+
 ## Fab export
 
 ```bash
@@ -105,6 +120,18 @@ smallest drills read back from the files, and writes the zip through a temporary
 The zip goes to the board's entry in `FAB_ZIPS` in `tools/check_all.py`, or `<board folder>/fab/<name>_gerber.zip`
 (`-o` overrides). `--check` exports to a temporary folder and compares with the zip, ignoring dates and KiCad's version
 line. `check_all.py` runs it for every board in `FAB_ZIPS`, so a board change that wasn't re-exported fails there.
+
+Before the new zip replaces the old one, `gerber_view.py` checks it:
+
+```bash
+uv run tools/kicad/gerber_view.py audio-board/rev2/fab/B1NARY_SOLUTIONS_gerber.zip -o /tmp/gerbers
+```
+
+It reads the zip, not the board, renders each Gerber with pygerber and reads the Excellon files itself, all on one grid
+over the outline. Checks: every layer a 2-layer order needs is present and nothing unknown is in the zip, the outline
+is closed, copper, mask and drill hits lie inside it, and every plated hole has copper around it on every copper layer.
+Silkscreen past the outline is a note, not a failure. With `-o` it writes `top.png` and `bottom.png` (mask, exposed
+copper, silk and holes as made; the bottom mirrored), `drills.png` and one PNG per layer.
 
 ## Edit
 
@@ -174,8 +201,9 @@ status is 1 when a check fails or can't be proven. It takes about 3 s on the See
 It needs three things, kept apart so each can be reused:
 
 1. **The schematic.** The netlist comes from `kicad-cli`, as in `schnet.py`. Resistors and capacitors are modelled from
-   their values; ratings come from the Value ("47uF 16V"), a Voltage/Power/Tolerance field, `parts/passives_lcsc.py` by
-   LCSC number, or the package.
+   their values; ratings come from the Value ("47uF 16V"), a Voltage/Power/Tolerance field, the catalogs in `parts/`
+   (`passives_mpn.py` by MPN, `passives_lcsc.py` by LCSC number), or the package. A capacitor's dielectric (C0G, X7R...)
+   comes from a Dielectric field or the catalog.
 2. **Part models** in `parts/`, one file per part, shared by every board. Each has `MATCH` (Value or MPN patterns), `SOURCE`
    (the datasheet and its sections) and `model(p)`, which describes the part with a few calls: `p.supply`, `p.limit` (absolute
    and operating limits per pin, optionally with protection diodes and their injection rating), `p.opamp`/`p.amp`,
@@ -192,6 +220,7 @@ It needs three things, kept apart so each can be reused:
    - `spec.claim(name, V(net) | I(part) | Gain(ports, net, f), lo, hi, cases)`: numbers the design depends on.
    - `spec.waive(check, cases, reason)`: accepted failures, each with its reason.
    - `spec.provides(iface, {signal: pin}, cases)`: signals this board drives under an interface contract (below).
+   - `spec.audio(net, ...)`: the nets that carry audio (a net name, or a pin on an unnamed net such as `"C2.2"`).
    - `spec.test_stage(name, absent, rails, ports)`: a bring-up test stage, with its readings: `measure(id, a, b, expect)`
      for resistance on an unpowered stage, `voltage(id, a, expect)` on a powered one (`rails` is the bench supply).
    - `spec.fault_states`: the power states the fault check runs in.
@@ -200,6 +229,9 @@ Each power state is checked with every port at its nominal source, then once per
 For each case it bounds every node and checks every pin limit, every protection-diode current, resistor power, capacitor
 voltage (and reverse voltage on electrolytics), MOSFET channel current, output loads, port currents and the claims. It
 also checks structure: parts with no model, exposed pins with no ESD diode on their net, and powered inputs with no DC path.
+Two capacitor checks warn without failing: a Class II ceramic (X5R, X7R...) or a capacitor of unknown dielectric on an
+audio net (its capacitance moves with voltage, which distorts, and it is microphonic), and a Class II ceramic above 50 %
+of its voltage rating (DC bias costs it much of its capacitance; 50 % is NASA EEE-INST-002's derating).
 
 ### What the verdicts mean
 

@@ -1,6 +1,6 @@
 ---
 name: kicad-fab-export
-description: Export a KiCad board as the zip of Gerbers and drill files JLCPCB takes, with tools/kicad/fab_export.py. It runs the board check first, exports with fixed settings from JLC's KiCad guide, and reports the board size and hole sizes; --check says whether a committed zip still matches the board. Use when the user asks for Gerbers, a fab zip or files to order a board, after a board change on a board that has a committed fab zip, or when check_all reports a stale fab zip.
+description: Export a KiCad board as the zip of Gerbers and drill files JLCPCB takes, with tools/kicad/fab_export.py, and look at the result with tools/kicad/gerber_view.py. The export runs the board check first, exports with fixed settings from JLC's KiCad guide, checks the files fit together (layers present, all inside the outline, plated holes on copper) and reports the board size and hole sizes; --check says whether a committed zip still matches the board. gerber_view renders the zip as the fab will make it (top and bottom composites, each layer). Use when the user asks for Gerbers, a fab zip or files to order a board, after a board change on a board that has a committed fab zip, or when check_all reports a stale fab zip.
 ---
 
 # Export a board for JLCPCB
@@ -43,3 +43,22 @@ Rules:
   capstone fab asks for something different, tell the user and change the script for every board.
 - Before the user uploads it, suggest they check JLC's online Gerber viewer on the order page. It shows the board as
   JLC reads it, and it's the last chance to catch a missing layer or a wrong outline.
+
+## Looking at the zip
+
+`fab_export.py` already runs `gerber_view.py`'s checks on every zip before writing it ("gerber check: Result: ..."). To
+see the board as the fab will make it, render the zip and open the PNGs with the Read tool:
+
+```bash
+uv run tools/kicad/gerber_view.py audio-board/rev2/fab/B1NARY_SOLUTIONS_gerber.zip -o <scratch>/gerbers
+```
+
+- `top.png`: green mask, gold where the mask opens over copper, tan for bare board in a mask opening, white silk,
+  black holes. `bottom.png` is the underside, mirrored as you'd see it with the board flipped. One PNG per layer and
+  `drills.png` show each file alone.
+- Look for: every pad gold (not green: a missing mask opening), silkscreen clear of pads (the export clips it at mask
+  openings), the B.Cu ground pour and the back credits present, holes centred in their pads, nothing outside the outline.
+- The checks: every layer present, the outline closed, copper, mask and drills inside it, and every plated hole on
+  copper on both sides. A FAIL means the zip is wrong; don't upload it. The carrier has one expected note: F.Silkscreen
+  extends past the outline (J1's panel-nose outline, 9 mm past the front edge, and connector silk at the edges). JLC
+  clips silk at the board edge.

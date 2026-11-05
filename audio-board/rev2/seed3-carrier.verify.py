@@ -18,6 +18,12 @@ power = Interface.load("../../interfaces/carrier-power.py")
 supply = power.source("5V")
 spec.rail("+5V", dc(supply.lo - 0.05, supply.hi))      # 5V_IN through Q1, which drops tens of mV
 
+# The audio path, jack to jack (DESIGN.md "Signal paths"). Every capacitor on these nets should be C0G or film.
+spec.audio("/GTR_TIP", "C2.2", "U1.3", "/AUDIO_IN_1",                      # guitar input
+           "/AUX_TIP", "/AUX_RING", "/AUDIO_IN_2",                         # AUX input
+           "/AUDIO_OUT_1", "/HP_SOURCE", "C10.2", "C11.2", "U2.16", "U2.10", "/HP_L", "/HP_R",   # headphones
+           "/AUDIO_OUT_2", "/LINE_OUT", "/LINE_REF")                       # speaker send
+
 # Firmware pin modes (DESIGN.md "Firmware requirements" and "Daisy pins").
 spec.config("A1", out=[14, 28], inp=[15], pullup=[23], adc=[22, 25])
 

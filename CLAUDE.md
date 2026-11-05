@@ -15,7 +15,7 @@ Hardware for a capstone guitar amp, in KiCad 10:
 
 ## Commands
 
-The tools run through `uv run`, which builds `.venv` from `pyproject.toml` and `uv.lock` (matplotlib and numpy) on first
+The tools run through `uv run`, which builds `.venv` from `pyproject.toml` and `uv.lock` (matplotlib, numpy, pypdfium2, pygerber) on first
 use. They find KiCad 10 at `/Applications/KiCad` themselves. `kicad-cli` isn't on PATH, and `pcbnew` only imports under KiCad's bundled Python:
 `/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3`.
 
@@ -28,6 +28,13 @@ uv run tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb --ass
 
 # Fab zip for JLC (Gerbers + drill): runs the board check first. --check says if the committed zip is stale.
 uv run tools/kicad/fab_export.py audio-board/rev2/seed3-carrier.kicad_pcb
+
+# Render the schematic, zoomed to parts, or list a part's pin nets
+uv run tools/kicad/sch_view.py audio-board/rev2/seed3-carrier.kicad_sch --around U2 -o <scratch>/u2-sch.png
+uv run tools/kicad/sch_view.py audio-board/rev2/seed3-carrier.kicad_sch --pins U2
+
+# Look at the fab zip as the fab will make it (fab_export runs its checks already)
+uv run tools/kicad/gerber_view.py audio-board/rev2/fab/B1NARY_SOLUTIONS_gerber.zip -o <scratch>/gerbers
 
 # Render the board to a PNG (write it to the scratchpad, not the repo)
 uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 -o <scratch>/u2.png
@@ -44,7 +51,7 @@ uv run python -c "import sys; sys.path.insert(0, 'tools/kicad'); import test_cir
 ```
 
 Every checker exits 1 on a failure. Scripted board edits import `tools/kicad/boardedit.py` and run under KiCad's Python.
-The `kicad-board-edit`, `kicad-board-view`, `kicad-board-check`, `kicad-circuit-verify` and `kicad-fab-export` skills in `.claude/skills/`
+The `kicad-board-edit`, `kicad-board-view`, `kicad-board-check`, `kicad-circuit-verify`, `kicad-fab-export` and `kicad-schematic` skills in `.claude/skills/`
 explain how to use each tool and how to read its results.
 
 ## How the pieces fit together

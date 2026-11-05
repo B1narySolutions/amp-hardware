@@ -17,7 +17,9 @@ Steps:
        Drill:   Excellon, mm, decimal, absolute origin, PTH and NPTH in separate files, slots as G85.
   3. Checks that every expected file is there and not empty, and reads the board size, hole sizes and slot
      count back from the files.
-  4. Writes the zip through a temporary file, so a failed run never leaves a half-written zip.
+  4. Writes the zip to a temporary file, runs gerber_view.py's checks on it (layers present, everything inside
+     the outline, every plated hole on copper), and only then replaces the old zip, so a failed run never leaves a
+     half-written or broken zip.
 
 The board file is never modified. The only file written is the zip. Exit status is 1 on any failure, and with
 --check when the zip is missing or no longer matches the board (dates and KiCad's version line are ignored).
@@ -257,6 +259,15 @@ def main():
             with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as z:
                 for name in sorted(files):
                     z.write(os.path.join(tmp, name), name)
+            # read the zip back the way the fab will before it replaces the old one
+            r = subprocess.run([sys.executable, os.path.join(HERE, "gerber_view.py"), partial],
+                               capture_output=True, text=True)
+            result = re.search(r"^Result: .*$", r.stdout, re.M)
+            print(f"gerber check: {result.group(0) if result else 'no result line'}")
+            if r.returncode != 0:
+                print(r.stdout + r.stderr)
+                print(f"No zip written: the exported files don't fit together. {rel(zip_path)} is unchanged.")
+                return 1
             os.replace(partial, zip_path)
         finally:
             if os.path.exists(partial):

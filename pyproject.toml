@@ -1,10 +1,15 @@
 # The Python environment for tools/kicad. Run a tool with `uv run tools/kicad/<tool>.py ...`: uv builds .venv from
-# uv.lock on first use. KiCad itself (pcbnew, kicad-cli, ngspice) isn't on PyPI; tools/kicad/kicadenv.py finds it.
+# uv.lock on first use. matplotlib: board_view; numpy: circuit check; pypdfium2: sch_view; pygerber: gerber_view. KiCad itself (pcbnew, kicad-cli, ngspice) isn't on PyPI; tools/kicad/kicadenv.py finds it.
 [project]
 name = "amp-hardware-tools"
 version = "0"
 requires-python = ">=3.9"
-dependencies = ["matplotlib", "numpy"]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pygerber>=2.4.3",
+    "pypdfium2>=5.14.0",
+]
 
 [tool.uv]
 package = false

@@ -49,6 +49,44 @@ Rules that keep this safe:
 - `replace_footprint`/`remove_footprint` remove the copper on the old pads up to the next junction, via or part
   (`tracks=False` keeps it). Clear longer stale routes with `remove_tracks`, and re-route.
 
+## Where parts go
+
+The script decides how a part moves; this decides where. Placement sets most of what routing can achieve, so
+settle it before routing, and work from these reasons (adapted from KiStack's layout-placement skill, MIT, American
+Embedded). When a rule here and a reason disagree on a particular part, follow the reason, and say so.
+
+- **Current flows in loops.** It leaves on one conductor and returns on another, usually ground. The loop's area sets
+  how much noise it picks up and radiates. A decoupling cap only works if the loop from its pads through the IC's
+  supply and ground pins is small: put it at its pin, supply pad toward the pin, its GND via right beside it.
+- **Rank connections by how much length they tolerate, and place the least tolerant first,** while the space at the
+  pins is free: decoupling and charge-pump caps (C6 at U1; C13, C14, C12, C15 at U2), then filter caps at the pin they
+  filter, then high-impedance nodes, then everything else. When a part that must be close competes for space with one
+  that can sit further away, move the one that can sit further away.
+- **High impedance is what picks up noise, so keep high-impedance nodes short and let low-impedance nets run long.**
+  On this board the 1 MΩ node at C2/R1/R2 is the most sensitive copper on the board: a few mm, no vias, nothing
+  crossing it. The long runs are op-amp and DAC outputs. Each filter or divider sits at its load, not its source.
+- **Keep noisy and sensitive circuits apart.** Noisy: the power board's wiring at J6, the Daisy's digital current,
+  the display UART at J3, U2's charge pump. Sensitive: J1, the guitar row to U1, and U2's inputs. Display and power
+  return current must not flow under U1, U2, J1 or J2. That's why J3 and J6 share the rear-right corner.
+- **Fixed parts first.** Jacks, screw terminals, the Daisy sockets, mounting holes and the outline come from the
+  enclosure and the front panel. They don't move to help routing. DESIGN.md "Board outline and placement" says where
+  each one is and why.
+- **Every pad must stay reachable.** Leave a lane one track plus two clearances wide (0.6 mm for 0.2 mm tracks at
+  0.2 mm clearance) where a signal must pass between parts, room beside each SMD ground pad for its GND via, and the
+  area in front of U2's 0.65 mm-pitch rows free until its tracks can turn. An escaping track can bend or hop to B.Cu;
+  a decoupling cap can't move away from its pin. So when the two compete, the cap keeps its place.
+- **Hand assembly.** Every part is soldered with an iron: keep at least 1 mm of copper between pads of different
+  blocks, all parts on the top side, and every polarised part readable from the silkscreen (DESIGN.md "Passive
+  placement" has the board's numbers).
+- **Audio nets stay on F.Cu, end to end.** B.Cu is the ground plane. When two top traces must cross, the one that
+  doesn't carry audio hops to B.Cu for a few mm (DESIGN.md "Stackup").
+
+Compute positions from pad coordinates (`b.pad()`, or the viewer's `--json` dump), not from a picture: an estimate by
+eye is often off by 0.3 mm. Before moving a critical part away from its pin to solve a conflict, try at least two
+alternatives: another rotation, the other side of a neighbour, swapping two parts at adjacent pins, or moving the part
+that holds the space. When placement changes what DESIGN.md says ("Passive placement", the placement table), update it
+in the same commit.
+
 After every edit:
 1. Look at it with the `kicad-board-view` skill (zoom on what changed).
 2. Run the `kicad-board-check` skill. Use `--allow-unrouted` mid-layout, and get it free of new errors.

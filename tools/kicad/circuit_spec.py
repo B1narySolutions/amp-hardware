@@ -167,6 +167,7 @@ class Spec:
         self.stages = []      # unpowered resistance checks from the test plan
         self.fault_states = None  # power states the fault check runs in (default: the first)
         self.warn_ratio = 0.8  # stress above this fraction of a rating is a warning
+        self.audio_nets = []   # nets (or pins) that carry the audio signal; see audio()
 
     def rail(self, net, on):
         """A supply net the board receives or makes. Each power state lists the rails that are on; the rest sit at 0 V."""
@@ -186,6 +187,12 @@ class Spec:
         """A power state: the rails that are on, parts powered some other way (a module on USB) or not at all, parts
         not fitted, and port overrides (a display that is off). misuse=False skips the misuse cases in this state."""
         self.states.append(State(name, rails, powered, unpowered, absent, ports, misuse, note))
+
+    def audio(self, *nets):
+        """Nets that carry the audio signal, by name ("/HP_SOURCE") or by a pin on them ("C2.2", for an unnamed net).
+        Every capacitor on one must be C0G or film: a Class II ceramic (X5R, X7R...) there is a warning, because its
+        capacitance moves with voltage (distortion) and it is piezoelectric (microphonics)."""
+        self.audio_nets += nets
 
     def config(self, ref, **options):
         """Model options for one part, usually firmware pin modes: config("A1", out=[14, 28], adc=[22, 25])."""

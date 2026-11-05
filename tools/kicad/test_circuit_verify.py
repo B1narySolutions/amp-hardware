@@ -143,6 +143,40 @@ def test_spec_end_to_end():
     assert status["on + J1.1: 12 V"]["U1.1 abs hi"] == "fail"    # 8.4 mA
 
 
+def test_audio_dielectrics_and_dc_bias():
+    """On an audio net: X7R warns, C0G passes, an unknown dielectric warns. Off it, X7R is fine. A 10 V X7R on a 6 V
+    rail is past 50 % of its rating, so its DC bias warns."""
+    def cap(pins, mpn="", value="1uF", fields=None):
+        return {"value": value, "footprint": "C_0805_2012Metric", "fields": {"MPN": mpn, **(fields or {})},
+                "dnp": False, "pins": pins}
+    parts = {
+        "J1": {"value": "CONN", "footprint": "", "fields": {}, "dnp": False, "pins": {"1": "/IN", "2": "GND"}},
+        "C1": cap({"1": "/IN", "2": "/MID"}, "X7R-PART"),
+        "C2": cap({"1": "/MID", "2": "GND"}, "C0G-PART", "1nF"),
+        "C3": cap({"1": "/MID", "2": "/OUT"}),
+        "C4": cap({"1": "+6V", "2": "GND"}, "X7R-PART", "1uF 10V"),
+        "R1": {"value": "10k", "footprint": "R_0805_2012Metric", "fields": {}, "dnp": False,
+               "pins": {"1": "/OUT", "2": "GND"}},
+    }
+    catalog = {"X7R-PART": {"volts": 50, "dielectric": "X7R"}, "C0G-PART": {"volts": 50, "dielectric": "C0G"}}
+    spec = Spec()
+    spec.rail("+6V", dc(6.0))
+    spec.port("J1.1", nominal=tone(1.0))
+    spec.state("on", rails=["+6V"])
+    spec.audio("/IN", "C1.2", "/OUT")
+    case = expand_cases(spec)[0]
+    circ = cv.build(spec, parts, ([], catalog), case, "GND")
+    status = {r.id: r.status for r in cv.structure(spec, parts, circ)}
+    assert status["C1 dielectric"] == "warn"
+    assert status["C2 dielectric"] == "pass"
+    assert status["C3 dielectric"] == "warn"           # unknown
+    assert "C4 dielectric" not in status               # decoupling, not on an audio net
+    results, _ = cv.check_case(spec, circ, case, {})
+    bias = {r.id: r.status for r in results if r.id.endswith("DC bias")}
+    assert bias["C4 DC bias"] == "warn"                # 6 V on a 10 V part
+    assert bias["C1 DC bias"] == "pass"                # 1 V on a 50 V part
+
+
 # --- contracts, test-plan readings and faults
 
 def _two_board_parts():

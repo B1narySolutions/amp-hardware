@@ -36,6 +36,14 @@ Reading the result:
   and the contract is shared with the other board's team: ask before editing it.
 - Fault check: lead with the damaging faults the test plan doesn't catch, then its suggested readings. Present those as
   proposed TEST_PLAN additions for the user to accept. Say so when a fault is "possible" (outside a part's model).
+- **WARN `<C> dielectric`** means a Class II ceramic (X5R, X7R...) sits on a net the spec marks with `spec.audio(...)`.
+  Its capacitance moves with voltage (distortion), and it's piezoelectric, so vibration becomes signal (microphonics).
+  Say whether it's in series with the signal or a shunt, and how high the node's impedance is. A series coupling cap
+  into a high-impedance input matters most. Suggest a C0G or a film part (large C0G values are big and expensive:
+  check what DigiKey stocks in the footprint), and let the user decide. A dielectric that isn't known also warns: add the part's MPN to `tools/kicad/parts/passives_mpn.py`,
+  decoded from the manufacturer's part-numbering scheme, with the source in the docstring.
+- **WARN `<C> DC bias`** means a Class II ceramic sees more than 50 % of its rated voltage and has lost much of its
+  capacitance. Suggest a higher voltage rating or a bigger package, and check that the value still does its job.
 - Results marked as using an assumed value depend on a number the datasheet doesn't give. `-v` lists them with the
   reason. Mention this when one decides a result.
 

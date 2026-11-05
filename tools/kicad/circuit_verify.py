@@ -49,6 +49,13 @@ from circuit_spec import Gain, I, V, dc, expand_cases, fmt, matches, parse_passi
 PARTS_DIR = os.path.join(HERE, "parts")
 NOT_MODELLED = ("J", "TP", "H", "MH", "FID", "LOGO", "G")   # connectors (ports), test points, holes, artwork
 
+# Class II and III ceramics: capacitance falls with DC bias and moves with the voltage across them, and the material is
+# piezoelectric. Class I (C0G/NP0) is neither.
+CLASS2 = {"X5R", "X6S", "X7R", "X7S", "X7T", "X8R", "X8L", "Y5V", "Z5U"}
+# A Class II ceramic above this fraction of its voltage rating gets a warning: it has lost much of its capacitance.
+# 50 % is the usual derating for ceramics (NASA EEE-INST-002, capacitor derating).
+DC_BIAS_RATIO = 0.5
+
 # Resistor power by package when neither a field nor the catalog gives it (typical thick-film ratings).
 R_POWER = {"0201": 0.05, "0402": 0.0625, "0603": 0.1, "0805": 0.125, "1206": 0.25, "1210": 0.5, "2010": 0.75,
            "2512": 1.0}
@@ -251,7 +258,7 @@ def passive(circ, ref, part, catalog):
         circ.notes.append(f"{ref}: can't read the value {part['value']!r}")
         return []
     f = part["fields"]
-    cat = catalog.get(f.get("LCSC", ""), {})
+    cat = catalog.get(f.get("LCSC", "")) or catalog.get(f.get("MPN", "")) or {}
     tol = _percent(f.get("Tolerance")) or cat.get("tol")
     a, b = part["pins"].get("1"), part["pins"].get("2")
     if ref.startswith("R"):
@@ -265,6 +272,8 @@ def passive(circ, ref, part, catalog):
     polar = os.path.basename(part["footprint"].split(":")[-1]).startswith("CP")
     tol = (0.2 if polar else 0.1) if tol is None else tol
     e = circ.add(Elem("C", ref, (a, b), value, tol, owner=ref))
+    dielectric = (f.get("Dielectric") or cat.get("dielectric") or ("electrolytic" if polar else "")).upper()
+    circ.dielectric[ref] = dielectric or None
     rating = rating or _volts(f.get("Voltage")) or cat.get("volts")
     src = "value" if parse_passive(part["value"])[1] else "catalog" if cat.get("volts") else "field"
     out = [("voltage", e, rating, src if rating else "unknown")]
@@ -308,7 +317,7 @@ def build(spec, parts, library, case, gnd, strict=True, rail_values=None):
     (for resistance readings, which ignore sources). rail_values overrides the spec's rails (a bench supply)."""
     models, catalog = library
     circ = Circuit(gnd, strict)
-    circ.ratings, circ.ports, circ.unmodelled = [], {}, []
+    circ.ratings, circ.ports, circ.unmodelled, circ.dielectric = [], {}, [], {}
     for net, on in spec.rails.items():
         on = (rail_values or {}).get(net, on)
         circ.fix(net, on if net in case.state.rails else dc(0.0), f"rail {net}")
@@ -482,6 +491,15 @@ def _check_branch(spec, circ, case, a, branch, label):
                         square=e.value * (1 - e.tol) if kind == "power" else None)
         r.owner, r.damage = e.name, True
         out.append(r)
+        if kind == "voltage" and circ.dielectric.get(e.name) in CLASS2:
+            d = circ.dielectric[e.name]
+            ok = ratio <= DC_BIAS_RATIO
+            r = Result(f"{e.name} DC bias", "derating", "pass" if ok else "warn",
+                       f"{fmt(v, 'V')} across {e.name} is {ratio:.0%} of its {fmt(rating, 'V')} rating ({d}; keep a "
+                       f"Class II ceramic under {DC_BIAS_RATIO:.0%}, or it loses much of its capacitance)",
+                       DC_BIAS_RATIO - ratio, label, source="NASA EEE-INST-002 capacitor derating", scale=DC_BIAS_RATIO)
+            r.owner = e.name
+            out.append(r)
 
     # switches that are on: channel current
     for s in [e for e in circ.elems if e.kind == "S" and branch["sw"].get(e.name) == "on" and e.i_max]:
@@ -649,6 +667,35 @@ def _structure_case(spec, circ, case, a):
     return out
 
 
+AUDIO_DIELECTRIC_WHY = ("its capacitance moves with the signal voltage, which adds distortion, and the material is "
+                        "piezoelectric, so knocks and vibration become signal (microphonics). C0G or film has neither")
+
+
+def audio_dielectrics(spec, parts, circ):
+    """Every capacitor on a net the spec marks as audio: a Class II ceramic, or one whose dielectric isn't known,
+    is a warning."""
+    audio = {resolve(parts, x) for x in spec.audio_nets}
+    out = []
+    for ref, d in sorted(circ.dielectric.items(), key=lambda kv: _refkey(kv[0])):
+        on = sorted(n for n in parts[ref]["pins"].values() if n in audio)
+        if not on:
+            continue
+        where = ", ".join(_short(n) for n in on)
+        series = all(n not in (circ.gnd, *spec.rails) for n in parts[ref]["pins"].values())
+        role = "in series with" if series else "from"
+        if d in CLASS2:
+            out.append(Result(f"{ref} dielectric", "structure", "warn",
+                              f"{ref} ({parts[ref]['value']}, {d}) sits {role} the audio signal on {where}: "
+                              f"{AUDIO_DIELECTRIC_WHY}", 0, "all"))
+        elif d is None:
+            out.append(Result(f"{ref} dielectric", "structure", "warn",
+                              f"{ref} is on the audio net {where}, but its dielectric isn't known: add its MPN to "
+                              f"tools/kicad/parts/passives_mpn.py, or a Dielectric field to the symbol", 0, "all"))
+        else:
+            out.append(Result(f"{ref} dielectric", "structure", "pass", f"{ref} ({d}) on {where}", 0, "all"))
+    return out
+
+
 def structure(spec, parts, circ_on):
     """Checks that don't depend on the case: parts without a model, exposed ports without an ESD diode."""
     out = []
@@ -657,6 +704,7 @@ def structure(spec, parts, circ_on):
                           f"{u} has no model in tools/kicad/parts/, so the check treats it as absent", 0, "all"))
     for note in circ_on.notes:
         out.append(Result("note", "structure", "warn", note, 0, "all"))
+    out += audio_dielectrics(spec, parts, circ_on)
     for pin, port in spec.ports.items():
         if not port.exposed:
             continue
