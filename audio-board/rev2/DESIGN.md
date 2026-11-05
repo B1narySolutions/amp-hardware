@@ -200,8 +200,7 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   - J5's LINE+: R11 (1k) puts ≈ 3 mA into the codec output's protection, which it will probably survive but which is the worst case.
 
   GND sits between 5V and the signals on J6, so a stray strand from the 5 V wire can only reach GND. Check every terminal against its
-  silkscreen label before powering up. `tools/kicad/circuit_verify.py` checks each of these cases against the spec in
-  `seed3-carrier.verify.py`.
+  silkscreen label before powering up. "What each connector can see" lists every case a design review checks.
 - **Bulk at the power entry:** C5 (47 µF electrolytic) and C4 (100 nF) at Q1's output. C5's ESR damps the ringing between the
   wiring's inductance and the ceramics. C4 is the only ceramic at the entry, and the Seed3 datasheet recommends extra filtering on VIN.
 - **Local decoupling:** C6 at U1 pin 5, and C12 (PVDD) and C15 (SVDD) at U2.
@@ -219,7 +218,7 @@ Daisy output that is high then pushes current into an unpowered part on the carr
 - **Headphone input (`5V_SENSE`):** C10/C11 pass pin 18's audio through R25/R27 to U2's inputs, which are rated only from SVSS − 0.3 V
   to SVDD + 0.3 V (MAX9722A datasheet, Absolute Maximum Ratings). U2's charge pump makes SVSS, so with `+5V` off both rails sit at 0 V
   and the inputs may only see ±0.3 V. Full scale is ±1.4 V. R10 and R25/R27 limit the current into U2's protection diodes to
-  ≈ 0.07 mA (the circuit check's bound), but that is still outside the rating. So the firmware has to know whether `+5V` is up: R18/R19 (100k/100k) divide `+5V` to ≈ 2.5 V on `5V_SENSE`
+  ≈ 0.07 mA (worst case), but that is still outside the rating. So the firmware has to know whether `+5V` is up: R18/R19 (100k/100k) divide `+5V` to ≈ 2.5 V on `5V_SENSE`
   (Daisy pin 22, ADC_0). While it reads low, the firmware keeps both outputs at digital silence (see "Firmware requirements").
   - **Why not `BATT_SENSE`:** a bench supply on J6 gives it no reading, so it can't tell whether `+5V` is up.
   - **Why 100k/100k:** 2.5 V is well inside the ADC range and the divider draws 25 µA. The Daisy's VIN is `+5V`, so whenever `+5V` is
@@ -231,6 +230,32 @@ Daisy output that is high then pushes current into an unpowered part on the carr
     U2's unpowered inputs, limited to ≈ 0.07 mA by R10 and R25/R27. TEST_PLAN 5.18 measures this.
 
 ## Connectors
+
+### What each connector can see
+The outside world the carrier is designed for, case by case. A design review checks every IC pin against these, one
+misuse at a time with everything else normal, in each power state. Misuse may stop the board working, but must not
+damage it.
+
+| Pin | Normal | Misuse that must not damage anything |
+|---|---|---|
+| J6.1 5V | 4.75–5.25 V while on (`power-board/README.md`) | 5 V and GND swapped (−5.25 V), TEST_PLAN 2.12 |
+| J6.3 BAT | 0–3.3 V from 10 kΩ or less | A 5 V wire on BAT |
+| J6.4 MUTE | Power board's pull-up, 4.7 kΩ or more to at most 5.25 V | A 5 V wire on MUTE |
+| J3.2 TX | The display's RX: high impedance, clamped to −0.5…3.8 V, 1 mA at most | A 5 V wire on TX |
+| J3.3 RX | The display's TX: 0–3.3 V logic from ≈ 50 Ω | A 5 V wire on RX |
+| J5.1 LINE+ | The speaker amp's input: 10 kΩ–1 MΩ | LINE+ shorted to GND; a 5 V wire on LINE+ |
+| J5.2 LINE− | The speaker amp's input: 10 kΩ–1 MΩ | A 5 V wire on LINE− |
+| J1 tip (guitar) | Passive pickups, 1.5 V peak (3 Vpp) from ≈ 10 kΩ, 20 Hz–20 kHz | An 18 V boost pedal at full output, 9 V peak from 1 kΩ (out of scope: may distort, must survive) |
+| J2 tip/ring (AUX) | A 2 Vrms laptop, 2.83 V peak, the same signal on both | Pro line out at full level, ±5 V from 10 Ω |
+| J4 tip/ring | Headphones, 16 Ω or more | — |
+| J4.6 detect | Open (no plug), or switched to GND (plug in) | — |
+
+Power states: **on** (power board up, Daisy running); **Daisy out** (TEST_PLAN stage 2); **USB only** (Daisy on its own
+USB, power board and display off, see "Running from USB alone"); **off** (everything off while a guitar or phone may
+still play, and the display may still be on); **reversed** (5 V and GND swapped). The jack pins (J1, J2, J4) are touched
+by people, so each needs an ESD diode (D1–D5, see "Jack ESD protection"). Every capacitor on the audio path, from
+the jacks through the Daisy to J4 and J5, should be C0G or film. Today C2 (X7R) and C10/C11 (X5R) aren't: see
+"Open items".
 
 ### Power board connector (J6)
 J6 is a 4-way 3.5 mm screw terminal (Phoenix PT 1,5/4-3,5-H) on the rear edge. Wires screw in, so there's nothing to crimp and a
@@ -341,6 +366,12 @@ USB stays on the Daisy's own connector.
 - **Hot passive pickups:** the Daisy's full scale is reached at ≈ 3.9 Vpp at J1 (see "Guitar input"). Play the hottest passive
   guitar available hard into J1 (TEST_PLAN 5.19) and confirm its peaks stay below that.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
+- **Class II ceramics on the audio path:** C2 (1 µF X7R) is in series with the guitar signal into the 1 MΩ node, and
+  C10/C11 (4.7 µF X5R) are in series with the headphone path. X5R/X7R capacitance moves with voltage, and the
+  material is piezoelectric, so knocks can become signal. Distortion from C2 is negligible (at audio frequencies it drops
+  almost none of the signal into 1 MΩ). Microphonics is the risk. Tap the board with a guitar plugged in (TEST_PLAN
+  stage 5) and listen. If it's audible, C2 can become a 100 nF C0G in the same 1206 footprint (with R1 the corner moves
+  from 0.16 Hz to 1.6 Hz). C10/C11 sit on a ≈ 2 kΩ node, so they matter less. Film parts would be the fix there.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C10/C11 alone (≈ 3.4 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
 - **Headphone noise while the Daisy boots:** U2 is always on (SHDN tied to `+5V`). Check TEST_PLAN 7.1 and 7.6 for clicks on J4 at

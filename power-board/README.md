@@ -5,12 +5,21 @@ This directory is where we will put the KiCad project for the power board.
 ## What the audio board needs from it
 
 The audio board (the Seed3 carrier, `../audio-board/rev2/`) connects to the power board through two screw terminals, six wires in all. This list
-collects everything the carrier expects from the power board. `../audio-board/rev2/DESIGN.md` gives the reasons ("Power board
-connector (J6)", "Output mute", "Speaker send", "Display connector (J3)"). `../interfaces/carrier-power.py` encodes the same
-numbers as a contract that both boards' circuit-check specs load: the carrier takes its J6/J5 assumptions from it and
-checks the signals it drives against it, and the power board's spec will do the same once it has a schematic. If the
-power board's design departs from any of them, change the contract and rerun `tools/kicad/circuit_verify.py` on both
-boards.
+collects everything the carrier expects from the power board, and it is the contract between the two boards.
+`../audio-board/rev2/DESIGN.md` gives the reasons ("Power board connector (J6)", "Output mute", "Speaker send",
+"Display connector (J3)", "What each connector can see"). If the power board's design departs from any number here,
+change it here and in the carrier's DESIGN.md together, and review both boards' designs against the new number.
+
+### The contract in brief
+
+| Signal | Driven by | Promise |
+|---|---|---|
+| 5V (J6.1) | Power board | 4.75–5.25 V (5.0 V ± 5 %), never above 5.5 V |
+| BAT (J6.3) | Power board | 0–3.3 V, source impedance 10 kΩ or less |
+| MUTE (J6.4) | Power board pulls up, carrier pulls down | Pull-up of 4.7 kΩ or more to at most the 5 V rail; the carrier pulls it to ≈ 0.24–0.5 V to play |
+| LINE+ (J5.1) | Carrier | Audio, full scale ≈ 1 Vrms (1.5 V peak), ≈ 0 V DC, from ≈ 1 kΩ (at most 1.1 kΩ) |
+| LINE− (J5.2) | Carrier | The carrier's ground through ≈ 1 kΩ (0 V ± 10 mV) |
+| LINE+ / LINE− load | Power board | 10 kΩ–1 MΩ per leg |
 
 ### Connections
 
