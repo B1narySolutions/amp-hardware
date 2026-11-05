@@ -1,7 +1,9 @@
 # 3D placeholders
 
 KiCad ships no 3D model for the Daisy Seed3 or the Neutrik NRJ4HF, and Same Sky's SJ3-35063AG model isn't in its library either, so
-`make_placeholders.py` builds simplified STEP bodies sized from the manufacturer drawings.
+these are simplified STEP bodies (boxes and cylinders) sized from the manufacturer drawings, so jack and shaft centrelines land where
+the real parts will. They were generated once with build123d; the script is in git history (`make_placeholders.py`, removed in
+the commit after 02dfdfa) if a model needs regenerating.
 
 - **A1** uses `Electrosmith_Daisy_Seed_placeholder.step` on two stock `PinSocket_1x20_P2.54mm_Vertical` models (8.5 mm), at x = 0 and
   15.24. **J1** uses `Neutrik_NRJ4HF_placeholder.step`. The paths are set on the board, so re-running "Update footprints from library"
