@@ -13,13 +13,17 @@ Hardware for a capstone guitar amp, in KiCad 10:
   from it, and what the carrier promises back.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
-(`kicad-cli`, jobsets, the IPC API), following the skills from
-[roccoagain/kicad-agent-skills](https://github.com/roccoagain/kicad-agent-skills): `kicad-view`, `kicad-check`,
-`kicad-board-edit`, `kicad-placement`, `kicad-schematic`, `kicad-fab-export` and `kicad-design-review`. They're
-installed per machine, not in this repo. **If they aren't available** (no `kicad-check` skill listed), tell the user
-and offer to install them (needs Node.js):
+(`kicad-cli`, jobsets, the IPC API), following the `kas-*` skills from
+[roccoagain/kicad-agent-skills](https://github.com/roccoagain/kicad-agent-skills): `kas-view`, `kas-check`,
+`kas-schematic`, `kas-board-edit`, `kas-placement`, `kas-routing`, `kas-library`, `kas-part-selection`,
+`kas-design-review`, `kas-simulate`, `kas-fab-export`, `kas-assembly-export`, `kas-bringup` and `kas-new-project`.
+They're installed per machine, not in this repo. **If they aren't available** (no `kas-check` skill listed), tell the
+user and offer to install them (needs Node.js):
 `npx skills add roccoagain/kicad-agent-skills -g -a claude-code codex --skill '*' -y`. Improve a skill in that repo,
 not here (its README covers linking a clone for editing).
+**Use the `kas-*` skills, not KiStack's `kicad-*` skills** (`kicad-schematic`, `kicad-layout`, `kicad-pcb`,
+`layout-placement`...) if those are installed too: KiStack targets Backplane's own KiCad build, and its
+`layout-placement` move script empties footprints (pads, fields, 3D model) on the stock KiCad 10.0.5 used here.
 The user doesn't open KiCad: Claude launches and quits the PCB editor itself when an edit needs it.
 
 ## Commands
@@ -27,7 +31,7 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
 `kicad-cli` isn't on PATH: `K=/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
 
 ```bash
-# Schematic and board checks (kicad-check skill; it also has the JLC passes and the checklist DRC can't do)
+# Schematic and board checks (kas-check skill; it also has the JLC passes and the checklist DRC can't do)
 "$K" sch erc --severity-error --severity-warning -o <scratch>/erc.rpt audio-board/rev2/seed3-carrier.kicad_sch
 "$K" pcb drc --refill-zones --schematic-parity --severity-all -o <scratch>/drc.rpt audio-board/rev2/seed3-carrier.kicad_pcb
 
@@ -36,7 +40,7 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
      -o <scratch>/gate.rpt audio-board/rev2/seed3-carrier.kicad_pcb \
   && "$K" jobset run --stop-on-error -f audio-board/rev2/jlc-fab.kicad_jobset audio-board/rev2/seed3-carrier.kicad_pro
 
-# Look at it (kicad-view skill): read the PDFs with the Read tool
+# Look at it (kas-view skill): read the PDFs with the Read tool
 "$K" sch export pdf -o <scratch>/sch.pdf audio-board/rev2/seed3-carrier.kicad_sch
 "$K" pcb export pdf --mode-single --scale 0 -l F.Cu,F.SilkS,F.Mask,Edge.Cuts -o <scratch>/top.pdf \
      audio-board/rev2/seed3-carrier.kicad_pcb
@@ -46,7 +50,7 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
 
 **Documents must agree with each other and with the design.** Keep these in step when one changes:
 - **`audio-board/rev2/DESIGN.md`** is the current design and the reasons for it, not its history. "What each connector
-  can see" is the environment a design review checks against (`kicad-design-review` skill). Decisions the user accepts
+  can see" is the environment a design review checks against (`kas-design-review` skill). Decisions the user accepts
   are recorded in it, with the reason.
 - **`audio-board/TEST_PLAN.md`**: its expected readings (stages 1 and 2) must match the schematic. Recheck the
   affected readings after a schematic change.
@@ -63,7 +67,7 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
 
 **KiCad libraries:** project footprints are in `audio-board/Seed3_Carrier.pretty` and symbols in
 `audio-board/seed3-carrier.kicad_sym`. The tables in `rev2/` reach them through `${KIPRJMOD}/..`, so a copy of the
-board outside `rev2/` reports `lib_footprint_issues` (expected in the kicad-check skill's JLC passes).
+board outside `rev2/` reports `lib_footprint_issues` (expected in the kas-check skill's JLC passes).
 
 ## Git workflow
 
@@ -76,14 +80,16 @@ board outside `rev2/` reports `lib_footprint_issues` (expected in the kicad-chec
 
 ## Working rules
 
-- **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kicad-check` skill), and put
+- **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kas-check` skill, 2-layer rule files), and put
   the results in the commit message: errors, warnings, and anything new. After a board change, re-export the fab zip
   with the jobset and commit it in the same commit.
 - **Don't accept a finding on your own.** A design-review finding or a DRC exclusion becomes accepted only when the user
   agrees, or when DESIGN.md already records the decision.
-- **Board edits** go through the IPC API (`kicad-board-edit` skill), from throwaway scripts in the scratchpad. Never
-  commit an edit script: replaying it later would undo newer work. New footprints use KiCad's bundled `pcbnew` module
-  with the board closed, as the skill describes.
+- **Board edits** go through the IPC API (`kas-board-edit` skill), from throwaway scripts in the scratchpad. Never
+  commit an edit script: replaying it later would undo newer work. Schematic changes reach the board (new parts,
+  values, fields) with the skill's `sch_to_board.py`, run with the board closed; run it too after any API session
+  that rotated a part, which drops the part's 3D model.
 - **Expected DRC warnings:** 21 `silk_edge_clearance` warnings come from the edge-mounted connectors (J1–J6). Don't
   trim their footprints to clear them. The JLC recommended pass also flags TP1's silk circle (0.14 mm from its pad,
-  JLC prefers 0.15 mm) and stock footprints' 0.12 mm silk lines. Both print fine.
+  JLC prefers 0.15 mm) and stock footprints' 0.12 mm silk lines. Both print fine. The JLC limits pass reports
+  nothing else on rev 2.
