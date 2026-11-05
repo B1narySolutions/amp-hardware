@@ -49,7 +49,7 @@ CP-102AH-ND,PJ-102AH,Same Sky (Formerly CUI Devices),1,,J1,DC jack 5A,
 952-2171-ND,M7567-05,Harwin,4,,JP1 JP2 JP3 JP4 shunts,2.54mm shunt,JP5 stays open (manual reset)
 708-1898-ND,FX0457,Bulgin,1,,F1 holder,5x20mm fuse holder,
 486-1773-ND,0001.2509,SCHURTER,1,,F1 fuse,T3.15A 5x20mm,Initial choice; validate inrush
-6281-S1B-ND,S1B,NKK Switches,1,,panel switch to SW1,SPST toggle 5A 30VDC,"Substitute for S301T ($15.78): same NKK S series, 12.5mm M12x1 panel hole and lever; rated 5A AC/DC instead of 20A DC; solder lugs, not screw terminals"
+6281-S1B-ND,S1B,NKK Switches,1,,panel switch to SW1,SPST toggle 5A 30VDC,"Substitute for S301T ($15.78): same NKK S series, 12.5mm M12x1 panel hole and lever; rated 5A AC/DC instead of 20A DC; solder lugs, not screw terminals. NKK lists it obsolete; DigiKey still stocks it, but pick another for later builds"
 1738-1442-ND,DFR0571,DFRobot,1,,U2 off-board,DFR0571 buck converter,Only a few in stock
 541-0.0RBCT-ND,CRCW25120000Z0EGHP,Vishay Dale,1,,R5 experiment,0R 2512 high-power jumper,"Experiment. Substitute for WSL251200000ZEA9 (out of stock): thick-film, not solid copper. Check its jumper current in the datasheet before trusting it above 2A"
 486-1768-ND,0001.2507,SCHURTER,1,,F1 experiment,T2A 5x20mm,Experiment
