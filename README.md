@@ -24,6 +24,8 @@ each board expects from the other.
 - `audio-board/rev2/fab/`: the Gerber zip sent to JLCPCB
 - `power-board/README.md`: the power board's contract with the audio board
 - `power-board/DigiKey_Import.csv`: the power board's parts order
+- `amp-digikey-order.csv`: one build of both boards in a single DigiKey order, with the power board's experiment parts,
+  stock substitutes and notes; `amp-digikey-cart.csv` is the same order in DigiKey's cart upload format
 
 ## Opening the designs
 

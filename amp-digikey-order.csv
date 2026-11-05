@@ -1,0 +1,65 @@
+Digi-Key Part Number,Manufacturer Part Number,Manufacturer,Quantity,Audio board,Power board,Value,Notes
+1276-1014-1-ND,CL21C101JBANNNC,Samsung Electro-Mechanics,1,C1,,100pF,
+399-C1206C105K5RACTUCT-ND,C1206C105K5RACTU,KEMET,4,C2,C15 C24 C25,1uF 50V X7R 1206,
+399-C1206C102J5GACTUCT-ND,C1206C102J5GACTU,KEMET,2,C3 C9,,1nF,
+1276-1017-1-ND,CL31B104KBCNNNC,Samsung Electro-Mechanics,3,C4 C6 C17,,100nF,
+732-8628-1-ND,860010472005,Würth Elektronik,1,C5,,47uF 16V,
+490-6539-1-ND,GRM32ER61C476KE15L,Murata Electronics,1,C7,,47uF 16V,Murata lists it Not For New Designs; in stock
+1276-CL21A475KACLRNCCT-ND,CL21A475KACLRNC,Samsung Electro-Mechanics,2,C10 C11,,4.7uF,DigiKey renumbered it; the carrier's files still say 1276-2415-1-ND
+399-C0805C105K5RACTUCT-ND,C0805C105K5RACTU,KEMET,5,C12 C13 C14 C15,C10,1uF 50V X7R 0805,
+399-C0805C332J5GACTUCT-ND,C0805C332J5GACTU,KEMET,1,C16,,3.3nF,
+1727-PESD5V0S1BAFCT-ND,PESD5V0S1BAF,Nexperia USA Inc.,5,D1 D2 D3 D4 D5,,PESD5V0S1BA,
+6473-NRJ4HF-ND,NRJ4HF,Neutrik,1,J1,,NRJ4HF,
+2223-SJ3-35063AG-ND,SJ3-35063AG,Same Sky (Formerly CUI Devices),2,J2 J4,,SJ3-35063AG,
+277-1722-ND,1984620,Phoenix Contact,1,J3,,3-pos 3.5mm terminal,
+277-1721-ND,1984617,Phoenix Contact,7,J5,J2 J4 J5 J6 J7 SW1,2-pos 3.5mm terminal,
+277-1860-ND,1984633,Phoenix Contact,2,J6,J3,4-pos 3.5mm terminal,
+785-1001-1-ND,AO3401A,Alpha & Omega Semiconductor Inc.,1,Q1,,AO3401A,
+1727-8643-1-ND,2N7002NXAKR,Nexperia USA Inc.,1,Q2,,2N7002,
+311-1.00MFRCT-ND,RC1206FR-071ML,YAGEO,1,R1,,1M,
+311-1.00KFRCT-ND,RC1206FR-071KL,YAGEO,3,R2 R11 R21,,1k,
+311-10.0KFRCT-ND,RC1206FR-0710KL,YAGEO,14,R3 R4 R6 R7 R8 R9 R13 R22,R1 R3 R7 R9 R12 R13,10k 1206,
+13-RC0805FR-13470RLCT-ND,RC0805FR-13470RL,YAGEO,3,R5 R20 R23,,470,
+311-3.30KCRCT-ND,RC0805FR-073K3L,YAGEO,1,R10,,3.3k,
+311-100KFRCT-ND,RC1206FR-07100KL,YAGEO,6,R12 R17 R18 R19 R24,R11,100k 1206,
+311-10.0KCRCT-ND,RC0805FR-0710KL,YAGEO,4,R25 R26 R27 R28,,10k 0805,
+296-TLV9061QDBVRQ1CT-ND,TLV9061QDBVRQ1,Texas Instruments,1,U1,,TLV9061,
+MAX9722AEUE+-ND,MAX9722AEUE+,Analog Devices Inc./Maxim Integrated,1,U2,,MAX9722A,
+S7018-ND,PPTC201LFBN-RC,Sullins Connector Solutions,2,A1,,1x20 socket,"For the Daisy Seed3. S6104-ND, in earlier orders, is a 2x20 socket"
+10-EEU-FM1E101HCT-ND,EEU-FM1E101H,Panasonic,4,,C11 C12; C4 C6 optional,100uF 25V 6.3mm 2.5mm pitch,"Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C4 C6 are DNP until rail-startup tests"
+399-C1206C104K5RACTUCT-ND,C1206C104K5RACTU,KEMET,3,,C5 C7 C23,100nF 50V X7R 1206,
+399-C0805C104K5RACTUCT-ND,C0805C104K5RACTU,KEMET,3,,C13 C14 C16,100nF 50V X7R 0805,
+399-C0805C224K3RACTUCT-ND,C0805C224K3RACTU,KEMET,4,,C17 C18 C19 C20,220nF 25V X7R 0805,Bootstrap
+399-C1206C106K4RACTUCT-ND,C1206C106K4RACTU,KEMET,1,,C3,10uF 16V X7R 1206,
+399-C1206C155K5RACTUCT-ND,C1206C155K5RACTU,KEMET,2,,C8 C9,1.5uF 50V X7R 1206,Substitute for GRM31MR71E155KA88L (Not For New Designs; full reels only and none in stock). Same value and size; 50V loses less to DC bias. Use on both input legs
+399-C1206C684K5RACTUCT-ND,C1206C684K5RACTU,KEMET,2,,C21 C22,680nF 50V X7R 1206,
+311-30.0KFRCT-ND,RC1206FR-0730KL,YAGEO,1,,R2,30k 1%,
+311-5.60KFRCT-ND,RC1206FR-075K6L,YAGEO,1,,R4,5.6k 1%,
+311-10.0FRCT-ND,RC1206FR-0710RL,YAGEO,1,,R6,10R 1%,
+13-RC1206FR-132K2LCT-ND,RC1206FR-132K2L,YAGEO,2,,R8 R10,2.2k 1%,RC1206FR-072K2L is out of stock on cut tape; this is the same resistor on a 13-inch reel
+YAG1232CT-ND,RC2512JK-070RL,YAGEO,1,,R5,0R 2512,2A jumper; low-current experiments only
+BZT52C12-TPMSCT-ND,BZT52C12-TP,Micro Commercial Co,1,,D1,12V zener SOD-123,Substitute for BZT52C12-7-F (out of stock). Same 12V 500mW SOD-123
+IRF4905PBF-ND,IRF4905PBF,Infineon Technologies,1,,Q1,IRF4905 TO-220,
+296-38572-1-ND,TPA3118D2DAPR,Texas Instruments,1,,U1,TPA3118D2,
+296-17196-1-ND,TPS3808G50DBVR,Texas Instruments,1,,U3,TPS3808G50 4.65V supervisor,"OUT OF STOCK at DigiKey in every package, so this line backorders. Buy it from Mouser or TI instead, or drop this line"
+445-MPZ1608S221ATA00CT-ND,MPZ1608S221ATA00,TDK,2,,FB1 FB2,220R at 100MHz 0603,
+SRP1038A-100MCT-ND,SRP1038A-100M,Bourns,2,,L1 L2,10uH,
+CP-102AH-ND,PJ-102AH,Same Sky (Formerly CUI Devices),1,,J1,DC jack 5A,
+952-2261-ND,M20-9990245,Harwin,5,,JP1 JP2 JP3 JP4 JP5,2-pos 2.54mm header,
+952-2171-ND,M7567-05,Harwin,4,,JP1 JP2 JP3 JP4 shunts,2.54mm shunt,JP5 stays open (manual reset)
+708-1898-ND,FX0457,Bulgin,1,,F1 holder,5x20mm fuse holder,
+486-1773-ND,0001.2509,SCHURTER,1,,F1 fuse,T3.15A 5x20mm,Initial choice; validate inrush
+360-1897-ND,S301T,NKK Switches,1,,panel switch to SW1,SPST toggle,
+1738-1442-ND,DFR0571,DFRobot,1,,U2 off-board,DFR0571 buck converter,Only a few in stock
+541-0.0RBCT-ND,CRCW25120000Z0EGHP,Vishay Dale,1,,R5 experiment,0R 2512 high-power jumper,"Experiment. Substitute for WSL251200000ZEA9 (out of stock): thick-film, not solid copper. Check its jumper current in the datasheet before trusting it above 2A"
+296-TPA3128D2DAPRCT-ND,TPA3128D2DAPR,Texas Instruments,1,,U1 alternative,TPA3128D2,Experiment. Pin-compatible; pin 1 low selects ultra-low-idle mode
+486-1768-ND,0001.2507,SCHURTER,1,,F1 experiment,T2A 5x20mm,Experiment
+486-1800-ND,0001.2508,SCHURTER,1,,F1 experiment,T2.5A 5x20mm,Experiment
+486-1774-ND,0001.2510,SCHURTER,1,,F1 experiment,T4A 5x20mm,Experiment. Only after checking wiring and inrush
+486-1785-ND,0001.2511,SCHURTER,1,,F1 experiment,T5A 5x20mm,Experiment. Upper test option
+399-C1206C474K5RACTUCT-ND,C1206C474K5RACTU,KEMET,2,,C21 C22 experiment,470nF 50V X7R 1206,Experiment. Change both together
+399-C1206C225K3RACTUCT-ND,C1206C225K3RACTU,KEMET,2,,C8 C9 experiment,2.2uF 25V X7R 1206,Experiment. Matched pair
+SRP1038A-6R8MCT-ND,SRP1038A-6R8M,Bourns,2,,L1 L2 experiment,6.8uH,Experiment. Change both together
+SRP1038A-150MCT-ND,SRP1038A-150M,Bourns,2,,L1 L2 experiment,15uH,Experiment. Change both together
+311-4.70FRCT-ND,RC1206FR-074R7L,YAGEO,1,,R6 experiment,4.7R 1%,Experiment. AVCC filter
+311-22.0FRCT-ND,RC1206FR-0722RL,YAGEO,1,,R6 experiment,22R 1%,Experiment. AVCC filter
