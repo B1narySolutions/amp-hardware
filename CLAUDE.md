@@ -16,9 +16,10 @@ The repo has no scripts of its own. Every view, check, edit and export goes thro
 (`kicad-cli`, jobsets, the IPC API), following the skills from
 [roccoagain/kicad-agent-skills](https://github.com/roccoagain/kicad-agent-skills): `kicad-view`, `kicad-check`,
 `kicad-board-edit`, `kicad-placement`, `kicad-schematic`, `kicad-fab-export` and `kicad-design-review`. They're
-installed per machine, not in this repo. **If they aren't available** (no `kicad-check` skill listed, no
-`~/.claude/skills/kicad-check`), tell the user and offer to install them as that repo's README describes: clone it
-(ask where; anywhere works) and link its skills into `~/.claude/skills/`. Improve a skill in that repo, not here.
+installed per machine, not in this repo. **If they aren't available** (no `kicad-check` skill listed), tell the user
+and offer to install them (needs Node.js):
+`npx skills add roccoagain/kicad-agent-skills -g -a claude-code codex --skill '*' -y`. Improve a skill in that repo,
+not here (its README covers linking a clone for editing).
 The user doesn't open KiCad: Claude launches and quits the PCB editor itself when an edit needs it.
 
 ## Commands
