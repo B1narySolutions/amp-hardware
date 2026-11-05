@@ -5,7 +5,8 @@
     uv run tools/check_all.py audio-board     # only boards under this folder
     uv run tools/check_all.py --full          # also print each check's whole report
 
-For every .kicad_pcb: the board check (board_check.py). For every schematic with a <stem>.verify.py spec beside it: the
+For every .kicad_pcb: the board check (board_check.py), and for a board listed in FAB_ZIPS, whether its committed
+fab zip still matches a fresh export (fab_export.py --check). For every schematic with a <stem>.verify.py spec beside it: the
 circuit check (circuit_verify.py) and the fault check (circuit_faults.py). Then the circuit checker's own tests. A
 failing check's whole report is printed after the summary. Exits 1 if any check fails.
 
@@ -26,6 +27,13 @@ BOARD_CHECK_ARGS = {
     "audio-board/rev2/seed3-carrier.kicad_pcb": ["--assembly", "none"],   # hand-soldered, parts from DigiKey
 }
 
+# The committed fab zip per board (fab_export.py writes it). Each listed zip is checked against a fresh export, so
+# a board change that wasn't re-exported fails here.
+FAB_ZIPS = {
+    # The capstone manual asks for TeamName_gerber.zip.
+    "audio-board/rev2/seed3-carrier.kicad_pcb": "audio-board/rev2/fab/B1NARY_SOLUTIONS_gerber.zip",
+}
+
 
 def find(suffix, under):
     """Files ending in suffix under these folders, skipping hidden folders and KiCad's backups."""
@@ -44,6 +52,13 @@ def rel(path):
 def board_summary(out):
     m = re.search(r"^Result: .*$", out, re.M)
     return m.group(0) if m else None
+
+
+def fab_summary(out):
+    m = re.search(r"^(OK|STALE)  .*$", out, re.M)
+    if not m:
+        return None
+    return "matches the board" if m.group(1) == "OK" else "STALE: re-export with fab_export.py"
 
 
 def circuit_summary(out):
@@ -96,6 +111,8 @@ def main():
 
     jobs = [(f"board check {rel(pcb)}", "board_check.py", [rel(pcb), *BOARD_CHECK_ARGS.get(rel(pcb), [])],
              board_summary) for pcb in boards]
+    jobs += [(f"fab zip {FAB_ZIPS[rel(pcb)]}", "fab_export.py", [rel(pcb), "--check"], fab_summary)
+             for pcb in boards if rel(pcb) in FAB_ZIPS]
     for spec in specs:
         sch = rel(spec[: -len(".verify.py")] + ".kicad_sch")
         jobs += [(f"circuit check {sch}", "circuit_verify.py", [sch], circuit_summary),

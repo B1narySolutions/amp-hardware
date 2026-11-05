@@ -7,6 +7,7 @@ Claude Code uses them through the skills in `.claude/skills/`, and they work jus
 |---|---|
 | `board_view.py` | Renders a board to PNG: real pad shapes, tracks to scale, vias, silkscreen, labels and the ratsnest. Zooms to a window or to parts |
 | `board_check.py` | Runs the project's DRC and schematic parity, then checks the board against JLCPCB's fabrication and assembly limits |
+| `fab_export.py` | Checks a board, then writes the zip of Gerbers and drill files for JLCPCB with fixed export settings; `--check` says whether a committed zip still matches the board |
 | `boardedit.py` | Python library for scripted, incremental edits: placing parts, adding tracks and vias, GND vias with stubs, net changes, removing selected tracks and placing labels |
 | `circuit_verify.py` | Checks a schematic against what every part can take and what the design claims, for everything a spec says can reach the connectors: worst-case bounds on every voltage and current, then simulation for the results the bounds can't settle. Also checks interface contracts between boards and the test plan's expected readings |
 | `circuit_faults.py` | Injects assembly faults one at a time (opens, shorts, wrong values, missing parts, solder bridges from the PCB) and reports what each damages and whether the test plan catches it |
@@ -28,8 +29,9 @@ Contracts between boards live in `/interfaces/`.
   circuit check's simulator, `NGSPICE_LIB` (KiCad's `libngspice`).
 
 `uv run tools/check_all.py` runs the board check on every board, the circuit and fault checks on every schematic with a
-spec, and the circuit checker's tests, and prints one summary line each. Per-board board-check options (such as
-`--assembly none` for the hand-soldered carrier) are in its `BOARD_CHECK_ARGS`.
+spec, whether each committed fab zip still matches its board, and the circuit checker's tests, and prints one summary
+line each. Per-board settings are at its top: board-check options (such as `--assembly none` for the hand-soldered
+carrier) in `BOARD_CHECK_ARGS`, and each board's fab zip in `FAB_ZIPS`.
 
 `board_view.py`, `board_check.py` and the circuit checks run in the uv environment and call KiCad's Python for anything
 that needs `pcbnew`. `boardedit.py` is imported by a script you run under KiCad's Python.
@@ -79,6 +81,30 @@ warnings too), so the checker can gate a commit or CI.
 The JLC numbers live in `jlcpcb.py` with their sources and the date they were read. JLC updates its capability pages: re-check
 them before ordering, and update `jlcpcb.py` when they change. Outer copper weight comes from the stackup (2 oz tightens the
 track, space and annular limits).
+
+## Fab export
+
+```bash
+uv run tools/kicad/fab_export.py audio-board/rev2/seed3-carrier.kicad_pcb            # check, then write the zip
+uv run tools/kicad/fab_export.py audio-board/rev2/seed3-carrier.kicad_pcb --check    # does the zip match the board?
+```
+
+It writes the zip of Gerbers and drill files JLCPCB takes. It runs the board check first (with the board's options from
+`BOARD_CHECK_ARGS`) and writes nothing if that has errors. Then it exports with fixed settings, so the zip doesn't depend
+on the plot settings saved in KiCad's GUI:
+
+- **Gerbers:** every copper layer, F/B mask, F/B silkscreen and Edge.Cuts (`--paste` adds F/B paste). Protel
+  extensions, no X2 attributes (JLC's KiCad guide), silkscreen clipped at mask openings, 4.6 mm format, zones refilled
+  in memory.
+- **Drill:** Excellon in mm with decimal coordinates and an absolute origin, plated and non-plated holes in separate
+  files, oval holes as G85 slots.
+
+It checks that every file is present and draws something, prints the board outline size and the hole counts and
+smallest drills read back from the files, and writes the zip through a temporary file. The board is never modified.
+
+The zip goes to the board's entry in `FAB_ZIPS` in `tools/check_all.py`, or `<board folder>/fab/<name>_gerber.zip`
+(`-o` overrides). `--check` exports to a temporary folder and compares with the zip, ignoring dates and KiCad's version
+line. `check_all.py` runs it for every board in `FAB_ZIPS`, so a board change that wasn't re-exported fails there.
 
 ## Edit
 

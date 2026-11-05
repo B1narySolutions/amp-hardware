@@ -26,6 +26,9 @@ uv run tools/check_all.py
 # Board: project DRC, schematic parity and JLC fab limits. The carrier is hand-assembled, so skip JLC's assembly rules.
 uv run tools/kicad/board_check.py audio-board/rev2/seed3-carrier.kicad_pcb --assembly none
 
+# Fab zip for JLC (Gerbers + drill): runs the board check first. --check says if the committed zip is stale.
+uv run tools/kicad/fab_export.py audio-board/rev2/seed3-carrier.kicad_pcb
+
 # Render the board to a PNG (write it to the scratchpad, not the repo)
 uv run tools/kicad/board_view.py audio-board/rev2/seed3-carrier.kicad_pcb --around U2,C9 -o <scratch>/u2.png
 
@@ -41,7 +44,7 @@ uv run python -c "import sys; sys.path.insert(0, 'tools/kicad'); import test_cir
 ```
 
 Every checker exits 1 on a failure. Scripted board edits import `tools/kicad/boardedit.py` and run under KiCad's Python.
-The `kicad-board-edit`, `kicad-board-view`, `kicad-board-check` and `kicad-circuit-verify` skills in `.claude/skills/`
+The `kicad-board-edit`, `kicad-board-view`, `kicad-board-check`, `kicad-circuit-verify` and `kicad-fab-export` skills in `.claude/skills/`
 explain how to use each tool and how to read its results.
 
 ## How the pieces fit together
@@ -84,7 +87,8 @@ board outside `rev2/` reports `lib_footprint_issues`.
 
 - **After a schematic or board change,** run the board check, the circuit check and the fault check
   (`uv run tools/check_all.py` runs all three), and put their results in the commit message: errors, pass/fail counts,
-  and anything new that's waived or failing.
+  and anything new that's waived or failing. A board with a committed fab zip (`FAB_ZIPS` in `tools/check_all.py`)
+  needs it re-exported with `fab_export.py` in the same commit, or check_all reports it stale.
 - **Don't add a waiver on your own.** Add one only when the user agrees, or when DESIGN.md already records the decision.
   Don't change a port's assumed environment in the spec to make a check pass.
 - **Before a scripted board edit,** make sure the board isn't open in KiCad: an open board has a
