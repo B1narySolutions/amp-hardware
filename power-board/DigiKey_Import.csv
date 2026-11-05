@@ -1,44 +1,43 @@
-﻿Manufacturer Part Number,Manufacturer,Quantity,Customer Reference,Notes
-EEU-FR1E101,Panasonic,10,C11 C12,100uF 25V; 6.3mm dia; 2.5mm pitch; amplifier bulk; order covers 3 builds plus spares
-C1206C104K5RACTU,KEMET,25,C23 C5 C7,100nF 50V X7R 1206; order covers 3 builds plus spares
-C0805C104K5RACTU,KEMET,25,C13 C14 C16,100nF 50V X7R 0805 local decoupling; order covers 3 builds plus spares
-C0805C224K3RACTU,KEMET,25,C17 C18 C19 C20,220nF 25V X7R 0805 bootstrap; order covers 3 builds plus spares
-C1206C105K5RACTU,KEMET,25,C15 C24 C25,1uF 50V X7R 1206; order covers 3 builds plus spares; extras also allow matched 1uF C21/C22 filter experiments
-C0805C105K5RACTU,KEMET,15,C10,1uF 50V X7R 0805 local GVDD bypass; order covers 3 builds plus spares
-C1206C106K4RACTU,KEMET,15,C3,10uF 16V X7R 1206; check effective capacitance at 5V; order covers 3 builds plus spares
-GRM31MR71E155KA88L,Murata,15,C8 C9,1.5uF 25V X7R 1206; use same part on both input legs; order covers 3 builds plus spares
-C1206C684K5RACTU,KEMET,15,C21 C22,680nF 50V X7R 1206; order covers 3 builds plus spares
-RC1206FR-0710KL,YAGEO,50,R1 R12 R13 R3 R7 R9,1206 1% 0.25W; order covers 3 builds plus spares
-RC1206FR-0730KL,YAGEO,25,R2,1206 1% 0.25W; order covers 3 builds plus spares
-RC1206FR-075K6L,YAGEO,25,R4,1206 1% 0.25W; order covers 3 builds plus spares
-RC1206FR-0710RL,YAGEO,25,R6,1206 1% 0.25W; order covers 3 builds plus spares
-RC1206FR-072K2L,YAGEO,25,R10 R8,1206 1% 0.25W; order covers 3 builds plus spares
-RC1206FR-07100KL,YAGEO,25,R11,1206 1% 0.25W; order covers 3 builds plus spares
-RC2512JK-070RL,YAGEO,15,R5,Original 0-ohm 2512 jumper; 2A continuous rating; low-current experiments only; use higher-current option for larger amplifier current
-BZT52C12-7-F,Diodes Incorporated,10,D1,12V Zener SOD-123; order covers 3 builds plus spares
-IRF4905PBF,Infineon,5,Q1,P-MOSFET TO-220; verify inrush/thermal in hardware; order covers 3 builds plus spares
-TPA3118D2DAPR,Texas Instruments,5,U1,HTSSOP-32 DAP bottom exposed pad; order covers 3 builds plus spares
-TPS3808G50DBVR,Texas Instruments,5,U3,SOT-23-6 4.65V supervisor; order covers 3 builds plus spares
-MPZ1608S221ATA00,TDK,15,FB1 FB2,0603 220ohm at 100MHz; retain selected bead package; order covers 3 builds plus spares
-SRP1038A-100M,Bourns,10,L1 L2,10uH lead-frame A series; custom local footprint; order covers 3 builds plus spares
-PJ-102AH,Same Sky,5,J1,DC jack; 5A 24V; CP-102AH-ND; order covers 3 builds plus spares
-1984617,Phoenix Contact,25,J2 J4 J5 J6 J7 SW1,2-position 3.5mm PT 1.5; SW1 is panel-switch terminal; order covers 3 builds plus spares
-1984633,Phoenix Contact,5,J3,4-position 3.5mm PT 1.5; order covers 3 builds plus spares
-M20-9990245,Harwin,25,JP1 JP2 JP3 JP4 JP5,2-position 2.54mm vertical header; order covers 3 builds plus spares
-FX0457,Bulgin,5,F1 HOLDER,Holder only; separate fuse required; order covers 3 builds plus spares
-0001.2509,SCHURTER,10,F1 FUSE,T3.15A 5x20mm ceramic fuse rated 300V DC; initial engineering choice; validate inrush; order covers 3 builds plus spares
-S301T,NKK Switches,5,PANEL SWITCH,Maintained SPST on/off screw-terminal toggle; 20A 30VDC; wire to SW1 terminal; order covers 3 builds plus spares
-M7567-05,Harwin,25,JP1 JP2 JP3 JP4 SHUNTS,2.54mm 3A shunts; JP5 manual reset normally open; order covers 3 builds plus spares
-DFR0571,DFRobot,3,U2 OFFBOARD,1738-1442-ND; deduct if already owned; manufacturer continuous rating 1.6A; order covers 3 builds plus spares
-WSL251200000ZEA9,Vishay Dale,10,R5 HIGH-CURRENT OPTION,Solid-copper zero-ohm 2512 jumper; preferred over 2A RC2512 for higher-current trials; verify solder lands and assembly fit; see ORDER_NOTES.md
-TPA3128D2DAPR,Texas Instruments,5,U1 ALTERNATIVE,DAP-32 pin-compatible comparison part; pin 1 LOW selects ultra-low-idle mode; review ORDER_NOTES.md before substitution
-0001.2507,SCHURTER,10,F1 EXPERIMENT 2A,Time-lag 5x20mm ceramic SPT fuse; bench alternative; verify startup and sustained current
-0001.2508,SCHURTER,10,F1 EXPERIMENT 2.5A,Time-lag 5x20mm ceramic SPT fuse; bench alternative
-0001.2510,SCHURTER,10,F1 EXPERIMENT 4A,Time-lag 5x20mm ceramic SPT fuse; use only after verifying wiring/connector/PCB protection and inrush
-0001.2511,SCHURTER,10,F1 EXPERIMENT 5A,Time-lag 5x20mm ceramic SPT fuse; upper test option; 5A jack rating does not establish safe fuse coordination
-C1206C474K5RACTU,KEMET,15,C21 C22 EXPERIMENT,470nF 50V X7R 1206; change both output filter capacitors together; measure ringing and response
-C1206C225K3RACTU,KEMET,15,C8 C9 EXPERIMENT,2.2uF 25V X7R 1206; matched audio input pair alternative
-SRP1038A-6R8M,Bourns,10,L1 L2 EXPERIMENT,6.8uH; same SRP1038A mechanical series; change both together; validate ripple/heating/filter response
-SRP1038A-150M,Bourns,10,L1 L2 EXPERIMENT,15uH; same SRP1038A mechanical series; change both together; validate ripple/heating/filter response
-RC1206FR-074R7L,YAGEO,25,R6 EXPERIMENT,4.7 ohm 1% 1206 0.25W AVCC filter option; verify supply ripple and voltage
-RC1206FR-0722RL,YAGEO,25,R6 EXPERIMENT,22 ohm 1% 1206 0.25W AVCC filter option; verify AVCC voltage drop
+Digi-Key Part Number,Manufacturer Part Number,Manufacturer,Quantity,Customer Reference,Notes
+399-C1206C105K5RACTUCT-ND,C1206C105K5RACTU,KEMET,3,C15 C24 C25,1uF 50V X7R 1206
+399-C0805C105K5RACTUCT-ND,C0805C105K5RACTU,KEMET,1,C10,1uF 50V X7R 0805 local GVDD bypass
+277-1721-ND,1984617,Phoenix Contact,6,J2 J4 J5 J6 J7 SW1,2-position 3.5mm PT 1.5; SW1 is panel-switch terminal
+277-1860-ND,1984633,Phoenix Contact,1,J3,4-position 3.5mm PT 1.5
+311-10.0KFRCT-ND,RC1206FR-0710KL,YAGEO,6,R1 R3 R7 R9 R12 R13,1206 1% 0.25W
+311-100KFRCT-ND,RC1206FR-07100KL,YAGEO,1,R11,1206 1% 0.25W
+10-EEU-FM1E101HCT-ND,EEU-FM1E101H,Panasonic,4,C11 C12; C4 C6 optional,"Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C4 C6 are DNP until rail-startup tests"
+399-C1206C104K5RACTUCT-ND,C1206C104K5RACTU,KEMET,3,C5 C7 C23,100nF 50V X7R 1206
+399-C0805C104K5RACTUCT-ND,C0805C104K5RACTU,KEMET,3,C13 C14 C16,100nF 50V X7R 0805 local decoupling
+399-C0805C224K3RACTUCT-ND,C0805C224K3RACTU,KEMET,4,C17 C18 C19 C20,220nF 25V X7R 0805 bootstrap
+399-C1206C106K4RACTUCT-ND,C1206C106K4RACTU,KEMET,1,C3,10uF 16V X7R 1206; check effective capacitance at 5V
+399-C1206C155K5RACTUCT-ND,C1206C155K5RACTU,KEMET,2,C8 C9,Substitute for GRM31MR71E155KA88L (Not For New Designs; full reels only and none in stock). Same value and size; 50V loses less to DC bias. Use on both input legs
+399-C1206C684K5RACTUCT-ND,C1206C684K5RACTU,KEMET,2,C21 C22,680nF 50V X7R 1206
+311-30.0KFRCT-ND,RC1206FR-0730KL,YAGEO,1,R2,1206 1% 0.25W
+311-5.60KFRCT-ND,RC1206FR-075K6L,YAGEO,1,R4,1206 1% 0.25W
+311-10.0FRCT-ND,RC1206FR-0710RL,YAGEO,1,R6,1206 1% 0.25W
+13-RC1206FR-132K2LCT-ND,RC1206FR-132K2L,YAGEO,2,R8 R10,RC1206FR-072K2L is out of stock on cut tape; this is the same resistor on a 13-inch reel
+YAG1232CT-ND,RC2512JK-070RL,YAGEO,1,R5,Original 0-ohm 2512 jumper; 2A continuous rating; low-current experiments only; use higher-current option for larger amplifier current
+BZT52C12-TPMSCT-ND,BZT52C12-TP,Micro Commercial Co,1,D1,Substitute for BZT52C12-7-F (out of stock). Same 12V 500mW SOD-123
+IRF4905PBF-ND,IRF4905PBF,Infineon Technologies,1,Q1,P-MOSFET TO-220; verify inrush/thermal in hardware
+296-38572-1-ND,TPA3118D2DAPR,Texas Instruments,1,U1,HTSSOP-32 DAP bottom exposed pad
+296-TPS3808EG50DBVRCT-ND,TPS3808EG50DBVR,Texas Instruments,1,U3,"Substitute for TPS3808G50DBVR (none at DigiKey). TI's drop-in successor: same SOT-23-6 pinout, 4.65V threshold, open-drain RESET, 90k MR pull-up, 20ms delay with CT open. VDD is rated 6V (abs max 6.5V), not 6.5V (7V)"
+445-MPZ1608S221ATA00CT-ND,MPZ1608S221ATA00,TDK,2,FB1 FB2,0603 220ohm at 100MHz; retain selected bead package
+SRP1038A-100MCT-ND,SRP1038A-100M,Bourns,2,L1 L2,10uH lead-frame A series; custom local footprint
+CP-102AH-ND,PJ-102AH,Same Sky (Formerly CUI Devices),1,J1,DC jack; 5A 24V; CP-102AH-ND
+952-2261-ND,M20-9990245,Harwin,5,JP1 JP2 JP3 JP4 JP5,2-position 2.54mm vertical header
+952-2171-ND,M7567-05,Harwin,4,JP1 JP2 JP3 JP4 shunts,2.54mm 3A shunts; JP5 manual reset normally open
+708-1898-ND,FX0457,Bulgin,1,F1 holder,Holder only; separate fuse required
+486-1773-ND,0001.2509,SCHURTER,1,F1 fuse,T3.15A 5x20mm ceramic fuse rated 300V DC; initial engineering choice; validate inrush
+6281-S1B-ND,S1B,NKK Switches,1,panel switch to SW1,"Substitute for S301T ($15.78): same NKK S series, 12.5mm M12x1 panel hole and lever; rated 5A AC/DC instead of 20A DC; solder lugs, not screw terminals. NKK lists it obsolete; DigiKey still stocks it, but pick another for later builds"
+1738-1442-ND,DFR0571,DFRobot,1,U2 off-board,Off-board 5V buck module; manufacturer continuous rating 1.6A
+541-0.0RBCT-ND,CRCW25120000Z0EGHP,Vishay Dale,1,R5 EXPERIMENT,"Experiment. Substitute for WSL251200000ZEA9 (out of stock): thick-film, not solid copper. Check its jumper current in the datasheet before trusting it above 2A"
+486-1768-ND,0001.2507,SCHURTER,1,F1 EXPERIMENT,Time-lag 5x20mm ceramic SPT fuse; bench alternative; verify startup and sustained current
+486-1800-ND,0001.2508,SCHURTER,1,F1 EXPERIMENT,Time-lag 5x20mm ceramic SPT fuse; bench alternative
+486-1774-ND,0001.2510,SCHURTER,1,F1 EXPERIMENT,Time-lag 5x20mm ceramic SPT fuse; use only after verifying wiring/connector/PCB protection and inrush
+486-1785-ND,0001.2511,SCHURTER,1,F1 EXPERIMENT,Time-lag 5x20mm ceramic SPT fuse; upper test option; 5A jack rating does not establish safe fuse coordination
+399-C1206C474K5RACTUCT-ND,C1206C474K5RACTU,KEMET,2,C21 C22 EXPERIMENT,470nF 50V X7R 1206; change both output filter capacitors together; measure ringing and response
+399-C1206C225K3RACTUCT-ND,C1206C225K3RACTU,KEMET,2,C8 C9 EXPERIMENT,2.2uF 25V X7R 1206; matched audio input pair alternative
+SRP1038A-6R8MCT-ND,SRP1038A-6R8M,Bourns,2,L1 L2 EXPERIMENT,6.8uH; same SRP1038A mechanical series; change both together; validate ripple/heating/filter response
+SRP1038A-150MCT-ND,SRP1038A-150M,Bourns,2,L1 L2 EXPERIMENT,15uH; same SRP1038A mechanical series; change both together; validate ripple/heating/filter response
+311-4.70FRCT-ND,RC1206FR-074R7L,YAGEO,1,R6 EXPERIMENT,4.7 ohm 1% 1206 0.25W AVCC filter option; verify supply ripple and voltage
+311-22.0FRCT-ND,RC1206FR-0722RL,YAGEO,1,R6 EXPERIMENT,22 ohm 1% 1206 0.25W AVCC filter option; verify AVCC voltage drop

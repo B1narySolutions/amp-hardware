@@ -59,9 +59,12 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
   it, and change DESIGN.md with it.
 - **`audio-board/rev2/CHANGES.md`** records only the net difference from rev 1.
 - **`seed3-carrier-digikey.csv`** is the order. The schematic's MPN/DigiKey fields are its source.
-- **`amp-digikey-order.csv`** (repo root) is one build of both boards in a single DigiKey order, built from the
-  carrier's order and the power board's schematic and `DigiKey_Import.csv`, with its experiment parts. Its Notes column
-  says where a line differs from those sources (a stock substitute, a renumbered DigiKey listing).
+- **`amp-digikey-order.csv`** (repo root) is one build of both boards in a single DigiKey order (ordered
+  2026-11-05), built from the carrier's order and the power board's parts, with its experiment parts. Its Notes column
+  says where a line differs from the original part (a stock substitute, a renumbered DigiKey listing).
+- **`power-board/DigiKey_Import.csv`** is the power board's share of that order, one build, with DigiKey numbers.
+  The power board's schematic MPN/Manufacturer fields match it, substitutes included: assemble from these, not
+  from the original part choices.
   `amp-digikey-cart.csv` is generated from it (Quantity, Digi-Key Part Number, Customer Reference of 48 characters at
   most). Update both when either board's parts change. DigiKey API credentials are in
   `~/.config/digikey/credentials` (`DIGIKEY_CLIENT_ID`, `DIGIKEY_CLIENT_SECRET`); never print them.

@@ -8126,7 +8126,7 @@
 				)
 			)
 		)
-		(property "MPN" "BZT52C12-7-F"
+		(property "MPN" "BZT52C12-TP"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8137,7 +8137,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Diodes Incorporated"
+		(property "Manufacturer" "Micro Commercial Co"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8148,7 +8148,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "12V Zener SOD-123"
+		(property "Purchase_Note" "12V 500mW Zener SOD-123; substitute for BZT52C12-7-F (out of stock)"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10201,7 +10201,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM31MR71E155KA88L"
+		(property "MPN" "C1206C155K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10212,7 +10212,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata"
+		(property "Manufacturer" "KEMET"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10223,7 +10223,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1.5uF 25V X7R 1206; use same part on both input legs"
+		(property "Purchase_Note" "1.5uF 50V X7R 1206; use same part on both input legs; substitute for GRM31MR71E155KA88L (not for new designs, none in stock)"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11044,7 +11044,7 @@
 				)
 			)
 		)
-		(property "MPN" "EEU-FR1E101"
+		(property "MPN" "EEU-FM1E101H"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11066,7 +11066,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch"
+		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11326,7 +11326,7 @@
 				)
 			)
 		)
-		(property "Value" "TPS3808G50DBVR"
+		(property "Value" "TPS3808EG50DBVR"
 			(at 454.66 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11378,7 +11378,7 @@
 				)
 			)
 		)
-		(property "MPN" "TPS3808G50DBVR"
+		(property "MPN" "TPS3808EG50DBVR"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11400,7 +11400,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "SOT-23-6 4.65V supervisor"
+		(property "Purchase_Note" "SOT-23-6 4.65V supervisor; TI's drop-in successor to TPS3808G50DBVR (none at DigiKey); VDD rated 6V"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11511,7 +11511,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-072K2L"
+		(property "MPN" "RC1206FR-132K2L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11533,7 +11533,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" "1206 1% 0.25W; same resistor as RC1206FR-072K2L on a 13-inch reel"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11634,7 +11634,7 @@
 				)
 			)
 		)
-		(property "MPN" "EEU-FR1E101"
+		(property "MPN" "EEU-FM1E101H"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11656,7 +11656,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch"
+		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12745,7 +12745,7 @@
 				)
 			)
 		)
-		(property "MPN" "EEU-FR1E101"
+		(property "MPN" "EEU-FM1E101H"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12767,7 +12767,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch"
+		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12868,7 +12868,7 @@
 				)
 			)
 		)
-		(property "MPN" "EEU-FR1E101"
+		(property "MPN" "EEU-FM1E101H"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12890,7 +12890,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch"
+		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13805,7 +13805,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-072K2L"
+		(property "MPN" "RC1206FR-132K2L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13827,7 +13827,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" "1206 1% 0.25W; same resistor as RC1206FR-072K2L on a 13-inch reel"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14905,7 +14905,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM31MR71E155KA88L"
+		(property "MPN" "C1206C155K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14916,7 +14916,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata"
+		(property "Manufacturer" "KEMET"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14927,7 +14927,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1.5uF 25V X7R 1206; use same part on both input legs"
+		(property "Purchase_Note" "1.5uF 50V X7R 1206; use same part on both input legs; substitute for GRM31MR71E155KA88L (not for new designs, none in stock)"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
