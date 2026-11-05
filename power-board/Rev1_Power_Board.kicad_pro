@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.8,
-          "height": 1.27,
-          "width": 1.27
+          "drill": 0.0,
+          "height": 2.0,
+          "width": 2.0
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -172,7 +172,6 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_enabled": false,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -184,7 +183,6 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_enabled": false,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -196,7 +194,6 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_enabled": false,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -492,7 +489,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "Halliquest_Power.kicad_pro",
+    "filename": "Rev1_Power_Board.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -596,8 +593,8 @@
     "meta": {
       "version": 5
     },
-    "net_colors": {},
-    "netclass_assignments": {},
+    "net_colors": null,
+    "netclass_assignments": null,
     "netclass_patterns": [
       {
         "netclass": "Power0.75",
@@ -881,18 +878,18 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "Halliquest_Power.kicad_sch",
-        "name": "Halliquest_Power",
+        "filename": "Rev1_Power_Board.kicad_sch",
+        "name": "Rev1_Power_Board",
         "uuid": "56ec54de-021f-45f6-975b-b2d6ee111503"
       }
     ],
-    "used_designators": "#PWR1,D1,F1,J1-4,TP1-2,U1",
+    "used_designators": "#PWR1,D1,F1,TP1-2,J1-4,U1",
     "variants": []
   },
   "sheets": [
     [
       "56ec54de-021f-45f6-975b-b2d6ee111503",
-      "Halliquest_Power_Wired"
+      "Rev1_Power_Board"
     ]
   ],
   "text_variables": {},
