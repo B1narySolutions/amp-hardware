@@ -5,7 +5,7 @@ Digi-Key Part Number,Manufacturer Part Number,Manufacturer,Quantity,Audio board,
 1276-1017-1-ND,CL31B104KBCNNNC,Samsung Electro-Mechanics,3,C4 C6 C17,,100nF,
 732-8628-1-ND,860010472005,Würth Elektronik,1,C5,,47uF 16V,
 490-6539-1-ND,GRM32ER61C476KE15L,Murata Electronics,1,C7,,47uF 16V,Murata lists it Not For New Designs; in stock
-1276-CL21A475KACLRNCCT-ND,CL21A475KACLRNC,Samsung Electro-Mechanics,2,C10 C11,,4.7uF,DigiKey renumbered it; the carrier's files still say 1276-2415-1-ND
+1276-CL21A475KACLRNCCT-ND,CL21A475KACLRNC,Samsung Electro-Mechanics,2,C10 C11,,4.7uF,DigiKey renumbered it; the audio board's files still say 1276-2415-1-ND
 399-C0805C105K5RACTUCT-ND,C0805C105K5RACTU,KEMET,5,C12 C13 C14 C15,C10,1uF 50V X7R 0805,
 399-C0805C332J5GACTUCT-ND,C0805C332J5GACTU,KEMET,1,C16,,3.3nF,
 1727-PESD5V0S1BAFCT-ND,PESD5V0S1BAF,Nexperia USA Inc.,5,D1 D2 D3 D4 D5,,PESD5V0S1BA,

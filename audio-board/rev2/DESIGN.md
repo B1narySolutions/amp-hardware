@@ -1,9 +1,9 @@
-# Seed3 Carrier rev 2 — design
+# Audio board rev 2 — design
 
 How the board works now, and why. `CHANGES.md` lists what changed from rev 1. `../TEST_PLAN.md` is the bring-up and test procedure.
 Keep this file current as the schematic and board change. Write down the design as it stands now, not the history behind it (git has that).
 
-The carrier holds a Daisy Seed3 (A1, in two 1×20 sockets), the analog input and output stages, the headphone amp and the
+The audio board holds a Daisy Seed3 (A1, in two 1×20 sockets), the analog input and output stages, the headphone amp and the
 connectors to the power board and display. Volume, tone, input trim and mute come from the touchscreen over the UART, so the
 board has no pots or encoder. If there is a master volume encoder, it goes on the touchscreen / ESP32 side.
 
@@ -132,7 +132,7 @@ through the Daisy's USB-C.
 - **J5** is a 2-way 3.5 mm screw terminal (Phoenix PT 1,5/2-3,5-H) on the right edge: pin 1 LINE+ (`LINE_OUT`), pin 2 LINE− (`LINE_REF`),
   marked on the silkscreen. It feeds the speaker amp on the power board (or an off-the-shelf class D module while prototyping). Use a
   short twisted pair routed away from the guitar input and speaker wires.
-- **Pseudo-differential output for a differential amp input.** The Daisy has one output pin per channel, so LINE− is the carrier's
+- **Pseudo-differential output for a differential amp input.** The Daisy has one output pin per channel, so LINE− is the audio board's
   ground rather than an inverted copy of the signal. Wire LINE+ to the amp's IN+ and LINE− to its IN− **only**, never to the amp's
   GND as well. The amp then amplifies only the difference between the two wires, and any voltage between the two boards' grounds
   (the power board's supply current flowing in J6's GND wire) is rejected instead of added to the speaker signal. Tied to the amp's
@@ -210,9 +210,9 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 ### Running from USB alone
 The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear to drive the
 VIN pin. With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
-Daisy output that is high then pushes current into an unpowered part on the carrier through that part's input protection diodes.
+Daisy output that is high then pushes current into an unpowered part on the audio board through that part's input protection diodes.
 - **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. That would only leak a little current to the power
-  board. Nothing on the carrier back-powers `+5V`.
+  board. Nothing on the audio board back-powers `+5V`.
 - **Display UART:** with the power board off, the display is unpowered too, and Daisy TX idles high into it. R8 (10k) limits that
   current to ≈ 0.27 mA. See "Display connector (J3)".
 - **Headphone input (`5V_SENSE`):** C10/C11 pass pin 18's audio through R25/R27 to U2's inputs, which are rated only from SVSS − 0.3 V
@@ -232,7 +232,7 @@ Daisy output that is high then pushes current into an unpowered part on the carr
 ## Connectors
 
 ### What each connector can see
-The outside world the carrier is designed for, case by case. A design review checks every IC pin against these, one
+The outside world the audio board is designed for, case by case. A design review checks every IC pin against these, one
 misuse at a time with everything else normal, in each power state. Misuse may stop the board working, but must not
 damage it.
 
@@ -264,13 +264,13 @@ which cuts the 5 V output itself.
 
 | Pin | Silkscreen | Net | Direction | Daisy pin | Use |
 |---|---|---|---|---|---|
-| 1 | 5V | `5V_IN` | Power board → carrier | 39 (VIN) via Q1 | 5 V supply |
+| 1 | 5V | `5V_IN` | Power board → audio board | 39 (VIN) via Q1 | 5 V supply |
 | 2 | GND | GND | — | 20 / 40 | Ground |
-| 3 | BAT | `BATT_SENSE_CONN` | Power board → carrier | 25 (`BATT_SENSE`) | Battery voltage scaled to ≤ 3.3 V. R13/R22 (10k/10k) halve it and C17 (100 nF) filters it into the ADC |
-| 4 | MUTE | `SPK_MUTE` | Carrier → power board | 28 (`SPK_EN`) via Q2 and R23 | Open-drain speaker-amp mute (see "Output mute") |
+| 3 | BAT | `BATT_SENSE_CONN` | Power board → audio board | 25 (`BATT_SENSE`) | Battery voltage scaled to ≤ 3.3 V. R13/R22 (10k/10k) halve it and C17 (100 nF) filters it into the ADC |
+| 4 | MUTE | `SPK_MUTE` | Audio board → power board | 28 (`SPK_EN`) via Q2 and R23 | Open-drain speaker-amp mute (see "Output mute") |
 
 - **Pin order:** seen from the wire side, the terminals read 5V, GND, BAT, MUTE from left to right. GND sits between 5V and the signals.
-- **One 5 V and one GND pin:** the carrier draws well under 1 A (the display has its own supply), and a PT 1,5 contact is rated
+- **One 5 V and one GND pin:** the audio board draws well under 1 A (the display has its own supply), and a PT 1,5 contact is rated
   17.5 A. A single GND is fine because the speaker amp's input is differential and LINE− connects only to the amp's IN− (see "Speaker
   send"), so no supply current returns through J5.
 - **R13/R22 (10k/10k) halve the battery level:** 0–3.3 V on BAT reads as 0–1.65 V on pin 25, and a 5 V wire on BAT reaches only
@@ -278,19 +278,24 @@ which cuts the 5 V output itself.
   reference, which may sit a little below 3.3 V.
 - **The reading depends on the power board's divider too.** R13 + R22 load BAT with 20k, so pin 25 reads V × 10k / (20k + R_source),
   where V is the divider's open-circuit output and R_source its source impedance. With a stiff source that is half of BAT.
+- **The power board's divider (rev 1)** is R2/R3 (30k/10k, 1 %) from its switched battery rail (`VBAT_PROTECTED`, after its power
+  switch): a ratio of 0.25 from a 7.5 kΩ source, so BAT is 3.15 V at 12.6 V. Pin 25 then reads
+  VBAT × 0.25 × 10k / (20k + 7.5k) = **VBAT / 11**: 1.15 V at 12.6 V, 1.01 V at 11.1 V, 0.82 V at 9.0 V. With all four resistors
+  at 1 %, the ratio is within ±2.4 % worst case. The firmware converts with VBAT = 11 × V(pin 25).
 - **While the amp is off,** a power board divider still holding BAT near 3.3 V puts at most 1.65 V on the unpowered Daisy's pin, inside
   its 4.0 V rating.
 - With C17 the filter corner is ≈ 320 Hz (10k ‖ 10k), far above battery changes. C17 also supplies the ADC's sampling charge.
 
-**Power board requirements** (`../../power-board/README.md` collects these with everything else the carrier needs from the power board)
+**Power board requirements** (`../../power-board/README.md` collects these with everything else the audio board needs from the power board)
 - Keep `BATT_SENSE_CONN` within 0–3.3 V.
-- Keep the `BATT_SENSE` divider's source impedance at 10 kΩ or less, and record its ratio and impedance here. The carrier loads it with
-  20k (R13 + R22), so the reading is at least a third of BAT and the firmware needs both numbers to convert it.
+- Keep the `BATT_SENSE` divider's source impedance at 10 kΩ or less, and record its ratio and impedance here (rev 1: 0.25 from 7.5 kΩ,
+  above). The audio board loads it with 20k (R13 + R22), so the reading is at least a third of BAT and the firmware needs both numbers to
+  convert it.
 - Switch the `BATT_SENSE` divider off with the 5 V output, so it doesn't drain the battery while the amp is off.
 - Pull `SPK_MUTE` up on the amp side, with 4.7 kΩ or more to at most 5 V, so the amp is muted when this board is unpowered or
   unplugged. Q2 pulls it low through R23 (470 Ω): ≈ 0.24 V against 10k, ≈ 0.5 V against 4.7k. The amp's mute input has to read that
   as low.
-- Provide the power switch and a low-battery cutoff: the carrier has no way to turn the power off.
+- Provide the power switch and a low-battery cutoff: the audio board has no way to turn the power off.
 - Supply the display's 5 V directly, with its own wire pair.
 
 ### Display connector (J3)
@@ -318,7 +323,7 @@ different times, and add a little ESD margin.
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
-marked no-connect. With the Daisy out, its sockets (A1) give probe access to every carrier net, so there are no breakout headers.
+marked no-connect. With the Daisy out, its sockets (A1) give probe access to every audio board net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
 ## Firmware requirements
@@ -336,7 +341,7 @@ USB stays on the Daisy's own connector.
   low when headphones are in.
 - Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18 does from boot.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display every few seconds. Warn on the display when it gets low;
-  the power board cuts the power at its own low-battery threshold. R13/R22 halve BAT, and less with a high source impedance (see
+  the power board cuts the power at its own low-battery threshold. VBAT = 11 × V(pin 25) with the power board's rev 1 divider (see
   "Power board connector (J6)").
 - Read `5V_SENSE` (pin 22, ADC_0) with the longest ADC sample time (its source impedance is 50k). It reads ≈ 2.4–2.5 V with `+5V`
   at 4.85–5.0 V.
@@ -353,8 +358,6 @@ USB stays on the Daisy's own connector.
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and J5 go silent and `SPK_MUTE` mutes within ~10 ms.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). The power board's amp is the
   TPA3118D2, whose MUTE pin is active high, so it matches with no inverter (see power-board/README.md). Check it on the built boards.
-- **`BATT_SENSE` divider:** the power board sets the ratio and source impedance, and R13/R22 then halve it (less with a high source
-  impedance). Record both here so the firmware can convert the reading to volts.
 - **Wire ends:** use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** full scale is ≈ 0.60 Vrms per channel (TEST_PLAN 7.8). If that's too loud, or the hiss is audible with
@@ -461,7 +464,7 @@ All parts sit on the top side, in blocks next to the pins they serve. Each filte
 then the low-impedance ones (a source output, the DAC output, an op-amp output), and every high-impedance node is a few mm long.
 The analog section fills the band between the Daisy and the front jacks, with every audio net on F.Cu. Power, the display and the power
 board controls sit in the rear-right corner beside the Daisy, as far from J1, U1 and U2 as the board allows. The power board's
-regulators and class D amp are the noisiest things the carrier connects to.
+regulators and class D amp are the noisiest things the audio board connects to.
 
 - **Guitar input (most sensitive):** one straight row on F.Cu at the height of J1's tip: J1 tip → D1 → C1 → C2 → R2 → U1 pin 3, about
   18 mm, with no vias. R1 rises from the C2/R2 node to `VREF`, so the 1 MΩ node is about 4.5 mm of trace. U1's output, through R20,
@@ -542,7 +545,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 2
 
 - **Via drill:** the capstone fab needs every hole to be at least 13 mil (0.33 mm), so the smallest via drill is 0.35 mm. The
   0.6 mm via pad is kept, so clearances don't change, which leaves a 0.125 mm annular ring (JLC's minimum is 0.075 mm).
-- **`Power` class:** `+5V`, `/5V_IN` (the class also lists `/3V3_A`, which is unused on the carrier).
+- **`Power` class:** `+5V`, `/5V_IN` (the class also lists `/3V3_A`, which is unused on the audio board).
   GND stays in Default and mostly drops straight to the pours through vias.
 - **Neck-down at U1 and U2:** a 1 mm power trace cannot reach U2's 0.4 mm pads (0.65 mm pitch) or U1 pin 5 without touching the next
   pin. Inside each IC's courtyard, two rules set the default to the pad width (U2: 0.25 mm, U1: 0.5 mm), so a trace started at the pin

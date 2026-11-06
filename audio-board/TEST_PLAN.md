@@ -1,4 +1,4 @@
-# Seed3 Carrier — Post-Assembly Test Plan
+# Audio board — Post-Assembly Test Plan
 
 Bring-up and acceptance tests for one hand-assembled **rev 2** board built from the rev 2 schematic
 (`rev2/seed3-carrier.kicad_sch`), its fabrication package and its BOM. Record the package name in the log.
@@ -40,8 +40,8 @@ the log at the end (one copy per board serial).
 - J4 / J2 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J2's 5/6 not connected)
 - A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`,
   19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
-  39 `+5V`, 40 GND. All other Daisy pins are not connected on the carrier. Probe the sockets while the Daisy is out. With it fitted
-  they are covered, so the checks name a carrier part on the same net instead
+  39 `+5V`, 40 GND. All other Daisy pins are not connected on the audio board. Probe the sockets while the Daisy is out. With it fitted
+  they are covered, so the checks name an audio board part on the same net instead
 
 ## Equipment
 
@@ -84,7 +84,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.5 | J3.2 → GND; J3.3 → GND | Open; ≈ 110 kΩ (R9 + R24) | UART pins shorted to GND; ≈ 100 kΩ = R9 shorted, open = R9 or R24 open |
 | 1.6 | PVSS (C14 pad 1) → GND and → `+5V` (C5 `+`) | High (no short) | C14 shorted; U2.7 (PVSS) bridged to U2.8 (SGND) |
 | 1.6a | U2 charge-pump pins: C13 pad 1 (C1P) → C13 pad 2 (C1N), → `+5V` and → GND; C13 pad 2 → GND and → C14 pad 1 (PVSS) | High (no short) on all five | C13 shorted; U2 pins 3–4 (PVDD/C1P), 4–5 (C1P/PGND), 5–6 (PGND/C1N) or 6–7 (C1N/PVSS) bridged |
-| 1.7 | A1.33 and A1.38 → GND and → `+5V` | Open (not connected on the carrier) | Stray copper or a socket bridge |
+| 1.7 | A1.33 and A1.38 → GND and → `+5V` | Open (not connected on the audio board) | Stray copper or a socket bridge |
 | 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V`, J4 tip → J4 ring | High (no short), not < 100 Ω | TSSOP bridge: OUTR (12) to SVDD (11), an output to SVSS (13), or OUTR (12) to OUTL (14) |
 | 1.8a | J4 tip → C10 pad 2; J4 ring → C11 pad 2 | ≈ 20 kΩ (R26 + R25; R28 + R27) | A gain resistor missing, open or the wrong value |
 | 1.9 | J1 tip → GND, no plug | ≈ 0 Ω (tip-normal shorts to GND) | J1 switch / footprint issue |

@@ -5,12 +5,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 Hardware for a capstone guitar amp, in KiCad 10:
-- `audio-board/rev2/` is the Seed3 carrier: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs, the headphone
+- `audio-board/rev2/` is the audio board: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs, the headphone
   amp (U2, MAX9722A) and screw terminals to the power board and display. It is a 2-layer board, hand-soldered with an
   iron, with every part from DigiKey (`seed3-carrier-digikey.csv` is the order). Rev 2 has been ordered.
 - `power-board/` is the power board, rev 1, ordered (`Rev1_Power_Board.kicad_pro`, designed by a teammate; its order is
-  `DigiKey_Import.csv`). Its README is the contract with the carrier: everything the carrier expects
-  from it, and what the carrier promises back.
+  `DigiKey_Import.csv`). Its README is the contract with the audio board: everything the audio board expects
+  from it, and what the audio board promises back.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
 (`kicad-cli`, jobsets, the IPC API), following the skills from
@@ -60,7 +60,7 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
 - **`audio-board/rev2/CHANGES.md`** records only the net difference from rev 1.
 - **`seed3-carrier-digikey.csv`** is the order. The schematic's MPN/DigiKey fields are its source.
 - **`amp-digikey-order.csv`** (repo root) is one build of both boards in a single DigiKey order (ordered
-  2026-11-05), built from the carrier's order and the power board's parts, with its experiment parts. Its Notes column
+  2026-11-05), built from the audio board's order and the power board's parts, with its experiment parts. Its Notes column
   says where a line differs from the original part (a stock substitute, a renumbered DigiKey listing).
 - **`power-board/DigiKey_Import.csv`** is the power board's share of that order, one build, with DigiKey numbers.
   The power board's schematic MPN/Manufacturer fields match it, substitutes included: assemble from these, not

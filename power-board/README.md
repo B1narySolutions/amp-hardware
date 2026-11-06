@@ -4,11 +4,11 @@ This directory holds the power board's KiCad project, rev 1 (`Rev1_Power_Board.k
 
 ## What the audio board needs from it
 
-The audio board (the Seed3 carrier, `../audio-board/rev2/`) connects to the power board through two screw terminals, six wires in all. This list
-collects everything the carrier expects from the power board, and it is the contract between the two boards.
+The audio board (`../audio-board/rev2/`) connects to the power board through two screw terminals, six wires in all. This list
+collects everything the audio board expects from the power board, and it is the contract between the two boards.
 `../audio-board/rev2/DESIGN.md` gives the reasons ("Power board connector (J6)", "Output mute", "Speaker send",
 "Display connector (J3)", "What each connector can see"). If the power board's design departs from any number here,
-change it here and in the carrier's DESIGN.md together, and review both boards' designs against the new number.
+change it here and in the audio board's DESIGN.md together, and review both boards' designs against the new number.
 
 ### The contract in brief
 
@@ -16,32 +16,32 @@ change it here and in the carrier's DESIGN.md together, and review both boards' 
 |---|---|---|
 | 5V (J6.1) | Power board | 4.75–5.25 V (5.0 V ± 5 %), never above 5.5 V |
 | BAT (J6.3) | Power board | 0–3.3 V, source impedance 10 kΩ or less |
-| MUTE (J6.4) | Power board pulls up, carrier pulls down | Pull-up of 4.7 kΩ or more to at most the 5 V rail; the carrier pulls it to ≈ 0.24–0.5 V to play |
-| LINE+ (J5.1) | Carrier | Audio, full scale ≈ 1 Vrms (1.5 V peak), ≈ 0 V DC, from ≈ 1 kΩ (at most 1.1 kΩ) |
-| LINE− (J5.2) | Carrier | The carrier's ground through ≈ 1 kΩ (0 V ± 10 mV) |
+| MUTE (J6.4) | Power board pulls up, audio board pulls down | Pull-up of 4.7 kΩ or more to at most the 5 V rail; the audio board pulls it to ≈ 0.24–0.5 V to play |
+| LINE+ (J5.1) | Audio board | Audio, full scale ≈ 1 Vrms (1.5 V peak), ≈ 0 V DC, from ≈ 1 kΩ (at most 1.1 kΩ) |
+| LINE− (J5.2) | Audio board | The audio board's ground through ≈ 1 kΩ (0 V ± 10 mV) |
 | LINE+ / LINE− load | Power board | 10 kΩ–1 MΩ per leg |
 
 ### Connections
 
-| Carrier terminal | Pins (silkscreen) | What the power board does with it |
+| Audio board terminal | Pins (silkscreen) | What the power board does with it |
 |---|---|---|
-| J6, power | 1 5V, 2 GND, 3 BAT, 4 MUTE | Sends 5 V and the battery level to the carrier, and gets the speaker mute back |
+| J6, power | 1 5V, 2 GND, 3 BAT, 4 MUTE | Sends 5 V and the battery level to the audio board, and gets the speaker mute back |
 | J5, speaker send | 1 LINE+, 2 LINE− | Feeds the speaker amp's differential input |
 
-Both are 3.5 mm screw terminals on the carrier, J6 4-way and J5 2-way. Seen from the wire side, J6 reads 5V, GND, BAT, MUTE from
+Both are 3.5 mm screw terminals on the audio board, J6 4-way and J5 2-way. Seen from the wire side, J6 reads 5V, GND, BAT, MUTE from
 left to right.
 
-The carrier's third screw terminal, J3 (1 GND, 2 TX, 3 RX), is not a power board connection. It is the UART link between the Seed3
+The audio board's third screw terminal, J3 (1 GND, 2 TX, 3 RX), is not a power board connection. It is the UART link between the Seed3
 and the display's ESP32-S3, wired straight to the display. The power board only supplies the display's power (see "Display").
 
 ### 5 V supply (J6.1, J6.2)
-- 5.0 V ± 5 % (4.75–5.25 V) at J6, never above 5.5 V: the carrier's op-amp (U1) and headphone amp (U2) run straight from it.
-  The carrier's Q1 drops tens of mV, and its firmware won't start audio below 4.7 V or keep it running below 4.4 V.
-- The carrier draws well under 1 A. The Daisy takes roughly 100–200 mA.
+- 5.0 V ± 5 % (4.75–5.25 V) at J6, never above 5.5 V: the audio board's op-amp (U1) and headphone amp (U2) run straight from it.
+  The audio board's Q1 drops tens of mV, and its firmware won't start audio below 4.7 V or keep it running below 4.4 V.
+- The audio board draws well under 1 A. The Daisy takes roughly 100–200 mA.
 - One 5 V wire and one GND wire on J6 (a Phoenix PT 1,5 contact is rated 17.5 A). The display's ground returns with its own power
   pair, though some of its return current comes back through the display UART's GND (J3) and across to J6, which sit side by side on
-  the carrier.
-- The carrier has reverse-polarity protection (Q1), but nothing else on the power board should rely on it.
+  the audio board.
+- The audio board has reverse-polarity protection (Q1), but nothing else on the power board should rely on it.
 
 ### Power switch and battery
 - **The battery:** a Talentcell rechargeable power bank, "72W 100Wh 12V/8300mAh 9V/11000mAh 5V/20000mAh"
@@ -49,26 +49,26 @@ and the display's ESP32-S3, wired straight to the display. The power board only 
   rated 72 W, not a bare 3S pack. The power board takes its 12 V DC output. The listing doesn't say whether that output is regulated
   or the 3S cells' raw voltage; this README assumes the worst case, 9.0 V empty to 12.6 V full. Measure it at full charge and near
   empty, and fuse the input on the power board anyway.
-- Put the power switch and the low-battery cutoff on the power board. The carrier can't turn the power off itself, and its firmware
+- Put the power switch and the low-battery cutoff on the power board. The audio board can't turn the power off itself, and its firmware
   assumes the power can disappear at any time.
 - **Battery level (J6.3, BAT):** a voltage proportional to the battery, scaled to 0–3.3 V.
-  - Keep its source impedance at 10 kΩ or less. The carrier loads BAT with 20 kΩ (its R13 + R22) and reads
+  - Keep its source impedance at 10 kΩ or less. The audio board loads BAT with 20 kΩ (its R13 + R22) and reads
     V × 10k / (20k + R_source), where V is the divider's open-circuit output. With a stiff source that is half of BAT.
-  - Record the divider's ratio and source impedance in the carrier's DESIGN.md ("Open items"), so the firmware can convert the
-    reading to volts.
+  - Record the divider's ratio and source impedance in the audio board's DESIGN.md ("Power board connector (J6)"), so the firmware can
+    convert the reading to volts. Rev 1 uses 30k over 10k: 0.25 from 7.5 kΩ.
   - Switch the divider off with the 5 V output, so it doesn't drain the battery while the amp is off.
   - For a 12.6 V maximum, 30 kΩ over 10 kΩ would do: a ratio of 0.25 (3.15 V at 12.6 V) from a 7.5 kΩ source.
 
 ### Speaker amp
-- **Input (J5):** wire LINE+ to the amp's IN+ and LINE− to its IN− **only**, never to the amp's GND as well. LINE− is the carrier's
+- **Input (J5):** wire LINE+ to the amp's IN+ and LINE− to its IN− **only**, never to the amp's GND as well. LINE− is the audio board's
   ground through 1 kΩ, so the amp rejects any voltage between the two boards' grounds. Tied to the amp's GND, LINE− would close a
   ground loop through J6 and J5.
-- **Input impedance:** 10 kΩ or more per leg. The carrier drives each leg through 1 kΩ, so full scale arrives at ≈ 0.83 Vrms
+- **Input impedance:** 10 kΩ or more per leg. The audio board drives each leg through 1 kΩ, so full scale arrives at ≈ 0.83 Vrms
   differential into 10 kΩ (−1.7 dB), and ≈ 3.0 dB lower into 5 kΩ. Choose the amp's gain for that level. J5 should sit at ≈ 0 V DC
-  (the carrier's TEST_PLAN 5.16 confirms it).
-- **Mute (J6.4, MUTE):** the carrier pulls MUTE to GND through Q2 and a 470 Ω resistor to let the speaker play, and leaves it open to
+  (the audio board's TEST_PLAN 5.16 confirms it).
+- **Mute (J6.4, MUTE):** the audio board pulls MUTE to GND through Q2 and a 470 Ω resistor to let the speaker play, and leaves it open to
   mute. So:
-  - Pull MUTE up on the power board, with 4.7 kΩ or more to at most 5 V. The amp is then muted whenever the carrier is unpowered,
+  - Pull MUTE up on the power board, with 4.7 kΩ or more to at most 5 V. The amp is then muted whenever the audio board is unpowered,
     booting, reset or unplugged.
   - Low (speaker on) is ≈ 0.24 V against a 10 kΩ pull-up and ≈ 0.5 V against 4.7 kΩ. The amp's mute or shutdown input has to read that
     as "play" and a pulled-up line as "mute". If the chosen amp's pin works the other way, invert it on the power board.
@@ -90,7 +90,7 @@ The power board uses the TPA3118D2 (TPA3116D2/TPA3118D2/TPA3130D2 datasheet, SLO
   sit at an internal bias). Use the same type and value on both legs so they stay matched; the datasheet suggests 1.5 µF at 20 dB.
 - **Gain and input impedance:** the gain is set by the GAIN/SLV divider, and the input impedance falls as the gain rises, from 60 kΩ
   at 20 dB to 9 kΩ at 36 dB, ±20 %. Use 32 dB or less: 36 dB breaks the 10 kΩ-per-leg minimum.
-- **Use 20 dB, the lowest setting.** The carrier's full scale (1 Vrms, ≈ 0.98 Vrms after its 1 kΩ legs into 60 kΩ) becomes
+- **Use 20 dB, the lowest setting.** The audio board's full scale (1 Vrms, ≈ 0.98 Vrms after its 1 kΩ legs into 60 kΩ) becomes
   ≈ 9.8 Vrms, which already clips on the battery: ≈ 1.5 dB below full scale on a full pack, ≈ 2.5 dB at 11.1 V and ≈ 4.5 dB near
   9 V. The firmware should cap the speaker level about 5 dB below full scale (or use the PLIMIT pin). A higher gain would only clip sooner.
 - **Supply:** 4.5–26 V, straight from the power bank's 12 V output (9.0–12.6 V assumed). AVCC is then always above 5 V, so the MUTE pull-up can go to the
@@ -103,12 +103,12 @@ The power board uses the TPA3118D2 (TPA3116D2/TPA3118D2/TPA3130D2 datasheet, SLO
 
 ### Display
 - Supply the display's 5 V directly from the power board, with its own wire pair, so its current pulses (ESP32-S3 Wi-Fi, backlight PWM)
-  never flow through the carrier's `+5V`.
+  never flow through the audio board's `+5V`.
 
 ### Wiring and placement
 - Use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
 - Run J5 as a short twisted pair, away from the guitar input and the speaker wires.
-- Keep the power board's regulators and class D amp away from the carrier's audio section. The carrier's J6 is on its rear
+- Keep the power board's regulators and class D amp away from the audio board's analog circuits. The audio board's J6 is on its rear
   edge and J5 on its right edge, away from the front-edge jacks.
-- The carrier is designed to survive 5 V landing on BAT or MUTE, and probably on LINE+ (it puts ≈ 3 mA into the codec output's
+- The audio board is designed to survive 5 V landing on BAT or MUTE, and probably on LINE+ (it puts ≈ 3 mA into the codec output's
   protection). Check every wire against the silkscreen label before powering up anyway.

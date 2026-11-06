@@ -43,7 +43,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 - **R18/R19 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`).** On USB alone, `+5V` and U2's rails are off, and pin 18's audio would
   reach U2's inputs through C10/C11 and R25/R27. The firmware keeps the outputs silent while `5V_SENSE` is low.
 - **Display: J3 carries only the UART and GND.** The display takes its power from the power board, so its current pulses stay off
-  the carrier's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
+  the audio board's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
   different times.
 - **R22, R23 and R24 added against a 5 V wire on a signal terminal.** R13/R22 halve BAT, so Daisy pin 25 (a 4.0 V pin with no clamp)
   stays below 2.65 V. R23 limits Q2's current to ≈ 11 mA if 5 V lands on MUTE while Q2 is on. R24 divides RX with R9 to ≤ 4.78 V, and
