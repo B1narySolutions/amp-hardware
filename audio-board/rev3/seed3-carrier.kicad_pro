@@ -549,6 +549,24 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
+        "name": "HighCurrent",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 1.5,
+        "tuning_profile": "",
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
         "name": "Power",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,
@@ -577,6 +595,62 @@
       {
         "netclass": "Power",
         "pattern": "/3V3_A"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Power/+5V_RAW"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Power/+5V_DFR"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Power/+5V_DISPLAY"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Power/CAP_BANK_A"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Power/CAP_BANK_D"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/VBAT_PROTECTED"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/AMP_PVCC"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/OUT_P"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/OUT_N"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/SPK+"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "/Power/SPK-"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "Net-(F101-Pad1)"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "Net-(SW101-A)"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "Net-(Q101-D)"
       }
     ]
   },

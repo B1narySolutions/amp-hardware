@@ -49,3 +49,17 @@
 (rule "Fiducial pour clearance"
 	(condition "A.memberOfFootprint('FID*') && B.Type == 'Zone'")
 	(constraint clearance (min 1.0mm)))
+
+# Rev 3: the battery, PVCC, class D output and speaker nets (fused at 3.15 A, 1 oz outer copper).
+(rule "HighCurrent track width"
+	(condition "A.Type == 'Track' && A.NetClass == 'HighCurrent'")
+	(constraint track_width (min 0.5mm) (opt 1.5mm) (max 3mm)))
+
+# Neck-down at U101's 0.65 mm pitch pins (PVCC, OUT_P, OUT_N) and U103's SOT-23-6 supply pins.
+(rule "HighCurrent neck-down at U101"
+	(condition "A.Type == 'Track' && A.NetClass == 'HighCurrent' && A.intersectsCourtyard('U101')")
+	(constraint track_width (min 0.3mm) (opt 0.45mm) (max 3mm)))
+
+(rule "Power neck-down at U103"
+	(condition "A.Type == 'Track' && A.NetClass == 'Power' && A.intersectsCourtyard('U103')")
+	(constraint track_width (min 0.3mm) (opt 0.4mm) (max 2mm)))

@@ -6722,7 +6722,7 @@
 		)
 		(uuid "89d5639e-5424-4fce-86a4-a48d0385e2c1")
 	)
-	(label "SPK-"
+	(label "SPK+"
 		(at 358.14 284.48 0)
 		(effects
 			(font
@@ -6862,7 +6862,7 @@
 		)
 		(uuid "9b909a3f-b01f-4d1e-9623-5eb1a9b0fdcc")
 	)
-	(label "SPK+"
+	(label "SPK-"
 		(at 358.14 281.94 0)
 		(effects
 			(font
