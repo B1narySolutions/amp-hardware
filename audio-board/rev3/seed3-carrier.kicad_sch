@@ -5,12 +5,12 @@
 	(uuid "94ecceca-f8ce-4e68-9c84-99ac5115dfb9")
 	(paper "A3")
 	(title_block
-		(title "Seed3 Carrier")
-		(date "2026-10-26")
-		(rev "2.0")
-		(comment 1 "Design notes: rev2/DESIGN.md. Bring-up: TEST_PLAN.md")
-		(comment 2 "Screw terminals to the power board (J6), speaker amp (J5) and display (J3)")
-		(comment 3 "Daisy Seed3 carrier: guitar and AUX inputs, headphone and line outputs")
+		(title "Audio board")
+		(date "2026-11-07")
+		(rev "3.0")
+		(comment 1 "Design notes: rev3/DESIGN.md. Bring-up: rev3/TEST_PLAN.md")
+		(comment 2 "Sheet 2: battery input, 5 V distribution and TPA3118D2 speaker amp (from power board rev 1)")
+		(comment 3 "Guitar and AUX inputs, headphone amp and speaker amp on one 4-layer board")
 	)
 	(lib_symbols
 		(symbol "Device:D_TVS"
@@ -6021,12 +6021,6 @@
 		(uuid "beddbb10-af5c-47b1-a6f8-c457a0570916")
 	)
 	(junction
-		(at 52.07 142.24)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c4e17ca2-3840-4c6b-b0ed-4dce1a842c4f")
-	)
-	(junction
 		(at 360.68 40.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7749,16 +7743,6 @@
 		(uuid "515ca4c8-50b9-4e7a-ba01-b864a9f85373")
 	)
 	(label "BATT_SENSE_CONN"
-		(at 43.18 236.22 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5baf7769-07df-4bce-93dc-6d4c71c87554")
-	)
-	(label "BATT_SENSE_CONN"
 		(at 83.82 228.6 180)
 		(effects
 			(font
@@ -7797,16 +7781,6 @@
 			(justify left bottom)
 		)
 		(uuid "a40e4683-ac74-4af6-9bc3-2235aba5f522")
-	)
-	(label "LINE_OUT"
-		(at 382.27 189.23 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a4f59d54-422c-47f5-a36d-a504ca51b24e")
 	)
 	(label "SPK_EN"
 		(at 165.1 78.74 180)
@@ -7868,16 +7842,6 @@
 		)
 		(uuid "ba98826c-22cb-4c67-aa4f-b83d3df2707d")
 	)
-	(label "5V_IN"
-		(at 43.18 231.14 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "beccfac4-3ac9-4ada-bafd-e6cdfec8f597")
-	)
 	(label "HP_DETECT"
 		(at 271.78 129.54 0)
 		(effects
@@ -7908,16 +7872,6 @@
 		)
 		(uuid "d63053ea-7b21-4d26-8cc5-a654694a7a95")
 	)
-	(label "GND"
-		(at 43.18 233.68 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "dcab4601-2a59-412c-8823-d65df03288f1")
-	)
 	(label "HP_SOURCE"
 		(at 320.04 60.96 180)
 		(effects
@@ -7937,16 +7891,6 @@
 			(justify right bottom)
 		)
 		(uuid "e3a09219-ad06-44d7-bfbb-45083e167dbb")
-	)
-	(label "SPK_MUTE"
-		(at 43.18 238.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ee0c8b2b-6937-4d70-9cf6-94d398d071eb")
 	)
 	(label "HP_L"
 		(at 375.92 138.43 0)
@@ -8252,7 +8196,7 @@
 		)
 		(uuid "358ab8f1-0083-48b2-a209-dc6826e3f45f")
 	)
-	(text "POWER BOARD CONNECTOR"
+	(text "POWER AND SPEAKER AMP (SHEET 2)"
 		(exclude_from_sim no)
 		(at 17.78 213.36 0)
 		(effects
@@ -8310,7 +8254,7 @@
 		)
 		(uuid "5fdec7bb-7eb2-4eab-a939-6ca592e8dfff")
 	)
-	(text "Q1: reverse-polarity\nprotection for 5V_IN (J6).\nC5 (low-ESR) damps the\nharness ringing. C4 is\nthe entry ceramic."
+	(text "Q1: reverse-polarity\nprotection for 5V_IN\n(J107 on sheet 2).\nC5 (low-ESR) damps the\nwiring ringing. C4 is\nthe entry ceramic."
 		(exclude_from_sim no)
 		(at 101.6 127 0)
 		(effects
@@ -8343,7 +8287,7 @@
 		)
 		(uuid "562b185c-0f50-4716-95f7-9acaccca3ed2")
 	)
-	(text "J3: 3-way screw terminal. The display takes its power from the power board, so only the UART and its GND come here.\nR8/R9 (10k each) limit current if a wire is swapped or the display and Daisy power up at different times.\nR24 divides a 5 V wire on RX to ≤ 4.8 V, and holds RX low with no display: firmware reads that as no display.\nKeep the UART at 230400 baud or less. Leave PB7's internal pull-up off."
+	(text "J3: 3-way screw terminal. The display takes its power from J105 (sheet 2), so only the UART and its GND come here.\nR8/R9 (10k each) limit current if a wire is swapped or the display and Daisy power up at different times.\nR24 divides a 5 V wire on RX to ≤ 4.8 V, and holds RX low with no display: firmware reads that as no display.\nKeep the UART at 230400 baud or less. Leave PB7's internal pull-up off."
 		(exclude_from_sim no)
 		(at 144.78 191.77 0)
 		(effects
@@ -8376,7 +8320,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives J5 (speaker amp, differential input) directly.\nR11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nJ5: LINE+ = LINE_OUT, LINE− = LINE_REF. R21 matches R11's 1k\nso the amp's input sees equal source impedances. Wire LINE−\nto the amp's IN− only. Assumes pin 19 at 0 V DC (TEST_PLAN 5.16)."
+	(text "AUDIO_OUT_2 drives the speaker amp (U101, sheet 2) directly.\nR11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nLINE_OUT → U101 IN+ (C108), LINE_REF → IN− (C109). R21 matches\nR11's 1k so the amp's input sees equal source impedances. Route\nthe pair together; R21's GND end at the Daisy's AGND (pin 20).\nAssumes pin 19 at 0 V DC (TEST_PLAN 5.16)."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8387,7 +8331,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "J6 goes to the power board: a 4-way 3.5 mm screw terminal (two KF350-3.5-2P slid together).\nPin 3 (BATT_SENSE) must stay within 0–3.3 V: the power board's divider sets that. R13/R22 halve it for the ADC.\nA 5 V wire on BAT then stays below PA7's 4.0 V, and R23 limits Q2's current if 5 V lands on MUTE.\nGND sits between 5V_IN and the signals, so a stray strand from 5V_IN can only reach GND.\nSPK_MUTE is open drain. The power board pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nThe power switch is on the power board."
+	(text "Sheet 2 (power.kicad_sch) is the power board rev 1, its parts renumbered +100. It connects here by the sheet pins:\nBAT_MON (R102/R103 = VBAT × 0.25 from 7.5 kΩ) → BATT_SENSE_CONN; R13/R22 halve it again: VBAT = 11 × V(pin 25).\nSPK_MUTE is open drain: R107 pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nLINE_OUT / LINE_REF feed U101's differential input. 5V_IN is +5V_AUDIO, after FB101 (or JP101).\nThe battery jack, fuse, power switch (SW101), DFR0571 buck terminals and display power are on sheet 2."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -9505,120 +9449,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "R4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 387.35 189.23 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "163c231e-87d0-4415-aa04-51a0b82b8583")
-		(property "Reference" "J5"
-			(at 387.35 186.69 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SPEAKER_SEND"
-			(at 387.35 194.31 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "1984617"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Phoenix Contact"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "277-1721-ND"
-			(at 387.35 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0808d421-954b-4fc0-8345-ab9d7c7a5a1c")
-		)
-		(pin "2"
-			(uuid "042e517e-d479-4319-be7e-4c492d117249")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -11275,127 +11105,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "C11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x04")
-		(at 38.1 233.68 0)
-		(mirror y)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "4a794b57-a160-46ed-816b-d1d0297a2203")
-		(property "Reference" "J6"
-			(at 38.1 228.6 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "POWER_BOARD"
-			(at 38.1 241.3 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2450/Combicon%20Compact%20Series.pdf"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "1984633"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Phoenix Contact"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "277-1860-ND"
-			(at 38.1 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "dea8e75a-b2a1-4fd6-aa81-b1458afa8e3e")
-		)
-		(pin "1"
-			(uuid "2af071d2-8941-42a4-a021-727ea6fd744f")
-		)
-		(pin "3"
-			(uuid "c4ae6588-30c3-4a18-bd5f-350bbdfb94d6")
-		)
-		(pin "4"
-			(uuid "efd939f5-d802-470a-a421-2deedd79bfa6")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -16967,83 +16676,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 52.07 142.24 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f8e3c29b-2444-49ad-81f5-53bbff10beb6")
-		(property "Reference" "#FLG02"
-			(at 52.07 140.335 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 58.166 140.208 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 52.07 142.24 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 52.07 142.24 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 52.07 142.24 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "479890ac-19a4-494b-9092-f2e69fbd51df")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#FLG02")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 52.07 144.78 0)
 		(unit 1)
@@ -18654,16 +18286,6 @@
 			)
 		)
 	)
-	(label "LINE_REF"
-		(at 382.27 191.77 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "1eaa702b-23f2-4439-81e3-c46db5913762")
-	)
 	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 365.76 190.5 0)
@@ -19376,6 +18998,111 @@
 		(color 0 0 0 0)
 		(uuid "9b496885-c6c9-47c6-8b9d-d5bbe82977b8")
 	)
+	(sheet
+		(at 25.4 226.06)
+		(size 20.32 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "f6736f7f-a886-45cd-a179-bb502f0835ac")
+		(property "Sheetname" "Power"
+			(at 25.4 225.3484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 25.4 246.9646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+5V_AUDIO" output
+			(at 45.72 231.14 0)
+			(uuid "d1760672-52fe-4565-b6fd-890ba8ace85e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BAT_MON" output
+			(at 45.72 233.68 0)
+			(uuid "8b3d23c0-7508-484f-a6cf-8104b6d0bdc2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPK_MUTE" input
+			(at 45.72 236.22 0)
+			(uuid "9169c869-6873-48ea-aeeb-1cc266c93fa9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Line+" input
+			(at 45.72 238.76 0)
+			(uuid "7c764224-b305-4544-a9a1-66c7b4b277c5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Line-" input
+			(at 45.72 241.3 0)
+			(uuid "451a0034-6809-433c-b1dd-5cea112e4ef2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "seed3-carrier"
+				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
+					(page "2")
+				)
+			)
+		)
+	)
+	(junction (at 52.07 34.29) (diameter 0) (color 0 0 0 0) (uuid "5f1fcef2-1527-4203-be8b-331e1bf3d0dc"))
+	(junction (at 52.07 97.79) (diameter 0) (color 0 0 0 0) (uuid "862e294a-7ef4-4e19-80bc-bb429619f7c7"))
+	(junction (at 52.07 92.71) (diameter 0) (color 0 0 0 0) (uuid "9edfcc10-d937-43fa-8b65-d3155769be45"))
+	(wire (pts (xy 45.72 231.14) (xy 50.8 231.14)) (stroke (width 0) (type default)) (uuid "356a3436-2de8-4501-b48a-be6ebd96b885"))
+	(label "5V_IN" (at 50.8 231.14 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5ab15171-829d-4e01-bf61-e802d4039f25"))
+	(wire (pts (xy 45.72 233.68) (xy 50.8 233.68)) (stroke (width 0) (type default)) (uuid "f5dc41ec-c1f5-4872-b673-4dca02bcdde1"))
+	(label "BATT_SENSE_CONN" (at 50.8 233.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6e4b945b-be13-49c4-89ff-6567022b702e"))
+	(wire (pts (xy 45.72 236.22) (xy 50.8 236.22)) (stroke (width 0) (type default)) (uuid "e73076b4-3a26-4d62-9e3e-844c9a1eb1d2"))
+	(label "SPK_MUTE" (at 50.8 236.22 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6ff6d418-4715-4bff-b469-085a20aeda74"))
+	(wire (pts (xy 45.72 238.76) (xy 50.8 238.76)) (stroke (width 0) (type default)) (uuid "3de24811-9453-4244-8bfe-334ac49a6bbc"))
+	(label "LINE_OUT" (at 50.8 238.76 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5718051f-4d39-4943-be5b-7938332241c5"))
+	(wire (pts (xy 45.72 241.3) (xy 50.8 241.3)) (stroke (width 0) (type default)) (uuid "d1e74bda-cacf-46b8-a760-d5019e124d57"))
+	(label "LINE_REF" (at 50.8 241.3 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "61b5e0b8-977f-4dec-bcea-56eb8462d321"))
 	(sheet_instances
 		(path "/"
 			(page "1")
