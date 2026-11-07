@@ -37,7 +37,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   the output pins, and wide output traces. Power rev 1 routed the outputs at about 0.25 mm.
 - **Rules:** a `HighCurrent` net class (1.5 mm) for the battery, PVCC, output and speaker nets, neck-down rules at U101 and
   U103, and the five new 5 V nets in `Power`. ERC excludes U101's two PBTL output ties, with the reason.
-- **Silkscreen:** pin legends for every new terminal; the back-side credits name both designers and rev 3.
+- **Silkscreen:** pin legends for every new terminal; the back-side credits name both designers and rev 3, set in
+  Orbitron (SIL Open Font License), which is embedded in the board file so any KiCad plots it the same.
 
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
