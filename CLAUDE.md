@@ -110,7 +110,7 @@ reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy
 - **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
   has 36 (J1, J2, J4, J101, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
   recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm) and stock
-  footprints' 0.12 mm silk lines; on rev 3 also 35 0.8 mm references (by U101 and in the columns beside the Daisy) and U101's
+  footprints' 0.12 mm silk lines; on rev 3 also 34 0.8 mm references (by U101 and in the columns beside the Daisy) and U101's
   footprint silk over its own pad.
   All print fine. The JLC limits pass reports nothing else on either board.
 - **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V drives U101's SDZ and MUTE above its
