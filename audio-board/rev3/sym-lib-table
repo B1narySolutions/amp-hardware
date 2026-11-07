@@ -1,0 +1,5 @@
+(sym_lib_table
+ (version 7)
+ (lib (name "seed3-carrier") (type "KiCad") (uri "${KIPRJMOD}/../seed3-carrier.kicad_sym") (options "") (descr "Carrier-specific package variants"))
+ (lib (name "Halliquest_Power") (type "KiCad") (uri "${KIPRJMOD}/../../power-board/Halliquest_Power.kicad_sym") (options "") (descr "Power board symbols"))
+)
