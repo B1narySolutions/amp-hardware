@@ -36001,20 +36001,9 @@
 		(uuid "0f8a1272-1217-4d41-a9df-1003d9ed58cc")
 	)
 	(gr_text "5V"
-		(at 109.2 44.6 0)
-		(layer "F.SilkS")
-		(uuid "cdd96570-643f-46bd-a005-1d8fc3832179")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(gr_text "5V"
 		(at 110 35.5 0)
 		(layer "F.SilkS")
-		(uuid "07cec63c-9814-4e3c-bb1a-78e5607892b4")
+		(uuid "a8cdb866-63af-4e46-8c4e-e5ba8c73e6f5")
 		(effects
 			(font
 				(size 1 1)
@@ -36025,7 +36014,7 @@
 	(gr_text "TX"
 		(at 110 58 0)
 		(layer "F.SilkS")
-		(uuid "f1a8fc49-5f30-4202-a9d7-6d522ef31ba5")
+		(uuid "bf99d899-6ad3-4c28-91cf-86af094932bd")
 		(effects
 			(font
 				(size 1 1)
@@ -36036,7 +36025,18 @@
 	(gr_text "RX"
 		(at 110 61.5 0)
 		(layer "F.SilkS")
-		(uuid "985505a7-63f7-4d39-947f-6963403fb148")
+		(uuid "71101ea0-53c3-4008-96d7-ee1423072072")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "DISP"
+		(at 110.25 44.6 0)
+		(layer "F.SilkS")
+		(uuid "518f81f8-de7d-4e71-ba1c-d61e302bc31a")
 		(effects
 			(font
 				(size 1 1)
@@ -36047,7 +36047,7 @@
 	(gr_text "GND"
 		(at 110.8 29.5 0)
 		(layer "F.SilkS")
-		(uuid "e7deb320-8a34-465e-a090-10d0f5a5f5ff")
+		(uuid "98d454a6-49db-457d-a8ba-45e3695f1011")
 		(effects
 			(font
 				(size 1 1)
@@ -36058,7 +36058,7 @@
 	(gr_text "GND"
 		(at 110.8 39.6 0)
 		(layer "F.SilkS")
-		(uuid "6e0ded95-a3f0-4146-adbf-99b0ec1db5f8")
+		(uuid "a686e623-89d5-4c92-abea-7ce58fe89107")
 		(effects
 			(font
 				(size 1 1)
@@ -36069,7 +36069,7 @@
 	(gr_text "GND"
 		(at 110.8 48.6 0)
 		(layer "F.SilkS")
-		(uuid "e57f6394-4d18-452f-9123-c9d1fb51db48")
+		(uuid "a928ddfe-ecfa-4e76-93f9-ffe3f14a7643")
 		(effects
 			(font
 				(size 1 1)
@@ -36080,7 +36080,7 @@
 	(gr_text "GND"
 		(at 110.8 54.5 0)
 		(layer "F.SilkS")
-		(uuid "366d95dd-3ede-4069-8f2a-2817cc3c5ad7")
+		(uuid "a84df73d-2a3e-4141-9fe8-a6a2e28eec0b")
 		(effects
 			(font
 				(size 1 1)
@@ -36091,7 +36091,7 @@
 	(gr_text "BAT+"
 		(at 111.1 26 0)
 		(layer "F.SilkS")
-		(uuid "73452974-9543-4bef-baa8-f2ebc352dba3")
+		(uuid "6a288f2c-3187-4865-8597-6fc16d58b222")
 		(effects
 			(font
 				(size 1 1)
@@ -36102,7 +36102,7 @@
 	(gr_text "SPK+"
 		(at 188.6 48.25 0)
 		(layer "F.SilkS")
-		(uuid "1e4f3531-5576-4f5c-857e-f443a45a9460")
+		(uuid "629323ea-55a7-4c03-8880-c41b201b53c7")
 		(effects
 			(font
 				(size 1 1)
@@ -36113,7 +36113,7 @@
 	(gr_text "SPK-"
 		(at 188.6 51.75 0)
 		(layer "F.SilkS")
-		(uuid "97284f41-9850-4ad2-aa63-4db7f5c279ed")
+		(uuid "4559f00b-e455-4490-a147-62418e735dff")
 		(effects
 			(font
 				(size 1 1)
@@ -36124,7 +36124,7 @@
 	(gr_text "12V IN"
 		(at 190.6 33.6 0)
 		(layer "F.SilkS")
-		(uuid "0850ccd2-3c3d-46b7-8cba-d5eb41033821")
+		(uuid "31aedd99-4113-4a31-a699-30ffdd1bcf03")
 		(effects
 			(font
 				(size 1 1)
@@ -36135,7 +36135,7 @@
 	(gr_text "ECEN 4610 · rev 3 · 2026-11-07"
 		(at 119 85.55 0)
 		(layer "B.SilkS")
-		(uuid "bcb02ed8-6eb3-40aa-aac1-506ca1f4ff3c")
+		(uuid "a5f69999-c2f9-474f-a84b-5dc77928d4a9")
 		(effects
 			(font
 				(size 1 1)
@@ -36147,7 +36147,7 @@
 	(gr_text "Rocco Antoniou, William Anderson"
 		(at 119 81.2 0)
 		(layer "B.SilkS")
-		(uuid "17ea5410-758b-4c34-88d2-4e9ec4f6703c")
+		(uuid "4d0d46b3-3bc3-43c8-a4f6-77ac599aa667")
 		(effects
 			(font
 				(size 1.2 1.2)
@@ -36159,7 +36159,7 @@
 	(gr_text "B1NARY SOLUTIONS"
 		(at 119 76.2 0)
 		(layer "B.SilkS")
-		(uuid "02b8cef3-5c7b-46d4-ba33-414b9a59d1ff")
+		(uuid "ea178ac8-7809-4659-a6e5-862ac7157484")
 		(effects
 			(font
 				(size 1.8 1.8)

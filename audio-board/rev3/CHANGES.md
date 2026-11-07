@@ -14,8 +14,9 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **The DFR0571 5 V buck stays off the board,** on J106 (its input) and J107 (its output), as on power rev 1.
 
 ## Circuit
-- **Q102 (AO3401A) added** between J107 and `+5V_RAW`, gate to GND. J107 wired backwards no longer puts −5 V on U103 or the
-  display (power rev 1 had no protection at J7). Q1 stays as it was.
+- **Q102 (AO3401A) added** between J107 and `+5V_RAW`, gate to GND. A reversed 5 V source on J107 no longer puts −5 V on
+  U103 or the display (power rev 1 had no protection at J7). The DFR0571's own swapped wires short its output instead,
+  because its grounds are common. Q1 stays as it was.
 - **J102's pins swapped:** pin 2 is SPK+ and pin 1 SPK−, so the speaker traces from L101/L102 don't cross. Marked on the
   silkscreen.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined

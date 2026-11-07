@@ -141,7 +141,7 @@ C109. On sheet 2 the two nets are named `Line+` and `Line−`.
   AC-coupled on the module (see "DC level" under "Headphone output"). C108 blocks DC into U101 anyway, but R12 would carry
   it. If TEST_PLAN finds more than a few tens of mV at pin 19, the fix is a 10 µF cap in series between C16 and
   `LINE_OUT`.
-- **R11** is the output impedance. With R21, U101 sees a 2k source into its 60 kΩ per leg (20 dB, ±20 %): ≈ 0.15 dB of loss.
+- **R11** is the output impedance. With R12 (100k) in parallel with U101's 60 kΩ input (20 dB, ±20 %), it costs ≈ 0.23 dB.
   If `LINE_OUT` is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V.
 - **Pseudo-differential into a differential input.** The Daisy has one output pin per channel, so LINE− is the
@@ -219,12 +219,15 @@ speaker details; this section is the design as it stands on rev 3.
 
 ### 5 V supply and distribution
 - **The DFR0571** buck module is off the board. J106 sends it `VBAT_PROTECTED` and J107 takes its 5 V back as `+5V_DFR`. Its
-  specifications (input range, output accuracy, current limit, reverse protection) couldn't be read (DFRobot's page for the
-  SKU returns 404). The rest of this section assumes 5.0 V ± 5 % at up to 1.6 A, the figure in the parts order. Measure it at
-  bring-up.
-- **Q102 (AO3401A)** sits between `+5V_DFR` and `+5V_RAW`, gate to GND, in the same orientation as Q1. If J107 is wired
-  backwards it blocks, and nothing on `+5V_RAW` sees −5 V. That protects U103, whose VDD is rated −0.3 V minimum, and the
-  display on J105. It drops ≈ 45 mV at 0.75 A (60 mΩ maximum at VGS = −4.5 V, AO3401A datasheet).
+  specifications aren't on DFRobot's site (its page for the SKU returns 404). A reseller lists 8–28 V in, 5 V ± 0.1 V out,
+  3 A peak and 0.5 mA with no load, and no input reverse protection; the parts order gives 1.6 A continuous. Unverified:
+  TEST_PLAN measures the module before it is wired to the board. It is a non-isolated buck, so its input and output
+  grounds are one node.
+- **Q102 (AO3401A)** sits between `+5V_DFR` and `+5V_RAW`, gate to GND, in the same orientation as Q1. A reversed 5 V source
+  on J107 then can't put −5 V on `+5V_RAW`, where U103 (VDD rated −0.3 V minimum) and the display on J105 would take it.
+  With the DFR0571 wired normally its reach is narrower: the module's grounds are common, so swapping J107's two wires
+  shorts the module's output rather than reversing it (see "What each connector can see"). It drops ≈ 45 mV at 0.75 A
+  (60 mΩ maximum at VGS = −4.5 V, AO3401A datasheet).
 - **`+5V_RAW`** feeds two filtered branches:
   - **Audio:** FB101 (220 Ω at 100 MHz, MPZ1608S221A) → `5V_IN` → Q1 → `+5V`, sheet 1's analog rail and the Daisy's VIN.
     C105 (100 nF) sits after the bead; C104 (100 µF) is optional bulk through JP102.
@@ -330,8 +333,8 @@ a time with everything else normal, in each power state. Misuse may stop the boa
 |---|---|---|
 | J101 (12 V jack) | The power bank's 12 V output, 9.0–12.6 V, fused at 3.15 A | Reversed (Q101 blocks); a 19–24 V adapter (the board survives; the DFR0571's limit is unknown) |
 | SW101 (panel switch) | The switch's two contacts, in series with the battery | — |
-| J106 (to the DFR0571's input) | The module's input | Its two wires swapped: the DFR0571's input is reversed. The board's side is fine; the module's protection is unknown (accepted, see "Decisions") |
-| J107 (from the DFR0571's output) | 5.0 V ± 5 % | Its two wires swapped: Q102 blocks |
+| J106 (to the DFR0571's input) | The module's input | Its two wires swapped: `VBAT_PROTECTED` shorts to GND through the module's ground and J107's ground wire. F101 or the pack's own protection stops it; the module's ground track may not survive (accepted, see "Decisions") |
+| J107 (from the DFR0571's output) | 5.0 V ± 0.1 V | Its two wires swapped: the module's output is shorted, and its own current limit has to hold. A reversed source that doesn't share J106's ground (a bench supply): Q102 blocks |
 | J105 (display 5 V) | The display's supply, up to ≈ 0.5 A | Shorted: limited only by the DFR0571 |
 | J102 (speaker) | A 4 Ω speaker, bridged | Shorted, or one wire to GND: U101 latches off (FAULTZ low); a power cycle or JP105 clears it |
 | J3.2 TX | The display's RX: high impedance, clamped to −0.5…3.8 V, 1 mA at most | A 5 V wire on TX |
@@ -424,17 +427,20 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **PBTL ERC exclusions.** ERC's two U101 output-to-output conflicts (OUTPR–OUTNR, OUTPL–OUTNL) are the datasheet's PBTL
   wiring (SLOS708G 7.4.1). They are excluded in `seed3-carrier.kicad_pro` with that reason, so ERC shows 0 errors and any new
   error stands out.
-- **Q102 at J107.** Added, because J107 wired backwards put −5 V on all of `+5V_RAW` (U103, the display) and Q1 only covered
-  the audio branch.
+- **Q102 at J107.** Added, because a reversed 5 V source on J107 would put −5 V on all of `+5V_RAW` (U103, the display) and Q1
+  only covered the audio branch. The design review assumed the DFR0571's own wires could do that; they can't, because its
+  grounds are common (swapped J107 wires short its output instead). Q102 stays for a reversed bench supply or a module whose
+  input-side ground isn't connected: one SOT-23 and ≈ 45 mV.
 - **No 5 V alone on J107, ever: bench supply on J101 only.** With PVCC at 0 V and 5 V on `+5V_RAW`, U103 releases SDZ to
-  ≈ 4.9 V through R110 (≈ 2 mA into SDZ's protection diode) and R107/R108 pull MUTE to 5 V. The TPA3118 rates both at
-  −0.3 V to PVCC + 0.3 V and publishes no injection rating. Normal power-up and power-down never get there (see "Power
+  ≈ 4.5 V through R109 + R110 and R107/R108 pull MUTE to 5 V: up to ≈ 0.36 mA into each pin's protection diode. The TPA3118
+  rates both at −0.3 V to PVCC + 0.3 V and publishes no injection rating. Normal power-up and power-down never get there (see "Power
   sequence"), so the rule is procedural; a circuit fix would change rev 1's control block. Raise it with the power board's
   designer before a rev 4.
 - **FAULTZ latches until power cycle or JP105, and the Daisy can't see it.** Rev 1's choice, kept: a fault does no damage.
   Routing FAULTZ to a free Daisy pin is now possible and left for later.
-- **J106 wired backwards reverses the DFR0571's input.** The board's side survives; whether the module does is unknown. Accepted
-  with clear silkscreen labels.
+- **The DFR0571's four wires can be swapped in pairs.** J106 swapped shorts the battery through the module's ground (F101 or
+  the pack's protection stops it); J107 swapped shorts the module's output. Accepted for now, with silkscreen labels that tell
+  J106, J107 and J105 apart and a wiring check before power (TEST_PLAN); a keyed connector for the module would prevent it.
 - **J102's pins swapped** (pin 2 SPK+, pin 1 SPK−), so the speaker traces from L101/L102 don't cross. The silkscreen marks them.
 - **The AUX input is 48 mm from the class D's switching nodes, short of the 50 mm the plan aimed for** (45 mm to the
   `AUDIO_IN_2` line at Daisy pin 17). That node is ≈ 400 Ω, not a high-impedance node, and runs 0.2 mm over the unbroken In1
@@ -453,7 +459,11 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **Bring up audio rev 2 and power rev 1 first,** and fold their results into rev 3 before ordering it: the Daisy outputs'
   DC level (the speaker send has no DC block on this side), the fuse rating, beads or bypass, the optional bulk caps, L101/L102's
   value, R105, C2 microphonics, and headphone clicks at boot. Set the jumpers and parts to match.
-- **The DFR0571's specifications:** confirm its input range, output accuracy, current limit and input reverse protection.
+- **The DFR0571's specifications:** confirm the reseller's figures (8–28 V in, 5 V ± 0.1 V, 3 A peak) and its output current
+  limit on the module itself.
+- **No low-battery cutoff on the board.** `power-board/README.md` asks for one, but sheet 2 has none: U103 watches only
+  `+5V_RAW`. As the pack runs down, the Talentcell's own protection or the DFR0571's dropout ends it. TEST_PLAN records what
+  actually happens; the firmware warns from `BATT_SENSE` first.
 - **Battery:** measure the Talentcell's 12 V output at full charge and near empty (9.0–12.6 V assumed).
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and the speaker go silent and
   `SPK_MUTE` mutes within ~10 ms.
