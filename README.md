@@ -16,9 +16,9 @@ screw terminals to the power board and the display. It's a 2-layer board, hand-s
 **Power board.** Supplies 5 V and the battery level to the audio board, and drives the speaker. Its `README.md` lists what
 each board expects from the other.
 
-**Audio board rev 3.** The audio board rev 2 and power board rev 1 on one 4-layer, 100 × 110 mm board, with the same
-circuits. The class D amp sits in the rear corner, as far from the guitar input as the board allows, over a solid ground
-plane. The 5 V buck stays off the board.
+**Audio board rev 3.** The audio board rev 2 and power board rev 1 on one 4-layer, 122 × 78 mm board, with the same
+circuits. The Daisy stands upright in the middle and divides the board: audio on its left and in front of it, the battery
+entry and class D amp on its right, all over a solid ground plane. The 5 V buck stays off the board.
 
 ## Where to look
 
