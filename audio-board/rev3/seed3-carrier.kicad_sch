@@ -10389,7 +10389,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "1276-2415-1-ND"
+		(property "DigiKey" "1276-CL21A475KACLRNCCT-ND"
 			(at 330.2 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -11084,7 +11084,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "1276-2415-1-ND"
+		(property "DigiKey" "1276-CL21A475KACLRNCCT-ND"
 			(at 330.2 60.96 0)
 			(hide yes)
 			(show_name no)

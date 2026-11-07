@@ -11,6 +11,10 @@ Hardware for a capstone guitar amp, in KiCad 10:
 - `power-board/` is the power board, rev 1, ordered (`Rev1_Power_Board.kicad_pro`, designed by a teammate; its order is
   `DigiKey_Import.csv`). Its README is the contract with the audio board: everything the audio board expects
   from it, and what the audio board promises back.
+- `audio-board/rev3/` is rev 3: audio rev 2 and power rev 1 on one 4-layer board (same `seed3-carrier` file names). Sheet 1
+  is rev 2's audio sheet; sheet 2, `power.kicad_sch`, is power rev 1 with designators +100. Not ordered: its open items
+  wait for the bring-up of the ordered rev 2 and rev 1 boards. Its own `DESIGN.md`, `CHANGES.md`, `TEST_PLAN.md` and
+  order live in the folder.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
 (`kicad-cli`, jobsets, the IPC API), following the skills from
@@ -47,6 +51,8 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
      audio-board/rev2/seed3-carrier.kicad_pcb
 ```
 
+For rev 3, use the same commands with `audio-board/rev3/`. Its jobset also plots In1.Cu and In2.Cu.
+
 ## How the pieces fit together
 
 **Documents must agree with each other and with the design.** Keep these in step when one changes:
@@ -68,10 +74,15 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
   `amp-digikey-cart.csv` is generated from it (Quantity, Digi-Key Part Number, Customer Reference of 48 characters at
   most). Update both when either board's parts change. DigiKey API credentials are in
   `~/.config/digikey/credentials` (`DIGIKEY_CLIENT_ID`, `DIGIKEY_CLIENT_SECRET`); never print them.
+- **Rev 3's documents** (`audio-board/rev3/`) follow the same rules for rev 3: `DESIGN.md` (with its "Decisions"),
+  `CHANGES.md` (the net difference from audio rev 2 and power rev 1), `TEST_PLAN.md`, and `seed3-carrier-digikey.csv`
+  plus its cart file (one build, derived from `amp-digikey-order.csv`). Rev 2's files and `power-board/` describe the
+  boards that were ordered; leave them as they are unless those boards change.
 
 **KiCad libraries:** project footprints are in `audio-board/Seed3_Carrier.pretty` and symbols in
-`audio-board/seed3-carrier.kicad_sym`. The tables in `rev2/` reach them through `${KIPRJMOD}/..`, so a copy of the
-board outside `rev2/` reports `lib_footprint_issues` (expected in the kicad-check skill's JLC passes).
+`audio-board/seed3-carrier.kicad_sym`. The tables in `rev2/` and `rev3/` reach them through `${KIPRJMOD}/..` (rev 3 also
+reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy of the board elsewhere reports
+`lib_footprint_issues` (expected in the kicad-check skill's JLC passes).
 
 ## Git workflow
 
@@ -84,16 +95,23 @@ board outside `rev2/` reports `lib_footprint_issues` (expected in the kicad-chec
 
 ## Working rules
 
-- **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kicad-check` skill, 2-layer rule files), and put
-  the results in the commit message: errors, warnings, and anything new. After a board change, re-export the fab zip
-  with the jobset and commit it in the same commit.
+- **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kicad-check` skill; it picks the
+  2-layer or multilayer rule files from the board), and put the results in the commit message: errors, warnings, and
+  anything new. After a board change, re-export the fab zip with the jobset and commit it in the same commit.
 - **Don't accept a finding on your own.** A design-review finding or a DRC exclusion becomes accepted only when the user
   agrees, or when DESIGN.md already records the decision.
 - **Board edits** go through the IPC API (`kicad-board-edit` skill), from throwaway scripts in the scratchpad. Never
   commit an edit script: replaying it later would undo newer work. Schematic changes reach the board (new parts,
-  values, fields) with the skill's `sch_to_board.py`, run with the board closed; run it too after any API session
+  values, fields) with the skill's `board.py sync`, run with the board closed; run it too after any API session
   that rotated a part, which drops the part's 3D model.
-- **Expected DRC warnings:** 21 `silk_edge_clearance` warnings come from the edge-mounted connectors (J1–J6). Don't
-  trim their footprints to clear them. The JLC recommended pass also flags TP1's silk circle (0.14 mm from its pad,
-  JLC prefers 0.15 mm) and stock footprints' 0.12 mm silk lines. Both print fine. The JLC limits pass reports
-  nothing else on rev 2.
+- **Rev 3's sheet 2 is a sub-sheet.** `sch.py` numbers and paths new symbols as if the file were the root: after adding a
+  part to `power.kicad_sch`, set its reference by hand (the next free +100 number) and its instance path to
+  `/<root uuid>/<sheet uuid>` (copy them from a neighbouring symbol), then run ERC on the root sheet.
+- **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
+  has 36 (J1, J2, J4, J101, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
+  recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm) and stock
+  footprints' 0.12 mm silk lines; on rev 3 also five 0.8 mm references by U101 and U101's footprint silk over its own pad.
+  All print fine. The JLC limits pass reports nothing else on either board.
+- **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V drives U101's SDZ and MUTE above its
+  PVCC + 0.3 V rating. Bench supplies go on J101 (12 V, current-limited) with the DFR0571 connected (rev 3 DESIGN.md,
+  "Decisions").

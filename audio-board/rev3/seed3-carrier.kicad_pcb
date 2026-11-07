@@ -5631,7 +5631,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "1276-2415-1-ND"
+		(property "DigiKey" "1276-CL21A475KACLRNCCT-ND"
 			(at 166.2 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -34803,7 +34803,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "1276-2415-1-ND"
+		(property "DigiKey" "1276-CL21A475KACLRNCCT-ND"
 			(at 180.6 84.2 270)
 			(layer "F.Fab")
 			(hide yes)
