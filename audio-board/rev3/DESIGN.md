@@ -501,7 +501,9 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 ### Stackup
 4 layers, 1.6 mm, JLC's standard JLC04161H-7628 stackup: 1 oz outer copper, 0.5 oz inner, 0.21 mm prepreg between each outer
 layer and its neighbour, a 1.065 mm core between In1 and In2. KiCad's Python can't edit the stackup table, so it was written
-into the board file to match; choose the same stackup on JLC's order page. Page numbers below refer to Eric Bogatin,
+into the board file to match; choose the same stackup on JLC's order page. Black solder mask on both sides with white
+silkscreen (also set in the stackup); Board Setup's minimum mask web is 0.13 mm, JLC's figure for black mask, and the
+narrowest web on the board is 0.20 mm (U101's pins). Page numbers below refer to Eric Bogatin,
 *Bogatin's Practical Guide to Prototype Breadboard and PCB Design* (Artech House, 2021).
 
 | Layer | Use |

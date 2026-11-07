@@ -23,6 +23,7 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   nets, the four removed terminals and Q102.
 
 ## Board
+- **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
 - **4 layers, JLC04161H-7628:** In1 is solid GND with no tracks; In2 is GND fill with the slow and DC nets that cross; B.Cu
   is GND with a PVCC pour under the class D. Rev 2's 2-layer hops stay, now over In1.
 - **Layout:** the Daisy stands upright in the middle, USB on the rear edge, between the audio side (left and front) and the
