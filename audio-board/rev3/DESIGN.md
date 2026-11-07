@@ -491,7 +491,7 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
     virtual grounds) over the In1 plane; U2 sits in front of the power section because the left column is full.
   - The display's ground terminals (J3, J105) are 26–31 mm from the guitar input's 1 MΩ node (56–62 mm before). The display
     current loop stays at the left edge, behind the input buffer.
-  - About 30 more references are 0.8 mm tall (34 in all), in the dense columns beside the Daisy and in the 5 V filter column.
+  - 25 more references are 0.8 mm tall (30 in all), in the dense columns beside the Daisy and in the 5 V filter column.
   - `AUDIO_OUT_2` runs 32 mm on In2 and `AUDIO_IN_2` 13 mm on B.Cu, under the Daisy.
 - **Front panel thickness:** under 3 mm, Neutrik's limit for the NRJ4HF's nut.
 - **3D models:** J101 and L101/L102 have none (their footprints don't carry one); the 3D view shows only their pads.
@@ -618,7 +618,7 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
   ground pads (see "Decisions"). Vias stay solid.
 - **Expected DRC warnings:** 36 `silk_edge_clearance`, all from edge-mounted connectors (J1, J2, J4, J101, J102, J105, J106,
   J107, J3, SW101). Don't trim their footprints. JLC's recommended pass also flags the test points' silk circles (0.14 mm
-  from their pads, JLC prefers 0.15 mm), the 0.8 mm references (34, all with a 0.15 mm stroke), and U101's footprint silk
+  from their pads, JLC prefers 0.15 mm), the 0.8 mm references (30, all with a 0.15 mm stroke), and U101's footprint silk
   over its own pad; all print fine. On KiCad 10.0.8 DRC also reports `lib_footprint_mismatch` for the three fiducials,
   against that version's library; the board is unaffected.
 

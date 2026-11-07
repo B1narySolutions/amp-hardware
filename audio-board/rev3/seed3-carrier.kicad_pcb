@@ -162,7 +162,7 @@
 		(descr "SOT, 5 Pin (JEDEC MO-178 Var AA https://www.jedec.org/document_search?search_api_views_fulltext=MO-178)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "U1"
-			(at 2.893249 0 0)
+			(at 3.043249 0 0)
 			(layer "F.SilkS")
 			(uuid "f45c5b73-120c-40f6-89bb-b0f70ee6bdd7")
 			(effects
@@ -583,7 +583,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R6"
-			(at 0 -2.22619 0)
+			(at -3.44325 0 0)
 			(layer "F.SilkS")
 			(uuid "0934968f-1e05-4321-8194-5c0b1ab69310")
 			(effects
@@ -777,7 +777,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R9"
-			(at 0 2.27325 0)
+			(at 0 2.12325 0)
 			(layer "F.SilkS")
 			(uuid "37a94644-bd4c-4f56-ab2d-d61cb05d6951")
 			(effects
@@ -1560,7 +1560,7 @@
 		(descr "SOT, 6 Pin (JEDEC MO-178 Var AB https://www.jedec.org/document_search?search_api_views_fulltext=MO-178)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "U103"
-			(at 0 -2.84325 0)
+			(at 0 -2.99325 0)
 			(layer "F.SilkS")
 			(uuid "0a57577f-9308-4a9f-9f77-9a524faa30a2")
 			(effects
@@ -1951,7 +1951,7 @@
 		(descr "Slim Jacks, 6.35mm (1/4in) mono jack, switched, fully threaded nose, https://www.neutrik.com/en/product/nrj4hf")
 		(tags "neutrik jack slim")
 		(property "Reference" "J1"
-			(at 9.25 5.785 0)
+			(at -8.84325 5.785 0)
 			(layer "F.SilkS")
 			(uuid "2354eb02-a58f-42b9-9d93-1aa3a836e216")
 			(effects
@@ -2525,7 +2525,7 @@
 		(descr "Capacitor SMD 1210 (3225 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C7"
-			(at 0 -2.696191 0)
+			(at 0 -2.846191 0)
 			(layer "F.SilkS")
 			(uuid "f1db26ab-5d7a-49d9-8c87-1b2f95a0ab73")
 			(effects
@@ -2719,12 +2719,12 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R23"
-			(at -0.000001 1.8587 0)
+			(at 0.999999 1.94325 0)
 			(layer "F.SilkS")
 			(uuid "61d79793-b1a1-43ab-b868-9360371bff19")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -3103,12 +3103,12 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R5"
-			(at 0 -1.858701 0)
+			(at -3.096191 0 0)
 			(layer "F.SilkS")
 			(uuid "b8646552-d99a-4276-a69e-c4781e2f0474")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -3297,7 +3297,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C107"
-			(at 0 2.1 0)
+			(at 4.678571 0.5 0)
 			(layer "F.SilkS")
 			(uuid "3ee47139-ef5e-4795-a1a1-d09079190fbf")
 			(effects
@@ -4546,12 +4546,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C3"
-			(at 0 2.255952 0)
+			(at 0 2.39619 0)
 			(layer "F.SilkS")
 			(uuid "6c4ac418-ae23-4af9-914c-cd9eda123d54")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -4752,12 +4752,12 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R4"
-			(at 0 -2.1 0)
+			(at 0.5 -2.376191 0)
 			(layer "F.SilkS")
 			(uuid "3524afd3-ee52-4fc3-9d1f-2ffb98747710")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -4946,12 +4946,12 @@
 		(descr "SOT, 3 Pin (JEDEC TO-236 Var AB https://www.jedec.org/document_search?search_api_views_fulltext=TO-236)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "Q102"
-			(at 0 4.072381 0)
+			(at -2.80625 2 0)
 			(layer "F.SilkS")
 			(uuid "0afd53ff-6517-4f24-bd42-fddfd23b4835")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -5351,12 +5351,12 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R10"
-			(at -3.3 0 0)
+			(at -3.572381 0.000001 0)
 			(layer "F.SilkS")
 			(uuid "7ad5b3ba-80b2-444f-8ff0-11f5a7fc6fea")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -6127,7 +6127,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C12"
-			(at 0 -4.552381 0)
+			(at -2.87325 0 0)
 			(layer "F.SilkS")
 			(uuid "e1f1076c-3690-4f60-8f04-cd416c7ccf62")
 			(effects
@@ -6326,12 +6326,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C122"
-			(at 4.4 0.1 0)
+			(at -3.35625 0 0)
 			(layer "F.SilkS")
 			(uuid "0f0942d2-b44f-43e7-be3e-1246b1a4b435")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -6907,7 +6907,7 @@
 		(descr "SOD-323")
 		(tags "SOD-323")
 		(property "Reference" "D1"
-			(at 2.44325 0 0)
+			(at 2.59325 0 0)
 			(layer "F.SilkS")
 			(uuid "307c7b68-e5d2-48e1-b5bb-9d64a2f551a4")
 			(effects
@@ -7214,7 +7214,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R102"
-			(at 0 2.27325 0)
+			(at 0 2.12325 0)
 			(layer "F.SilkS")
 			(uuid "a9a67f4a-8ade-4901-a7d8-b51436e35de9")
 			(effects
@@ -7411,7 +7411,7 @@
 		(descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 2.54mm single row")
 		(property "Reference" "JP103"
-			(at 0 -2.91325 0)
+			(at 1 -2.76325 0)
 			(layer "F.SilkS")
 			(uuid "c78b3fbc-74af-43b4-a6c1-3443725508db")
 			(effects
@@ -7689,7 +7689,7 @@
 		(descr "SOD-323")
 		(tags "SOD-323")
 		(property "Reference" "D5"
-			(at 2.69619 0 0)
+			(at 0 -2.24325 0)
 			(layer "F.SilkS")
 			(uuid "36791249-e758-4965-ae4a-a8104a7a9a1a")
 			(effects
@@ -7996,7 +7996,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R26"
-			(at 0 2.52238 0)
+			(at -2.843249 0 0)
 			(layer "F.SilkS")
 			(uuid "70019b95-2d60-448b-b03d-3b02a7d7e8f5")
 			(effects
@@ -8182,7 +8182,7 @@
 		(at 210.25 40)
 		(descr "Bourns SRP1038A lead-frame, recommended land pattern: 13.6 outer, 5.4 inner gap, height 3.5 mm. https://bourns.com/docs/product-datasheets/srp1038a.pdf")
 		(property "Reference" "L101"
-			(at 0 6.4 0)
+			(at -9.153334 0 0)
 			(layer "F.SilkS")
 			(uuid "d003d0da-6d54-4be7-9cd2-257952391fd3")
 			(effects
@@ -8457,7 +8457,7 @@
 		(descr "Inductor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
 		(tags "inductor")
 		(property "Reference" "FB101"
-			(at -3.7 -1.5 0)
+			(at -1 -1.60625 0)
 			(layer "F.SilkS")
 			(uuid "248fac33-bd15-4646-9bb9-1c2e80acf237")
 			(effects
@@ -8654,12 +8654,12 @@
 		(descr "SOD-323")
 		(tags "SOD-323")
 		(property "Reference" "D2"
-			(at -2.35 1.4 0)
+			(at -3.14619 0.5 0)
 			(layer "F.SilkS")
 			(uuid "c2ee65d6-a1d1-426d-aa3a-4be05881ea92")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -8961,7 +8961,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C109"
-			(at 3.62325 0 0)
+			(at 3.47325 0 0)
 			(layer "F.SilkS")
 			(uuid "c1aec2ba-a2ce-4063-af3c-86a4c1a05840")
 			(effects
@@ -9270,7 +9270,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R101"
-			(at -3.59325 0 0)
+			(at -3.44325 1 0)
 			(layer "F.SilkS")
 			(uuid "6ec381e8-4987-4b18-a437-2d5a2b63f363")
 			(effects
@@ -9574,7 +9574,7 @@
 		(descr "SOT, 3 Pin (JEDEC TO-236 Var AB https://www.jedec.org/document_search?search_api_views_fulltext=TO-236)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "Q1"
-			(at 0 2.84325 0)
+			(at 0 2.693251 0)
 			(layer "F.SilkS")
 			(uuid "feeffa00-d7d8-401b-9138-a3017fc8162f")
 			(effects
@@ -9992,7 +9992,7 @@
 		(descr "SOD-323")
 		(tags "SOD-323")
 		(property "Reference" "D4"
-			(at 0 2.09325 0)
+			(at 0 2.24325 0)
 			(layer "F.SilkS")
 			(uuid "541c042d-2550-4708-bc32-4cdae6be4af4")
 			(effects
@@ -10411,7 +10411,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C15"
-			(at -3.31325 -3.042381 0)
+			(at -2.87325 -2 0)
 			(layer "F.SilkS")
 			(uuid "e244f1db-fcf2-4cd0-a7c3-07b1be4a5909")
 			(effects
@@ -10610,7 +10610,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R8"
-			(at 0 2.27325 0)
+			(at -1 2.12325 0)
 			(layer "F.SilkS")
 			(uuid "c423f856-0128-4225-865a-9ae297f76ca3")
 			(effects
@@ -10804,12 +10804,12 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R21"
-			(at 0 2.0387 0)
+			(at 0 2.12325 0)
 			(layer "F.SilkS")
 			(uuid "a69a7cc9-435b-40b0-9e9a-392222bb9cb4")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -10989,7 +10989,7 @@
 		(descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 2.54mm single row")
 		(property "Reference" "JP104"
-			(at 4.499524 1.274999 0)
+			(at 2 -2.76325 0)
 			(layer "F.SilkS")
 			(uuid "9ec7a907-ba40-4739-89fb-2540624dca2f")
 			(effects
@@ -11374,7 +11374,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C119"
-			(at 3.9 -0.25 0)
+			(at 1 -1.973251 0)
 			(layer "F.SilkS")
 			(uuid "b141b7a8-628c-4fe2-a1e7-949e8c6d4e52")
 			(effects
@@ -11571,12 +11571,12 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C118"
-			(at 7.3 -0.9 0)
+			(at 0 1.85625 0)
 			(layer "F.SilkS")
 			(uuid "56d5e291-0724-4b0a-a5b6-3daf13856bf4")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -11768,7 +11768,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R104"
-			(at 3.9 2.6 0)
+			(at -3.44325 -1 0)
 			(layer "F.SilkS")
 			(uuid "a525ce20-7906-49f3-b234-1157fc488159")
 			(effects
@@ -12162,7 +12162,7 @@
 		(descr "Terminal Block Phoenix PT-1,5-3-3.5-H, 3 pins, pitch 3.5mm, size 10.5x7.6mm, drill diameter 1.2mm, pad diameter 2.4mm, ")
 		(tags "THT Terminal Block Phoenix PT-1,5-3-3.5-H pitch 3.5mm size 10.5x7.6mm drill 1.2mm pad 2.4mm")
 		(property "Reference" "J3"
-			(at 10.8 0 0)
+			(at 10.24325 0.7 0)
 			(layer "F.SilkS")
 			(uuid "b7335678-c7a4-4726-a577-e9d8004ba4e3")
 			(effects
@@ -12573,7 +12573,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R1"
-			(at 0 2.22619 0)
+			(at 0 2.37619 0)
 			(layer "F.SilkS")
 			(uuid "74f3cf27-e38a-4a7d-b86e-09c8175c890f")
 			(effects
@@ -13045,7 +13045,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R17"
-			(at 0 -2.0387 0)
+			(at 0 -2.00625 0)
 			(layer "F.SilkS")
 			(uuid "ba19606f-c57c-4253-b3e1-8e6a39e5c378")
 			(effects
@@ -13351,7 +13351,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.50mm, diameter=6.3mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.50mm diameter 6.3mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C104"
-			(at -4.496079 -0.000001 0)
+			(at -4.346079 -0.000001 0)
 			(layer "F.SilkS")
 			(uuid "39fcf412-2490-4007-99af-bd0d9915c71c")
 			(effects
@@ -15031,7 +15031,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R3"
-			(at 0 1.75 0)
+			(at -1 2.200952 0)
 			(layer "F.SilkS")
 			(uuid "1fcff9c0-4a84-4f90-9d59-50c12fad6ed8")
 			(effects
@@ -15225,7 +15225,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.00mm, diameter=5mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.00mm diameter 5mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C5"
-			(at -3.146189 0 0)
+			(at 4.993682 0 0)
 			(layer "F.SilkS")
 			(uuid "688b21be-478f-439f-8bec-133639911d71")
 			(effects
@@ -16820,7 +16820,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R109"
-			(at 0.2 1.65 90)
+			(at -3.32625 -1 0)
 			(layer "F.SilkS")
 			(uuid "8dca93e7-09ea-4bfd-99a8-25bfa0948e7d")
 			(effects
@@ -17124,7 +17124,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.50mm, diameter=6.3mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.50mm diameter 6.3mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C111"
-			(at 6.99857 -0.000001 0)
+			(at 6.84857 -0.000001 0)
 			(layer "F.SilkS")
 			(uuid "2473cd26-9422-4589-86ab-fd301a1bf768")
 			(effects
@@ -18695,7 +18695,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R112"
-			(at 0.4 -2 0)
+			(at 0 -2.123251 0)
 			(layer "F.SilkS")
 			(uuid "f96be739-3a34-4d97-9649-1b31bb9a60cd")
 			(effects
@@ -18892,7 +18892,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.50mm, diameter=6.3mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.50mm diameter 6.3mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C112"
-			(at 1.250001 5.74857 0)
+			(at -3.145738 1.001245 0)
 			(layer "F.SilkS")
 			(uuid "9cd52269-988d-4d47-8c0c-02c9c56390ec")
 			(effects
@@ -20463,7 +20463,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R28"
-			(at -2.69325 0 0)
+			(at -2.843249 0 0)
 			(layer "F.SilkS")
 			(uuid "b63d051b-e197-4084-9e5a-946b449607bf")
 			(effects
@@ -20650,12 +20650,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C4"
-			(at 1 -1.85 0)
+			(at 0 -2.14325 0)
 			(layer "F.SilkS")
 			(uuid "fb1ef1d7-9265-4cb4-9e11-fab96e4d223b")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -20856,12 +20856,12 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R18"
-			(at 0 -2.0387 0)
+			(at 0 -2.12325 0)
 			(layer "F.SilkS")
 			(uuid "f1f6afd7-c425-423e-b4f6-bb6482d80754")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -21554,7 +21554,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R110"
-			(at 0 -2.27325 0)
+			(at 0 -2.12325 0)
 			(layer "F.SilkS")
 			(uuid "eba70730-7475-4a3d-abd6-2fcad0a208fe")
 			(effects
@@ -22134,7 +22134,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C123"
-			(at 3.62325 0 0)
+			(at 3.47325 0 0)
 			(layer "F.SilkS")
 			(uuid "f1597600-1c29-4048-8ad6-5572a1ef1582")
 			(effects
@@ -22528,7 +22528,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R2"
-			(at 0 -1.97325 0)
+			(at 0 -2.12325 0)
 			(layer "F.SilkS")
 			(uuid "51c14b82-d037-425a-947d-2b1521b6c2f2")
 			(effects
@@ -22722,7 +22722,7 @@
 		(descr "Resistor SMD 2512 (6332 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R105"
-			(at -4.97325 0 0)
+			(at -4.82325 0 0)
 			(layer "F.SilkS")
 			(uuid "21fa2f12-60b2-4126-a6dd-fadecf672b1c")
 			(effects
@@ -22919,7 +22919,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C117"
-			(at 0 3.328571 0)
+			(at 2.69325 1 0)
 			(layer "F.SilkS")
 			(uuid "3571c8ca-e53f-4053-8133-ab2e10c69f89")
 			(effects
@@ -23715,7 +23715,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R25"
-			(at 0 -2.522381 0)
+			(at 2.843249 0 0)
 			(layer "F.SilkS")
 			(uuid "428d8e27-a393-4f44-9e48-c9ec5633437f")
 			(effects
@@ -23902,7 +23902,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R108"
-			(at -3.9 0 0)
+			(at -3.443249 0 0)
 			(layer "F.SilkS")
 			(uuid "fd681a36-7841-4753-806f-bac09fee4d44")
 			(effects
@@ -24099,7 +24099,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R113"
-			(at -4.8 0 0)
+			(at -4.282857 0 0)
 			(layer "F.SilkS")
 			(uuid "25352e8e-7cd0-4757-8929-5982ccaf390c")
 			(effects
@@ -24296,7 +24296,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R24"
-			(at 0 -3.002381 0)
+			(at -3.44325 0 0)
 			(layer "F.SilkS")
 			(uuid "52ce1388-acc4-4bf5-b932-6b0b6315c7bb")
 			(effects
@@ -24483,7 +24483,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R20"
-			(at 0 2.52238 0)
+			(at 2.84325 0 0)
 			(layer "F.SilkS")
 			(uuid "48070599-06c4-409e-92ab-ada52aa4ddc6")
 			(effects
@@ -24677,7 +24677,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C9"
-			(at 3.28325 2.106191 0)
+			(at 0 2.396191 0)
 			(layer "F.SilkS")
 			(uuid "e06eb238-792f-47b3-b041-2fb996683fff")
 			(effects
@@ -24991,7 +24991,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C108"
-			(at -3.62325 0 0)
+			(at -3.47325 0 0)
 			(layer "F.SilkS")
 			(uuid "8c306fba-6613-4dcb-9c0c-c956b08e81f9")
 			(effects
@@ -25188,12 +25188,12 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R19"
-			(at 0 -1.6 0)
+			(at 0 -2.12325 0)
 			(layer "F.SilkS")
 			(uuid "0e704a81-3359-4879-9751-18927467b0be")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -25382,7 +25382,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R12"
-			(at 3.6 0 0)
+			(at 3.901905 -0.5 0)
 			(layer "F.SilkS")
 			(uuid "80f07f1a-15ef-409f-a791-2ba34576836a")
 			(effects
@@ -25576,12 +25576,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C115"
-			(at 4.1 -1.3 0)
+			(at 3.35625 0 0)
 			(layer "F.SilkS")
 			(uuid "6cebd227-fe68-4e09-9567-14ba88600995")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -25773,12 +25773,12 @@
 		(descr "Terminal Block Phoenix PT-1,5-2-3.5-H, 2 pins, pitch 3.5mm, size 7x7.6mm, drill diameter 1.2mm, pad diameter 2.4mm, ")
 		(tags "THT Terminal Block Phoenix PT-1,5-2-3.5-H pitch 3.5mm size 7x7.6mm drill 1.2mm pad 2.4mm")
 		(property "Reference" "J102"
-			(at 6.89325 0.7 0)
+			(at 6.626251 1.7 0)
 			(layer "F.SilkS")
 			(uuid "d0df9177-8fbd-4b4a-8f17-1f5f47e4c4bd")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -26156,7 +26156,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R27"
-			(at 2.653249 2.382381 0)
+			(at 2.843249 1 0)
 			(layer "F.SilkS")
 			(uuid "76e77609-a412-49cd-a3d9-a5948c0722d8")
 			(effects
@@ -26342,7 +26342,7 @@
 		(at 210.25 60)
 		(descr "Bourns SRP1038A lead-frame, recommended land pattern: 13.6 outer, 5.4 inner gap, height 3.5 mm. https://bourns.com/docs/product-datasheets/srp1038a.pdf")
 		(property "Reference" "L102"
-			(at 0 -6.54325 0)
+			(at 0 6.393249 0)
 			(layer "F.SilkS")
 			(uuid "e2ef5181-11d7-4187-8213-21d63d69673b")
 			(effects
@@ -26809,7 +26809,7 @@
 		(descr "TSSOP, 16 Pin (https://www.jedec.org/document_search?search_api_views_fulltext=MO-153)")
 		(tags "TSSOP SO JEDEC-MO-153-AB Texas_PW0016A Microchip-ST Toshiba-TSSOP16-P-0044-0.65A NXP-SOT403-1 Infineon-P-TSSOP-16-800")
 		(property "Reference" "U2"
-			(at 0 -4.17 0)
+			(at 4.843249 0 0)
 			(layer "F.SilkS")
 			(uuid "36d212d2-66b0-41a6-bc3a-2cd787bc730e")
 			(effects
@@ -27260,7 +27260,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.50mm, diameter=6.3mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.50mm diameter 6.3mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C106"
-			(at 6.99857 -0.000001 0)
+			(at 1.251246 -4.39574 0)
 			(layer "F.SilkS")
 			(uuid "473aed93-44ae-4339-b55c-ec8af4172bad")
 			(effects
@@ -28831,12 +28831,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C6"
-			(at 0 2.24619 0)
+			(at 0 2.220952 0)
 			(layer "F.SilkS")
 			(uuid "35e51227-0be4-4567-9445-f5e8e726f48f")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -29234,7 +29234,7 @@
 		(descr "SOT, 3 Pin (JEDEC TO-236 Var AB https://www.jedec.org/document_search?search_api_views_fulltext=TO-236)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "Q2"
-			(at 3.055 0 0)
+			(at 3.02 0 0)
 			(layer "F.SilkS")
 			(uuid "55e40721-3f2c-4910-a45e-63c7c4745b35")
 			(effects
@@ -30479,7 +30479,7 @@
 		(descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 2.54mm single row")
 		(property "Reference" "JP101"
-			(at -2.91325 1.275 0)
+			(at -2.76325 1.275 0)
 			(layer "F.SilkS")
 			(uuid "85724cc5-99c8-4b54-afe1-6eeff00c6124")
 			(effects
@@ -30963,12 +30963,12 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C121"
-			(at 4.35 -0.1 0)
+			(at 3.35625 0 0)
 			(layer "F.SilkS")
 			(uuid "de95cb41-2687-48be-8272-36870582a597")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -31160,7 +31160,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R7"
-			(at 0 -2.226191 0)
+			(at 3.44325 0 0)
 			(layer "F.SilkS")
 			(uuid "8bf1ea63-1ad0-477a-8675-d67f668bc18b")
 			(effects
@@ -32548,7 +32548,7 @@
 		(descr "3.5mm stereo (TRS) jack, horizontal, through hole, isolated normally-open detect switch (pins 5-6). Pads from the recommended PCB layout: 6x 1.2x0.8 slots (pin 4 not fitted on the AG variant), 2x 1.3mm locating pegs. Jack front face at X=-2.4. https://www.sameskydevices.com/product/resource/sj3-3506x.pdf")
 		(tags "audio jack 3.5mm TRS stereo horizontal detect switch Same Sky SJ3-35063AG")
 		(property "Reference" "J2"
-			(at 1.775 -0.375 0)
+			(at 1.775 -6.777143 0)
 			(layer "F.SilkS")
 			(uuid "328d2804-8e21-45e5-b100-837177560a6c")
 			(effects
@@ -32862,7 +32862,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C103"
-			(at 0 -3.498572 0)
+			(at -3.47325 0 0)
 			(layer "F.SilkS")
 			(uuid "7446e63f-2fa1-46ab-84ff-4847cfaff840")
 			(effects
@@ -33171,12 +33171,12 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor handsolder")
 		(property "Reference" "R13"
-			(at 0 2.0387 0)
+			(at 0 2.12325 0)
 			(layer "F.SilkS")
 			(uuid "e1717665-5efe-4867-b560-7bb62833c997")
 			(effects
 				(font
-					(size 0.8 0.8)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -33559,7 +33559,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C1"
-			(at 2.683249 -1.93619 0)
+			(at 2.873249 0 0)
 			(layer "F.SilkS")
 			(uuid "80a95da6-eb5c-4ad0-a988-730a1540cee5")
 			(effects
@@ -34076,7 +34076,7 @@
 		(descr "3.5mm stereo (TRS) jack, horizontal, through hole, isolated normally-open detect switch (pins 5-6). Pads from the recommended PCB layout: 6x 1.2x0.8 slots (pin 4 not fitted on the AG variant), 2x 1.3mm locating pegs. Jack front face at X=-2.4. https://www.sameskydevices.com/product/resource/sj3-3506x.pdf")
 		(tags "audio jack 3.5mm TRS stereo horizontal detect switch Same Sky SJ3-35063AG")
 		(property "Reference" "J4"
-			(at 1.775 -0.375 0)
+			(at 1.775 6.027143 0)
 			(layer "F.SilkS")
 			(uuid "21449988-9a7e-4842-a687-ea63d0c4af91")
 			(effects
@@ -34390,7 +34390,7 @@
 		(descr "SOD-123")
 		(tags "SOD-123")
 		(property "Reference" "D101"
-			(at 0 -2.29325 0)
+			(at 0 -2.14325 0)
 			(layer "F.SilkS")
 			(uuid "efadddad-154d-4531-af26-9f9150c41bfd")
 			(effects
@@ -34717,7 +34717,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C10"
-			(at 0 -2.552381 0)
+			(at -2.87325 -1 0)
 			(layer "F.SilkS")
 			(uuid "2e7447f1-9a92-4e7e-9802-d972768e5927")
 			(effects
@@ -34916,7 +34916,7 @@
 		(descr "Embedded platform for audio applications. 96kHz / 24-bit audio hardware. 64MB of SDRAM for up to 10 minute long audio. ARM Cortex-M7 MCU, running at 480MHz. 31 total GPIO pins with configurable functionality. 12-bit Digital to Analog Converters (x2). SD card interfaces. PWM outputs. Serial Protocols for connecting external sensors and devices (SPI, UART, I2S, I2C). Dedicated VIN pin for power. Micro USB port, and additional USB pins for full OTG-support as host and device. https://static1.squarespace.com/static/58d03fdc1b10e3bf442567b8/t/6227e6236f02fb68d1577146/1646781988478/Daisy_Seed_datasheet_v1.0.3.pdf")
 		(tags "Electrosmith Daisy Seed Microcontroller Module ARM Cortex-M7 Audio Codec")
 		(property "Reference" "A1"
-			(at 7.6 19.5 0)
+			(at 18.164762 24.505 0)
 			(layer "F.SilkS")
 			(uuid "46d98118-7b34-4c24-8926-937c530aa342")
 			(effects
@@ -35711,7 +35711,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor handsolder")
 		(property "Reference" "C2"
-			(at 0 1.99325 0)
+			(at 1 2.143249 0)
 			(layer "F.SilkS")
 			(uuid "d7f9f08e-9182-4d48-9c8c-1548e103e843")
 			(effects
