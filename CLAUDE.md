@@ -115,6 +115,10 @@ reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy
   footprints' 0.12 mm silk lines; on rev 3 also 47 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
   footprint silk over its own pad.
   All print fine. The JLC limits pass reports nothing else on either board.
+- **Re-render rev 3 after a board change.** The README shows `audio-board/rev3/render/top.png` and `bottom.png`; overwrite
+  them in the same commit: `"$K" pcb render --use-board-stackup-colors --background transparent --side top --quality high
+  --width 1600 --height 1250 -o audio-board/rev3/render/top.png audio-board/rev3/seed3-carrier.kicad_pcb`, and the same with
+  `--side bottom --quality basic` for `bottom.png` (high quality's floor shadows show the top-side parts through it).
 - **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V drives U101's SDZ and MUTE above its
   PVCC + 0.3 V rating. Bench supplies go on J101 (12 V, current-limited) with the DFR0571 connected (rev 3 DESIGN.md,
   "Decisions").

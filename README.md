@@ -2,6 +2,12 @@
 
 The circuit boards for our capstone guitar amp, designed in KiCad 10.
 
+The latest board, audio board rev 3 (top, then bottom seen from below):
+
+![Audio board rev 3, top](audio-board/rev3/render/top.png)
+
+![Audio board rev 3, bottom](audio-board/rev3/render/bottom.png)
+
 ## Boards
 
 | Board | Folder | Status |
