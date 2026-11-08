@@ -5997,12 +5997,6 @@
 		(uuid "7e5bf14f-c4e5-402c-a695-4c217779ac1c")
 	)
 	(junction
-		(at 52.07 134.62)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7f376cf2-bfde-4660-918d-9b3d8f1612c3")
-	)
-	(junction
 		(at 358.14 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6534,16 +6528,6 @@
 	)
 	(wire
 		(pts
-			(xy 35.56 134.62) (xy 52.07 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "192f53ef-7c74-4878-9605-1c5c59308f57")
-	)
-	(wire
-		(pts
 			(xy 196.85 114.3) (xy 201.93 114.3)
 		)
 		(stroke
@@ -6592,16 +6576,7 @@
 		)
 		(uuid "266e545a-9479-42c5-919a-4e2edfdd665f")
 	)
-	(wire
-		(pts
-			(xy 52.07 130.81) (xy 52.07 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2ce3cc30-701d-454f-a35c-d3bf2ef09110")
-	)
+	
 	(wire
 		(pts
 			(xy 74.93 185.42) (xy 74.93 189.23)
@@ -6741,16 +6716,6 @@
 			(type default)
 		)
 		(uuid "4f219e00-6e7d-42aa-b002-38ac89228ee2")
-	)
-	(wire
-		(pts
-			(xy 52.07 144.78) (xy 52.07 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4f4f14bb-56ec-4a96-8b98-0f895e1df388")
 	)
 	(wire
 		(pts
@@ -6964,16 +6929,6 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 228.6) (xy 86.36 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7b825bc4-2add-4f78-bc8a-648bd8669020")
-	)
-	(wire
-		(pts
 			(xy 165.1 78.74) (xy 173.99 78.74)
 		)
 		(stroke
@@ -7001,16 +6956,6 @@
 			(type default)
 		)
 		(uuid "7d53e18e-b969-4b96-904c-0d4485d7fe62")
-	)
-	(wire
-		(pts
-			(xy 25.4 134.62) (xy 22.86 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "816dd12a-66a1-4121-b440-e2f5e2d26e5f")
 	)
 	(wire
 		(pts
@@ -7124,16 +7069,6 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 228.6) (xy 96.52 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a5c6fce9-a042-4080-b44d-c9d838a5ffc0")
-	)
-	(wire
-		(pts
 			(xy 162.56 158.75) (xy 163.83 158.75)
 		)
 		(stroke
@@ -7151,26 +7086,6 @@
 			(type default)
 		)
 		(uuid "a77bbba9-525f-488b-9a67-a5b444266708")
-	)
-	(wire
-		(pts
-			(xy 30.48 142.24) (xy 52.07 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a78a0c2a-17f0-4dc0-8a5d-4fd3a216b0bf")
-	)
-	(wire
-		(pts
-			(xy 182.88 228.6) (xy 187.96 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7a2e6b0-3e39-43c2-9d33-9819fa32d24f")
 	)
 	(wire
 		(pts
@@ -7311,16 +7226,6 @@
 			(type default)
 		)
 		(uuid "c7490db5-03e8-4707-8e77-29a8cc6bb7b1")
-	)
-	(wire
-		(pts
-			(xy 22.86 134.62) (xy 22.86 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cd673c91-9bea-43cf-9ac5-5b228b89fb92")
 	)
 	(wire
 		(pts
@@ -7524,16 +7429,6 @@
 	)
 	(wire
 		(pts
-			(xy 182.88 228.6) (xy 182.88 233.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f8c644c1-57bc-45a6-af8a-4e29f8ed75e9")
-	)
-	(wire
-		(pts
 			(xy 45.72 92.71) (xy 53.34 92.71)
 		)
 		(stroke
@@ -7581,16 +7476,6 @@
 			(justify left bottom)
 		)
 		(uuid "11f4fb3b-121a-46e9-87ae-852c2acf4f35")
-	)
-	(label "5V_IN"
-		(at 22.86 139.7 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "139f6bdb-d26c-4fdb-b4aa-6e88ee3441e3")
 	)
 	(label "LINE_OUT"
 		(at 346.71 179.07 90)
@@ -7702,16 +7587,6 @@
 		)
 		(uuid "3ddfbf37-5a27-4034-be5d-9848de125177")
 	)
-	(label "SPK_MUTE"
-		(at 187.96 228.6 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4730197f-e166-408c-80f2-5050955bcba8")
-	)
 	(label "BATT_SENSE"
 		(at 165.1 71.12 180)
 		(effects
@@ -7731,16 +7606,6 @@
 			(justify left bottom)
 		)
 		(uuid "515ca4c8-50b9-4e7a-ba01-b864a9f85373")
-	)
-	(label "BATT_SENSE_CONN"
-		(at 83.82 228.6 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "799713b5-27d5-4d72-a9af-95f18bd93a5a")
 	)
 	(label "UART_TX_CONN"
 		(at 162.56 156.21 180)
@@ -8896,84 +8761,7 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 52.07 130.81 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0742fdf7-73b3-4cba-82a5-fb1021c1af4d")
-		(property "Reference" "#PWR014"
-			(at 52.07 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 52.07 125.73 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 52.07 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 52.07 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 52.07 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ea2c857c-2b4c-4eb6-9594-e7c1c886352a")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR014")
-					(unit 1)
-				)
-			)
-		)
-	)
+	
 	(symbol
 		(lib_id "power:GND")
 		(at 196.85 121.92 0)
@@ -9650,84 +9438,7 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 52.07 134.62 0)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "1daa4b14-8ca3-49b0-8947-222a009df478")
-		(property "Reference" "#FLG01"
-			(at 52.07 136.525 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 58.166 136.398 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 52.07 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 52.07 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 52.07 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "080a8dfe-8480-4a71-912b-1522cd0360aa")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#FLG01")
-					(unit 1)
-				)
-			)
-		)
-	)
+	
 	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 378.46 71.12 0)
@@ -11848,127 +11559,6 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 88.9 228.6 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "67ef532b-328e-41a3-a135-0d3629d6931e")
-		(property "Reference" "R13"
-			(at 88.9 222.25 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 88.9 224.79 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "RMCF0603FT10K0"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Stackpole Electronics Inc"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "RMCF0603FT10K0CT-ND"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25804"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3e6c8b6a-290b-4967-b411-b0fb2d8fb12f")
-		)
-		(pin "2"
-			(uuid "d9f3688d-9d35-4cf2-bd4e-413c78d0b932")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
 		(at 172.72 248.92 0)
 		(unit 1)
 		(body_style 1)
@@ -14064,133 +13654,6 @@
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
 					(reference "#PWR062")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_FET:AO3401A")
-		(at 30.48 137.16 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ad6c7b58-4dd0-4e05-8681-e92fea439d48")
-		(property "Reference" "Q1"
-			(at 30.48 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "AO3401A"
-			(at 30.48 130.81 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 32.385 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3401A.pdf"
-			(at 34.29 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "-4.0A Id, -30V Vds, P-Channel MOSFET, SOT-23"
-			(at 30.48 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "AO3401A"
-			(at 30.48 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Alpha & Omega Semiconductor Inc."
-			(at 30.48 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "785-1001-1-ND"
-			(at 30.48 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C15127"
-			(at 30.48 137.16 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2ecdfdcd-259e-46f1-b96b-03350ee2c02c")
-		)
-		(pin "2"
-			(uuid "a8833d86-3959-4ee6-9f11-13273e8024f6")
-		)
-		(pin "3"
-			(uuid "165a19bc-3854-4d18-8e5f-7ec2eca65739")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "Q1")
 					(unit 1)
 				)
 			)
@@ -16990,84 +16453,6 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 52.07 144.78 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "faab1da7-feef-47e0-a123-f9c92f78b998")
-		(property "Reference" "#PWR013"
-			(at 52.07 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 52.07 149.86 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 52.07 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 52.07 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 52.07 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "94a96cb8-2192-4551-aadc-b7532f25e850")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR013")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
 		(at 383.54 130.81 180)
 		(unit 1)
 		(body_style 1)
@@ -18834,206 +18219,6 @@
 		(at 173.99 76.2)
 		(uuid "7367436c-e0de-471f-bc2c-2c535a56f3eb")
 	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 109.22 231.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9fd8ec1b-b24f-480a-baf4-fa3143b9f0b8")
-		(property "Reference" "R22"
-			(at 111.76 229.87 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 111.76 232.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "RMCF0603FT10K0"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Stackpole Electronics Inc"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "RMCF0603FT10K0CT-ND"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25804"
-			(at 109.22 231.14 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d8c702d4-5222-4e2c-8211-110832cefbf2")
-		)
-		(pin "2"
-			(uuid "f31865ca-f1fb-4353-a450-8db8bd54c472")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 109.22 233.68 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "589e3675-9d4b-475e-baea-2e2cd917b59b")
-		(property "Reference" "#PWR079"
-			(at 109.22 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 109.22 238.76 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 109.22 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 109.22 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 109.22 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6809bdb8-add6-4444-ac04-d154eea2ef91")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR079")
-					(unit 1)
-				)
-			)
-		)
-	)
 	(wire
 		(pts
 			(xy 101.6 228.6) (xy 109.22 228.6)
@@ -19053,145 +18238,6 @@
 			(type default)
 		)
 		(uuid "a6ecc730-fd80-461d-9aa2-e1af408a9fc9")
-	)
-	(junction
-		(at 109.22 228.6)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ce1a4565-436b-4773-b70f-fbaffaea6fa8")
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 182.88 236.22 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c5e2740e-de0b-49ee-ac30-55f535347d23")
-		(property "Reference" "R23"
-			(at 185.42 234.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "470"
-			(at 185.42 237.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "RC0603FR-07470RL"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "YAGEO"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "DigiKey" "311-470HRCT-ND"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C23179"
-			(at 182.88 236.22 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f0cd67d9-edc0-4e75-bffb-b78c174d6968")
-		)
-		(pin "2"
-			(uuid "b8476ebd-7877-42bc-97c0-68d7cde25d73")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "R23")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 182.88 238.76) (xy 182.88 241.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "21946289-de90-4573-8a4c-be8b20574880")
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
@@ -19514,9 +18560,8 @@
 	(junction (at 52.07 97.79) (diameter 0) (color 0 0 0 0) (uuid "862e294a-7ef4-4e19-80bc-bb429619f7c7"))
 	(junction (at 52.07 92.71) (diameter 0) (color 0 0 0 0) (uuid "9edfcc10-d937-43fa-8b65-d3155769be45"))
 	(wire (pts (xy 45.72 231.14) (xy 50.8 231.14)) (stroke (width 0) (type default)) (uuid "356a3436-2de8-4501-b48a-be6ebd96b885"))
-	(label "5V_IN" (at 50.8 231.14 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5ab15171-829d-4e01-bf61-e802d4039f25"))
 	(wire (pts (xy 45.72 233.68) (xy 50.8 233.68)) (stroke (width 0) (type default)) (uuid "f5dc41ec-c1f5-4872-b673-4dca02bcdde1"))
-	(label "BATT_SENSE_CONN" (at 50.8 233.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6e4b945b-be13-49c4-89ff-6567022b702e"))
+	(label "BATT_SENSE" (at 50.8 233.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6e4b945b-be13-49c4-89ff-6567022b702e"))
 	(wire (pts (xy 45.72 236.22) (xy 50.8 236.22)) (stroke (width 0) (type default)) (uuid "e73076b4-3a26-4d62-9e3e-844c9a1eb1d2"))
 	(label "SPK_MUTE" (at 50.8 236.22 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6ff6d418-4715-4bff-b469-085a20aeda74"))
 	(wire (pts (xy 45.72 238.76) (xy 50.8 238.76)) (stroke (width 0) (type default)) (uuid "3de24811-9453-4244-8bfe-334ac49a6bbc"))
@@ -19616,6 +18661,17 @@
 		(property "Description" "" (at 194.31 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "669fffd6-0d9d-4d68-b9fd-c21016cf5c46"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR3") (unit 1)))))
+	(wire (pts (xy 182.88 241.3) (xy 182.88 238.76)) (stroke (width 0) (type default)) (uuid "56927afc-0d56-476a-99df-ff4338aa4bfb"))
+	(label "SPK_MUTE" (at 182.88 238.76 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "55f1feb6-b43a-439d-bed0-111a4b583612"))
+	(junction (at 44.45 34.29) (diameter 0) (color 0 0 0 0) (uuid "6babb53e-bfc1-439f-b620-845c5cbdc95c"))
+	(symbol (lib_id "power:+5V") (at 50.8 231.14 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "8b4f4b2d-06bf-4a52-83b5-35944ab331a1")
+		(property "Reference" "#PWR4" (at 50.8 234.95 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "+5V" (at 50.8 227.584 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 50.8 231.14 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 50.8 231.14 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 50.8 231.14 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "6ab59eb0-fd01-4428-98ff-c8cbf72d7b34"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR4") (unit 1)))))
 	(sheet_instances
 		(path "/"
 			(page "1")

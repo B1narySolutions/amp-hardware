@@ -5,10 +5,10 @@ each. `DESIGN.md` describes the current design in full. Keep this list to the ne
 Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 100 (see "Designators").
 
 ## One board
-- **Audio rev 2 and power rev 1 are one board,** 122 × 78 mm, 4 layers. They were a 90 × 56.5 mm 2-layer board and a
+- **Audio rev 2 and power rev 1 are one board,** 100 × 78 mm, 4 layers. They were a 90 × 56.5 mm 2-layer board and a
   98 × 98 mm 2-layer board joined by screw terminals and wires.
 - **Schematic:** sheet 1 is rev 2's audio sheet. Sheet 2 (`power.kicad_sch`) is power rev 1's sheet with every designator +100,
-  joined to sheet 1 by five sheet pins: `5V_IN`, `BATT_SENSE_CONN`, `SPK_MUTE`, `LINE_OUT` and `LINE_REF`.
+  joined to sheet 1 by five sheet pins: `+5V` (rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT` and `LINE_REF`.
 - **Removed: the four terminals between the boards:** audio J5 (speaker send) and J6 (power, battery level, mute), and power
   J3 and J4 (rev 1 numbers). Their nets join on the board.
 - **The DFR0571 5 V buck stays off the board,** on J106 (its input) and J107 (its output), as on power rev 1.
@@ -16,9 +16,15 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 ## Circuit
 - **Q102 (AO3401A) added** between J107 and `+5V_RAW`, gate to GND. A reversed 5 V source on J107 no longer puts −5 V on
   U103 or the display (power rev 1 had no protection at J7). The DFR0571's own swapped wires short its output instead,
-  because its grounds are common. Q1 stays as it was.
+  because its grounds are common.
 - **J102's pins swapped:** pin 2 is SPK+ and pin 1 SPK−, so the speaker traces from L101/L102 don't cross. Marked on the
   silkscreen.
+- **Removed: Q1, R23, R13 and R22.** Q1 (rev 2's 5 V reverse protection) is redundant with Q102, so FB101 feeds `+5V`
+  directly. R23 (Q2's series resistor) guarded an inter-board wire that no longer exists. R13/R22 halved power rev 1's
+  divider a second time; instead R102 is 100k (was 30k), so R102/R103 alone give VBAT / 11 on pin 25, the same firmware
+  constant, from 9.1 kΩ.
+- **F101 is a Bel 0683G3150-01** SMD slow-blow fuse (3.15 A, 2 kA DC interrupting) instead of a T3.15A 5 × 20 mm fuse in a
+  Bulgin FX0457 holder: same rating, 12 × 4.65 mm instead of 36 × 13 mm. Soldered, not swappable.
 - **C18 (100 pF C0G) added** from U1A's + input to GND: RF filtering at the op-amp pin against the display's Wi-Fi bursts.
 - **JP106–JP108 added:** U101's AM2–AM0 reach GND through solder jumpers bridged in copper (on the back), instead of
   straight to GND. Same circuit as built; cutting one moves the class D's switching frequency if it beats with U2's charge pump.
@@ -27,7 +33,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **C2 is 47 nF C0G** (was 1 µF X7R): not microphonic at the 1 MΩ input. The input's high-pass moves from 0.16 Hz to 3.4 Hz.
 - **C19/C20 (10 pF C0G) added** on `DISPLAY_UART_TX`/`DISPLAY_UART_RX`, the Daisy side of R8/R9: RF filtering on the display UART.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
-  nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20 and JP106–JP108.
+  nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20, JP106–JP108, the removed Q1/R23/R13/R22, R102's
+  value and F101's part.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
@@ -35,12 +42,12 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   is GND with a PVCC pour under the class D. Rev 2's 2-layer hops stay, now over In1.
 - **Layout:** the Daisy stands upright in the middle, USB on the rear edge, between the audio side (left and front) and the
   power side (right). The jacks stay on the front edge. Rev 2's input buffer and U2 blocks keep their routing. The class D
-  is at the right edge with the speaker terminal; the 12 V jack, fuse and switch terminal run along the rear edge, and the
-  5 V and display terminals sit on the left edge.
+  is near the right edge with L101 and L102 upright above and below its outputs and the speaker terminal between them; the
+  switch terminal, fuse and 12 V jack run along the rear edge, and the 5 V and display terminals sit on the left edge.
 - **Moved from rev 2:** J3 to the left edge, R8/R9/R24 next to it; the AUX sum, mute, sense and speaker-send parts beside the
-  upright Daisy; Q1, C4 and C5 into the 5 V filter column; all four mounting holes and the fiducials.
-- **Moved from power rev 1's arrangement:** the audio 5 V filter (FB101, JP101, JP102, C104, C105) now sits beside Q1, at the
-  analog rail's entry, and R107 sits beside R23.
+  upright Daisy; C4 and C5 into the 5 V filter column; all four mounting holes and the fiducials.
+- **Moved from power rev 1's arrangement:** the audio 5 V filter (FB101, JP101, JP102, C104, C105) now sits beside C5, at the
+  analog rail's entry; R107 sits in the mute column; L101/L102 stand upright; C112 sits below U101.
 - **U101:** nine vias in its exposed pad and ten under its body, a back-side mask opening under the pad, bootstrap caps at
   the output pins, and wide output traces. Power rev 1 routed the outputs at about 0.25 mm.
 - **Rules:** a `HighCurrent` net class (1.5 mm) for the battery, PVCC, output and speaker nets, neck-down rules at U101 and
@@ -52,14 +59,15 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
-  four changes: no four-way terminals and two fewer two-way ones, one more AO3401A (Q102), one more 100 pF C0G (C18), and
-  none of rev 1's experiment parts, which that build's spares cover.
+  these changes: no four-way terminals and two fewer two-way ones; Q102 in place of Q1 (one AO3401A); C18, FB1 and C19/C20
+  added; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
+  and none of rev 1's experiment parts, which that build's spares cover.
 - **New part numbers for every resized passive,** same value with equal or better rating, except C108/C109 (1.5 µF, now 16 V
   0805; they sit at 3 V) and C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
   0603 versions had none in stock.
 - **LCSC numbers on every SMD part** for JLC assembly (JLC Basic equivalents for the commodity passives), with
-  `jlc-assembly.kicad_jobset`, `jlc-rotations.csv` and the exported BOM and CPL in `fab/assembly/`. C121/C122 moved 1.1 mm in
-  from the right edge for JLC's 2.5 mm assembly clearance.
+  `jlc-assembly.kicad_jobset`, `jlc-rotations.csv` and the exported BOM and CPL in `fab/assembly/`. F101 is hand-soldered
+  (no JLC stock) and left out of the CPL.
 - **C10/C11's DigiKey number** is DigiKey's renumbered listing, 1276-CL21A475KACLRNCCT-ND (same part).
 
 ## Designators

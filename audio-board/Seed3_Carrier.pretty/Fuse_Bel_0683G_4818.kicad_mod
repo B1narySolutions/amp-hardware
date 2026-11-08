@@ -1,0 +1,106 @@
+(footprint "Fuse_Bel_0683G_4818"
+	(version 20260206)
+	(generator "pcbnew")
+	(layer "F.Cu")
+	(descr "Bel Fuse 0683G series square ceramic SMD slow-blow fuse, 4818 size, body 12.0 x 4.65 x 4.65 mm. Pads from the datasheet's recommended reflow layout: 3.50 x 5.60 mm, 6.50 mm gap (10.00 mm centres). https://belfuse.com/media/datasheets/products/circuit-protection/ds-CP-0683G-series.pdf")
+	(tags "fuse smd bel 0683G 4818 slow blow")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Fuse_Bel_0683G_4818"
+		(at 0 4 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.85 -2.45)
+		(end 2.85 -2.45)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -2.85 2.45)
+		(end 2.85 2.45)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_rect
+		(start -7 -3.05)
+		(end 7 3.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_rect
+		(start -6 -2.325)
+		(end 6 2.325)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -4.6 -2.325)
+		(end -4.6 2.325)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 4.6 -2.325)
+		(end 4.6 2.325)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -5 0)
+		(size 3.5 5.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "2" smd rect
+		(at 5 0)
+		(size 3.5 5.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(embedded_fonts no)
+)

@@ -9532,7 +9532,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(in_pos_files yes)
+		(in_pos_files no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50002176-54ce-4527-9e3e-d7bc2c23e246")
@@ -9556,7 +9556,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Halliquest_Power:Fuseholder_Bulgin_FX0457_P10.00mm"
+		(property "Footprint" "Seed3_Carrier:Fuse_Bel_0683G_4818"
 			(at 55.88 33.782 90)
 			(hide yes)
 			(show_name no)
@@ -9567,7 +9567,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://belfuse.com/media/datasheets/products/circuit-protection/ds-CP-0683G-series.pdf"
 			(at 55.88 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -9589,7 +9589,7 @@
 				)
 			)
 		)
-		(property "Footprint_Review" "PROVISIONAL physical package: choose exact manufacturer part before fabrication"
+		(property "Footprint_Review" "Bel 0683G datasheet land pattern; hand-soldered (no JLC stock), excluded from the CPL"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9600,7 +9600,7 @@
 				)
 			)
 		)
-		(property "MPN" "FX0457"
+		(property "MPN" "0683G3150-01"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9611,7 +9611,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Bulgin"
+		(property "Manufacturer" "Bel Fuse Inc."
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9627,6 +9627,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "5923-0683G3150-01CT-ND"
+			(at 55.88 35.56 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13787,7 +13796,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "30k 1%"
+		(property "Value" "100k 1%"
 			(at 54.61 130.81 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13809,7 +13818,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 50.8 129.54 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13840,7 +13849,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0603FR-0730KL"
+		(property "MPN" "RMCF0603FT100K"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13851,7 +13860,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13873,7 +13882,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "311-30.0KHRCT-ND"
+		(property "DigiKey" "RMCF0603FT100KCT-ND"
 			(at 50.8 129.54 0)
 			(hide yes)
 			(effects
@@ -13882,7 +13891,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22984"
+		(property "LCSC" "C25803"
 			(at 50.8 129.54 0)
 			(hide yes)
 			(effects
