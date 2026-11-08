@@ -6804,16 +6804,6 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 34.29) (xy 53.34 34.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d0b6941-b3ee-4e06-bda4-15c26b798dbf")
-	)
-	(wire
-		(pts
 			(xy 196.85 114.3) (xy 196.85 121.92)
 		)
 		(stroke
@@ -8537,16 +8527,6 @@
 			(justify left top)
 		)
 		(uuid "00fac623-fc35-4a69-bc46-6cf3faa52619")
-	)
-	(label "GTR_TIP"
-		(at 52.07 34.29 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ba6ea9df-e1bc-4787-91e3-ac7eb88ecf2e")
 	)
 	(label "AUX_TIP"
 		(at 52.07 92.71 90)
@@ -15418,7 +15398,7 @@
 				)
 			)
 		)
-		(property "Value" "1uF"
+		(property "Value" "47nF"
 			(at 55.8863 30.48 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15439,7 +15419,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1003_C0G_SMD"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15461,7 +15441,7 @@
 				)
 			)
 		)
-		(property "Voltage" "50V"
+		(property "Voltage" "25V"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15472,7 +15452,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C105K5RACTU"
+		(property "MPN" "C0805C473J3GACTU"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15494,7 +15474,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+		(property "DigiKey" "399-C0805C473J3GACTUCT-ND"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -15505,7 +15485,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "LCSC" "C22402129"
 			(at 55.88 34.29 0)
 			(hide yes)
 			(effects
@@ -19531,7 +19511,6 @@
 			)
 		)
 	)
-	(junction (at 52.07 34.29) (diameter 0) (color 0 0 0 0) (uuid "5f1fcef2-1527-4203-be8b-331e1bf3d0dc"))
 	(junction (at 52.07 97.79) (diameter 0) (color 0 0 0 0) (uuid "862e294a-7ef4-4e19-80bc-bb429619f7c7"))
 	(junction (at 52.07 92.71) (diameter 0) (color 0 0 0 0) (uuid "9edfcc10-d937-43fa-8b65-d3155769be45"))
 	(wire (pts (xy 45.72 231.14) (xy 50.8 231.14)) (stroke (width 0) (type default)) (uuid "356a3436-2de8-4501-b48a-be6ebd96b885"))
@@ -19576,6 +19555,67 @@
 		(property "Description" "" (at 76.2 39.37 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "ecc7700a-c84f-4fd6-8851-1a09f9f6a35e"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR1") (unit 1)))))
+	(wire (pts (xy 52.07 34.29) (xy 53.34 34.29)) (stroke (width 0) (type default)) (uuid "673c2a02-cead-41f6-aee5-22ced5676fc4"))
+	(label "GTR_TIP" (at 44.45 34.29 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "135f6f81-0a75-4afe-b2c2-878e280f3d43"))
+	(wire (pts (xy 186.69 154.94) (xy 186.69 152.4)) (stroke (width 0) (type default)) (uuid "cab8a026-448c-4a45-8635-d4e71cb72fa0"))
+	(label "DISPLAY_UART_TX" (at 186.69 152.4 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "16178ca2-6134-4d8e-9142-56bc25739d22"))
+	(wire (pts (xy 194.31 154.94) (xy 194.31 152.4)) (stroke (width 0) (type default)) (uuid "1f988a4f-438e-4218-ade2-152e4a009b78"))
+	(label "DISPLAY_UART_RX" (at 194.31 152.4 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "4d519a5a-902b-4dfc-89f2-bb3f802df279"))
+	(junction (at 43.18 34.29) (diameter 0) (color 0 0 0 0) (uuid "73ea2b99-f3ed-418b-b228-e2c9cdec7b27"))
+	(symbol (lib_id "Device:FerriteBead_Small") (at 49.53 34.29 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "0b65df96-92a4-4961-b280-d38162b7f49c")
+		(property "Reference" "FB1" (at 50.165 32.385 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "600R GHz" (at 50.165 37.465 0) (hide yes) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric" (at 49.53 36.068 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://pim.murata.com/asset/pim4/ferriteBeadInductortypefilter/ENFA0004_PDF_FERRITEBEADINDUCTORTYPEFILTER?lastModifiedDatetime=20250707191219" (at 49.53 34.29 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 49.53 34.29 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "BLM18HG601SN1D" (at 49.53 34.29 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Murata Electronics" (at 49.53 34.29 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "490-1033-1-ND" (at 49.53 34.29 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C85830" (at 49.53 34.29 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "efa301ec-2694-4ade-bf3a-5504a6e6f9e4")) (pin "2" (uuid "39205021-df44-4cbe-bfd3-29085f39c9b5"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "FB1") (unit 1)))))
+	(symbol (lib_id "Device:C_Small") (at 186.69 157.48 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "e3ab51aa-976b-454f-adf2-81add20f25ea")
+		(property "Reference" "C19" (at 188.214 156.21 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10pF" (at 188.214 158.496 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/609/CL10C100JB8NNNC_Spec.pdf" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Voltage" "50V" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "CL10C100JB8NNNC" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Samsung Electro-Mechanics" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "1276-1027-1-ND" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C1634" (at 186.69 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "a0605d0d-b1a1-4680-88f6-205c23858f3d")) (pin "2" (uuid "49ebcc18-73d9-4b3b-86b0-d0ee2ced627c"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C19") (unit 1)))))
+	(symbol (lib_id "power:GND") (at 186.69 160.02 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "28676ad3-dca3-492f-b1c0-c3f95d14fbd5")
+		(property "Reference" "#PWR2" (at 186.69 166.37 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 186.69 163.83 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 186.69 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 186.69 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 186.69 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "b4c84c6f-8e5a-424b-aba6-7c2a29c8b227"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR2") (unit 1)))))
+	(symbol (lib_id "Device:C_Small") (at 194.31 157.48 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "46825fa3-64dd-40a5-989a-29ea9bee5546")
+		(property "Reference" "C20" (at 195.834 156.21 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10pF" (at 195.834 158.496 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/609/CL10C100JB8NNNC_Spec.pdf" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Voltage" "50V" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "CL10C100JB8NNNC" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Samsung Electro-Mechanics" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "1276-1027-1-ND" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C1634" (at 194.31 157.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "5f80a0d7-da1c-4f29-aa7f-182d1d0c0e43")) (pin "2" (uuid "3e883c4a-f033-4a06-9dff-3b51a3f66c0d"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C20") (unit 1)))))
+	(symbol (lib_id "power:GND") (at 194.31 160.02 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "6e2e5990-afdc-4ff4-a51a-0b547cffbf2d")
+		(property "Reference" "#PWR3" (at 194.31 166.37 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 194.31 163.83 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 194.31 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 194.31 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 194.31 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "669fffd6-0d9d-4d68-b9fd-c21016cf5c46"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR3") (unit 1)))))
 	(sheet_instances
 		(path "/"
 			(page "1")

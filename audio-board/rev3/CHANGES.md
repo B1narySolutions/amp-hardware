@@ -22,8 +22,12 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **C18 (100 pF C0G) added** from U1A's + input to GND: RF filtering at the op-amp pin against the display's Wi-Fi bursts.
 - **JP106–JP108 added:** U101's AM2–AM0 reach GND through solder jumpers bridged in copper (on the back), instead of
   straight to GND. Same circuit as built; cutting one moves the class D's switching frequency if it beats with U2's charge pump.
+- **FB1 (BLM18HG601SN1D) added** between C1 and C2 on the guitar input: with C1 and C18 it blocks Wi-Fi RF before the board's
+  input traces.
+- **C2 is 47 nF C0G** (was 1 µF X7R): not microphonic at the 1 MΩ input. The input's high-pass moves from 0.16 Hz to 3.4 Hz.
+- **C19/C20 (10 pF C0G) added** on `DISPLAY_UART_TX`/`DISPLAY_UART_RX`, the Daisy side of R8/R9: RF filtering on the display UART.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
-  nets, the four removed terminals, Q102, C18 and JP106–JP108.
+  nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20 and JP106–JP108.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.

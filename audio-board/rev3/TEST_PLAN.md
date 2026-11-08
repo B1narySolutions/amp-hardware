@@ -58,7 +58,7 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
 |---|---|---|
 | 5 V decoupling | C6, C4, C5, C12, C15 | Bulk/HF decoupling on `+5V` (C12 at U2 PVDD, C15 at U2 SVDD) |
 | Mid-rail reference | R7, R6 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
-| Guitar input | J1, C1, C2, R1 (1M), R2, C18, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; C18 filters RF at U1A's input; unity-gain buffer → R20 (470 Ω series) → Daisy `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
+| Guitar input | J1, C1, FB1, C2, R1 (1M), R2, C18, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; C1, FB1 and C18 filter RF; C2 is 47 nF C0G; unity-gain buffer → R20 (470 Ω series) → Daisy `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
 | AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ~110 kHz RF filter, straight into Daisy `AUDIO_IN_2` (no buffer). R5 (470 Ω) sets the level: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
 | Headphone filter | R10, C9 | Daisy `AUDIO_OUT_1` → ~80 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
 | Headphone amp | U2 (MAX9722A), R25–R28, C10/C11, C12–C15 | DirectDrive stereo amp, inverting at a gain of −1, outputs at 0 V straight to J4 (`HP_L` tip, `HP_R` ring). SHDN tied to `+5V`: U2 is on whenever `+5V` is up |
@@ -147,7 +147,7 @@ record every setting in the log, since some readings depend on them.
 | 0.5 | Q1, Q102 and Q2 | All SOT-23: Q1 and Q102 are AO3401A, Q2 is 2N7002, not swapped (Q2 in Q102's place leaves `+5V_RAW` dead; an AO3401A in Q2's place holds `SPK_MUTE` near 1 V). Seated on the correct pads |
 | 0.6 | Q101 and D101 | Q101 is the IRF4905, legs in the holes the silkscreen marks, tab facing as drawn. D101's cathode band on the side the silkscreen marks (cathode on `VBAT_PROTECTED`) |
 | 0.7 | Polarised parts | C5 `+` to `+5V`. C111 and C112 `+` to PVCC (fitted backwards they fail at first power). C104 and C106 not fitted (DNP) |
-| 0.8 | Passive values vs BOM | Sheet 1 as rev 2: R1 (1M), R3/R4/R6/R7/R8/R9/R13/R22 and R25–R28 (10k), R12/R17/R18/R19/R24 (100k), R10 (3.3k), R5/R20/R23 (470), R2/R11/R21 (1k); C7 is the 1210 part; C2, C10–C15 are 0805; C1, C3, C4, C6, C9, C16–C18 are 0603. Sheet 2: R101/R103/R107/R109/R112/R113 (10k), R102 (30k), R104 (5.6k), R106 (10 Ω), R108/R110 (2.2k), R111 (100k), R105 (0 Ω 2512). Every other resistor is 0603, often unmarked, so take values from the tape and confirm the swaps that matter by resistance in stage 1: R102/R103 (battery reading ×3), a 10k for R106 (AVCC starved), R104 (gain). Ceramic caps aren't marked: fit C108/C109 (1.5 µF), C121/C122 (680 nF), C117–C120 (220 nF), C110 (1 µF) and C103 (10 µF) straight from their tapes |
+| 0.8 | Passive values vs BOM | Sheet 1 as rev 2: R1 (1M), R3/R4/R6/R7/R8/R9/R13/R22 and R25–R28 (10k), R12/R17/R18/R19/R24 (100k), R10 (3.3k), R5/R20/R23 (470), R2/R11/R21 (1k); C7 is the 1210 part; C2 (47 nF C0G), C10–C15 are 0805; C1, C3, C4, C6, C9, C16–C20 are 0603; FB1 is the 0603 bead marked on its tape BLM18HG601 (not FB101/FB102's MPZ1608). Sheet 2: R101/R103/R107/R109/R112/R113 (10k), R102 (30k), R104 (5.6k), R106 (10 Ω), R108/R110 (2.2k), R111 (100k), R105 (0 Ω 2512). Every other resistor is 0603, often unmarked, so take values from the tape and confirm the swaps that matter by resistance in stage 1: R102/R103 (battery reading ×3), a 10k for R106 (AVCC starved), R104 (gain). Ceramic caps aren't marked: fit C108/C109 (1.5 µF), C121/C122 (680 nF), C117–C120 (220 nF), C110 (1 µF) and C103 (10 µF) straight from their tapes |
 | 0.9 | F101 | A T3.15A 5 × 20 mm fuse in the FX0457 holder, clips tight. Record the fuse fitted |
 | 0.10 | Screw terminals J3, J102, J105, J106, J107, SW101 | Seated flat, wire openings facing the board edge, screws turn freely |
 | 0.11 | Silkscreen legends | GND/TX/RX (J3), BAT+/GND (J106, to the DFR0571's input), 5V/GND (J107, from its output), DISP/GND (J105, the display's supply), SPK+/SPK− (J102, SPK+ on pin 2, toward the rear), 12V IN (J101); each test point's net beside its reference (VBAT, PVCC, SDZ, FAULT, 5V RAW, HP DET, GND) |
@@ -492,7 +492,7 @@ before the display (6.14) or a loud speaker test (6.20, 6.21). Speaker tests go 
 | 7.2 | Plug/unplug J1, J4, J2 repeatedly while running | No resets, no lasting noise, jacks stay mechanically solid; `HP_DETECT` reports every J4 change |
 | 7.3 | Wiggle the J3, J105, J106, J107 and J102 wires, the switch wires and the J101 plug while running | No crackle, dropouts or resets. A loose DFR0571 wire can only drop the 5 V, never leave it up without the battery, since the module runs from J106 |
 | 7.4 | Full-level 1 kHz into 32 Ω on J4 for 10 min | U2 at most warm; no shutdown or distortion change |
-| 7.5 | Light flex/tap test on the board and Daisy, guitar plugged in, listening on J4 and the speaker | No crackle or resets (would point to a cracked joint or loose socket pin). Record any knock heard through C2 or C108/C109 (class II ceramics, DESIGN.md "Open items") |
+| 7.5 | Light flex/tap test on the board and Daisy, guitar plugged in, listening on J4 and the speaker | No crackle or resets (would point to a cracked joint or loose socket pin). Record any knock heard through C10/C11 or C108/C109 (class II ceramics, DESIGN.md "Open items"); C2 is C0G and shouldn't |
 | 7.6 | Board off, a phone or laptop at full volume into J2. Scope A1.17 (on top of the module) | At most ≈ 0.46 Vpp (±0.23 V) for a 2 Vrms source: the unpowered codec's input stays within its ±0.3 V rating. Record the peak |
 | 7.7 | Speaker for 30 min: music at the capped level into the speaker, or 1 kHz at ≈ 2 W into the dummy load | No thermal shutdown (TP109 stays high); record U101's case temperature; L101/L102 warm at most; Q101, F101 and the DFR0571 cool |
 | 7.8 | With the battery: switch on at SW101 20 times, and plug the battery into J101 (switch on) 10 times | F101 survives every inrush (record the fuse value); U101 starts each time (TP109 high); record any spark at the switch or the jack |
@@ -532,7 +532,7 @@ recording for spikes. Pass means no audible click and no spike more than ~10 dB 
 | Speaker level wrong or distorted | R104 (gain), C108/C109, R11/R12; TP103 sagging under load (R105, F101, Q101, the supply lead) |
 | Speaker never mutes | MUTE bridged to GND (U101 pins 11–13); Q2 shorted, or an AO3401A fitted as Q2 |
 | Battery reading wrong | R102/R103 swapped (reads ≈ 3× high); R13/R22; C17 |
-| Input works only intermittently | J1 tip-normal switch, C2/R2 joints |
+| Input works only intermittently | J1 tip-normal switch, FB1/C2/R2 joints |
 | No headphone output | U2.2 (SHDN), U2.3 (PVDD) and U2.11/U2.15 (SVDD) at `+5V`; U2's pin joints |
 | PVSS ≈ 0 V with SHDN high | C13 (flying cap), C14, U2 pins 4/6/7/13 |
 | DC or hum on J4 outputs | U2 SGND (pin 8) and PGND (pin 5) to GND; INL+/INR+ (pins 1/9) grounded; R25–R28 values |

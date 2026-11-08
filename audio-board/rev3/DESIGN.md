@@ -32,13 +32,17 @@ R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source i
 noise on `+5V` (from the display) out of `VREF`. Its only load is R1.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
-J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → C18 (100 pF to GND) → U1A follower → R20
-(470 Ω) → `AUDIO_IN_1` (Daisy pin 16).
+J1 tip → C1 (100 pF to GND, RF shunt) → FB1 (ferrite bead) → C2 (47 nF C0G) → R1 (1M to `VREF`) → R2 (1k) → C18 (100 pF to
+GND) → U1A follower → R20 (470 Ω) → `AUDIO_IN_1` (Daisy pin 16). D1 and C1 sit on `GTR_TIP`, the jack side of FB1.
 - J1's tip switch shorts the tip to GND when nothing is plugged in.
+- **C2 (47 nF C0G)** blocks `VREF`'s DC from the guitar. C0G isn't piezoelectric, so knocks on the board don't become signal at
+  this 1 MΩ node. With R1 it's a 3.4 Hz high-pass, far below a guitar's 82 Hz low E. 47 nF is the largest C0G in 0805 in stock
+  (DigiKey had no 100 nF C0G 0805); 25 V is plenty for 2.5 V of bias.
 - **R1** sets both the 1 MΩ guitar load and the DC bias. **R2** is the only series resistance in this path. It protects U1A's input from plug-in transients.
-- **C18 filters RF at U1A's input.** The display's ESP32 transmits Wi-Fi in bursts, and an op-amp input rectifies RF into an
-  audible buzz at the burst rate. C1 shunts RF at the jack, but the track from there to U1A picks it up again; C18 sits at
-  the pin, with R2 a low-pass at ≈ 1.6 MHz. The guitar sees it as ≈ 100 pF more cable capacitance (C1 + C18 ≈ 200 pF, against
+- **RF filtering: C1, FB1 and C18.** The display's ESP32 transmits Wi-Fi in bursts, and an op-amp input rectifies RF into an
+  audible buzz at the burst rate. C1 shunts RF at the jack. FB1 (Murata BLM18HG601SN1D, a GHz-band bead: 600 Ω at 100 MHz,
+  rising toward 1 GHz) blocks what's left before it reaches the board's input traces, and is a fraction of an ohm at audio
+  frequencies, so it adds no noise or tone. C18 sits at U1A's pin, with R2 a low-pass at ≈ 1.6 MHz. The guitar sees it as ≈ 100 pF more cable capacitance (C1 + C18 ≈ 200 pF, against
   a typical cable's 500–1000 pF). Same part as C1 (C0G).
 - **Unity gain, no level pot.** A pot at mid travel put about 250 kΩ of source impedance in front of U1A, which added noise and an
   ~80 kHz pole. Input trim is done in firmware.
@@ -356,7 +360,7 @@ off, see "Running from USB alone"); **off** (everything off while a guitar or ph
 reversed at J101, or J107's wires swapped). **Bench supply: never 5 V alone on J107** (see "Decisions"); bring the board up
 from a current-limited 12 V supply on J101 with the DFR0571 connected, as in use. The jack pins (J1, J2, J4) are touched by
 people, so each has an ESD diode (D1–D5, see "Jack ESD protection"). The speaker outputs see ESD through C121/C122 (680 nF to
-GND). Every capacitor on the audio path should be C0G or film. Today C2 (X7R), C10/C11 (X5R) and C108/C109 (X7R) aren't: see
+GND). Every capacitor on the audio path should be C0G or film. Today C10/C11 (X5R) and C108/C109 (X7R) aren't: see
 "Open items".
 
 ### Links between the sheets
@@ -392,8 +396,11 @@ different times, and add a little ESD margin.
 - **R24 also detects the display.** With the display unplugged or off, R24 holds RX low. The UART flags one break (a framing
   error) when the line drops, then waits for it to go high again, so the firmware sees one error, not a stream. A line that
   idles high means a display is connected and powered. PB7's internal pull-up has to stay off, or it fights R24.
-- **Baud rate limit:** 10k with ~50 pF of cable and pin capacitance is a ≈ 0.5 µs time constant. That is fine up to 230400
-  baud, but not for 921600.
+- **C19/C20 (10 pF C0G) filter RF off the UART:** each sits on the Daisy side of R8/R9, so with the 10k it's a low-pass that
+  cuts 2.4 GHz by ≈ 60 dB, keeping the display's Wi-Fi off the board's traces and the Daisy's pins. C19 loads the Daisy's own
+  TX pin, so it doesn't slow TX edges; C20 adds ≈ 0.1 µs to RX.
+- **Baud rate limit:** 10k with ~60 pF of cable, pin and C20 capacitance is a ≈ 0.6 µs time constant. That is fine up to
+  230400 baud, but not for 921600.
 
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
@@ -461,7 +468,7 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 ## Open items
 - **Bring up audio rev 2 and power rev 1 first,** and fold their results into rev 3 before ordering it: the Daisy outputs'
   DC level (the speaker send has no DC block on this side), the fuse rating, beads or bypass, the optional bulk caps, L101/L102's
-  value, R105, C2 microphonics, and headphone clicks at boot. Set the jumpers and parts to match.
+  value, R105, and headphone clicks at boot. Set the jumpers and parts to match.
 - **The DFR0571's specifications:** confirm the reseller's figures (8–28 V in, 5 V ± 0.1 V, 3 A peak) and its output current
   limit on the module itself.
 - **No low-battery cutoff on the board.** `power-board/README.md` asks for one, but sheet 2 has none: U103 watches only
@@ -478,11 +485,11 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **Hot passive pickups:** the Daisy's full scale is reached at ≈ 3.9 Vpp at J1. Play the hottest passive guitar available
   hard and confirm its peaks stay below that.
 - **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
-- **Class II ceramics on the audio path:** C2 (1 µF X7R) is in series with the guitar signal into the 1 MΩ node, C10/C11
-  (4.7 µF X5R) with the headphone path, and C108/C109 (1.5 µF X7R) with the speaker amp's inputs. X5R/X7R capacitance moves
-  with voltage and the material is piezoelectric, so knocks can become signal. Tap the board with a guitar plugged in and
-  listen. C2 can become a 100 nF C0G in the same footprint (the corner moves from 0.16 Hz to 1.6 Hz); film parts would fix
-  the others.
+- **Class II ceramics on the audio path:** C10/C11 (4.7 µF X5R) are in series with the headphone path and C108/C109 (1.5 µF
+  X7R) with the speaker amp's inputs. X5R/X7R capacitance moves with voltage and the material is piezoelectric, so knocks can
+  become signal. They sit at 10 kΩ and 60 kΩ nodes, where that matters far less than at the guitar input (C2 is C0G). Tap the
+  board with a guitar plugged in and listen. C108/C109 can become 1 µF C0G in 1206 (the speaker path's corner moves from
+  1.7 Hz to ≈ 2.7 Hz).
 - **USB-alone power transitions:** scope U2's input and rails while the battery is switched off and on with USB connected
   and audio playing. If U2's inputs stay outside SVSS − 0.3 V … SVDD + 0.3 V for more than a few ms at full scale, raise the
   firmware's 2.2 V threshold or shorten the audio block.
@@ -648,8 +655,8 @@ with Q102 and C18 added and without rev 1's experiment parts, which that build's
   value, size, tolerance and dielectric, with an equal or higher voltage rating: UNI-ROYAL 0603WAF resistors; Samsung or YAGEO
   for 100 pF, 100 nF, 220 nF (25 V, as required), 1 µF, 4.7 µF and 10 µF (25 V X5R). C108/C109 use TDK C2012X7R1E155K (25 V)
   because KEMET's part has no JLC stock. D1–D5 are C19224, Nexperia's PESD5V0S1BA in SOD-323: the same diode as the DigiKey
-  order's SOD-323F PESD5V0S1BAF. 15 Extended parts carry JLC's loading fee: C3/C9, C16, C108/C109, C121/C122, C7, R105,
-  FB101/FB102, D1–D5, D101, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
+  order's SOD-323F PESD5V0S1BAF. 17 Extended parts carry JLC's loading fee: C2, C3/C9, C16, C108/C109, C121/C122, C7, R105,
+  FB1, FB101/FB102, D1–D5, D101, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
   on 2026-11-07.
 - **Assembly files:** `jlc-assembly.kicad_jobset` writes `fab/assembly/seed3-carrier_bom.csv` and `_cpl-all-pos.csv` (SMD
   parts only); `jlc_asm.py cpl` turns the latter into `_cpl.csv` with `jlc-rotations.csv` (empty until JLC's placement preview
@@ -662,7 +669,7 @@ with Q102 and C18 added and without rev 1's experiment parts, which that build's
   matching `power-board/DigiKey_Import.csv` (substitutes included), except the resized passives, which carry the 0603/0805
   part and its `DigiKey` and `Datasheet` fields too.
 - **U2:** the EUE suffix is the TSSOP. Don't substitute the MAX9722B: it has a fixed −2 V/V gain.
-- **C0G for the filter caps** C1, C18, C9, C16 and C3.
+- **C0G for the filter caps** C1, C18, C9, C16, C3, C19 and C20, and for C2 (on the guitar signal).
 - **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND).
 - **The DFR0571** is in the order as an off-board part (U102 on sheet 2, no footprint).
 - **The S1B panel switch** is obsolete at NKK (DigiKey still stocks it); pick another for later builds.
