@@ -456,7 +456,7 @@ USB stays on the Daisy's own connector.
   - **While running:** sample it from the audio callback on every block. Below 2.2 V (`+5V` < 4.4 V) write silence from that
     block on. Hold the outputs silent until the start-up condition above is met again.
   - This applies on USB alone on the bench too.
-- Read `AMP_FAULTZ` (pin 32, D25) as an input with no pull: **low = speaker amp fault** (a shorted speaker wire,
+- Read `AMP_FAULTZ` (pin 32, SAI2_SD_B: libDaisy's D25, PA0) as an input with no pull: **low = speaker amp fault** (a shorted speaker wire,
   overheating, or DC at its output). Trust it only once `+5V` has been good for 50 ms (U103 holds U101 in shutdown for the
   first 20 ms). On a fault, mute the speaker send, drive `SPK_EN` low and show "speaker fault" on the display; only a
   power cycle or JP105 clears U101's latch.
