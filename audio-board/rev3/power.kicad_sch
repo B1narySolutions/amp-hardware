@@ -7635,7 +7635,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 426.72 223.52 0)
 			(hide yes)
 			(show_name no)
@@ -7646,7 +7646,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 223.52 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7677,7 +7677,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7688,7 +7688,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7704,6 +7704,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 426.72 223.52 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7758,7 +7767,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 218.44 365.76 0)
 			(hide yes)
 			(show_name no)
@@ -7769,7 +7778,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 218.44 365.76 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7800,7 +7809,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7827,6 +7836,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 218.44 365.76 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8126,7 +8144,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 208.28 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -8137,7 +8155,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 208.28 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8168,7 +8186,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8195,6 +8213,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 208.28 156.21 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8247,7 +8274,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 330.2 210.82 90)
 			(hide yes)
 			(show_name no)
@@ -8258,7 +8285,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 330.2 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8289,7 +8316,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C224K3RACTU"
+		(property "MPN" "CL10B224KB8NNNC"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8300,7 +8327,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8316,6 +8343,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-CL10B224KB8NNNCCT-ND"
+			(at 330.2 210.82 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8370,7 +8406,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 101.6 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -8381,7 +8417,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 101.6 129.54 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8412,7 +8448,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8423,7 +8459,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8439,6 +8475,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 101.6 129.54 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8751,7 +8796,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 116.84 274.32 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8809,6 +8854,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 116.84 274.32 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9070,7 +9124,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 109.22 327.66 90)
 			(hide yes)
 			(show_name no)
@@ -9081,7 +9135,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 109.22 327.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9112,7 +9166,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710RL"
+		(property "MPN" "RMCF0603FT10R0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9123,7 +9177,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9139,6 +9193,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10R0CT-ND"
+			(at 109.22 327.66 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9271,7 +9334,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 388.62 299.72 0)
 			(hide yes)
 			(show_name no)
@@ -9282,7 +9345,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 388.62 299.72 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9313,7 +9376,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C684K5RACTU"
+		(property "MPN" "C0805C684K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9340,6 +9403,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C684K5RACTUCT-ND"
+			(at 388.62 299.72 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9748,7 +9820,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 266.7 210.82 90)
 			(hide yes)
 			(show_name no)
@@ -9759,7 +9831,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 266.7 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9790,7 +9862,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C224K3RACTU"
+		(property "MPN" "CL10B224KB8NNNC"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9801,7 +9873,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9817,6 +9889,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-CL10B224KB8NNNCCT-ND"
+			(at 266.7 210.82 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10206,7 +10287,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 538.48 269.24 0)
 			(hide yes)
 			(show_name no)
@@ -10217,7 +10298,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 538.48 269.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10248,7 +10329,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C105K5RACTU"
+		(property "MPN" "C0805C105K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10275,6 +10356,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 538.48 269.24 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10329,7 +10419,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 160.02 365.76 0)
 			(hide yes)
 			(show_name no)
@@ -10340,7 +10430,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 160.02 365.76 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10371,7 +10461,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10398,6 +10488,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 160.02 365.76 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10450,7 +10549,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 40.64 236.22 90)
 			(hide yes)
 			(show_name no)
@@ -10461,7 +10560,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 40.64 236.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10492,7 +10591,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C155K5RACTU"
+		(property "MPN" "C0805C155K4RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10519,6 +10618,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C155K4RACTUCT-ND"
+			(at 40.64 236.22 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10573,7 +10681,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 218.44 327.66 0)
 			(hide yes)
 			(show_name no)
@@ -10584,7 +10692,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 218.44 327.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10615,7 +10723,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C105K5RACTU"
+		(property "MPN" "C0805C105K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10642,6 +10750,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 218.44 327.66 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10848,7 +10965,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 345.44 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -10859,7 +10976,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://datasheets.kyocera-avx.com/KGM_X7R.pdf"
 			(at 345.44 45.72 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10890,7 +11007,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C106K4RACTU"
+		(property "MPN" "KGM21AR71C106KU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10901,7 +11018,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "KYOCERA AVX"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10917,6 +11034,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "478-KGM21AR71C106KUCT-ND"
+			(at 345.44 45.72 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11289,7 +11415,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 316.23 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -11300,7 +11426,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 316.23 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11331,7 +11457,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11358,6 +11484,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 316.23 156.21 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11633,7 +11768,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 482.6 269.24 90)
 			(hide yes)
 			(show_name no)
@@ -11644,7 +11779,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 482.6 269.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11675,7 +11810,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-132K2L"
+		(property "MPN" "RC0603FR-072K2L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11702,6 +11837,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-2.20KHRCT-ND"
+			(at 482.6 269.24 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12000,7 +12144,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 160.02 327.66 0)
 			(hide yes)
 			(show_name no)
@@ -12011,7 +12155,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 160.02 327.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12042,7 +12186,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12069,6 +12213,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 160.02 327.66 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12258,7 +12411,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 388.62 337.82 0)
 			(hide yes)
 			(show_name no)
@@ -12269,7 +12422,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 388.62 337.82 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12300,7 +12453,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C684K5RACTU"
+		(property "MPN" "C0805C684K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12327,6 +12480,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C684K5RACTUCT-ND"
+			(at 388.62 337.82 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12381,7 +12543,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 426.72 269.24 0)
 			(hide yes)
 			(show_name no)
@@ -12392,7 +12554,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 269.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12423,7 +12585,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12434,7 +12596,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12450,6 +12612,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 426.72 269.24 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12623,7 +12794,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 266.7 241.3 90)
 			(hide yes)
 			(show_name no)
@@ -12634,7 +12805,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 266.7 241.3 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12665,7 +12836,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C224K3RACTU"
+		(property "MPN" "CL10B224KB8NNNC"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12676,7 +12847,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12692,6 +12863,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-CL10B224KB8NNNCCT-ND"
+			(at 266.7 241.3 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13113,7 +13293,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 530.86 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -13124,7 +13304,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 530.86 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13155,7 +13335,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C104K5RACTU"
+		(property "MPN" "C0603C104K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13182,6 +13362,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0603C104K5RACTUCT-ND"
+			(at 530.86 177.8 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13357,7 +13546,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 50.8 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -13368,7 +13557,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 50.8 129.54 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13399,7 +13588,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0730KL"
+		(property "MPN" "RC0603FR-0730KL"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13426,6 +13615,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-30.0KHRCT-ND"
+			(at 50.8 129.54 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13609,7 +13807,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 426.72 314.96 0)
 			(hide yes)
 			(show_name no)
@@ -13620,7 +13818,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 314.96 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13651,7 +13849,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-07100KL"
+		(property "MPN" "RMCF0603FT100K"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13662,7 +13860,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13678,6 +13876,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT100KCT-ND"
+			(at 426.72 314.96 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13732,7 +13939,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 538.48 314.96 0)
 			(hide yes)
 			(show_name no)
@@ -13743,7 +13950,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 538.48 314.96 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13774,7 +13981,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13785,7 +13992,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13801,6 +14008,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 538.48 314.96 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13927,7 +14143,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 482.6 223.52 90)
 			(hide yes)
 			(show_name no)
@@ -13938,7 +14154,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 482.6 223.52 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13969,7 +14185,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-132K2L"
+		(property "MPN" "RC0603FR-072K2L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -13996,6 +14212,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-2.20KHRCT-ND"
+			(at 482.6 223.52 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14050,7 +14275,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 482.6 314.96 0)
 			(hide yes)
 			(show_name no)
@@ -14061,7 +14286,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 482.6 314.96 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14092,7 +14317,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14103,7 +14328,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14119,6 +14344,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 482.6 314.96 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14173,7 +14407,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 167.64 251.46 0)
 			(hide yes)
 			(show_name no)
@@ -14184,7 +14418,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 167.64 251.46 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14215,7 +14449,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-075K6L"
+		(property "MPN" "RC0603FR-075K6L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14242,6 +14476,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "311-5.60KHRCT-ND"
+			(at 167.64 251.46 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14297,7 +14540,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 94.742 53.34 90)
 			(hide yes)
 			(show_name no)
@@ -14308,7 +14551,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 96.52 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -14341,7 +14584,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC1206FR-0710KL"
+		(property "MPN" "RMCF0603FT10K0"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14352,7 +14595,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "YAGEO"
+		(property "Manufacturer" "Stackpole Electronics Inc"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14368,6 +14611,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "RMCF0603FT10K0CT-ND"
+			(at 96.52 53.34 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14541,7 +14793,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 330.2 241.3 90)
 			(hide yes)
 			(show_name no)
@@ -14552,7 +14804,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 330.2 241.3 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14583,7 +14835,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C224K3RACTU"
+		(property "MPN" "CL10B224KB8NNNC"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14594,7 +14846,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14610,6 +14862,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "1276-CL10B224KB8NNNCCT-ND"
+			(at 330.2 241.3 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14664,7 +14925,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 538.48 223.52 0)
 			(hide yes)
 			(show_name no)
@@ -14675,7 +14936,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 538.48 223.52 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14706,7 +14967,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C105K5RACTU"
+		(property "MPN" "C0805C105K5RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -14733,6 +14994,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C105K5RACTUCT-ND"
+			(at 538.48 223.52 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15027,7 +15297,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 40.64 208.28 90)
 			(hide yes)
 			(show_name no)
@@ -15038,7 +15308,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 40.64 208.28 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15069,7 +15339,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206C155K5RACTU"
+		(property "MPN" "C0805C155K4RACTU"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -15096,6 +15366,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "399-C0805C155K4RACTUCT-ND"
+			(at 40.64 208.28 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)

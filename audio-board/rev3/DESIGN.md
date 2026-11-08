@@ -632,13 +632,20 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
   against that version's library; the board is unaffected.
 
 ## Parts sourcing
-Build plan: a 4-layer JLC board, hand-soldered, U101's exposed pad with hot air or from the back. Every part comes from DigiKey.
+Build plan: a 4-layer JLC board with the SMD parts reflowed (JLC assembly, or a stencil and an oven); the through-hole parts
+(jacks, terminals, Daisy sockets, fuse holder, Q101, headers) are soldered by hand. Every part comes from DigiKey; JLC
+assembly would need LCSC numbers added first (`kicad-assembly-export`).
 `seed3-carrier-digikey.csv` is one build's order (DigiKey's BOM upload format, one line per part number) and
 `seed3-carrier-digikey-cart.csv` the same in DigiKey's cart format. Both come from the build that was ordered for audio rev 2
 and power rev 1 (`amp-digikey-order.csv`, with its stock substitutes and notes), without the four inter-board terminals,
 with Q102 and C18 added and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
-- **Sheet 1's parts** carry `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields; sheet 2's carry `MPN` and `Manufacturer`
-  matching `power-board/DigiKey_Import.csv` (substitutes included).
+- **Passive sizes:** resistors are 0603 (R105 stays 2512 for the amp's supply current). Capacitors are 0603 up to 220 nF
+  and 0805 from 680 nF: a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
+  0805 body. C7 stays 1210: 47 µF on `VREF` sets the 0.7 Hz filter that keeps `+5V` noise off the guitar input. All use
+  KiCad's standard (reflow) footprints; 0603 still reworks with an iron.
+- **Sheet 1's parts** carry `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields. Sheet 2's carry `MPN` and `Manufacturer`
+  matching `power-board/DigiKey_Import.csv` (substitutes included), except the resized passives, which carry the 0603/0805
+  part and its `DigiKey` and `Datasheet` fields too.
 - **U2:** the EUE suffix is the TSSOP. Don't substitute the MAX9722B: it has a fixed −2 V/V gain.
 - **C0G for the filter caps** C1, C18, C9, C16 and C3.
 - **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND).

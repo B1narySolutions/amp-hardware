@@ -41,6 +41,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   the output pins, and wide output traces. Power rev 1 routed the outputs at about 0.25 mm.
 - **Rules:** a `HighCurrent` net class (1.5 mm) for the battery, PVCC, output and speaker nets, neck-down rules at U101 and
   U103, and the five new 5 V nets in `Power`. ERC excludes U101's two PBTL output ties, with the reason.
+- **Passives resized for reflow:** resistors 0603 (R105 still 2512); capacitors 0603 up to 220 nF and 0805 from 680 nF; C7
+  still 1210. KiCad's standard footprints replace the hand-solder ones. Values, positions and references are unchanged.
 - **Silkscreen:** pin legends for every new terminal, and every test point's net beside its reference; the back-side credits give the board and revision, both designers, the course code and the date, set in
   Orbitron (SIL Open Font License), which is embedded in the board file so any KiCad plots it the same.
 
@@ -48,6 +50,9 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
   four changes: no four-way terminals and two fewer two-way ones, one more AO3401A (Q102), one more 100 pF C0G (C18), and
   none of rev 1's experiment parts, which that build's spares cover.
+- **New part numbers for every resized passive,** same value with equal or better rating, except C108/C109 (1.5 µF, now 16 V
+  0805; they sit at 3 V) and C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
+  0603 versions had none in stock.
 - **C10/C11's DigiKey number** is DigiKey's renumbered listing, 1276-CL21A475KACLRNCCT-ND (same part).
 
 ## Designators
