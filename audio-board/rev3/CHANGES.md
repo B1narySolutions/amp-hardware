@@ -19,8 +19,11 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   because its grounds are common. Q1 stays as it was.
 - **J102's pins swapped:** pin 2 is SPK+ and pin 1 SPK−, so the speaker traces from L101/L102 don't cross. Marked on the
   silkscreen.
+- **C18 (100 pF C0G) added** from U1A's + input to GND: RF filtering at the op-amp pin against the display's Wi-Fi bursts.
+- **JP106–JP108 added:** U101's AM2–AM0 reach GND through solder jumpers bridged in copper (on the back), instead of
+  straight to GND. Same circuit as built; cutting one moves the class D's switching frequency if it beats with U2's charge pump.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
-  nets, the four removed terminals and Q102.
+  nets, the four removed terminals, Q102, C18 and JP106–JP108.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
@@ -43,8 +46,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
-  three changes: no four-way terminals and two fewer two-way ones, one more AO3401A (Q102), and none of rev 1's experiment
-  parts, which that build's spares cover.
+  four changes: no four-way terminals and two fewer two-way ones, one more AO3401A (Q102), one more 100 pF C0G (C18), and
+  none of rev 1's experiment parts, which that build's spares cover.
 - **C10/C11's DigiKey number** is DigiKey's renumbered listing, 1276-CL21A475KACLRNCCT-ND (same part).
 
 ## Designators

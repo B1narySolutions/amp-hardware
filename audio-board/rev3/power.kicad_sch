@@ -4088,6 +4088,141 @@
 							(font
 								(size 1.27 1.27))))))
 			(embedded_fonts no))
+	
+		(symbol "Jumper:SolderJumper_2_Bridged"
+			(pin_numbers
+				(hide yes))
+			(pin_names
+				(offset 0)
+				(hide yes))
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "JP"
+				(at 0 2.032 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Value" "SolderJumper_2_Bridged"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Datasheet" ""
+				(at 0 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_keywords" "solder jumper SPST"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_fp_filters" "SolderJumper*Bridged*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(symbol "SolderJumper_2_Bridged_0_1"
+				(rectangle
+					(start -0.508 0.508)
+					(end 0.508 -0.508)
+					(stroke
+						(width 0.1524)
+						(type default))
+					(fill
+						(type outline)))
+				(polyline
+					(pts
+						(xy -0.254 1.016)
+						(xy -0.254 -1.016))
+					(stroke
+						(width 0.1524)
+						(type default))
+					(fill
+						(type none)))
+				(arc
+					(start -0.254 -1.016)
+					(mid -1.2656 0)
+					(end -0.254 1.016)
+					(stroke
+						(width 0.1524)
+						(type default))
+					(fill
+						(type outline)))
+				(arc
+					(start 0.254 1.016)
+					(mid 1.2656 0)
+					(end 0.254 -1.016)
+					(stroke
+						(width 0.1524)
+						(type default))
+					(fill
+						(type outline)))
+				(polyline
+					(pts
+						(xy 0.254 1.016)
+						(xy 0.254 -1.016))
+					(stroke
+						(width 0.1524)
+						(type default))
+					(fill
+						(type none))))
+			(symbol "SolderJumper_2_Bridged_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27))))
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)))))
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27))))
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27))))))
+			(embedded_fonts no))
 	)
 	(rectangle
 		(start 289.56 269.24)
@@ -6112,7 +6247,7 @@
 		)
 		(uuid "2422601d-9ee5-40c0-ad9f-1817fd0c493f")
 	)
-	(label "GND"
+	(label "AMP_AM2"
 		(at 86.36 219.71 0)
 		(effects
 			(font
@@ -6272,7 +6407,7 @@
 		)
 		(uuid "396d1da8-a315-4fec-b17f-dbfab4942afd")
 	)
-	(label "GND"
+	(label "AMP_AM0"
 		(at 86.36 224.79 0)
 		(effects
 			(font
@@ -6482,7 +6617,7 @@
 		)
 		(uuid "59a2ab06-f52e-474b-b442-838bfd9bd12c")
 	)
-	(label "GND"
+	(label "AMP_AM1"
 		(at 86.36 222.25 0)
 		(effects
 			(font
@@ -15331,6 +15466,43 @@
 		(property "Description" "" (at 248.92 21.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "5c550ad3-07ba-4c33-aa62-56ccca0fbf1d"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG107") (unit 1)))))
+	(wire (pts (xy 50.8 250.19) (xy 48.26 250.19)) (stroke (width 0) (type default)) (uuid "07ad157b-3f6a-41cb-b022-9c9d68bb81ca"))
+	(label "AMP_AM2" (at 48.26 250.19 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "32f5045b-0677-470c-bd69-465bd76dc839"))
+	(wire (pts (xy 60.96 250.19) (xy 63.5 250.19)) (stroke (width 0) (type default)) (uuid "9e4c0b2f-8479-4acd-877f-fe597ff6ac47"))
+	(label "GND" (at 63.5 250.19 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "457c83ba-b237-4a9a-acb4-aeff7beb6301"))
+	(wire (pts (xy 50.8 257.81) (xy 48.26 257.81)) (stroke (width 0) (type default)) (uuid "0e3b4e8a-c8da-43b7-90cc-c1acb5d9cdbc"))
+	(label "AMP_AM1" (at 48.26 257.81 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "cee2ac61-6818-4c88-ad6d-e9e3db31b7aa"))
+	(wire (pts (xy 60.96 257.81) (xy 63.5 257.81)) (stroke (width 0) (type default)) (uuid "cc4b88c6-736c-4798-a59a-7b3d0478c69c"))
+	(label "GND" (at 63.5 257.81 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "418eb8fe-15c4-4632-aebb-1b8c9b1dc06e"))
+	(wire (pts (xy 50.8 265.43) (xy 48.26 265.43)) (stroke (width 0) (type default)) (uuid "1ab8e724-807c-4039-aa9b-4f0171fd9cea"))
+	(label "AMP_AM0" (at 48.26 265.43 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "a24e4aa7-c612-425c-9e66-184de0ee1a4d"))
+	(wire (pts (xy 60.96 265.43) (xy 63.5 265.43)) (stroke (width 0) (type default)) (uuid "ca45d123-1799-4239-8185-b421eddcce0c"))
+	(label "GND" (at 63.5 265.43 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "3086ffcf-1da1-4273-b00d-dca68d5b7006"))
+	(text "AM2-AM0 set the switching frequency (TPA3118 datasheet).\nBridged = all low, the default. Cut one to move the\nfrequency if a beat tone shows up." (exclude_from_sim no) (at 35.56 284.48 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "12cd590c-ca19-4059-9fb5-871510506c03"))
+	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 55.88 250.19 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "4ce54311-f455-4a2d-9c0a-5ebd0d756bb1")
+		(property "Reference" "JP106" (at 55.88 247.65 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "AM2" (at 55.88 252.73 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm" (at 55.88 250.19 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 55.88 256.54 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 55.88 255.27 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d1664121-bbef-4e61-b87d-1bee28252c40")) (pin "2" (uuid "3f4eb757-2225-442a-94e0-885418729ec9"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP106") (unit 1)))))
+	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 55.88 257.81 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "6aea1c4e-c40c-466c-9444-1d5aa352ee29")
+		(property "Reference" "JP107" (at 55.88 255.27 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "AM1" (at 55.88 260.35 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm" (at 55.88 257.81 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 55.88 264.16 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 55.88 262.89 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "71fd9ca6-7a4d-4fe0-a024-391938edc05d")) (pin "2" (uuid "7c5a42bf-4999-4845-ad8f-500117b95cb8"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP107") (unit 1)))))
+	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 55.88 265.43 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "c1d8e8ed-bfbb-4429-b06b-c8e94d0a96df")
+		(property "Reference" "JP108" (at 55.88 262.89 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "AM0" (at 55.88 267.97 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm" (at 55.88 265.43 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 55.88 271.78 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 55.88 270.51 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "9cd1440f-69b8-4b2c-af0a-78ba703a5261")) (pin "2" (uuid "05ea26b5-1f94-42de-9190-3f9dc99a583c"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP108") (unit 1)))))
 	(embedded_fonts no)
 	(symbol
 		(lib_id "Connector:TestPoint")

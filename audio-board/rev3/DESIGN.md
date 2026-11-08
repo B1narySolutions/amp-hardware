@@ -32,10 +32,14 @@ R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source i
 noise on `+5V` (from the display) out of `VREF`. Its only load is R1.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
-J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → U1A follower → R20 (470 Ω) → `AUDIO_IN_1`
-(Daisy pin 16).
+J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → C18 (100 pF to GND) → U1A follower → R20
+(470 Ω) → `AUDIO_IN_1` (Daisy pin 16).
 - J1's tip switch shorts the tip to GND when nothing is plugged in.
 - **R1** sets both the 1 MΩ guitar load and the DC bias. **R2** is the only series resistance in this path. It protects U1A's input from plug-in transients.
+- **C18 filters RF at U1A's input.** The display's ESP32 transmits Wi-Fi in bursts, and an op-amp input rectifies RF into an
+  audible buzz at the burst rate. C1 shunts RF at the jack, but the track from there to U1A picks it up again; C18 sits at
+  the pin, with R2 a low-pass at ≈ 1.6 MHz. The guitar sees it as ≈ 100 pF more cable capacitance (C1 + C18 ≈ 200 pF, against
+  a typical cable's 500–1000 pF). Same part as C1 (C0G).
 - **Unity gain, no level pot.** A pot at mid travel put about 250 kΩ of source impedance in front of U1A, which added noise and an
   ~80 kHz pole. Input trim is done in firmware.
 - **Passive pickups only, no pad.** Active pickups and boost pedals are out of scope. With the module's ≈ 5 kΩ input, R20 costs
@@ -273,7 +277,10 @@ speaker details; this section is the design as it stands on rev 3.
 - **Inputs:** C108/C109 (1.5 µF X7R, matched) into the inputs, biased at 3 V inside the device: a 1.7 Hz high-pass.
 - **Supplies:** PVCC from `VBAT_PROTECTED` through R105; C111/C112 (100 µF) bulk and C113/C114 (100 nF) at the two PVCC pin pairs.
   AVCC through R106 (10 Ω), with C115 (1 µF) and C116 (100 nF). GVDD has C110 (1 µF); PLIMIT ties to GVDD (no power limit).
-  MODSEL and AM0–AM2 go to GND: BD mode, the default switching frequency.
+  MODSEL goes to GND: BD mode. AM0–AM2 go to GND through JP106–JP108, solder jumpers bridged in copper on the back:
+  the default switching frequency (≈ 400 kHz). U101's harmonics and U2's charge pump (505–800 kHz) can beat into the
+  audio band (3 × 400 kHz and 2 × 600 kHz are both near 1.2 MHz). If a steady tone shows up with no signal, cut one jumper
+  to move U101's frequency (the datasheet's AM2–AM0 table), and record the setting.
 - **Output:** bootstrap caps C117–C120 (220 nF), then the LC filter L101/L102 (10 µH, Bourns SRP1038A) with C121/C122
   (680 nF), into J102. J102 pin 2 is SPK+ and pin 1 SPK−, marked on the silkscreen. The output is bridged, so neither
   speaker wire may be grounded.
@@ -569,6 +576,8 @@ else was placed for this floorplan.
 | U101 (TPA3118D2) | (92, 33.5), outputs facing right | Bootstrap caps at the output pins, L101/L102 to the right, J102 on the right edge between them |
 | J102 (speaker) | Right edge, pins at y 31.75 and 35.25 | Short output loop through L101/L102 and C121/C122 |
 | R17, Q2, R22, C17, R19, R107, R23, R13, R18 | Two columns right of the Daisy | Mute, battery sense and 5 V sense, each beside its Daisy pin (28, 25, 22) |
+| C18 | Below R2, its pad under R2's U1 end | RF filter at U1A's + input, 2.5 mm from the pin |
+| JP106–JP108 | Back, left of U101 (x 182, y 52–57) | AM2–AM0 drop through vias beside pins 13–15; the 2 mm between those pins and the `AMP_MUTE` track has no room for three jumpers on the front |
 | R12, C16, R11, R21 | Column left of C108/C109 | The speaker send's filter and LINE− reference, 6 mm from U101's input caps |
 | H1–H4 | (34.5, 46.5), (118, 57), (100, 74), (4, 4) | The front-left corner is J1's and the rear-right J101's |
 
@@ -627,11 +636,11 @@ Build plan: a 4-layer JLC board, hand-soldered, U101's exposed pad with hot air 
 `seed3-carrier-digikey.csv` is one build's order (DigiKey's BOM upload format, one line per part number) and
 `seed3-carrier-digikey-cart.csv` the same in DigiKey's cart format. Both come from the build that was ordered for audio rev 2
 and power rev 1 (`amp-digikey-order.csv`, with its stock substitutes and notes), without the four inter-board terminals,
-with Q102 added and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
+with Q102 and C18 added and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
 - **Sheet 1's parts** carry `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields; sheet 2's carry `MPN` and `Manufacturer`
   matching `power-board/DigiKey_Import.csv` (substitutes included).
 - **U2:** the EUE suffix is the TSSOP. Don't substitute the MAX9722B: it has a fixed −2 V/V gain.
-- **C0G for the filter caps** C1, C9, C16 and C3.
+- **C0G for the filter caps** C1, C18, C9, C16 and C3.
 - **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND).
 - **The DFR0571** is in the order as an off-board part (U102 on sheet 2, no footprint).
 - **The S1B panel switch** is obsolete at NKK (DigiKey still stocks it); pick another for later builds.
