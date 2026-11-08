@@ -10674,7 +10674,7 @@
 				)
 			)
 		)
-		(property "Value" "1.5u 16V MATCH"
+		(property "Value" "470n 25V C0G MATCH"
 			(at 40.64 231.902 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10684,7 +10684,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
 			(at 40.64 236.22 90)
 			(hide yes)
 			(show_name no)
@@ -10695,7 +10695,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
+		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23"
 			(at 40.64 236.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10726,7 +10726,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C155K4RACTU"
+		(property "MPN" "GRM31C5C1E474JE01L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10737,7 +10737,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Murata Electronics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10748,7 +10748,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1.5uF 50V X7R 1206; use same part on both input legs; substitute for GRM31MR71E155KA88L (not for new designs, none in stock)"
+		(property "Purchase_Note" "470nF 25V C0G 1206; C0G so the speaker amp's input isn't microphonic; same part on both legs"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10759,7 +10759,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "399-C0805C155K4RACTUCT-ND"
+		(property "DigiKey" "490-GRM31C5C1E474JE01LCT-ND"
 			(at 40.64 236.22 0)
 			(hide yes)
 			(effects
@@ -10768,7 +10768,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C338028"
+		(property "LCSC" "C6049896"
 			(at 40.64 236.22 0)
 			(hide yes)
 			(effects
@@ -15638,7 +15638,7 @@
 				)
 			)
 		)
-		(property "Value" "1.5u 16V MATCH"
+		(property "Value" "470n 25V C0G MATCH"
 			(at 38.862 204.47 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15648,7 +15648,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
 			(at 40.64 208.28 90)
 			(hide yes)
 			(show_name no)
@@ -15659,7 +15659,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
+		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23"
 			(at 40.64 208.28 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15690,7 +15690,7 @@
 				)
 			)
 		)
-		(property "MPN" "C0805C155K4RACTU"
+		(property "MPN" "GRM31C5C1E474JE01L"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -15701,7 +15701,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "KEMET"
+		(property "Manufacturer" "Murata Electronics"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -15712,7 +15712,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1.5uF 50V X7R 1206; use same part on both input legs; substitute for GRM31MR71E155KA88L (not for new designs, none in stock)"
+		(property "Purchase_Note" "470nF 25V C0G 1206; C0G so the speaker amp's input isn't microphonic; same part on both legs"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -15723,7 +15723,7 @@
 				)
 			)
 		)
-		(property "DigiKey" "399-C0805C155K4RACTUCT-ND"
+		(property "DigiKey" "490-GRM31C5C1E474JE01LCT-ND"
 			(at 40.64 208.28 0)
 			(hide yes)
 			(effects
@@ -15732,7 +15732,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C338028"
+		(property "LCSC" "C6049896"
 			(at 40.64 208.28 0)
 			(hide yes)
 			(effects
@@ -16151,6 +16151,28 @@
 		(property "Description" "" (at 55.88 270.51 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "9cd1440f-69b8-4b2c-af0a-78ba703a5261")) (pin "2" (uuid "05ea26b5-1f94-42de-9190-3f9dc99a583c"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP108") (unit 1)))))
+	(wire (pts (xy 495.3 314.96) (xy 495.3 312.42)) (stroke (width 0) (type default)) (uuid "432b39e7-287e-47ba-9db0-ed2a6d63e0f9"))
+	(hierarchical_label "AMP_FAULTZ" (shape output) (at 495.3 312.42 90) (effects (font (size 1.27 1.27)) (justify left)) (uuid "67577aca-0805-4a27-bbfd-3b5ed916cff1"))
+	(symbol (lib_id "Device:R") (at 495.3 318.77 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "975b1349-3ad7-4980-8fa9-00a0b66b2667")
+		(property "Reference" "R114" (at 497.332 318.77 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "18k" (at 495.3 318.77 90) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 493.522 318.77 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "RMCF0603FT18K0" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Stackpole Electronics Inc" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "RMCF0603FT18K0CT-ND" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C25810" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d3412624-c89b-44c2-a597-d4870a234980")) (pin "2" (uuid "f7787d12-ba5a-4d4f-8056-e3aafb785402"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "R114") (unit 1)))))
+	(symbol (lib_id "power:GND") (at 495.3 322.58 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "8732818e-60ae-423c-9c4a-747a07a3b9fe")
+		(property "Reference" "#PWR104" (at 495.3 328.93 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 495.3 326.39 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 495.3 322.58 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 495.3 322.58 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 495.3 322.58 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "5c1d8d96-6642-434d-8c70-585e666f97a5"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR104") (unit 1)))))
 	(embedded_fonts no)
 	(symbol
 		(lib_id "Connector:TestPoint")

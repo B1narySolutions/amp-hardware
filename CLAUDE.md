@@ -112,7 +112,7 @@ reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy
 - **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
   has 32 (J1, J2, J4, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
   recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm) and stock
-  footprints' 0.12 mm silk lines; on rev 3 also 47 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
+  footprints' 0.12 mm silk lines; on rev 3 also 54 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
   footprint silk over its own pad.
   All print fine. The JLC limits pass reports nothing else on either board.
 - **Re-render rev 3 after a board change.** The README shows `audio-board/rev3/render/top.png` and `bottom.png`; overwrite

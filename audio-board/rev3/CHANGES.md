@@ -8,7 +8,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **Audio rev 2 and power rev 1 are one board,** 100 × 78 mm, 4 layers. They were a 90 × 56.5 mm 2-layer board and a
   98 × 98 mm 2-layer board joined by screw terminals and wires.
 - **Schematic:** sheet 1 is rev 2's audio sheet. Sheet 2 (`power.kicad_sch`) is power rev 1's sheet with every designator +100,
-  joined to sheet 1 by five sheet pins: `+5V` (rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT` and `LINE_REF`.
+  joined to sheet 1 by six sheet pins: `+5V` (rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT`, `LINE_REF` and the
+  new `AMP_FAULTZ`.
 - **Removed: the four terminals between the boards:** audio J5 (speaker send) and J6 (power, battery level, mute), and power
   J3 and J4 (rev 1 numbers). Their nets join on the board.
 - **The DFR0571 5 V buck stays off the board,** on J106 (its input) and J107 (its output), as on power rev 1.
@@ -32,9 +33,15 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   input traces.
 - **C2 is 47 nF C0G** (was 1 µF X7R): not microphonic at the 1 MΩ input. The input's high-pass moves from 0.16 Hz to 3.4 Hz.
 - **C19/C20 (10 pF C0G) added** on `DISPLAY_UART_TX`/`DISPLAY_UART_RX`, the Daisy side of R8/R9: RF filtering on the display UART.
+- **U2 has its own supply filter:** R29 (2.2 Ω) from `+5V` and C21 (10 µF) form `HP_5V` for U2's supply pins, so its 600 kHz
+  charge pump stays off `+5V` (which also feeds U1, `VREF` and the Daisy).
+- **C108/C109 are 470 nF C0G 1206** (were 1.5 µF X7R 0805): not microphonic at the speaker amp's inputs. Its high-pass moves
+  from 1.7 Hz to 5.6 Hz.
+- **FAULTZ reaches Daisy pin 32:** R114 (18k) to GND divides R112's pull-up to ≈ 3.2 V, through a sixth sheet pin, so the
+  firmware can show a latched speaker fault. Power rev 1 left FAULTZ on a test point only.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
   nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20, JP106–JP108, the removed Q1/R23/R13/R22, R102's
-  value and F101's part.
+  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value and R114 with the `AMP_FAULTZ` link.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
@@ -59,11 +66,10 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
-  these changes: no four-way terminals and two fewer two-way ones; Q102 in place of Q1 (one AO3401A); C18, FB1 and C19/C20
-  added; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
+  these changes: no four-way terminals and two fewer two-way ones; Q102 in place of Q1 (one AO3401A); C18, FB1, C19/C20, R29, C21 and R114
+  added; C108/C109 470 nF C0G; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
   and none of rev 1's experiment parts, which that build's spares cover.
-- **New part numbers for every resized passive,** same value with equal or better rating, except C108/C109 (1.5 µF, now 16 V
-  0805; they sit at 3 V) and C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
+- **New part numbers for every resized passive,** same value with equal or better rating, except C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
   0603 versions had none in stock.
 - **LCSC numbers on every SMD part** for JLC assembly (JLC Basic equivalents for the commodity passives), with
   `jlc-assembly.kicad_jobset`, `jlc-rotations.csv` and the exported BOM and CPL in `fab/assembly/`. F101 is hand-soldered

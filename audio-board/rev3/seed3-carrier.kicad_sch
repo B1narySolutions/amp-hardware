@@ -6075,10 +6075,6 @@
 		(uuid "1a5aa832-9bdc-4ba9-8f37-6c893b65d9e0")
 	)
 	(no_connect
-		(at 173.99 91.44)
-		(uuid "23630012-9d85-4eae-a537-a82a692565c4")
-	)
-	(no_connect
 		(at 224.79 81.28)
 		(uuid "277c6120-5dac-4a60-aabd-3da89ebd8a9c")
 	)
@@ -13582,84 +13578,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
-		(at 360.68 38.1 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a98253fb-b0aa-4185-bb7c-12a325409d68")
-		(property "Reference" "#PWR062"
-			(at 360.68 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 360.68 33.02 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 360.68 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 360.68 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 360.68 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4bcdd4ea-17f6-4154-8125-f184e2a026f1")
-		)
-		(instances
-			(project "seed3-carrier"
-				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
-					(reference "#PWR062")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 172.72 251.46 0)
 		(unit 1)
@@ -18549,6 +18467,16 @@
 				(justify right)
 			)
 		)
+		(pin "AMP_FAULTZ" output
+			(at 45.72 243.84 0)
+			(uuid "3c95d886-ff04-48ea-8423-0facafea53af")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "seed3-carrier"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
@@ -18672,6 +18600,63 @@
 		(property "Description" "" (at 50.8 231.14 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "6ab59eb0-fd01-4428-98ff-c8cbf72d7b34"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR4") (unit 1)))))
+	(wire (pts (xy 360.68 35.56) (xy 360.68 38.1)) (stroke (width 0) (type default)) (uuid "34ee4d83-bf4c-467e-8647-1bbe92a29aa1"))
+	(label "HP_5V" (at 360.68 38.1 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "dd619b5b-af86-43f3-b852-b7ae07f8b38c"))
+	(wire (pts (xy 375.92 40.64) (xy 386.08 40.64)) (stroke (width 0) (type default)) (uuid "f2ea8f87-fa84-41fa-af11-43cecb3cc05d"))
+	(wire (pts (xy 173.99 91.44) (xy 171.45 91.44)) (stroke (width 0) (type default)) (uuid "9f4874d0-985d-4289-8ab9-3ade65f00394"))
+	(label "AMP_FAULTZ" (at 171.45 91.44 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "cbca57a7-77f1-4924-a7c9-ae977309fba7"))
+	(wire (pts (xy 45.72 243.84) (xy 50.8 243.84)) (stroke (width 0) (type default)) (uuid "12826979-7495-4f69-925a-61a80ed4b3b2"))
+	(label "AMP_FAULTZ" (at 50.8 243.84 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fc23635f-2f61-42df-a522-600fd2b649c6"))
+	(junction (at 375.92 40.64) (diameter 0) (color 0 0 0 0) (uuid "78f9cc41-de18-4e34-a8ea-8666f6442cf3"))
+	(symbol (lib_id "Device:R_Small_US") (at 360.68 33.02 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "244d184f-57ef-45bd-95be-b817c1d4ff57")
+		(property "Reference" "R29" (at 361.442 32.512 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "2.2" (at 361.442 34.036 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "RMCF0603FT2R20" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Stackpole Electronics Inc" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "RMCF0603FT2R20CT-ND" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C22939" (at 360.68 33.02 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "9be2561f-5adf-48ab-b403-fcaec7b2bc72")) (pin "2" (uuid "4b25cb85-9576-4dc1-931f-424d846475b8"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "R29") (unit 1)))))
+	(symbol (lib_id "power:+5V") (at 360.68 30.48 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "4cd7edf3-34ba-413d-818f-68fea8e95122")
+		(property "Reference" "#PWR5" (at 360.68 34.29 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "+5V" (at 360.68 26.924 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 360.68 30.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 360.68 30.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 360.68 30.48 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c04d3090-de21-4885-aa8c-1c606eb6ad44"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR5") (unit 1)))))
+	(symbol (lib_id "Device:C_Small") (at 386.08 43.18 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "da546fc4-162f-4044-923b-593eeeb4dda4")
+		(property "Reference" "C21" (at 388.62 42.545 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10u 16V" (at 388.62 45.085 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://datasheets.kyocera-avx.com/KGM_X7R.pdf" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "KGM21AR71C106KU" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "KYOCERA AVX" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "478-KGM21AR71C106KUCT-ND" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15850" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "f3a2679b-3bcf-4a4c-b794-8834c1342455")) (pin "2" (uuid "e3284626-a7a5-4ee5-bb76-568d9ad0e7cc"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C21") (unit 1)))))
+	(symbol (lib_id "power:GND") (at 386.08 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "c5619f67-2cc9-45fd-8311-fccfee2486e3")
+		(property "Reference" "#PWR6" (at 386.08 52.07 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 386.08 49.53 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 386.08 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 386.08 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 386.08 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d02fd7a1-ffad-455f-a46b-5da470338a71"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR6") (unit 1)))))
+	(junction (at 386.08 40.64) (diameter 0) (color 0 0 0 0) (uuid "86365906-d136-4ce8-9fc2-52c240fc7910"))
+	(symbol (lib_id "power:PWR_FLAG") (at 386.08 40.64 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "e7184c08-3821-4fdf-852f-5334a0b8a01d")
+		(property "Reference" "#FLG1" (at 386.08 38.735 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Value" "PWR_FLAG" (at 386.08 36.83 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 386.08 40.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 386.08 40.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 386.08 40.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "e53c16da-796e-4e2a-98e4-cff5f5dadef3"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#FLG1") (unit 1)))))
 	(sheet_instances
 		(path "/"
 			(page "1")
