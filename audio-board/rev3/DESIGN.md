@@ -633,8 +633,8 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 
 ## Parts sourcing
 Build plan: a 4-layer JLC board with the SMD parts reflowed (JLC assembly, or a stencil and an oven); the through-hole parts
-(jacks, terminals, Daisy sockets, fuse holder, Q101, headers) are soldered by hand. Every part comes from DigiKey; JLC
-assembly would need LCSC numbers added first (`kicad-assembly-export`).
+(jacks, terminals, Daisy sockets, fuse holder, Q101, C5, C111, C112, headers) are soldered by hand, from the DigiKey order.
+For a hand-soldered build every part comes from DigiKey; for JLC assembly, JLC fits the SMD parts from their `LCSC` numbers.
 `seed3-carrier-digikey.csv` is one build's order (DigiKey's BOM upload format, one line per part number) and
 `seed3-carrier-digikey-cart.csv` the same in DigiKey's cart format. Both come from the build that was ordered for audio rev 2
 and power rev 1 (`amp-digikey-order.csv`, with its stock substitutes and notes), without the four inter-board terminals,
@@ -643,6 +643,21 @@ with Q102 and C18 added and without rev 1's experiment parts, which that build's
   and 0805 from 680 nF: a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
   0805 body. C7 stays 1210: 47 µF on `VREF` sets the 0.7 Hz filter that keeps `+5V` noise off the guitar input. All use
   KiCad's standard (reflow) footprints; 0603 still reworks with an iron.
+- **JLC assembly:** every SMD part carries an `LCSC` field. Semiconductors, the beads, the inductors and the parts with no JLC
+  Basic equivalent use the `MPN` itself. The resistors and most capacitors use a JLC **Basic** part (no loading fee) of the same
+  value, size, tolerance and dielectric, with an equal or higher voltage rating: UNI-ROYAL 0603WAF resistors; Samsung or YAGEO
+  for 100 pF, 100 nF, 220 nF (25 V, as required), 1 µF, 4.7 µF and 10 µF (25 V X5R). C108/C109 use TDK C2012X7R1E155K (25 V)
+  because KEMET's part has no JLC stock. D1–D5 are C19224, Nexperia's PESD5V0S1BA in SOD-323: the same diode as the DigiKey
+  order's SOD-323F PESD5V0S1BAF. 15 Extended parts carry JLC's loading fee: C3/C9, C16, C108/C109, C121/C122, C7, R105,
+  FB101/FB102, D1–D5, D101, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
+  on 2026-11-07.
+- **Assembly files:** `jlc-assembly.kicad_jobset` writes `fab/assembly/seed3-carrier_bom.csv` and `_cpl-all-pos.csv` (SMD
+  parts only); `jlc_asm.py cpl` turns the latter into `_cpl.csv` with `jlc-rotations.csv` (empty until JLC's placement preview
+  shows a part rotated). All placed parts are on the top side, so JLC's Economic assembly applies. Check every polarised part
+  (U1, U2, U101, U103, Q1, Q2, Q102, D1–D5, D101) in JLC's preview before paying. The BOM's rows without a part number are the
+  hand-soldered parts, the test-point pads and the off-board DFR0571 (U102): leave them unselected.
+- **Edge clearance for assembly:** JLC wants placed part bodies 2.5 mm from the edge. C121/C122 sit at x = 118.4 (courtyard
+  2.5 mm from the right edge) for that; everything else placed clears it.
 - **Sheet 1's parts** carry `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields. Sheet 2's carry `MPN` and `Manufacturer`
   matching `power-board/DigiKey_Import.csv` (substitutes included), except the resized passives, which carry the 0603/0805
   part and its `DigiKey` and `Datasheet` fields too.

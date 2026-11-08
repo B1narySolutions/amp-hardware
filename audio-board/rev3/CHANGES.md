@@ -53,6 +53,9 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **New part numbers for every resized passive,** same value with equal or better rating, except C108/C109 (1.5 µF, now 16 V
   0805; they sit at 3 V) and C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
   0603 versions had none in stock.
+- **LCSC numbers on every SMD part** for JLC assembly (JLC Basic equivalents for the commodity passives), with
+  `jlc-assembly.kicad_jobset`, `jlc-rotations.csv` and the exported BOM and CPL in `fab/assembly/`. C121/C122 moved 1.1 mm in
+  from the right edge for JLC's 2.5 mm assembly clearance.
 - **C10/C11's DigiKey number** is DigiKey's renumbered listing, 1276-CL21A475KACLRNCCT-ND (same part).
 
 ## Designators

@@ -51,7 +51,9 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
      audio-board/rev2/seed3-carrier.kicad_pcb
 ```
 
-For rev 3, use the same commands with `audio-board/rev3/`. Its jobset also plots In1.Cu and In2.Cu.
+For rev 3, use the same commands with `audio-board/rev3/`. Its jobset also plots In1.Cu and In2.Cu. Rev 3 also has JLC
+assembly files (`kicad-assembly-export` skill): after the fab zip, run `jlc-assembly.kicad_jobset`, then the skill's
+`jlc_asm.py cpl` and `check` on `fab/assembly/`, and commit them with the board.
 
 ## How the pieces fit together
 
