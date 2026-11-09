@@ -1023,7 +1023,7 @@
 				)
 			)
 		)
-		(property "Value" "TO DFR VIN / GND"
+		(property "Value" "DFR IN"
 			(at 1.75 5.62 270)
 			(layer "F.Fab")
 			(uuid "eef1b02c-47c9-4d3d-8fae-ded21b96e39d")
@@ -4376,7 +4376,7 @@
 				)
 			)
 		)
-		(property "Value" "MPZ1608S221ATA00"
+		(property "Value" "220R@100MHz"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "20c290af-8320-4631-ad1a-1f0658c4d75d")
@@ -5444,7 +5444,7 @@
 				)
 			)
 		)
-		(property "Value" "PANEL SPST - TERMINAL INTERFACE"
+		(property "Value" "SPST"
 			(at 1.75 5.62 180)
 			(layer "F.Fab")
 			(uuid "16f57fc5-9b72-49ca-aeee-471e3a68f029")
@@ -7645,7 +7645,7 @@
 				)
 			)
 		)
-		(property "Value" "BEAD BYPASS: shunt = direct"
+		(property "Value" "BYPASS"
 			(at 0 4.92 0)
 			(layer "F.Fab")
 			(uuid "0bb43055-f6ec-4f63-aaec-e0af14b5882c")
@@ -8844,7 +8844,7 @@
 				)
 			)
 		)
-		(property "Value" "SRP1038A-100M 10uH"
+		(property "Value" "10uH"
 			(at 0 6.2 90)
 			(layer "F.Fab")
 			(uuid "33ba020d-f63b-4401-8995-72d60f848872")
@@ -9328,7 +9328,7 @@
 				)
 			)
 		)
-		(property "Value" "MPZ1608S221ATA00"
+		(property "Value" "220R@100MHz"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "5429ee44-2e28-4b38-aee2-ed7cdc2f53ce")
@@ -10702,7 +10702,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G MATCH"
+		(property "Value" "470n 25V C0G"
 			(at 0 1.85 90)
 			(layer "F.Fab")
 			(uuid "6ecea0c2-900a-441f-b456-8eb11093cc67")
@@ -11981,7 +11981,7 @@
 				)
 			)
 		)
-		(property "Value" "OPTIONAL BULK ENABLE"
+		(property "Value" "BULK"
 			(at 0 4.92 0)
 			(layer "F.Fab")
 			(uuid "35343e22-d32e-45e3-ab5c-b856232dad12")
@@ -14055,7 +14055,7 @@
 				)
 			)
 		)
-		(property "Value" "RESET / MANUAL FAULT CLEAR"
+		(property "Value" "RESET"
 			(at 0 4.92 270)
 			(layer "F.Fab")
 			(uuid "964a89cc-10b5-4f2c-8d6c-9007867c591d")
@@ -22148,7 +22148,7 @@
 				)
 			)
 		)
-		(property "Value" "DISPLAY USB POWER CABLE"
+		(property "Value" "DISPLAY 5V"
 			(at 1.75 5.62 270)
 			(layer "F.Fab")
 			(uuid "3976ca3c-e9f1-4d35-b5fe-1b968c2f2322")
@@ -22925,7 +22925,7 @@
 				)
 			)
 		)
-		(property "Value" "0R AMP ISOLATION"
+		(property "Value" "0R"
 			(at 0 2.63 270)
 			(layer "F.Fab")
 			(uuid "ea4cf56b-b007-468b-8930-635f60ed494e")
@@ -23242,7 +23242,7 @@
 				)
 			)
 		)
-		(property "Value" "FROM DFR 5V / GND"
+		(property "Value" "DFR OUT"
 			(at 1.75 5.62 270)
 			(layer "F.Fab")
 			(uuid "3f2d0c70-169b-41a8-9d02-e522cac3bf2c")
@@ -26164,7 +26164,7 @@
 				)
 			)
 		)
-		(property "Value" "4 ohm SPEAKER BTL"
+		(property "Value" "SPEAKER"
 			(at 1.75 5.62 90)
 			(layer "F.Fab")
 			(uuid "9bf5fa3f-a9df-4917-9961-278a0f01a847")
@@ -26546,7 +26546,7 @@
 				)
 			)
 		)
-		(property "Value" "SRP1038A-100M 10uH"
+		(property "Value" "10uH"
 			(at 0 6.2 270)
 			(layer "F.Fab")
 			(uuid "38157ebe-a34c-4819-838d-ce778564027b")
@@ -32441,7 +32441,7 @@
 				)
 			)
 		)
-		(property "Value" "BEAD BYPASS: shunt = direct"
+		(property "Value" "BYPASS"
 			(at 0 4.92 90)
 			(layer "F.Fab")
 			(uuid "01370fdc-03e5-41d5-aea5-6106f8dca928")
@@ -34267,7 +34267,7 @@
 				)
 			)
 		)
-		(property "Value" "OPTIONAL BULK ENABLE"
+		(property "Value" "BULK"
 			(at 0 4.92 90)
 			(layer "F.Fab")
 			(uuid "bbcdd43b-a850-40a9-8a0d-c36142741f91")
@@ -36339,7 +36339,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G MATCH"
+		(property "Value" "470n 25V C0G"
 			(at 0 1.85 90)
 			(layer "F.Fab")
 			(uuid "740b03ba-aeca-4cb5-ac11-a5c4b8426358")

@@ -149,7 +149,7 @@ inserted: pin 5 to GND, pin 6 straight to `HP_DETECT` (Daisy pin 23, PA3). TP1 s
 ### Speaker send (`AUDIO_OUT_2` → U101)
 `AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ~48 kHz low-pass) → `LINE_OUT`, with R12 (100k) to GND. `LINE_OUT`
 reaches the speaker amp's IN+ (U101 pin 4) through C108. `LINE_REF`, GND through R21 (1k), reaches IN− (pin 5) through
-C109. On sheet 2 the two nets are named `Line+` and `Line−`.
+C109. Sheet 2's labels use the same two names.
 - **No buffer.** The reason is the same as for the headphone path: R11 plus U101's 60 kΩ input is far above the 600 Ω
   line-out minimum (see "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps before C108,
   `LINE_OUT` doesn't drift at power-on.
@@ -392,10 +392,10 @@ board they are traces, and the numbers still hold. `AMP_FAULTZ` is new in rev 3.
 | Sheet 1 net | Sheet 2 net | From | Promise |
 |---|---|---|---|
 | `+5V` | `+5V_AUDIO` | FB101 / JP101 | 4.75–5.25 V (see "The audio rail's budget") |
-| `BATT_SENSE` | `BAT_MON` | R102/R103 | VBAT / 11 from 9.1 kΩ, 1.15 V at most in use |
+| `BATT_SENSE` | `BATT_SENSE` | R102/R103 | VBAT / 11 from 9.1 kΩ, 1.15 V at most in use |
 | `SPK_MUTE` | `SPK_MUTE` | R107 pull-up, Q2 pull-down | ≈ 5 V muted, a few mV playing |
-| `LINE_OUT` | `Line+` | R11 (1k) | Audio, 1 Vrms full scale, ≈ 0 V DC, into 60 kΩ |
-| `LINE_REF` | `Line−` | R21 (1k) to GND | 0 V ± 10 mV, into 60 kΩ |
+| `LINE_OUT` | `LINE_OUT` | R11 (1k) | Audio, 1 Vrms full scale, ≈ 0 V DC, into 60 kΩ |
+| `LINE_REF` | `LINE_REF` | R21 (1k) to GND | 0 V ± 10 mV, into 60 kΩ |
 | `AMP_FAULTZ` | `AMP_FAULTZ` | U101 FAULTZ, R112/R114 | ≈ 3.2 V, no fault; < 0.8 V, a latched fault; 0 V with `+5V_RAW` off |
 
 One ground net joins the sheets, through the planes.

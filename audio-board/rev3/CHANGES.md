@@ -10,6 +10,9 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **Schematic:** sheet 1 is rev 2's audio sheet. Sheet 2 (`power.kicad_sch`) is power rev 1's sheet with every designator +100,
   joined to sheet 1 by six sheet pins: `+5V` (rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT`, `LINE_REF` and the
   new `AMP_FAULTZ`.
+- **Sheet 2 redrawn** on A3 in signal-flow blocks, with wires in place of most labels. Its nets take sheet 1's names
+  (power rev 1's `BAT_MON`, `Line+` and `Line−` are now `BATT_SENSE`, `LINE_OUT` and `LINE_REF`). Value fields hold values,
+  not descriptions (R105 `0R`, JP101/JP103 `BYPASS`, L101/L102 `10uH`); the notes on the sheet carry the reasons.
 - **Removed: the four terminals between the boards:** audio J5 (speaker send) and J6 (power, battery level, mute), and power
   J3 and J4 (rev 1 numbers). Their nets join on the board.
 - **The DFR0571 5 V buck stays off the board,** on J106 (its input) and J107 (its output), as on power rev 1.

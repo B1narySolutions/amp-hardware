@@ -9,8 +9,8 @@
 		(date "2026-11-07")
 		(rev "3.0")
 		(comment 1 "Design notes: rev3/DESIGN.md. Bring-up: rev3/TEST_PLAN.md")
-		(comment 2 "Sheet 2: battery input, 5 V distribution and TPA3118D2 speaker amp (from power board rev 1)")
-		(comment 3 "Guitar and AUX inputs, headphone amp and speaker amp on one 4-layer board")
+		(comment 2 "Sheet 2: battery input, 5 V supply, speaker amp (power board rev 1)")
+		(comment 3 "Guitar and AUX inputs, headphone amp, speaker send. 4-layer board.")
 	)
 	(lib_symbols
 		(symbol "Device:D_TVS"
@@ -6423,7 +6423,7 @@
 		(uuid "8e0b0aca-7457-48b6-8b9a-9aa604d2a9cc")
 	)
 	(label "HP_L"
-		(at 337.82 50.8 180)
+		(at 322.58 50.8 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6433,7 +6433,7 @@
 		(uuid "699be10a-d5d7-4710-8a4d-265c73bb6fe3")
 	)
 	(label "HP_R"
-		(at 337.82 68.58 180)
+		(at 322.58 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8047,7 +8047,7 @@
 		)
 		(uuid "358ab8f1-0083-48b2-a209-dc6826e3f45f")
 	)
-	(text "POWER AND SPEAKER AMP (SHEET 2)"
+	(text "SHEET 2: POWER AND SPEAKER AMP"
 		(exclude_from_sim no)
 		(at 17.78 213.36 0)
 		(effects
@@ -8083,7 +8083,7 @@
 		)
 		(uuid "f03e6b7f-4759-43d9-9e7a-4928f80b6b00")
 	)
-	(text "R1 (1 MΩ to VREF) sets the guitar load and the DC bias. U1A is a unity-gain buffer: input trim is in firmware.\nR20 limits current into the Daisy pin if U1 is ever overdriven. Passive pickups only: no pad.\nJ1's tip switch shorts the input to GND with no plug in. C1 is an RF shunt. R2 protects U1A's input."
+	(text "R1: guitar load (1 MΩ) and DC bias from VREF.\nU1A: unity-gain buffer. Input trim is in firmware.\nR2: protects the U1A input. R20: current limit to the Daisy.\nC1: RF shunt. J1 shorts the input to GND with no plug. Passive pickups only."
 		(exclude_from_sim no)
 		(at 20.32 55.88 0)
 		(effects
@@ -8094,7 +8094,7 @@
 		)
 		(uuid "fd137606-5eb5-42d3-90fd-8858a9622356")
 	)
-	(text "Passive stereo-to-mono sum\nstraight into AUDIO_IN_2. The Seed3\ninput is AC-coupled (≈ 5 kΩ): no\nbuffer or coupling cap needed.\nR5 sets the level (≈ −22 dB) and\nis the source's DC return. It keeps\nthe unpowered codec within ±0.3 V\nwhen a source plays with the board off.\nC3: RF filter (≈ 400 kHz)."
+	(text "Stereo to mono: passive sum.\nNo buffer: the Seed3 input is\nAC-coupled (≈ 5 kΩ).\nR5: level (≈ −22 dB), DC return.\nR5 keeps the unpowered codec\nin ±0.3 V.\nC3: RF filter (≈ 400 kHz)."
 		(exclude_from_sim no)
 		(at 93.98 81.28 0)
 		(effects
@@ -8105,7 +8105,7 @@
 		)
 		(uuid "5fdec7bb-7eb2-4eab-a939-6ca592e8dfff")
 	)
-	(text "+5V comes from FB101 on\nsheet 2 (Q102 there is the\nreverse protection).\nC5 (low-ESR) damps the\nwiring ringing. C4 is\nthe entry ceramic."
+	(text "+5V: from FB101 (sheet 2).\nQ102 (sheet 2): reverse\nprotection.\nC5: low-ESR bulk, damps\nwire ringing.\nC4: entry ceramic."
 		(exclude_from_sim no)
 		(at 101.6 127 0)
 		(effects
@@ -8116,7 +8116,7 @@
 		)
 		(uuid "8ced076d-2dcb-4abc-b8cc-d98971550a69")
 	)
-	(text "VREF ≈ 2.5 V, only load R1.\nC7 keeps +5V noise from the\ndisplay out of VREF (≈ 0.7 Hz).\nC6 decouples U1 at pin 5."
+	(text "VREF ≈ 2.5 V. Load: R1 only.\nC7: keeps +5V noise out of\nVREF (≈ 0.7 Hz).\nC6: U1 decoupling, at pin 5."
 		(exclude_from_sim no)
 		(at 99.06 170.18 0)
 		(effects
@@ -8127,7 +8127,7 @@
 		)
 		(uuid "fe07b91c-fa25-4a5f-88b4-d43b0043c6f9")
 	)
-	(text "A1 plugs into two 1×20 sockets. Unused pins are no-connect. USB stays on the module."
+	(text "A1: in two 1×20 sockets. USB is on the module. Unused pins: no-connect."
 		(exclude_from_sim no)
 		(at 144.78 129.54 0)
 		(effects
@@ -8138,7 +8138,7 @@
 		)
 		(uuid "562b185c-0f50-4716-95f7-9acaccca3ed2")
 	)
-	(text "J3: 3-way screw terminal. The display takes its power from J105 (sheet 2), so only the UART and its GND come here.\nR8/R9 (10k each) limit current if a wire is swapped or the display and Daisy power up at different times.\nR24 divides a 5 V wire on RX to ≤ 4.8 V, and holds RX low with no display: firmware reads that as no display.\nKeep the UART at 230400 baud or less. Leave PB7's internal pull-up off."
+	(text "J3: UART and GND only. The display gets 5 V from J105 (sheet 2).\nR8, R9: current limit for a swapped wire or a power-up skew.\nR24: limits a 5 V input to ≤ 4.8 V. RX low = no display.\nKeep the UART at 230400 baud or less. Keep the PB7 pull-up off."
 		(exclude_from_sim no)
 		(at 144.78 191.77 0)
 		(effects
@@ -8149,7 +8149,7 @@
 		)
 		(uuid "7262124e-9131-425d-80a4-42bc45e91a3f")
 	)
-	(text "Mono to both channels, 16–64 Ω headphones. R10/C9: ≈ 80 kHz low-pass for DAC noise.\nU2: MAX9722A DirectDrive, inverting, gain −R26/R25 = −R28/R27 = −1 (0 dB): full scale ≈ 0.60 Vrms.\nOutputs sit at 0 V: no output caps. C10/C11 with R25/R27: 3.4 Hz high-pass. SHDN tied to HP_5V: always on.\nC13 flying, C14 PVSS hold (both to PGND), C12 PVDD and C15 SVDD bypass, each at its pin.\nR29/C21: U2's own supply filter (HP_5V), keeps its 600 kHz charge pump off +5V."
+	(text "Mono to both channels. Headphones: 16–64 Ω.\nU2: inverting, gain −1 (0 dB). Full scale ≈ 0.60 Vrms.\nR10, C9: ≈ 80 kHz low-pass. C10, C11: 3.4 Hz high-pass.\nOutputs at 0 V DC: no output capacitors. SHDN to HP_5V: always on.\nC13: flying. C14: PVSS hold. C12, C15: bypass. Put each at its pin.\nR29, C21: U2 supply filter (HP_5V)."
 		(exclude_from_sim no)
 		(at 271.78 91.44 0)
 		(effects
@@ -8160,7 +8160,7 @@
 		)
 		(uuid "9c46d46d-73ed-4716-9a8a-bb6ea0f50faf")
 	)
-	(text "J4 pins 5–6: isolated N/O switch, closes on plug insertion.\nHP_DETECT is LOW with headphones in. No external pull-up:\nthe firmware enables PA3's internal pull-up.\nBring-up: short TP1 to GND to simulate a plug."
+	(text "J4 pins 5–6: isolated N/O switch, closed with a plug in.\nHP_DETECT low = headphones in. Pull-up: PA3 internal.\nBring-up: short TP1 to GND to simulate a plug."
 		(exclude_from_sim no)
 		(at 271.78 135.89 0)
 		(effects
@@ -8171,7 +8171,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives the speaker amp (U101, sheet 2) directly.\nR11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nLINE_OUT → U101 IN+ (C108), LINE_REF → IN− (C109). R21 matches\nR11's 1k so the amp's input sees equal source impedances. Route\nthe pair together; R21 sits beside R11, at the source's ground.\nAssumes pin 19 at 0 V DC (TEST_PLAN 6.16)."
+	(text "R11, C16: ≈ 48 kHz low-pass. R12: DC return.\nLINE_OUT to U101 IN+, LINE_REF to U101 IN− (sheet 2).\nR21 = R11 (1k): equal source impedances.\nRoute LINE_OUT and LINE_REF as a pair. Put R21 next to R11.\nPin 19 is at 0 V DC (TEST_PLAN 6.16)."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8182,7 +8182,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "Sheet 2 (power.kicad_sch) is the power board rev 1, its parts renumbered +100. It connects here by the sheet pins:\nBAT_MON (R102/R103, 100k/10k = VBAT / 11 from 9.1 kΩ) → BATT_SENSE: VBAT = 11 × V(pin 25).\nSPK_MUTE is open drain: R107 pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nLINE_OUT / LINE_REF feed U101's differential input. +5V is +5V_AUDIO, after FB101 (or JP101).\nAMP_FAULTZ (R112/R114, ≈ 3.2 V; low = latched speaker fault) → Daisy pin 32.\nThe battery jack, fuse, power switch (SW101), DFR0571 buck terminals and display power are on sheet 2."
+	(text "Sheet 2: power board rev 1, references +100.\n+5V_AUDIO: +5V after FB101 (or JP101).\nBATT_SENSE = VBAT / 11 (R102, R103).\nSPK_MUTE: R107 pulls it up (muted). SPK_EN high: play.\nAMP_FAULTZ ≈ 3.2 V. Low = latched speaker fault (pin 32).\nLINE_OUT, LINE_REF: to the U101 inputs."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -8193,7 +8193,7 @@
 		)
 		(uuid "3f535bf0-a8d8-42b1-87f6-c218b77ed0c1")
 	)
-	(text "U2 SHDN is tied to HP_5V (on). A hung Daisy is muted by the\ncodec: the firmware feeds the STM32 IWDG only from the\naudio callback, so if audio stops the STM32 resets, its\nclocks stop and the TAC5242 powers down its DAC.\nR17 holds SPK_EN low (speaker muted) during a reset.\n5V_SENSE ≈ 2.5 V when +5V is up. With +5V off (Daisy on\nUSB) the firmware keeps both outputs silent: U2's inputs\nare rated only to its own rails ± 0.3 V."
+	(text "Daisy hangs: the IWDG resets the STM32.\nThe codec then mutes its DAC.\nR17: SPK_EN low (muted) during reset.\n5V_SENSE ≈ 2.5 V with +5V on.\n+5V off (Daisy on USB): firmware keeps\nboth outputs silent (U2 inputs: rails ± 0.3 V)."
 		(exclude_from_sim no)
 		(at 331.47 219.71 0)
 		(effects
@@ -8378,7 +8378,7 @@
 		)
 		(uuid "89b67d1e-95f7-4ba8-bb4c-c148b9f3c692")
 	)
-	(text "D1–D5: bidirectional ESD diodes (PESD5V0S1BA: 5 V working,\n35 pF, 5 nA) from every jack signal contact to GND, each placed\nat its jack. Guitar signals stay below the 5 V working voltage.\nThe J2/J4 detect switches are isolated from the plug: no diode."
+	(text "D1–D5: PESD5V0S1BA, bidirectional, 5 V, 35 pF.\nPut each diode at its jack.\nJ2, J4 detect switches: isolated, no diode."
 		(exclude_from_sim no)
 		(at 208.28 256.54 0)
 		(effects
@@ -10037,7 +10037,7 @@
 		(dnp no)
 		(uuid "39252404-2b75-48ba-9fde-6dcd8f613087")
 		(property "Reference" "C10"
-			(at 330.2 49.88 90)
+			(at 325.12 52.7 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10047,7 +10047,7 @@
 			)
 		)
 		(property "Value" "4.7uF"
-			(at 330.2 52.88 90)
+			(at 331.47 52.7 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15872,6 +15872,7 @@
 		)
 		(property "Value" "GND"
 			(at 46.99 29.21 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18427,7 +18428,7 @@
 				(justify right)
 			)
 		)
-		(pin "BAT_MON" output
+		(pin "BATT_SENSE" output
 			(at 45.72 233.68 0)
 			(uuid "8b3d23c0-7508-484f-a6cf-8104b6d0bdc2")
 			(effects
@@ -18447,7 +18448,7 @@
 				(justify right)
 			)
 		)
-		(pin "Line+" input
+		(pin "LINE_OUT" input
 			(at 45.72 238.76 0)
 			(uuid "7c764224-b305-4544-a9a1-66c7b4b277c5")
 			(effects
@@ -18457,7 +18458,7 @@
 				(justify right)
 			)
 		)
-		(pin "Line-" input
+		(pin "LINE_REF" input
 			(at 45.72 241.3 0)
 			(uuid "451a0034-6809-433c-b1dd-5cea112e4ef2")
 			(effects
@@ -18536,7 +18537,7 @@
 	(label "DISPLAY_UART_RX" (at 194.31 152.4 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "4d519a5a-902b-4dfc-89f2-bb3f802df279"))
 	(junction (at 43.18 34.29) (diameter 0) (color 0 0 0 0) (uuid "73ea2b99-f3ed-418b-b228-e2c9cdec7b27"))
 	(symbol (lib_id "Device:FerriteBead_Small") (at 49.53 34.29 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "0b65df96-92a4-4961-b280-d38162b7f49c")
-		(property "Reference" "FB1" (at 50.165 32.385 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Reference" "FB1" (at 49.53 29.21 90) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "600R GHz" (at 50.165 37.465 0) (hide yes) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Footprint" "Inductor_SMD:L_0603_1608Metric" (at 49.53 36.068 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://pim.murata.com/asset/pim4/ferriteBeadInductortypefilter/ENFA0004_PDF_FERRITEBEADINDUCTORTYPEFILTER?lastModifiedDatetime=20250707191219" (at 49.53 34.29 90) (hide yes) (effects (font (size 1.27 1.27))))
@@ -18657,6 +18658,10 @@
 		(property "Description" "" (at 386.08 40.64 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "e53c16da-796e-4e2a-98e4-cff5f5dadef3"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#FLG1") (unit 1)))))
+	(wire (pts (xy 337.82 50.8) (xy 322.58 50.8)) (stroke (width 0) (type default)) (uuid "2362e4a7-d71f-492b-afd0-d7f411f0f0f2"))
+	(wire (pts (xy 337.82 68.58) (xy 322.58 68.58)) (stroke (width 0) (type default)) (uuid "7460d309-0fa5-40ae-960e-415ede4a837e"))
+	(text "C17: BATT_SENSE filter." (exclude_from_sim no) (at 91.44 246.38 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "1214ac4c-4aba-4064-a0d0-66415da554da"))
+	(text "Q2: SPK_EN high pulls SPK_MUTE low (play)." (exclude_from_sim no) (at 152.4 262.89 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "a2f807e3-e732-4bc4-90e2-7fa02148d724"))
 	(sheet_instances
 		(path "/"
 			(page "1")

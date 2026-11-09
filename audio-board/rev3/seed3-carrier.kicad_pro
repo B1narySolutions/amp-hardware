@@ -282,11 +282,11 @@
   "erc": {
     "erc_exclusions": [
       [
-        "pin_to_pin|1397000|2019300|4937804f-4aca-4a05-b48f-2ce48392f08f|a50e3a39-4f7a-4767-a26c-7d0cee99de76|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac",
+        "pin_to_pin|1270000|1435100|4937804f-4aca-4a05-b48f-2ce48392f08f|a50e3a39-4f7a-4767-a26c-7d0cee99de76|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac",
         "PBTL: TPA3118 datasheet SLOS708G 7.4.1 ties OUTPR-OUTNR and OUTPL-OUTNL (DESIGN.md)"
       ],
       [
-        "pin_to_pin|1397000|2171700|3b9a0b94-6927-4ed8-a75d-66176dd22b18|07916d19-a6e4-4e83-b3f7-a538172f283e|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac",
+        "pin_to_pin|1270000|1587500|3b9a0b94-6927-4ed8-a75d-66176dd22b18|07916d19-a6e4-4e83-b3f7-a538172f283e|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac|/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac",
         "PBTL: TPA3118 datasheet SLOS708G 7.4.1 ties OUTPR-OUTNR and OUTPL-OUTNL (DESIGN.md)"
       ]
     ],
