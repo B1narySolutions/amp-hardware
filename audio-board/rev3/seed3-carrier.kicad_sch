@@ -8105,7 +8105,7 @@
 		)
 		(uuid "5fdec7bb-7eb2-4eab-a939-6ca592e8dfff")
 	)
-	(text "Q1: reverse-polarity\nprotection for 5V_IN\n(J107 on sheet 2).\nC5 (low-ESR) damps the\nwiring ringing. C4 is\nthe entry ceramic."
+	(text "+5V comes from FB101 on\nsheet 2 (Q102 there is the\nreverse protection).\nC5 (low-ESR) damps the\nwiring ringing. C4 is\nthe entry ceramic."
 		(exclude_from_sim no)
 		(at 101.6 127 0)
 		(effects
@@ -8149,7 +8149,7 @@
 		)
 		(uuid "7262124e-9131-425d-80a4-42bc45e91a3f")
 	)
-	(text "Mono to both channels, 16–64 Ω headphones. R10/C9: ≈ 80 kHz low-pass for DAC noise.\nU2: MAX9722A DirectDrive, inverting, gain −R26/R25 = −R28/R27 = −1 (0 dB): full scale ≈ 0.60 Vrms.\nOutputs sit at 0 V: no output caps. C10/C11 with R25/R27: 3.4 Hz high-pass. SHDN tied to +5V: always on.\nC13 flying, C14 PVSS hold (both to PGND), C12 PVDD and C15 SVDD bypass, each at its pin."
+	(text "Mono to both channels, 16–64 Ω headphones. R10/C9: ≈ 80 kHz low-pass for DAC noise.\nU2: MAX9722A DirectDrive, inverting, gain −R26/R25 = −R28/R27 = −1 (0 dB): full scale ≈ 0.60 Vrms.\nOutputs sit at 0 V: no output caps. C10/C11 with R25/R27: 3.4 Hz high-pass. SHDN tied to HP_5V: always on.\nC13 flying, C14 PVSS hold (both to PGND), C12 PVDD and C15 SVDD bypass, each at its pin.\nR29/C21: U2's own supply filter (HP_5V), keeps its 600 kHz charge pump off +5V."
 		(exclude_from_sim no)
 		(at 271.78 91.44 0)
 		(effects
@@ -8171,7 +8171,7 @@
 		)
 		(uuid "946342cf-ec0f-4e04-9aba-c86c15c779c9")
 	)
-	(text "AUDIO_OUT_2 drives the speaker amp (U101, sheet 2) directly.\nR11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nLINE_OUT → U101 IN+ (C108), LINE_REF → IN− (C109). R21 matches\nR11's 1k so the amp's input sees equal source impedances. Route\nthe pair together; R21's GND end at the Daisy's AGND (pin 20).\nAssumes pin 19 at 0 V DC (TEST_PLAN 5.16)."
+	(text "AUDIO_OUT_2 drives the speaker amp (U101, sheet 2) directly.\nR11/C16: ≈ 48 kHz low-pass, 1k out. R12: DC return.\nLINE_OUT → U101 IN+ (C108), LINE_REF → IN− (C109). R21 matches\nR11's 1k so the amp's input sees equal source impedances. Route\nthe pair together; R21 sits beside R11, at the source's ground.\nAssumes pin 19 at 0 V DC (TEST_PLAN 6.16)."
 		(exclude_from_sim no)
 		(at 271.78 191.77 0)
 		(effects
@@ -8182,7 +8182,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "Sheet 2 (power.kicad_sch) is the power board rev 1, its parts renumbered +100. It connects here by the sheet pins:\nBAT_MON (R102/R103 = VBAT × 0.25 from 7.5 kΩ) → BATT_SENSE_CONN; R13/R22 halve it again: VBAT = 11 × V(pin 25).\nSPK_MUTE is open drain: R107 pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nLINE_OUT / LINE_REF feed U101's differential input. 5V_IN is +5V_AUDIO, after FB101 (or JP101).\nThe battery jack, fuse, power switch (SW101), DFR0571 buck terminals and display power are on sheet 2."
+	(text "Sheet 2 (power.kicad_sch) is the power board rev 1, its parts renumbered +100. It connects here by the sheet pins:\nBAT_MON (R102/R103, 100k/10k = VBAT / 11 from 9.1 kΩ) → BATT_SENSE: VBAT = 11 × V(pin 25).\nSPK_MUTE is open drain: R107 pulls it up, so the speaker amp stays muted unless SPK_EN is high.\nLINE_OUT / LINE_REF feed U101's differential input. +5V is +5V_AUDIO, after FB101 (or JP101).\nAMP_FAULTZ (R112/R114, ≈ 3.2 V; low = latched speaker fault) → Daisy pin 32.\nThe battery jack, fuse, power switch (SW101), DFR0571 buck terminals and display power are on sheet 2."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -8193,7 +8193,7 @@
 		)
 		(uuid "3f535bf0-a8d8-42b1-87f6-c218b77ed0c1")
 	)
-	(text "U2 EN is tied to +5V. A hung Daisy is muted by the\ncodec: the firmware feeds the STM32 IWDG only from the\naudio callback, so if audio stops the STM32 resets, its\nclocks stop and the TAC5242 powers down its DAC.\nR17 holds SPK_EN low (speaker muted) during a reset.\n5V_SENSE ≈ 2.5 V when +5V is up. With +5V off (Daisy on\nUSB) the firmware keeps both outputs silent: U2's inputs\nare rated only to its own rails ± 0.3 V."
+	(text "U2 SHDN is tied to HP_5V (on). A hung Daisy is muted by the\ncodec: the firmware feeds the STM32 IWDG only from the\naudio callback, so if audio stops the STM32 resets, its\nclocks stop and the TAC5242 powers down its DAC.\nR17 holds SPK_EN low (speaker muted) during a reset.\n5V_SENSE ≈ 2.5 V when +5V is up. With +5V off (Daisy on\nUSB) the firmware keeps both outputs silent: U2's inputs\nare rated only to its own rails ± 0.3 V."
 		(exclude_from_sim no)
 		(at 331.47 219.71 0)
 		(effects

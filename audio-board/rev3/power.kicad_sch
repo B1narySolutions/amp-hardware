@@ -7648,6 +7648,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 223.52 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7789,6 +7790,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 218.44 365.76 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8184,6 +8186,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 208.28 156.21 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8323,6 +8326,7 @@
 		)
 		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 330.2 210.82 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8464,6 +8468,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 101.6 129.54 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8861,6 +8866,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 116.84 274.32 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9209,6 +9215,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 109.22 327.66 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9428,6 +9435,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 388.62 299.72 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9932,6 +9940,7 @@
 		)
 		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 266.7 210.82 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10417,6 +10426,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 538.48 269.24 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10558,6 +10568,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 160.02 365.76 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10697,6 +10708,7 @@
 		)
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23"
 			(at 40.64 236.22 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10838,6 +10850,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 218.44 327.66 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11131,6 +11144,7 @@
 		)
 		(property "Datasheet" "https://datasheets.kyocera-avx.com/KGM_X7R.pdf"
 			(at 345.44 45.72 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11590,6 +11604,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 316.23 156.21 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11787,7 +11802,7 @@
 		(dnp no)
 		(uuid "a55c8f28-b2a7-4857-a175-aec7a31a6465")
 		(property "Reference" "U103"
-			(at 454.66 162.56 0)
+			(at 441.96 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11797,7 +11812,7 @@
 			)
 		)
 		(property "Value" "TPS3808EG50DBVR"
-			(at 454.66 165.1 0)
+			(at 441.96 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11961,6 +11976,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 482.6 269.24 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12355,6 +12371,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 160.02 327.66 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12631,6 +12648,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 388.62 337.82 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12772,6 +12790,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 269.24 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13041,6 +13060,7 @@
 		)
 		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 266.7 241.3 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13549,6 +13569,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 530.86 177.8 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13820,6 +13841,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 50.8 129.54 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14090,6 +14112,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 426.72 314.96 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14231,6 +14254,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 538.48 314.96 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14444,6 +14468,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 482.6 223.52 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14585,6 +14610,7 @@
 		)
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf"
 			(at 482.6 314.96 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14726,6 +14752,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 167.64 251.46 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15130,6 +15157,7 @@
 		)
 		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/339/CL10B224KB8NNNC_Spec.pdf"
 			(at 330.2 241.3 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15271,6 +15299,7 @@
 		)
 		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1002_X7R_SMD"
 			(at 538.48 223.52 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15661,6 +15690,7 @@
 		)
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23"
 			(at 40.64 208.28 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16154,8 +16184,8 @@
 	(wire (pts (xy 495.3 314.96) (xy 495.3 312.42)) (stroke (width 0) (type default)) (uuid "432b39e7-287e-47ba-9db0-ed2a6d63e0f9"))
 	(hierarchical_label "AMP_FAULTZ" (shape output) (at 495.3 312.42 90) (effects (font (size 1.27 1.27)) (justify left)) (uuid "67577aca-0805-4a27-bbfd-3b5ed916cff1"))
 	(symbol (lib_id "Device:R") (at 495.3 318.77 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "975b1349-3ad7-4980-8fa9-00a0b66b2667")
-		(property "Reference" "R114" (at 497.332 318.77 90) (effects (font (size 1.27 1.27))))
-		(property "Value" "18k" (at 495.3 318.77 90) (effects (font (size 1.27 1.27))))
+		(property "Reference" "R114" (at 497.84 317.5 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "18k" (at 497.84 320.04 0) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 493.522 318.77 90) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://www.seielect.com/catalog/SEI-RMCF_RMCP.pdf" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 495.3 318.77 0) (hide yes) (effects (font (size 1.27 1.27))))

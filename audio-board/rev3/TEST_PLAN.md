@@ -60,7 +60,7 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
 | 5 V decoupling | C6, C4, C5; R29, C21, C12, C15 | Bulk/HF decoupling on `+5V`. U2 has its own filtered rail, `HP_5V`: `+5V` through R29 (2.2 Ω), with C21 (10 µF) beside C12 (U2 PVDD) and C15 (U2 SVDD). Probe at C21 pad 1 or C12 pad 1 |
 | Mid-rail reference | R7, R6 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
 | Guitar input | J1, C1, FB1, C2, R1 (1M), R2, C18, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; C1, FB1 and C18 filter RF; C2 is 47 nF C0G; unity-gain buffer → R20 (470 Ω series) → Daisy `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
-| AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ~110 kHz RF filter, straight into Daisy `AUDIO_IN_2` (no buffer). R5 (470 Ω) sets the level: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
+| AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ≈ 400 kHz RF filter (C3), straight into Daisy `AUDIO_IN_2` (no buffer). R5 (470 Ω) sets the level: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
 | Headphone filter | R10, C9 | Daisy `AUDIO_OUT_1` → ~80 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
 | Headphone amp | U2 (MAX9722A), R25–R28, C10/C11, C12–C15 | DirectDrive stereo amp, inverting at a gain of −1, outputs at 0 V straight to J4 (`HP_L` tip, `HP_R` ring). SHDN tied to `HP_5V` (`+5V` through R29): U2 is on whenever `+5V` is up |
 | Headphone detect | J4.5/J4.6, TP1 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 23, STM32 internal pull-up). **Low = headphones in.** Probe at **TP1** |
