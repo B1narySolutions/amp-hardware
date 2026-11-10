@@ -35,7 +35,7 @@ The AUX input and both outputs connect to the Daisy with no op-amp (see "AUX inp
 
 ### Mid-rail reference (VREF)
 R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source impedance, C7 gives a ≈ 0.7 Hz corner, which keeps
-noise on `+5V` (from the display) out of `VREF`. Its only load is R1.
+noise on `+5V` out of `VREF`. Its only load is R1.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
 J1 tip → C1 (100 pF to GND, RF shunt) → FB1 (ferrite bead) → C2 (47 nF C0G) → R1 (1M to `VREF`) → R2 (1k) → C18 (100 pF to

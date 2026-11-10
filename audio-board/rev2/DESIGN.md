@@ -11,11 +11,11 @@ board has no pots or encoder. If there is a master volume encoder, it goes on th
 
 U1 is a TLV9061 single op-amp (SOT-23-5), the guitar input buffer, on `+5V` (pin 5) and GND (pin 2). Its symbol,
 `seed3-carrier:TLV9061DBV` in `seed3-carrier.kicad_sym`, follows the TL07x style: U1A is the op-amp and U1B the power pins.
-The AUX input and both outputs connect to the Daisy with no op-amp (see "AUX input", "Headphone output" and "Speaker / line send").
+The AUX input and both outputs connect to the Daisy with no op-amp (see "AUX input", "Headphone output" and "Speaker send").
 
 ### Mid-rail reference (VREF)
 R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source impedance, C7 gives a ≈ 0.7 Hz corner, which keeps
-noise on `+5V` (from the display) out of `VREF`. Its only load is R1.
+noise on `+5V` out of `VREF`. Its only load is R1.
 
 ### Guitar input (J1 → `AUDIO_IN_1`)
 J1 tip → C1 (100 pF to GND, RF shunt) → C2 (1 µF) → R1 (1M to `VREF`) → R2 (1k) → U1A follower → R20 (470 Ω) → `AUDIO_IN_1`
@@ -71,8 +71,8 @@ with R26/R28 (10k) from each output back to its input. U2 (MAX9722AEUE+) drives 
     AC-coupled inputs. That matches only MD5 high / MD4 low, "Single-ended output; Line-out only" (TAC5242 datasheet, Table 7-10),
     whose minimum load is 600 Ω. The module cannot drive headphones, which is why U2 is here. Electrosmith's own headphone circuit
     (Seed3 datasheet, Figure 3.9) also adds an amp (TPA6110A2).
-  - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which only works if the pin
-    sits at 0 V DC, so the outputs are most likely AC-coupled on the module. TEST_PLAN 5.16 measures it with the Daisy fitted.
+  - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which suggests the pin
+    sits at 0 V DC (a pot that carries DC crackles when turned), so the outputs are most likely AC-coupled on the module. TEST_PLAN 5.16 measures it with the Daisy fitted.
 - **No buffer between the Daisy and U2.** U2's inverting inputs are virtual grounds, so the Daisy sees R10 plus R25 ‖ R27 (5k),
   ≈ 8.3 kΩ, far above the 600 Ω line-out minimum. Electrosmith's reference circuits load the pin with 10k through a 10 µF cap (line out,
   Figure 3.3) and with a pot to GND (headphone amp, Figure 3.9).
@@ -124,7 +124,7 @@ through the Daisy's USB-C.
   "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps in the path, `LINE_OUT` doesn't drift at power-on.
 - **No DC-blocking cap: this path assumes pin 19 sits at 0 V DC.** The outputs are most likely AC-coupled on the module (see "DC level"
   under "Headphone output"), so a cap here would only add a part. If TEST_PLAN 5.16 finds more than a few tens of mV at pin 19, that DC
-  reaches J5, R12 and the speaker amp, and the fix is a 10 µF cap in series between C16 and `LINE_OUT`, which needs a cut trace or a respin.
+  reaches J5 and R12 (the power board's C8/C9 block it from the speaker amp's inputs), and the fix, if it clicks, is a 10 µF cap in series between C16 and `LINE_OUT`, which needs a cut trace or a respin.
 - **R11** is the output impedance and isolates the Daisy from cable capacitance. With R21, a differential input sees a 2k source:
   into 10k (with R12) it costs ≈ 1.7 dB (≈ 0.83 Vrms at full scale), and ≈ 3.0 dB into 5k. Cable capacitance adds to C16 and lowers the corner, ≈ 44 kHz with 3 m of typical
   cable. If `LINE_OUT` is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load. A lower R11 would cut that margin.
@@ -208,8 +208,8 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   Q1 or `+5V`, the rail that feeds the analog circuits, and its current draw doesn't count against J6.
 
 ### Running from USB alone
-The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear to drive the
-VIN pin. With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
+The Seed3 runs from its own USB port, and USB doesn't drive the VIN pin: on the module, USB VBUS and VIN each reach the regulators'
+input through their own diode (Seed3 datasheet, Figure 1.0, "Onboard USB Power"). With USB plugged in and the power board off (flashing or debugging on the bench), the Daisy runs while `+5V` is at 0 V. Any
 Daisy output that is high then pushes current into an unpowered part on the audio board through that part's input protection diodes.
 - **Q1 conducts backwards** if `+5V` is lifted, because its gate is tied to GND. That would only leak a little current to the power
   board. Nothing on the audio board back-powers `+5V`.
@@ -309,8 +309,8 @@ different times, and add a little ESD margin.
   current stays in the rear-right corner.
 - **R8 is 10k:** with the Daisy on USB alone and the power board off (see "Running from USB alone"), its TX idles high into an
   unpowered display. 10k keeps the current into the display's RX protection diode to ≈ 0.27 mA.
-- **R9 is 10k too:** the display and the Daisy both run from the power board, but from different supply rails, so their power-up
-  order isn't fixed. 10k limits the current from a powered display into an unpowered Daisy's RX pin the same way.
+- **R9 is 10k too:** the display and the Daisy both run from the power board's 5 V, on separately filtered branches, and a display
+  can also be powered from elsewhere (its own USB), so their power-up order isn't fixed. 10k limits the current from a powered display into an unpowered Daisy's RX pin the same way.
 - **R24 (100k) pulls `DISPLAY_UART_RX` to GND.** With R9 it divides a 5 V wire on RX to at most 4.78 V at pin 15 (PB7), inside the
   Seed3's 0–5 V GPIO rating. The STM32 itself allows VDD + 4 V there while powered, but the module is rated 0–5 V. The display's 3.3 V
   high arrives at ≈ 3.0 V, well above the 0.7 × VDD (≈ 2.3 V) the input needs.
@@ -341,7 +341,8 @@ USB stays on the Daisy's own connector.
   low when headphones are in.
 - Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18 does from boot.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display every few seconds. Warn on the display when it gets low;
-  the power board cuts the power at its own low-battery threshold. VBAT = 11 × V(pin 25) with the power board's rev 1 divider (see
+  power board rev 1 has no low-battery cutoff (its supervisor watches only the 5 V), so the pack's own protection or the
+  5 V buck's dropout ends it. VBAT = 11 × V(pin 25) with the power board's rev 1 divider (see
   "Power board connector (J6)").
 - Read `5V_SENSE` (pin 22, ADC_0) with the longest ADC sample time (its source impedance is 50k). It reads ≈ 2.4–2.5 V with `+5V`
   at 4.85–5.0 V.
@@ -355,13 +356,13 @@ USB stays on the Daisy's own connector.
   It goes to both outputs. It arrives ≈ 22 dB below the source (≈ −18 dBFS for 2 Vrms, see "AUX input"), so apply gain before the mix.
 
 ## Open items
-- **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and J5 go silent and `SPK_MUTE` mutes within ~10 ms.
+- **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and J5 go silent and `SPK_MUTE` mutes within ~10–20 ms.
 - **Speaker amp mute polarity:** `SPK_MUTE` floats (pulled up = muted) or is pulled low (= playing). The power board's amp is the
   TPA3118D2, whose MUTE pin is active high, so it matches with no inverter (see power-board/README.md). Check it on the built boards.
 - **Wire ends:** use ferrules or solid wire in the screw terminals. Tinned stranded wire creeps under screw pressure and loosens.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for the small pull-up current on `SPK_MUTE`, but check it on the board.
 - **Headphone level:** full scale is ≈ 0.60 Vrms per channel (TEST_PLAN 7.8). If that's too loud, or the hiss is audible with
-  sensitive headphones, raise R25 and R27 together (20k gives −6 dB, ≈ 0.38 Vrms) and keep R26/R28 at 10k.
+  sensitive headphones, raise R25 and R27 together (20k gives ≈ −4 dB, ≈ 0.38 Vrms) and keep R26/R28 at 10k.
 - **AUX input level:** TEST_PLAN 5.17 checks the level with the Daisy fitted (the Daisy's input impedance isn't published). Then measure
   a phone and a laptop at full volume through J2: 2 Vrms should reach ≈ 0.44–0.45 Vpp, and it can't exceed 0.49 Vpp whatever the
   module's input is. If the firmware gain for quiet phones brings up audible noise, R5 can go up to 560 Ω (≈ 1.2 dB louder). At 680 Ω
@@ -373,7 +374,7 @@ USB stays on the Daisy's own connector.
   C10/C11 (4.7 µF X5R) are in series with the headphone path. X5R/X7R capacitance moves with voltage, and the
   material is piezoelectric, so knocks can become signal. Distortion from C2 is negligible (at audio frequencies it drops
   almost none of the signal into 1 MΩ). Microphonics is the risk. Tap the board with a guitar plugged in (TEST_PLAN
-  stage 5) and listen. If it's audible, C2 can become a 100 nF C0G in the same 1206 footprint (with R1 the corner moves
+  6.5) and listen. If it's audible, C2 can become a 100 nF C0G in the same 1206 footprint (with R1 the corner moves
   from 0.16 Hz to 1.6 Hz). C10/C11 sit on a ≈ 2 kΩ node, so they matter less. Film parts would be the fix there.
 - **Headphone low-end corner with the Daisy fitted:** TEST_PLAN 3B.3 (Daisy out) checks C10/C11 alone (≈ 3.4 Hz). Sweep it again in
   Stage 5 with the Daisy in and record the corner.
@@ -387,7 +388,7 @@ USB stays on the Daisy's own connector.
   that. The TPA3118D2's input impedance depends on its gain setting: ≈ 60k at 20 dB (≈ 0.15 dB loss), down to 9k at 36 dB, which the
   power board must not use. It runs at 20 dB from the 12 V power bank, where full scale clips the speaker, so the firmware caps the speaker
   level about 5 dB below full scale (see power-board/README.md, "The amp: TI TPA3118D2").
-- **U2 stock:** check DigiKey's stock of the MAX9722AEUE+ before ordering boards (see "Parts sourcing").
+- **U2 stock:** the MAX9722AEUE+ was in the 2026-11-05 order. Check DigiKey's stock again before any later build (see "Parts sourcing").
 - **Soldering U2:** the TSSOP's 0.65 mm pitch takes flux and a fine tip or drag soldering. TEST_PLAN 0.1, 1.6a and 1.8 catch bridges.
 - **Mechanical:** the outline, jack and hole positions are a first pass with no enclosure yet. Recheck them against the enclosure drawing. The Seed3's
   USB-C overhangs the PCB by 1.55 mm and stands 3.25 mm tall (Seed3 datasheet, page 8); the board's 3D placeholder is the original
@@ -470,7 +471,7 @@ regulators and class D amp are the noisiest things the audio board connects to.
   18 mm, with no vias. R1 rises from the C2/R2 node to `VREF`, so the 1 MΩ node is about 4.5 mm of trace. U1's output, through R20,
   makes the long run to Daisy pin 16. R6, R7 and C7 sit just above-left of R1, so `VREF` is a few mm of F.Cu.
 - **AUX input:** the AUX block sits right under Daisy pins 16–17. J2's ring and tip run about 20 mm, but the source drives them, so their
-  impedance is low. The ≈ 2 kΩ `AUDIO_IN_2` node is about 11 mm of trace. Nothing crosses the guitar row.
+  impedance is low. The ≈ 400 Ω `AUDIO_IN_2` node is about 11 mm of trace. Nothing crosses the guitar row.
 - **Headphone path:** `AUDIO_OUT_1`, the DAC output, makes the long run to R10. `HP_SOURCE` (≈ 2 kΩ: R10 into the 5k of R25 ‖ R27) is
   then about 17 mm, the cost of reaching both sides of U2 without a layer change. Each channel's input cap and resistors sit on its own
   side of U2, and the outputs leave straight down and run left to J4, so nothing crosses.
@@ -559,10 +560,11 @@ per-class ranges, including the maximums. All values are within JLC's standard 2
 - **Fiducials:** the "Fiducial pour clearance" rule keeps both pours 1 mm from FID1–FID3.
 
 ## Parts sourcing
-Build plan: a 2-layer board from the capstone's free fab (or JLC), with every part hand-soldered with an iron. Every part comes from
+Build plan: a 2-layer board (ordered 2026-11-05), with every part hand-soldered with an iron. Every part comes from
 DigiKey. Each part's symbol has `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields, copied to the board, and
-`seed3-carrier-digikey.csv` is the order (DigiKey's BOM upload format, one line per part number). Part numbers are as of 2026-10-29;
-check stock before ordering.
+`seed3-carrier-digikey.csv` is this board's parts list (DigiKey's BOM upload format, one line per part number), as of 2026-10-29. The
+order placed on 2026-11-05 is `amp-digikey-order.csv` at the repo root; its Notes column lists the stock substitutes. Check stock
+again before any later build.
 
 - **U2:** the EUE suffix is the TSSOP; the ETE is the QFN. Don't substitute the MAX9722B: it has a fixed −2 V/V gain, and R25–R28
   assume the A.
@@ -576,6 +578,6 @@ check stock before ordering.
   0805 part loses no capacitance to DC bias. C12–C15 are 1 µF, the value the MAX9722A datasheet uses for all four charge-pump and
   supply caps.
 - **TP1** is a bare 2 mm copper pad, not a part, so it has nothing to order.
-- **Daisy sockets:** two 1×20 2.54 mm female headers, 8.5 mm tall, aren't in the DigiKey CSV yet.
+- **Daisy sockets:** two 1×20 2.54 mm female headers, 8.5 mm tall (Sullins PPTC201LFBN-RC, S7018-ND, in the order).
 - **JLC assembly:** the schematic has no LCSC part numbers, so a JLC assembly order would need them added. Commit c8d6067 has a set,
   with JLC stock as of 2026-10-25.

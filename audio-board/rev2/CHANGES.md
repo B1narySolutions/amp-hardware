@@ -32,7 +32,7 @@ Designators are rev 2's (see "Designators" below). A part that no longer exists 
 
 ## Power and control
 - **J6: 2-pin 5 V header → 4-way 3.5 mm screw terminal to the power board:** 5V, GND, battery sense and the speaker mute. Adds R13,
-  R22, C17, Q2, R17 and R23. Q1 still provides reverse-polarity protection. The power switch and low-battery cutoff are on the power board.
+  R22, C17, Q2, R17 and R23. Q1 still provides reverse-polarity protection. The power switch is on the power board; power rev 1 has no low-battery cutoff.
 - **Screw terminals for every board-to-board connection (J3, J5, J6),** so prototype wiring needs no crimping. Each terminal's function
   is printed on the silkscreen.
 - **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
