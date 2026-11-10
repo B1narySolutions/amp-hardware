@@ -101,6 +101,13 @@ them (the kicad-check skill drops the resulting library warnings from its JLC pa
 - **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kicad-check` skill; it picks the
   2-layer or multilayer rule files from the board), and put the results in the commit message: errors, warnings, and
   anything new. After a board change, re-export the fab zip with the jobset and commit it in the same commit.
+- **After any design change, search every markdown file** for each changed part's reference and for its old value, net
+  name and derived numbers (corner frequencies, time constants, currents, levels), not only the section being edited:
+  `grep -rn --include='*.md' -e 'R5\b' -e '3\.3k' .`. The test plans repeat DESIGN.md's numbers, and rev 3's files repeat
+  rev 2's. Fix every hit or confirm it still holds.
+- **Datasheet claims cite where they were checked.** Before writing that a datasheet "doesn't state" something, or asking
+  the user to measure it, read the datasheet itself, figures included (text extraction skips drawings: read those pages
+  as images), and name the table or figure. Write a requirement on another board as a requirement, not as what it does.
 - **Don't accept a finding on your own.** A design-review finding or a DRC exclusion becomes accepted only when the user
   agrees, or when DESIGN.md already records the decision.
 - **Board edits** go through the IPC API (`kicad-board-edit` skill), from throwaway scripts in the scratchpad. Never
