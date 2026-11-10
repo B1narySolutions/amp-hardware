@@ -8,11 +8,12 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **Audio rev 2 and power rev 1 are one board,** 100 × 78 mm, 4 layers. They were a 90 × 56.5 mm 2-layer board and a
   98 × 98 mm 2-layer board joined by screw terminals and wires.
 - **Schematic:** sheet 1 is rev 2's audio sheet. Sheet 2 (`power.kicad_sch`) is power rev 1's sheet with every designator +100,
-  joined to sheet 1 by six sheet pins: `+5V` (rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT`, `LINE_REF` and the
+  joined to sheet 1 by six sheet pins: `+5V_AUDIO` (sheet 1's `+5V`, rev 2's `5V_IN`), `BATT_SENSE`, `SPK_MUTE`, `LINE_OUT`, `LINE_REF` and the
   new `AMP_FAULTZ`.
 - **Sheet 2 redrawn** on A3 in signal-flow blocks, with wires in place of most labels. Its nets take sheet 1's names
   (power rev 1's `BAT_MON`, `Line+` and `Line−` are now `BATT_SENSE`, `LINE_OUT` and `LINE_REF`). Value fields hold values,
-  not descriptions (R105 `0R`, JP101/JP103 `BYPASS`, L101/L102 `10uH`); the notes on the sheet carry the reasons.
+  not descriptions (R105 `0R`, JP101/JP103 `BYPASS`, L101/L102 `10uH`); the notes on the sheet carry the reasons. U1's value is its ordered part number
+  (TLV9061QDBVRQ1), and C104/C106 read 25 V, as the part they carry.
 - **Removed: the four terminals between the boards:** audio J5 (speaker send) and J6 (power, battery level, mute), and power
   J3 and J4 (rev 1 numbers). Their nets join on the board.
 - **The DFR0571 5 V buck stays off the board,** on J106 (its input) and J107 (its output), as on power rev 1.
@@ -38,7 +39,7 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **C19/C20 (10 pF C0G) added** on `DISPLAY_UART_TX`/`DISPLAY_UART_RX`, the Daisy side of R8/R9: RF filtering on the display UART.
 - **U2 has its own supply filter:** R29 (2.2 Ω) from `+5V` and C21 (10 µF) form `HP_5V` for U2's supply pins, so its
   charge pump stays off `+5V` (which also feeds U1, `VREF` and the Daisy).
-- **C108/C109 are 470 nF C0G 1206** (were 1.5 µF X7R 0805): not microphonic at the speaker amp's inputs. Its high-pass moves
+- **C108/C109 are 470 nF C0G 1206** (were 1.5 µF X7R 1206): not microphonic at the speaker amp's inputs. Its high-pass moves
   from 1.7 Hz to 5.6 Hz.
 - **FAULTZ reaches Daisy pin 32:** R114 (18k) to GND divides R112's pull-up to ≈ 3.2 V, through a sixth sheet pin, so the
   firmware can show a latched speaker fault. Power rev 1 left FAULTZ on a test point only.
@@ -54,7 +55,7 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   enables it, and through every reset.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
   nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20, JP106–JP108, the removed Q1/R23/R13/R22, R102's
-  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value, R114 and R30 with the `AMP_FAULTZ` link, D102/D103, J106's part, and the U2 block
+  value, F101's part, J102's swapped pins, R29/C21 (`HP_5V`), C108/C109's value, R114 and R30 with the `AMP_FAULTZ` link, D102/D103, J106's part, and the U2 block
   (U2, C10–C15, C22/C23, R32–R34, no R25–R28) with Daisy pins 12, 13, 27 and 38.
 
 ## Board
@@ -94,5 +95,5 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 
 ## Designators
 Sheet 1 keeps rev 2's designators (`../rev2/CHANGES.md` maps them to rev 1). On sheet 2, every part is power rev 1's number
-plus 100: U1 → U101, U3 → U103, Q1 → Q101, J1 → J101, R5 → R105, TP9 → TP109 and so on. Q102 is new. Power rev 1's J3 and J4
+plus 100: U1 → U101, U3 → U103, Q1 → Q101, J1 → J101, R5 → R105, TP9 → TP109 and so on. Q102, D102, D103, R114 and JP106–JP108 are new. Power rev 1's J3 and J4
 are gone; U102 is the off-board DFR0571 (no footprint).

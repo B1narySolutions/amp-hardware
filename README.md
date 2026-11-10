@@ -22,8 +22,9 @@ screw terminals to the power board and the display. It's a 2-layer board, hand-s
 **Power board.** Supplies 5 V and the battery level to the audio board, and drives the speaker. Its `README.md` lists what
 each board expects from the other.
 
-**Audio board rev 3.** The audio board rev 2 and power board rev 1 on one 4-layer, 100 × 78 mm board, with the same
-circuits (minus three parts the merge made redundant, and an SMD fuse). The Daisy stands upright in the middle and divides the board: audio on its left and in front of it, the battery
+**Audio board rev 3.** The audio board rev 2 and power board rev 1 on one 4-layer, 100 × 78 mm board. The circuits are
+theirs, with the changes `audio-board/rev3/CHANGES.md` lists: mainly an I2C headphone amp (TPA6130A2) for JLC assembly,
+an SMD fuse, a speaker-fault signal to the Daisy, and more input and supply protection. The Daisy stands upright in the middle and divides the board: audio on its left and in front of it, the battery
 entry and class D amp on its right, all over a solid ground plane. The 5 V buck stays off the board.
 
 ## Where to look

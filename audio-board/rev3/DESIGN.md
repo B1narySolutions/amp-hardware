@@ -31,7 +31,7 @@ since JLC assembles rev 3.
 
 U1 is a TLV9061 single op-amp (SOT-23-5), the guitar input buffer, on `+5V` (pin 5) and GND (pin 2). Its symbol,
 `seed3-carrier:TLV9061DBV` in `seed3-carrier.kicad_sym`, follows the TL07x style: U1A is the op-amp and U1B the power pins.
-The AUX input and both outputs connect to the Daisy with no op-amp (see "AUX input", "Headphone output" and "Speaker / line send").
+The AUX input and both outputs connect to the Daisy with no op-amp (see "AUX input", "Headphone output" and "Speaker send").
 
 ### Mid-rail reference (VREF)
 R6/R7 (10k/10k) from `+5V`, with C7 (47 µF): `VREF` ≈ 2.5 V. With 5k source impedance, C7 gives a ≈ 0.7 Hz corner, which keeps
@@ -100,8 +100,8 @@ ring) directly. The Daisy sets U2's volume and mute over I2C (pins 12/13) and sh
     AC-coupled inputs. That matches only MD5 high / MD4 low, "Single-ended output; Line-out only" (TAC5242 datasheet, Table 7-10),
     whose minimum load is 600 Ω. The module cannot drive headphones, which is why U2 is here. Electrosmith's own headphone circuit
     (Seed3 datasheet, Figure 3.9) also adds an amp (TPA6110A2).
-  - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which only works if the pin
-    sits at 0 V DC, so the outputs are most likely AC-coupled on the module. TEST_PLAN measures it with the Daisy fitted.
+  - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which suggests the pin
+    sits at 0 V DC (a pot that carries DC crackles when turned), so the outputs are most likely AC-coupled on the module. TEST_PLAN measures it with the Daisy fitted.
 - **No buffer between the Daisy and U2.** U2's differential input impedance is 37 kΩ at its highest gain and more at lower
   settings (TPA6130A2 datasheet, 9.2.2.1 and Figure 33), so each − input loads `HP_SOURCE` with ≥ 18.5 kΩ. With both channels
   in parallel the Daisy sees R10 plus ≥ 9.2 kΩ, ≥ 12.5 kΩ in all, far above the 600 Ω line-out minimum.
@@ -210,7 +210,7 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   C124 (1 µF) carry it to U101's MUTE pin (active high).
 - **Levels:** low (playing) is a few mV (Q2's on-resistance against R107's 0.5 mA), against U101's 0.8 V VIL. High (muted) is ≈ 5 V, against
   2 V VIH and MUTE's PVCC + 0.3 V maximum. After an IWDG reset, MUTE rises through R107 + R108 (12.2 kΩ) into C124 and passes
-  2 V in ≈ 5.6 ms. Both edges slew ≈ 2.3 V/ms or slower, inside the TPA3118's 10 V/ms limit for MUTE and SDZ.
+  2 V in ≈ 6.2 ms. Both edges slew ≈ 2.3 V/ms or slower, inside the TPA3118's 10 V/ms limit for MUTE and SDZ.
 - **D103 (BAT54H Schottky, anode on MUTE, cathode on PVCC)** holds MUTE near PVCC when PVCC falls first (see "Power
   sequence"). Reverse-biased in use; its leakage (2 µA maximum at 25 V and 25 °C, NSVBAT54HT1G) flows through R108 and Q2
   while playing, a few millivolts against the 0.8 V VIL.
@@ -256,7 +256,7 @@ speaker details; this section is the design as it stands on rev 3.
   draws at most ≈ 2.4 A on loud peaks. It is soldered, not replaceable in a holder: a blown fuse means a fault to find
   first. JLC has no stock, so it is soldered by hand and left out of the CPL. Pads are the datasheet's reflow layout.
 - **Overvoltage:** the board itself survives up to 24 V on J101. U101 is specified to 26 V; C111, C112 and C115 are rated
-  25 V; D101 limits Q101's gate. The DFR0571's input limit is unknown.
+  25 V; D101 limits Q101's gate. The DFR0571 is rated to 28 V in (DFRobot's datasheet).
 
 ### 5 V supply and distribution
 - **The DFR0571** buck module is off the board. J106 sends it `VBAT_PROTECTED` and J107 takes its 5 V back as `+5V_DFR`.
@@ -394,7 +394,7 @@ a time with everything else normal, in each power state. Misuse may stop the boa
 
 | Pin | Normal | Misuse that must not damage anything |
 |---|---|---|
-| J101 (12 V jack) | The power bank's 12 V output, 9.0–12.6 V, fused at 3.15 A | Reversed (Q101 blocks); a 19–24 V adapter (the board survives; the DFR0571's limit is unknown) |
+| J101 (12 V jack) | The power bank's 12 V output, 9.0–12.6 V, fused at 3.15 A | Reversed (Q101 blocks); a 19–24 V adapter (the board survives; the DFR0571 is rated to 28 V in) |
 | SW101 (panel switch) | The switch's two contacts, in series with the battery | — |
 | J106 (to the DFR0571's input) | The module's input cable, a JST XH 2-way plug (XHP-2): pin 1 BAT+, pin 2 GND | Keyed: only the module's input cable fits, one way round, and the bare 5 V and display wires fit only the screw terminals. A cable crimped with its two wires swapped still shorts `VBAT_PROTECTED` to GND through the module's ground and J107's ground wire: F101 or the pack's own protection stops it; the module's ground track may not survive (accepted, see "Decisions") |
 | J107 (from the DFR0571's output) | 5.0 V ± 0.1 V | Its two wires swapped: the module's output is shorted, and its own current limit has to hold. A reversed source that doesn't share J106's ground (a bench supply): Q102 blocks. J107's and J105's wire pairs swapped with each other: everything still works (the module feeds `+5V_RAW` through FB102, the display gets 5 V through Q102) |
@@ -553,7 +553,7 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
   network, as before.
 - **Noise and fault changes (2026-11-08, user's decision).** Three of the noise review's items, done together:
   - U2 gets its own RC supply filter (R29 2.2 Ω, C21 10 µF), to keep its charge pump off `+5V`.
-  - C108/C109 are 470 nF C0G (1206) instead of 1.5 µF X7R (0805): no microphonics at the speaker amp's inputs. 1 µF C0G
+  - C108/C109 are 470 nF C0G (1206) instead of 1.5 µF X7R (1206): no microphonics at the speaker amp's inputs. 1 µF C0G
     isn't made in 1206 or 1210 in stock; 470 nF moves the corner from 1.7 Hz to 5.6 Hz.
   - FAULTZ reaches Daisy pin 32 through the R112/R114 divider, so a latched speaker fault shows on the display.
   The fourth item, more bulk on PVCC, waits for bring-up (rev 1's optional bulk caps).
@@ -647,7 +647,7 @@ Where the noisy parts sit relative to the audio, and what was measured (2026-11-
    the output pins, L102 below them). Under them is In1 GND,
    then In2's GND fill and B.Cu's PVCC pour. No other signal runs through the class D area on any layer.
 4. **Distance from the switching nodes:** 60 mm to the guitar input's 1 MΩ node, 41 mm to the AUX input and summing parts,
-   52 mm to `AUDIO_IN_1`, 20 mm to U2's input network (see "Open items").
+   52 mm to `AUDIO_IN_1`, 20 mm to U2's input network (see "Floorplan" under "Decisions").
 5. **The 5 V tree:** J107 → Q102 → `+5V_RAW`. One branch goes to FB101 → the C5 star in the column left of the Daisy: the
    Daisy VIN branch (F.Cu, around the USB end to pin 39), and the analog branch (B.Cu down the Daisy's left side to R6, then
    In2 along its front end to U1, U2 and R18). The other goes to FB102 → J105 for the display. Display and Daisy current never flows in the analog branch, and
@@ -757,7 +757,7 @@ with Q102, C18, FB1, C19/C20, R29, C21, R114, D102/D103, R30, the SMD fuse and J
 housing and pre-crimped leads) added, U2 a TPA6130A2 (with C22/C23, R32–R34 added, R25–R28 gone and C10/C11 470 nF C0G),
 C0G C108/C109, without Q1, R13, R22 and R23, and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
 - **Passive sizes:** resistors are 0603 (R105 stays 2512 for the amp's supply current). Capacitors are 0603 up to 220 nF
-  and 0805 from 680 nF: a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
+  and 0805 from 680 nF (the C0G parts are larger for their value: C2 is 0805, the 470 nF parts 1206): a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
   0805 body. C7 stays 1210: 47 µF on `VREF` sets the 0.7 Hz filter that keeps `+5V` noise off the guitar input. All use
   KiCad's standard (reflow) footprints; 0603 still reworks with an iron.
 - **JLC assembly:** every SMD part carries an `LCSC` field. Semiconductors, the beads, the inductors and the parts with no JLC

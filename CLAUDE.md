@@ -20,7 +20,7 @@ The repo has no scripts of its own. Every view, check, edit and export goes thro
 (`kicad-cli`, jobsets, the IPC API), following the skills from
 [roccoagain/kicad-agent-skills](https://github.com/roccoagain/kicad-agent-skills): `kicad-view`, `kicad-check`,
 `kicad-schematic`, `kicad-board-edit`, `kicad-placement`, `kicad-routing`, `kicad-library`, `kicad-part-selection`,
-`kicad-design-review`, `kicad-simulate`, `kicad-fab-export`, `kicad-assembly-export`, `kicad-bringup` and `kicad-new-project`.
+`kicad-schematic-review`, `kicad-layout-review`, `kicad-simulate`, `kicad-fab-export`, `kicad-assembly-export`, `kicad-bringup` and `kicad-new-project`.
 They're installed per machine, not in this repo. **If they aren't available** (no `kicad-check` skill listed), tell the
 user and offer to install them (needs Node.js):
 `npx skills add roccoagain/kicad-agent-skills -g -a claude-code codex --skill '*' -y`. Improve a skill in that repo,
@@ -59,7 +59,7 @@ assembly files (`kicad-assembly-export` skill): after the fab zip, run `jlc-asse
 
 **Documents must agree with each other and with the design.** Keep these in step when one changes:
 - **`audio-board/rev2/DESIGN.md`** is the current design and the reasons for it, not its history. "What each connector
-  can see" is the environment a design review checks against (`kicad-design-review` skill). Decisions the user accepts
+  can see" is the environment a design review checks against (`kicad-schematic-review` skill). Decisions the user accepts
   are recorded in it, with the reason.
 - **`audio-board/TEST_PLAN.md`**: its expected readings (stages 1 and 2) must match the schematic. Recheck the
   affected readings after a schematic change.
@@ -70,11 +70,12 @@ assembly files (`kicad-assembly-export` skill): after the fab zip, run `jlc-asse
 - **`amp-digikey-order.csv`** (repo root) is one build of both boards in a single DigiKey order (ordered
   2026-11-05), built from the audio board's order and the power board's parts, with its experiment parts. Its Notes column
   says where a line differs from the original part (a stock substitute, a renumbered DigiKey listing).
+  `amp-digikey-cart.csv` is generated from it (Quantity, Digi-Key Part Number, Customer Reference of 48 characters at
+  most).
 - **`power-board/DigiKey_Import.csv`** is the power board's share of that order, one build, with DigiKey numbers.
   The power board's schematic MPN/Manufacturer fields match it, substitutes included: assemble from these, not
   from the original part choices.
-  `amp-digikey-cart.csv` is generated from it (Quantity, Digi-Key Part Number, Customer Reference of 48 characters at
-  most). Update both when either board's parts change. DigiKey API credentials are in
+  Update the order, this file and the cart when either board's parts change. DigiKey API credentials are in
   `~/.config/digikey/credentials` (`DIGIKEY_CLIENT_ID`, `DIGIKEY_CLIENT_SECRET`); never print them.
 - **Rev 3's documents** (`audio-board/rev3/`) follow the same rules for rev 3: `DESIGN.md` (with its "Decisions"),
   `CHANGES.md` (the net difference from audio rev 2 and power rev 1), `TEST_PLAN.md`, and `seed3-carrier-digikey.csv`
@@ -83,8 +84,8 @@ assembly files (`kicad-assembly-export` skill): after the fab zip, run `jlc-asse
 
 **KiCad libraries:** project footprints are in `audio-board/Seed3_Carrier.pretty` and symbols in
 `audio-board/seed3-carrier.kicad_sym`. The tables in `rev2/` and `rev3/` reach them through `${KIPRJMOD}/..` (rev 3 also
-reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy of the board elsewhere reports
-`lib_footprint_issues` (expected in the kicad-check skill's JLC passes).
+reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy of the board elsewhere can't reach
+them (the kicad-check skill drops the resulting library warnings from its JLC passes).
 
 ## Git workflow
 
@@ -106,13 +107,12 @@ reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy
   commit an edit script: replaying it later would undo newer work. Schematic changes reach the board (new parts,
   values, fields) with the skill's `board.py sync`, run with the board closed; run it too after any API session
   that rotated a part, which drops the part's 3D model.
-- **Rev 3's sheet 2 is a sub-sheet.** `sch.py` numbers and paths new symbols as if the file were the root: after adding a
-  part to `power.kicad_sch`, set its reference by hand (the next free +100 number) and its instance path to
-  `/<root uuid>/<sheet uuid>` (copy them from a neighbouring symbol), then run ERC on the root sheet.
+- **Rev 3's sheet 2 is a sub-sheet.** `sch.py` gives a new symbol there the right instance path, but numbers it without
+  the +100: after adding a part to `power.kicad_sch`, pass or set its reference by hand (the next free +100 number), then
+  run ERC on the root sheet (ERC on `power.kicad_sch` alone reports its sheet pins as unconnected).
 - **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
   has 29 (J1, J2, J4, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
-  recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm) and stock
-  footprints' 0.12 mm silk lines; on rev 3 also 71 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
+  recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm); on rev 3 also 71 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
   footprint silk over its own pad.
   All print fine. The JLC limits pass reports nothing else on either board.
 - **Re-render rev 3 after a board change.** The README shows `audio-board/rev3/render/top.png` and `bottom.png`; overwrite
