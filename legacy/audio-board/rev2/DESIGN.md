@@ -502,7 +502,7 @@ adds the per-class ranges, including the maximums. All values are within JLC's s
 ## Parts sourcing
 Every part is hand-soldered with an iron and comes from DigiKey. Each symbol has `MPN`, `Manufacturer`, `DigiKey` and
 `Datasheet` fields, copied to the board, and `seed3-carrier-digikey.csv` is this board's parts list (DigiKey's BOM
-upload format, one line per part number). The order placed on 2026-11-05 is `amp-digikey-order.csv` at the repo root;
+upload format, one line per part number). The order placed on 2026-11-05 is `../../amp-digikey-order.csv`;
 its Notes column lists the stock substitutes. Check stock again before any later build.
 
 - **U2:** the EUE suffix is the TSSOP; the ETE is the QFN. Don't substitute the MAX9722B: it has a fixed −2 V/V gain,

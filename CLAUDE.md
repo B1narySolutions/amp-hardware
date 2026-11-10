@@ -5,16 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 Hardware for a capstone guitar amp, in KiCad 10:
-- `audio-board/rev2/` is the audio board: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs, the headphone
-  amp (U2, MAX9722A) and screw terminals to the power board and display. It is a 2-layer board, hand-soldered with an
-  iron, with every part from DigiKey (`seed3-carrier-digikey.csv` is the order). Rev 2 has been ordered.
-- `power-board/` is the power board, rev 1, ordered (`Rev1_Power_Board.kicad_pro`, designed by a teammate; its order is
-  `DigiKey_Import.csv`). Its README is the contract with the audio board: everything the audio board expects
-  from it, and what the audio board promises back.
-- `audio-board/rev3/` is rev 3: audio rev 2 and power rev 1 on one 4-layer board (same `seed3-carrier` file names). Sheet 1
-  is rev 2's audio sheet; sheet 2, `power.kicad_sch`, is power rev 1 with designators +100. Not ordered: its open items
-  wait for the bring-up of the ordered rev 2 and rev 1 boards. Its own `DESIGN.md`, `CHANGES.md`, `TEST_PLAN.md` and
-  order live in the folder.
+- `amp-board/` is **the amp board**, the only live design: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs,
+  the headphone amp (U2, TPA6130A2), the battery input, the 5 V distribution and the class D speaker amp (U101,
+  TPA3118D2), on one 4-layer board that JLC assembles. Sheet 1 (`amp-board.kicad_sch`) is the audio circuit; sheet 2
+  (`power.kicad_sch`) is the power section, with designators from 101. Not ordered yet. It is its own design: change
+  its parts and circuits freely.
+- `legacy/` holds the two boards it grew out of, **frozen as ordered** (2026-11-05): `legacy/audio-board/rev2/` (2-layer,
+  hand-soldered, MAX9722A headphone amp), `legacy/power-board/` (rev 1, designed by a teammate) and their joint DigiKey
+  order. Don't edit anything under `legacy/` unless the user asks or a bring-up result has to be written into their
+  test plan. Nothing in `amp-board/` has to match them. Their bring-up results feed the amp board's "Open items".
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
 (`kicad-cli`, jobsets, the IPC API), following the skills from
@@ -33,59 +32,47 @@ The user doesn't open KiCad: Claude launches and quits the PCB editor itself whe
 
 ## Commands
 
-`kicad-cli` isn't on PATH: `K=/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
+`kicad-cli` isn't on PATH: `K=/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`. Run these from `amp-board/`.
 
 ```bash
 # Schematic and board checks (kicad-check skill; it also has the JLC passes and the checklist DRC can't do)
-"$K" sch erc --severity-error --severity-warning -o <scratch>/erc.rpt audio-board/rev2/seed3-carrier.kicad_sch
-"$K" pcb drc --refill-zones --schematic-parity --severity-all -o <scratch>/drc.rpt audio-board/rev2/seed3-carrier.kicad_pcb
-
-# The fab zip: DRC gate, then the project's jobset writes audio-board/rev2/fab/B1NARY_SOLUTIONS_gerber.zip
-"$K" pcb drc --severity-error --exit-code-violations --refill-zones --schematic-parity \
-     -o <scratch>/gate.rpt audio-board/rev2/seed3-carrier.kicad_pcb \
-  && "$K" jobset run --stop-on-error -f audio-board/rev2/jlc-fab.kicad_jobset audio-board/rev2/seed3-carrier.kicad_pro
+"$K" sch erc --severity-error --severity-warning -o <scratch>/erc.rpt amp-board.kicad_sch
+"$K" pcb drc --refill-zones --schematic-parity --severity-all -o <scratch>/drc.rpt amp-board.kicad_pcb
 
 # Look at it (kicad-view skill): read the PDFs with the Read tool
-"$K" sch export pdf -o <scratch>/sch.pdf audio-board/rev2/seed3-carrier.kicad_sch
-"$K" pcb export pdf --mode-single --scale 0 -l F.Cu,F.SilkS,F.Mask,Edge.Cuts -o <scratch>/top.pdf \
-     audio-board/rev2/seed3-carrier.kicad_pcb
+"$K" sch export pdf -o <scratch>/sch.pdf amp-board.kicad_sch
+"$K" pcb export pdf --mode-single --scale 0 -l F.Cu,F.SilkS,F.Mask,Edge.Cuts -o <scratch>/top.pdf amp-board.kicad_pcb
+
+# Order files, all written to fab/ (ignored by git): the DRC gate, then the three jobsets
+"$K" pcb drc --severity-error --exit-code-violations --refill-zones --schematic-parity \
+     -o <scratch>/gate.rpt amp-board.kicad_pcb \
+  && "$K" jobset run --stop-on-error -f jlc-fab.kicad_jobset amp-board.kicad_pro \
+  && "$K" jobset run --stop-on-error -f jlc-assembly.kicad_jobset amp-board.kicad_pro \
+  && "$K" jobset run --stop-on-error -f digikey-order.kicad_jobset amp-board.kicad_pro
 ```
 
-For rev 3, use the same commands with `audio-board/rev3/`. Its jobset also plots In1.Cu and In2.Cu. Rev 3 also has JLC
-assembly files (`kicad-assembly-export` skill): after the fab zip, run `jlc-assembly.kicad_jobset`, then the skill's
-`jlc_asm.py cpl` and `check` on `fab/assembly/`, and commit them with the board.
+## Where each fact lives
 
-## How the pieces fit together
+Each fact has one home. Don't copy it into a second file; point to it.
+- **The schematic and board** are the design. Part numbers live in the schematic's `MPN`, `Manufacturer`, `DigiKey`,
+  `LCSC` and `Purchase_Note` fields and nowhere else: there is no hand-kept BOM, order or cart file. Changing a part
+  means changing its fields (`kicad-part-selection`, `kicad-schematic`), then `board.py sync`.
+- **`amp-board/DESIGN.md`** is the reasons: how the board works and why, "What each connector can see" (the environment a
+  design review checks against, `kicad-schematic-review` skill), "Decisions" the user accepted, and "Open items". It
+  describes the design as it stands, not its history. Git is the history: there is no change list.
+- **`amp-board/TEST_PLAN.md`**: its expected readings must match the schematic. After a schematic change, recheck the
+  affected readings (`kicad-bringup` skill computes them from the netlist).
+- **`amp-board/order-extras.csv`** is the only hand-kept order file: the few DigiKey lines that aren't parts on the
+  schematic (the Daisy's sockets, J106's mating housing and leads, jumper shunts, the panel switch).
+- **`amp-board/fab/`** is generated and ignored by git: the Gerber zip, `assembly/` (JLC BOM and CPL) and
+  `amp-board-digikey.csv` (the DigiKey order in DigiKey's upload columns; its one line with no part number is the
+  Daisy and the test points, which aren't bought). Never edit a file in it; regenerate it.
+- **`amp-board/lib/`** holds the board's own symbols (`amp-board.kicad_sym`), footprints (`amp-board.pretty`) and 3D
+  models. The project's tables reach only it and KiCad's standard libraries, so the folder works when copied anywhere.
+- **`legacy/power-board/README.md`** was the contract between the two legacy boards. It binds only them.
 
-**Documents must agree with each other and with the design.** Keep these in step when one changes:
-- **`audio-board/rev2/DESIGN.md`** is the current design and the reasons for it, not its history. "What each connector
-  can see" is the environment a design review checks against (`kicad-schematic-review` skill). Decisions the user accepts
-  are recorded in it, with the reason.
-- **`audio-board/TEST_PLAN.md`**: its expected readings (stages 1 and 2) must match the schematic. Recheck the
-  affected readings after a schematic change.
-- **`power-board/README.md`** is the contract with whoever designs the power board. Ask before changing a number in
-  it, and change DESIGN.md with it.
-- **`audio-board/rev2/CHANGES.md`** records only the net difference from rev 1.
-- **`seed3-carrier-digikey.csv`** is the order. The schematic's MPN/DigiKey fields are its source.
-- **`amp-digikey-order.csv`** (repo root) is one build of both boards in a single DigiKey order (ordered
-  2026-11-05), built from the audio board's order and the power board's parts, with its experiment parts. Its Notes column
-  says where a line differs from the original part (a stock substitute, a renumbered DigiKey listing).
-  `amp-digikey-cart.csv` is generated from it (Quantity, Digi-Key Part Number, Customer Reference of 48 characters at
-  most).
-- **`power-board/DigiKey_Import.csv`** is the power board's share of that order, one build, with DigiKey numbers.
-  The power board's schematic MPN/Manufacturer fields match it, substitutes included: assemble from these, not
-  from the original part choices.
-  Update the order, this file and the cart when either board's parts change. DigiKey API credentials are in
-  `~/.config/digikey/credentials` (`DIGIKEY_CLIENT_ID`, `DIGIKEY_CLIENT_SECRET`); never print them.
-- **Rev 3's documents** (`audio-board/rev3/`) follow the same rules for rev 3: `DESIGN.md` (with its "Decisions"),
-  `CHANGES.md` (the net difference from audio rev 2 and power rev 1), `TEST_PLAN.md`, and `seed3-carrier-digikey.csv`
-  plus its cart file (one build, derived from `amp-digikey-order.csv`). Rev 2's files and `power-board/` describe the
-  boards that were ordered; leave them as they are unless those boards change.
-
-**KiCad libraries:** project footprints are in `audio-board/Seed3_Carrier.pretty` and symbols in
-`audio-board/seed3-carrier.kicad_sym`. The tables in `rev2/` and `rev3/` reach them through `${KIPRJMOD}/..` (rev 3 also
-reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy of the board elsewhere can't reach
-them (the kicad-check skill drops the resulting library warnings from its JLC passes).
+DigiKey API credentials are in `~/.config/digikey/credentials` (`DIGIKEY_CLIENT_ID`, `DIGIKEY_CLIENT_SECRET`); never
+print them.
 
 ## Git workflow
 
@@ -98,34 +85,43 @@ them (the kicad-check skill drops the resulting library warnings from its JLC pa
 
 ## Working rules
 
-- **After a schematic or board change,** run ERC, DRC with parity, and the JLC passes (`kicad-check` skill; it picks the
-  2-layer or multilayer rule files from the board), and put the results in the commit message: errors, warnings, and
-  anything new. After a board change, re-export the fab zip with the jobset and commit it in the same commit.
-- **After any design change, search every markdown file** for each changed part's reference and for its old value, net
-  name and derived numbers (corner frequencies, time constants, currents, levels), not only the section being edited:
-  `grep -rn --include='*.md' -e 'R5\b' -e '3\.3k' .`. The test plans repeat DESIGN.md's numbers, and rev 3's files repeat
-  rev 2's. Fix every hit or confirm it still holds.
+Two gates: a light one on every commit, a full one when the board is ordered.
+
+**Every commit that changes the schematic or board:**
+- Run ERC and DRC with parity (commands above), and say in the commit message: errors, warnings, and anything new.
+- Search the two documents for what changed: the part's reference, its old value, its net name and the numbers derived
+  from it (`grep -n -e 'R5\b' -e '3\.3k' amp-board/*.md`). Fix every hit or confirm it still holds.
+
+**When the user orders the board** (ask first; an order is theirs to place):
+1. Run the JLC passes (`kicad-check` skill, multilayer rule files) and the three jobsets above, then the
+   `kicad-assembly-export` skill's `jlc_asm.py cpl` and `check` on `fab/assembly/`.
+2. Check no `Customer Reference` in `fab/amp-board-digikey.csv` is over 48 characters (DigiKey's limit), and check
+   stock.
+3. Re-render the README's pictures: `"$K" pcb render --use-board-stackup-colors --background transparent --side top
+   --quality high --width 1600 --height 1250 -o render/top.png amp-board.kicad_pcb`, and the same with `--side bottom
+   --quality basic` for `render/bottom.png` (high quality's floor shadows show the top-side parts through it).
+4. Commit, tag the commit `amp-board-vN` (N = the schematic's title-block revision), push the tag, and attach `fab/`'s
+   files and `order-extras.csv` to a GitHub release of that tag. The tag is the revision: there are no revision
+   folders. Raise the title-block revision in the first commit after an order.
+
+**Always:**
 - **Datasheet claims cite where they were checked.** Before writing that a datasheet "doesn't state" something, or asking
   the user to measure it, read the datasheet itself, figures included (text extraction skips drawings: read those pages
-  as images), and name the table or figure. Write a requirement on another board as a requirement, not as what it does.
+  as images), and name the table or figure.
 - **Don't accept a finding on your own.** A design-review finding or a DRC exclusion becomes accepted only when the user
   agrees, or when DESIGN.md already records the decision.
-- **Board edits** go through the IPC API (`kicad-board-edit` skill), from throwaway scripts in the scratchpad. Never
-  commit an edit script: replaying it later would undo newer work. Schematic changes reach the board (new parts,
-  values, fields) with the skill's `board.py sync`, run with the board closed; run it too after any API session
-  that rotated a part, which drops the part's 3D model.
-- **Rev 3's sheet 2 is a sub-sheet.** `sch.py` gives a new symbol there the right instance path, but numbers it without
-  the +100: after adding a part to `power.kicad_sch`, pass or set its reference by hand (the next free +100 number), then
-  run ERC on the root sheet (ERC on `power.kicad_sch` alone reports its sheet pins as unconnected).
-- **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
-  has 29 (J1, J2, J4, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
-  recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm); on rev 3 also 71 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
-  footprint silk over its own pad.
-  All print fine. The JLC limits pass reports nothing else on either board.
-- **Re-render rev 3 after a board change.** The README shows `audio-board/rev3/render/top.png` and `bottom.png`; overwrite
-  them in the same commit: `"$K" pcb render --use-board-stackup-colors --background transparent --side top --quality high
-  --width 1600 --height 1250 -o audio-board/rev3/render/top.png audio-board/rev3/seed3-carrier.kicad_pcb`, and the same with
-  `--side bottom --quality basic` for `bottom.png` (high quality's floor shadows show the top-side parts through it).
-- **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V feeds PVCC through R107–R110 and
-  D102/D103 and leaves U101 at its 4.5 V minimum supply with SDZ high. Bench supplies go on J101 (12 V, current-limited) with the DFR0571 connected (rev 3 DESIGN.md,
-  "Decisions").
+- **Board edits** go through `board.py` or the IPC API (`kicad-board-edit` skill), from throwaway scripts in the
+  scratchpad. Never commit an edit script: replaying it later would undo newer work. Schematic changes reach the board
+  (new parts, values, fields) with the skill's `board.py sync`, run with the board closed; run it too after any API
+  session that rotated a part, which drops the part's 3D model.
+- **Sheet 2 is a sub-sheet.** `sch.py` gives a new symbol there the right instance path, but numbers it from 1: after
+  adding a part to `power.kicad_sch`, pass or set its reference by hand (the next free number from 101), then run ERC
+  on the root sheet (ERC on `power.kicad_sch` alone reports its sheet pins as unconnected).
+- **Expected DRC warnings:** 29 `silk_edge_clearance` warnings from the edge-mounted connectors (J1, J2, J4, J102,
+  J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC recommended pass also flags the test
+  points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm), 71 texts under 1.0 mm (0.8 mm references and
+  legends in the dense areas) and U101's footprint silk over its own pad. All print fine. The JLC limits pass reports
+  nothing else.
+- **Never power the amp board from 5 V alone on J107.** With the battery side off, the 5 V feeds PVCC through R107–R110
+  and D102/D103 and leaves U101 at its 4.5 V minimum supply with SDZ high. Bench supplies go on J101 (12 V,
+  current-limited) with the DFR0571 connected (DESIGN.md, "Decisions").

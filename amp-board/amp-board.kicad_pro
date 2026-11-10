@@ -260,7 +260,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": "2.0"
+      "sch_revision": "1"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -517,7 +517,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "seed3-carrier.kicad_pro",
+    "filename": "amp-board.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -790,7 +790,7 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "seed3-carrier.kicad_sch",
+        "filename": "amp-board.kicad_sch",
         "name": "Root",
         "uuid": "94ecceca-f8ce-4e68-9c84-99ac5115dfb9"
       }

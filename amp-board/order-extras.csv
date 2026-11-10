@@ -1,0 +1,6 @@
+Quantity,Digi-Key Part Number,Customer Reference,Manufacturer Part Number,Manufacturer,Value,Notes
+1,455-2266-ND,J106 mate (DFR0571 input cable),XHP-2,JST Sales America Inc.,JST XH 2-pos housing,
+1,455-3241-ND,J106 cable leads,ASXHSXH22K305,JST Sales America Inc.,XH lead 12in 22AWG,Cut in half: VIN+ and GND for the DFR0571's input cable
+2,S7018-ND,A1 sockets,PPTC201LFBN-RC,Sullins Connector Solutions,1x20 socket,"For the Daisy Seed3. S6104-ND, in earlier orders, is a 2x20 socket"
+4,952-2171-ND,JP101 JP102 JP103 JP104 shunts,M7567-05,Harwin,2.54mm shunt,JP105 stays open (manual reset)
+1,6281-S1B-ND,panel switch to SW101,S1B,NKK Switches,SPST toggle 5A 30VDC,"Substitute for S301T ($15.78): same NKK S series, 12.5mm M12x1 panel hole and lever; rated 5A AC/DC instead of 20A DC; solder lugs, not screw terminals. NKK lists it obsolete; DigiKey still stocks it, but pick another for later builds"

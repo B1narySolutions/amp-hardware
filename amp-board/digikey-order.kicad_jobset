@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "version": 1
+  },
+  "jobs": [
+    {
+      "id": "6f1c2a10-0000-4000-8000-000000000201",
+      "type": "sch_export_bom",
+      "description": "DigiKey order, in DigiKey's upload columns",
+      "settings": {
+        "output_filename": "${PROJECTNAME}-digikey.csv",
+        "fields_ordered": ["${QUANTITY}", "DigiKey", "Reference", "MPN", "Manufacturer", "Value", "Purchase_Note"],
+        "fields_labels": ["Quantity", "Digi-Key Part Number", "Customer Reference", "Manufacturer Part Number", "Manufacturer", "Value", "Notes"],
+        "fields_group_by": ["DigiKey", "MPN"],
+        "sort_field": "Reference",
+        "sort_asc": true,
+        "filter_string": "",
+        "group_symbols": true,
+        "exclude_dnp": false,
+        "field_delimiter": ",",
+        "string_delimiter": "\"",
+        "ref_delimiter": " ",
+        "ref_range_delimiter": "-",
+        "keep_tabs": false,
+        "keep_line_breaks": false,
+        "bom_preset_name": "",
+        "bom_format_preset_name": ""
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "id": "6f1c2a10-0000-4000-8000-0000000002aa",
+      "type": "folder",
+      "description": "DigiKey order",
+      "only": [],
+      "settings": {
+        "output_path": "${KIPRJMOD}/fab"
+      }
+    }
+  ]
+}

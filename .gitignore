@@ -5,3 +5,6 @@
 .DS_Store
 .venv/
 __pycache__/
+
+# Generated order files: regenerate with the jobsets; attached to the release of each order tag
+amp-board/fab/

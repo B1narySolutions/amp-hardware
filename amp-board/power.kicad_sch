@@ -7,9 +7,9 @@
 	(title_block
 		(title "Power and speaker amp")
 		(date "2026-11-07")
-		(rev "3.0")
-		(comment 1 "From power board rev 1. References +100.")
-		(comment 2 "Design notes: rev3/DESIGN.md. Bring-up: rev3/TEST_PLAN.md")
+		(rev "1")
+		(comment 1 "References 101 and up.")
+		(comment 2 "Design notes: DESIGN.md. Bring-up: TEST_PLAN.md")
 	)
 	(lib_symbols
 		(symbol "Connector:Jack-DC"
@@ -1982,7 +1982,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Halliquest_Power:DFR0571_OffBoard"
+		(symbol "amp-board:DFR0571_OffBoard"
 			(pin_names
 				(offset 1.016)
 			)
@@ -2133,7 +2133,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Halliquest_Power:TPA3118D2DAPR_DAP0032C"
+		(symbol "amp-board:TPA3118D2DAPR_DAP0032C"
 			(pin_names
 				(offset 1.016)
 			)
@@ -2162,7 +2162,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Halliquest_Power:TI_DAP0032C_HTSSOP32_P0.65mm_EP3.04x3.74mm"
+			(property "Footprint" "amp-board:TI_DAP0032C_HTSSOP32_P0.65mm_EP3.04x3.74mm"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2806,7 +2806,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Halliquest_Power:TPS3808G50DBVR"
+		(symbol "amp-board:TPS3808G50DBVR"
 			(pin_names
 				(offset 1.016)
 			)
@@ -4445,7 +4445,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -4481,7 +4481,7 @@
 			(uuid "57fca7ef-decd-483d-99d5-e9890b4b3e0e")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R107")
 					(unit 1)
@@ -4587,7 +4587,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 0805 local decoupling"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -4623,7 +4623,7 @@
 			(uuid "4ee0a4e4-9fce-474f-982a-fb939eea5faa")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C116")
 					(unit 1)
@@ -4726,7 +4726,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "0 ohm 2512; verify jumper rated current"
+		(property "Purchase_Note" "2A jumper; low-current experiments only"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -4746,6 +4746,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "YAG1232CT-ND"
+			(at 45.72 213.36 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "24780fb7-4733-4342-91b1-8d2adcfc55a6")
 		)
@@ -4753,7 +4762,7 @@
 			(uuid "53c0a7d1-ff13-44aa-a9ab-b59e189af8b7")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R105")
 					(unit 1)
@@ -4859,11 +4868,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 3.5mm PT 1.5; SW1 is panel-switch terminal"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
+			(at 58.42 35.56 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4877,7 +4895,7 @@
 			(uuid "c90bc3ad-ad97-442d-926f-f2d559451876")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "SW101")
 					(unit 1)
@@ -4983,7 +5001,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -5019,7 +5037,7 @@
 			(uuid "c2fb8266-540d-4a26-8ab3-0209a35a04bd")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C105")
 					(unit 1)
@@ -5123,7 +5141,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "220nF 25V X7R 0805 bootstrap"
+		(property "Purchase_Note" "Bootstrap"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -5159,7 +5177,7 @@
 			(uuid "afa3ac8c-3f73-44bc-83ab-e2fe92160467")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C118")
 					(unit 1)
@@ -5265,7 +5283,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -5301,7 +5319,7 @@
 			(uuid "c852167c-35a3-4fb3-9baa-af76c1f9d221")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R103")
 					(unit 1)
@@ -5409,7 +5427,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "12V 500mW Zener SOD-123; substitute for BZT52C12-7-F (out of stock)"
+		(property "Purchase_Note" "Substitute for BZT52C12-7-F (out of stock). Same 12V 500mW SOD-123"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -5429,6 +5447,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "BZT52C12-TPMSCT-ND"
+			(at 85.09 41.91 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "39176ea0-aca3-4c0f-8f01-1cfae20aec38")
 		)
@@ -5436,7 +5463,7 @@
 			(uuid "55802f78-7030-46e8-8225-269a75383a9d")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "D101")
 					(unit 1)
@@ -5539,11 +5566,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 2.54mm vertical header"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "952-2261-ND"
+			(at 327.66 48.26 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5557,7 +5593,7 @@
 			(uuid "e086e15c-29cd-47ce-8a32-9378a0bfdcf3")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "JP102")
 					(unit 1)
@@ -5663,7 +5699,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1uF 50V X7R 0805 local GVDD bypass"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -5699,7 +5735,7 @@
 			(uuid "05f3ea8f-d60c-42aa-a6b6-ab1d7e84330f")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C110")
 					(unit 1)
@@ -5787,7 +5823,7 @@
 			(uuid "5738653d-b2e3-46d2-8ebb-ee8b4eb045ad")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP102")
 					(unit 1)
@@ -5890,11 +5926,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 2.54mm vertical header"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "952-2261-ND"
+			(at 294.64 27.94 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5908,7 +5953,7 @@
 			(uuid "eeae4dc9-c91b-456d-a3d8-508e8f39678c")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "JP101")
 					(unit 1)
@@ -6012,7 +6057,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -6048,7 +6093,7 @@
 			(uuid "affbd327-9909-44f7-9fde-c41792ea8fd0")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R106")
 					(unit 1)
@@ -6154,7 +6199,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "680nF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -6190,7 +6235,7 @@
 			(uuid "37f9a9bf-78df-4e04-8a84-57cbf25a22fb")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C121")
 					(unit 1)
@@ -6231,7 +6276,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Seed3_Carrier:Fuse_Bel_0683G_4818"
+		(property "Footprint" "amp-board:Fuse_Bel_0683G_4818"
 			(at 43.18 33.782 90)
 			(hide yes)
 			(show_name no)
@@ -6297,7 +6342,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "Holder plus separate T3.15A fuse"
+		(property "Purchase_Note" "Hand-solder: JLC has no stock"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -6324,7 +6369,7 @@
 			(uuid "e6726e6a-6331-436c-a48d-44b93d109fc8")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "F101")
 					(unit 1)
@@ -6333,7 +6378,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Halliquest_Power:DFR0571_OffBoard")
+		(lib_id "amp-board:DFR0571_OffBoard")
 		(at 215.9 38.1 0)
 		(unit 1)
 		(body_style 1)
@@ -6394,6 +6439,42 @@
 				)
 			)
 		)
+		(property "DigiKey" "1738-1442-ND"
+			(at 215.9 38.1 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "DFR0571"
+			(at 215.9 38.1 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "DFRobot"
+			(at 215.9 38.1 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Purchase_Note" "Only a few in stock"
+			(at 215.9 38.1 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8bd8036e-2343-4076-8d1b-b2efc19b440a")
 		)
@@ -6407,7 +6488,7 @@
 			(uuid "d8a3f0df-1cbe-4d0f-a683-349bd177e2f6")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "U102")
 					(unit 1)
@@ -6511,7 +6592,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "220nF 25V X7R 0805 bootstrap"
+		(property "Purchase_Note" "Bootstrap"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -6547,7 +6628,7 @@
 			(uuid "8c47533b-1e98-4cf7-bb05-613736cb66d5")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C117")
 					(unit 1)
@@ -6650,11 +6731,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 2.54mm vertical header"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "952-2261-ND"
+			(at 294.64 55.88 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6668,7 +6758,7 @@
 			(uuid "23d31f38-3fae-47a3-8248-677764da7506")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "JP103")
 					(unit 1)
@@ -6677,7 +6767,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Halliquest_Power:TPA3118D2DAPR_DAP0032C")
+		(lib_id "amp-board:TPA3118D2DAPR_DAP0032C")
 		(at 104.14 149.86 0)
 		(unit 1)
 		(body_style 1)
@@ -6707,7 +6797,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Halliquest_Power:TI_DAP0032C_HTSSOP32_P0.65mm_EP3.04x3.74mm"
+		(property "Footprint" "amp-board:TI_DAP0032C_HTSSOP32_P0.65mm_EP3.04x3.74mm"
 			(at 104.14 149.86 0)
 			(hide yes)
 			(show_name no)
@@ -6771,7 +6861,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "HTSSOP-32 DAP bottom exposed pad"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -6783,6 +6873,15 @@
 			)
 		)
 		(property "LCSC" "C46497"
+			(at 104.14 149.86 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "296-38572-1-ND"
 			(at 104.14 149.86 0)
 			(hide yes)
 			(effects
@@ -6891,7 +6990,7 @@
 			(uuid "19b21ed0-e183-436a-a816-0bb14bf52757")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "U101")
 					(unit 1)
@@ -6997,7 +7096,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1uF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7033,7 +7132,7 @@
 			(uuid "62580bce-6c57-484e-ba23-66d6a74a1516")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C125")
 					(unit 1)
@@ -7139,7 +7238,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 0805 local decoupling"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7175,7 +7274,7 @@
 			(uuid "ca3ecdaf-f4dc-48cf-aa7a-c45446a09347")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C114")
 					(unit 1)
@@ -7279,7 +7378,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "470nF 25V C0G 1206; C0G so the speaker amp's input isn't microphonic; same part on both legs"
+		(property "Purchase_Note" "Input caps of U2 and U101"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7315,7 +7414,7 @@
 			(uuid "c6cda52c-da15-42d4-b809-c341035c20a5")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C109")
 					(unit 1)
@@ -7421,7 +7520,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1uF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7457,7 +7556,7 @@
 			(uuid "ec3b8963-fb44-4144-90d3-50d2d1f9d3a0")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C115")
 					(unit 1)
@@ -7563,7 +7662,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "10uF 16V X7R 1206; check effective capacitance at 5V"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7599,7 +7698,7 @@
 			(uuid "d038819e-865e-4f8f-83fa-641892f3ba66")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C103")
 					(unit 1)
@@ -7702,11 +7801,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 2.54mm vertical header"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "952-2261-ND"
+			(at 327.66 76.2 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7720,7 +7828,7 @@
 			(uuid "38e7f194-d68b-44af-85be-135d2d436127")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "JP104")
 					(unit 1)
@@ -7825,11 +7933,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
+		(property "Purchase_Note" "Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C104 C106 are DNP until rail-startup tests"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "10-EEU-FM1E101HCT-ND"
+			(at 337.82 52.07 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7843,7 +7960,7 @@
 			(uuid "e6afd9c3-d879-49c4-8a8c-32ce5587a4b4")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C104")
 					(unit 1)
@@ -7949,7 +8066,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -7985,7 +8102,7 @@
 			(uuid "952ed623-0dd6-40ea-89eb-4b692addf408")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C107")
 					(unit 1)
@@ -8074,7 +8191,7 @@
 			(uuid "adf174fb-b30d-4528-8ba7-48ddebc16ccd")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP101")
 					(unit 1)
@@ -8083,7 +8200,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Halliquest_Power:TPS3808G50DBVR")
+		(lib_id "amp-board:TPS3808G50DBVR")
 		(at 322.58 124.46 0)
 		(unit 1)
 		(body_style 1)
@@ -8177,7 +8294,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "SOT-23-6 4.65V supervisor; TI's drop-in successor to TPS3808G50DBVR (none at DigiKey); VDD rated 6V"
+		(property "Purchase_Note" "Substitute for TPS3808G50DBVR (none at DigiKey). TI's drop-in successor: same SOT-23-6 pinout, 4.65V threshold, open-drain RESET, 90k MR pull-up, 20ms delay with CT open. VDD is rated 6V (abs max 6.5V), not 6.5V (7V)"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8189,6 +8306,15 @@
 			)
 		)
 		(property "LCSC" "C30139374"
+			(at 322.58 124.46 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "296-TPS3808EG50DBVRCT-ND"
 			(at 322.58 124.46 0)
 			(hide yes)
 			(effects
@@ -8216,7 +8342,7 @@
 			(uuid "629ab9a4-0c27-4540-b9ac-b056a578a5b1")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "U103")
 					(unit 1)
@@ -8320,7 +8446,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W; same resistor as RC1206FR-072K2L on a 13-inch reel"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8356,7 +8482,7 @@
 			(uuid "93c01cda-2ce1-44bc-9c74-449d9359ec4c")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R110")
 					(unit 1)
@@ -8461,11 +8587,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
+		(property "Purchase_Note" "Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C104 C106 are DNP until rail-startup tests"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "10-EEU-FM1E101HCT-ND"
+			(at 76.2 217.17 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8479,7 +8614,7 @@
 			(uuid "f0c09c39-4eae-4f87-9419-22e0cb7e6c95")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C112")
 					(unit 1)
@@ -8518,7 +8653,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Halliquest_Power:L_Bourns_SRP1038A_LeadFrame"
+		(property "Footprint" "amp-board:L_Bourns_SRP1038A_LeadFrame"
 			(at 205.74 127 90)
 			(hide yes)
 			(show_name no)
@@ -8582,7 +8717,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "10uH lead-frame A series; custom local footprint"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8602,6 +8737,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "SRP1038A-100MCT-ND"
+			(at 205.74 127 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "19dc2775-b8b5-4d95-8dfc-83fde8c1ce74")
 		)
@@ -8609,7 +8753,7 @@
 			(uuid "1b607182-008b-4763-a66f-e1cc20698c3f")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "L101")
 					(unit 1)
@@ -8715,7 +8859,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 0805 local decoupling"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8751,7 +8895,7 @@
 			(uuid "9c6ff67f-417f-4fef-93ad-8cfc2dcb4129")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C113")
 					(unit 1)
@@ -8835,7 +8979,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Same Sky"
+		(property "Manufacturer" "Same Sky (Formerly CUI Devices)"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8868,7 +9012,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "DC jack; 5A 24V; CP-102AH-ND"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -8886,7 +9030,7 @@
 			(uuid "38fd14a5-6048-4a81-b8aa-0f4faccb4af5")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "J101")
 					(unit 1)
@@ -8992,7 +9136,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "680nF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9028,7 +9172,7 @@
 			(uuid "f71709a9-efca-48e8-8df6-a4194d59ff04")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C122")
 					(unit 1)
@@ -9134,7 +9278,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9170,7 +9314,7 @@
 			(uuid "22f40e58-f22c-4fbf-a34d-daf0a918fe2c")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R109")
 					(unit 1)
@@ -9273,7 +9417,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "0603 220ohm at 100MHz; retain selected bead package"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9293,6 +9437,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "445-MPZ1608S221ATA00CT-ND"
+			(at 294.64 38.1 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "33dc3459-0efc-43e6-a17f-71f5b737af6f")
 		)
@@ -9300,7 +9453,7 @@
 			(uuid "d2584dd8-2d6a-44d6-88e8-ccbcf47a064e")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "FB101")
 					(unit 1)
@@ -9404,7 +9557,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "220nF 25V X7R 0805 bootstrap"
+		(property "Purchase_Note" "Bootstrap"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9440,7 +9593,7 @@
 			(uuid "9a0ce25f-3d90-43a9-be26-a0dc66f35ba7")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C119")
 					(unit 1)
@@ -9545,7 +9698,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "JST XH 2-pos side entry, keyed. Mates XHP-2; only the DFR0571 input cable fits"
+		(property "Purchase_Note" "Keyed: only the DFR0571's input cable fits"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9572,7 +9725,7 @@
 			(uuid "153157c3-7984-416d-8f9a-0b5d4a70464b")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "J106")
 					(unit 1)
@@ -9677,11 +9830,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V low ESR; 6.3mm diameter; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
+		(property "Purchase_Note" "Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C104 C106 are DNP until rail-startup tests"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "10-EEU-FM1E101HCT-ND"
+			(at 58.42 217.17 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9695,7 +9857,7 @@
 			(uuid "8e271a41-44e0-42b5-9f09-4d701c380c6b")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C111")
 					(unit 1)
@@ -9800,11 +9962,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100uF 25V; 6.3mm dia; 2.5mm pitch; substitute for EEU-FR1E101 (out of stock); taped leads, trim before fitting"
+		(property "Purchase_Note" "Substitute for EEU-FR1E101 (out of stock; the in-stock B version has 5mm pitch). Same 130 mOhm, 318 mA ripple and 2.5mm pitch; 2000 h at 105C instead of 5000 h. Taped leads: trim before fitting. C104 C106 are DNP until rail-startup tests"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "10-EEU-FM1E101HCT-ND"
+			(at 337.82 80.01 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9818,7 +9989,7 @@
 			(uuid "0e753c32-8187-42d2-b74c-b26d82cbe022")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C106")
 					(unit 1)
@@ -9924,7 +10095,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "100nF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9960,7 +10131,7 @@
 			(uuid "4df7a1b6-e680-4541-8ded-312c44d6cce1")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C123")
 					(unit 1)
@@ -10063,7 +10234,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "0603 220ohm at 100MHz; retain selected bead package"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10083,6 +10254,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "445-MPZ1608S221ATA00CT-ND"
+			(at 294.64 66.04 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "d4cc8cf5-55fa-4e10-8417-a74b8ad4ce56")
 		)
@@ -10090,7 +10270,7 @@
 			(uuid "8b4fb311-aa72-4718-ab79-d3485ce93470")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "FB102")
 					(unit 1)
@@ -10196,7 +10376,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10232,7 +10412,7 @@
 			(uuid "fcad911b-b485-4173-a90d-5c9598635292")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R102")
 					(unit 1)
@@ -10329,7 +10509,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Infineon"
+		(property "Manufacturer" "Infineon Technologies"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10340,11 +10520,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "P-MOSFET TO-220; verify inrush/thermal in hardware"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "IRF4905PBF-ND"
+			(at 78.74 38.1 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10361,7 +10550,7 @@
 			(uuid "79656cee-7e58-4b54-ab10-e01b68d0ce33")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "Q101")
 					(unit 1)
@@ -10467,7 +10656,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10503,7 +10692,7 @@
 			(uuid "fe683f66-644e-4945-b441-8263a22b93ab")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R111")
 					(unit 1)
@@ -10609,7 +10798,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10645,7 +10834,7 @@
 			(uuid "394b4ebd-343c-4374-a9d3-a455bb801fae")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R113")
 					(unit 1)
@@ -10749,7 +10938,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W; same resistor as RC1206FR-072K2L on a 13-inch reel"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10785,7 +10974,7 @@
 			(uuid "8fc7b2bd-1941-444f-b927-2b1fd8807157")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R108")
 					(unit 1)
@@ -10891,7 +11080,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -10927,7 +11116,7 @@
 			(uuid "22d501b3-441b-4c05-ab8c-024851927001")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R112")
 					(unit 1)
@@ -11033,7 +11222,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11069,7 +11258,7 @@
 			(uuid "e5c5ba57-1d9d-48fc-9aa2-72cceac7a9dc")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R104")
 					(unit 1)
@@ -11177,7 +11366,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1206 1% 0.25W"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11213,7 +11402,7 @@
 			(uuid "a78b5aaa-a3fe-43cd-abb7-6196ad6b070d")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "R101")
 					(unit 1)
@@ -11316,11 +11505,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 3.5mm PT 1.5; SW1 is panel-switch terminal"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
+			(at 360.68 66.04 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11334,7 +11532,7 @@
 			(uuid "f008b713-4240-4fd1-a390-3d521f2f2589")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "J105")
 					(unit 1)
@@ -11438,7 +11636,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "220nF 25V X7R 0805 bootstrap"
+		(property "Purchase_Note" "Bootstrap"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11474,7 +11672,7 @@
 			(uuid "b3ccf26d-9c81-444d-a576-4b460a470ce6")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C120")
 					(unit 1)
@@ -11580,7 +11778,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "1uF 50V X7R 1206"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11616,7 +11814,7 @@
 			(uuid "a58f3130-f152-4487-85f5-97d938319e8b")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C124")
 					(unit 1)
@@ -11655,7 +11853,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Halliquest_Power:L_Bourns_SRP1038A_LeadFrame"
+		(property "Footprint" "amp-board:L_Bourns_SRP1038A_LeadFrame"
 			(at 205.74 104.14 90)
 			(hide yes)
 			(show_name no)
@@ -11719,7 +11917,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "10uH lead-frame A series; custom local footprint"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -11739,6 +11937,15 @@
 				)
 			)
 		)
+		(property "DigiKey" "SRP1038A-100MCT-ND"
+			(at 205.74 104.14 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "3fdcd219-ad30-484e-9de9-92b57fae399e")
 		)
@@ -11746,7 +11953,7 @@
 			(uuid "83a741e5-dbb6-4f9a-8f75-5bf3e4a038fe")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "L102")
 					(unit 1)
@@ -11849,11 +12056,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 3.5mm PT 1.5; SW1 is panel-switch terminal"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
+			(at 246.38 116.84 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11867,7 +12083,7 @@
 			(uuid "b62c2307-eef0-4d20-b1e8-a1a92a962c96")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "J102")
 					(unit 1)
@@ -11971,7 +12187,7 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "470nF 25V C0G 1206; C0G so the speaker amp's input isn't microphonic; same part on both legs"
+		(property "Purchase_Note" "Input caps of U2 and U101"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12007,7 +12223,7 @@
 			(uuid "295c4cf9-56e0-4d82-8914-9b2cd2500d47")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "C108")
 					(unit 1)
@@ -12111,11 +12327,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 2.54mm vertical header"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "952-2261-ND"
+			(at 281.94 124.46 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12129,7 +12354,7 @@
 			(uuid "603d80cc-6927-40dc-a1df-5e3d2221f187")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "JP105")
 					(unit 1)
@@ -12232,11 +12457,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 3.5mm PT 1.5; SW1 is panel-switch terminal"
+		(property "Purchase_Note" ""
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "277-1721-ND"
+			(at 246.38 33.02 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12250,7 +12484,7 @@
 			(uuid "491aa6af-90be-4b03-87dc-832ac9a31ec2")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "J107")
 					(unit 1)
@@ -12276,8 +12510,17 @@
 				)
 			)
 		)
+		(property "Purchase_Note" "Q102 protects +5V_RAW if J107 is wired backwards"
+			(at 177.8 68.58 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "7f59ca7c-6d45-4f4d-adb2-566ca1db1d13")) (pin "2" (uuid "8e9a3a48-7a17-4959-a703-899371d1a332")) (pin "3" (uuid "4732b0de-9c0f-4264-8abd-2c499f0f0ee9"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "Q102") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "Q102") (unit 1)))))
 	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 35.56 160.02 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "4ce54311-f455-4a2d-9c0a-5ebd0d756bb1")
 		(property "Reference" "JP106" (at 35.56 157.48 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "AM2" (at 35.56 162.56 0) (effects (font (size 1.27 1.27))))
@@ -12285,7 +12528,7 @@
 		(property "Datasheet" "~" (at 35.56 166.37 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 35.56 165.1 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "d1664121-bbef-4e61-b87d-1bee28252c40")) (pin "2" (uuid "3f4eb757-2225-442a-94e0-885418729ec9"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP106") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP106") (unit 1)))))
 	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 35.56 167.64 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "6aea1c4e-c40c-466c-9444-1d5aa352ee29")
 		(property "Reference" "JP107" (at 35.56 165.1 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "AM1" (at 35.56 170.18 0) (effects (font (size 1.27 1.27))))
@@ -12293,7 +12536,7 @@
 		(property "Datasheet" "~" (at 35.56 173.99 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 35.56 172.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "71fd9ca6-7a4d-4fe0-a024-391938edc05d")) (pin "2" (uuid "7c5a42bf-4999-4845-ad8f-500117b95cb8"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP107") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP107") (unit 1)))))
 	(symbol (lib_id "Jumper:SolderJumper_2_Bridged") (at 35.56 175.26 0) (unit 1) (exclude_from_sim no) (in_bom no) (in_pos_files no) (on_board yes) (dnp no) (uuid "c1d8e8ed-bfbb-4429-b06b-c8e94d0a96df")
 		(property "Reference" "JP108" (at 35.56 172.72 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "AM0" (at 35.56 177.8 0) (effects (font (size 1.27 1.27))))
@@ -12301,7 +12544,7 @@
 		(property "Datasheet" "~" (at 35.56 181.61 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 35.56 180.34 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "9cd1440f-69b8-4b2c-af0a-78ba703a5261")) (pin "2" (uuid "05ea26b5-1f94-42de-9190-3f9dc99a583c"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP108") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "JP108") (unit 1)))))
 	(symbol (lib_id "Device:R") (at 297.18 194.31 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "975b1349-3ad7-4980-8fa9-00a0b66b2667")
 		(property "Reference" "R114" (at 299.72 193.04 0) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "18k" (at 299.72 195.58 0) (effects (font (size 1.27 1.27)) (justify left)))
@@ -12313,7 +12556,7 @@
 		(property "DigiKey" "RMCF0603FT18K0CT-ND" (at 297.18 194.31 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "LCSC" "C25810" (at 297.18 194.31 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "d3412624-c89b-44c2-a597-d4870a234980")) (pin "2" (uuid "f7787d12-ba5a-4d4f-8056-e3aafb785402"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "R114") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "R114") (unit 1)))))
 	(rectangle (start 15.24 15.24) (end 139.7 88.9) (stroke (width 0.254) (type dash)) (fill (type none)) (uuid "3b78d933-90b6-48a4-a136-76bd14eb3bb4"))
 	(text "BATTERY INPUT" (exclude_from_sim no) (at 17.78 17.78 0) (effects (font (size 2 2) (bold yes)) (justify left top)) (uuid "a52ed0c1-5f4d-4789-ad2e-8054e39b7c10"))
 	(wire (pts (xy 33.02 35.56) (xy 39.37 35.56)) (stroke (width 0) (type default)) (uuid "0d657578-ad68-4bc2-8f69-c39f427892a0"))
@@ -12617,7 +12860,7 @@
 		(property "Datasheet" "" (at 35.56 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 35.56 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "fab92024-46df-4571-971e-fdb9ab6b949d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR7") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR7") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 40.64 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "48ef91f7-1922-4f05-9751-8efd6a22a793")
 		(property "Reference" "#FLG2" (at 40.64 43.815 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 40.64 41.91 0) (effects (font (size 1.27 1.27))))
@@ -12625,7 +12868,7 @@
 		(property "Datasheet" "" (at 40.64 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 40.64 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "7908f431-b9b4-49b5-aebb-bd37f37c7aea"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG2") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG2") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 78.74 55.88 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "bb9182e9-6b5d-4ff5-a001-c9e9a8be729e")
 		(property "Reference" "#PWR8" (at 78.74 62.23 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 78.74 59.69 0) (effects (font (size 1.27 1.27))))
@@ -12633,7 +12876,7 @@
 		(property "Datasheet" "" (at 78.74 55.88 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 78.74 55.88 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "4c368a6d-c22f-4007-85ba-44da14d6baaf"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR8") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR8") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 93.98 35.56 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "4c061f3a-25b3-480c-8e50-1167573235ca")
 		(property "Reference" "#FLG3" (at 93.98 33.655 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 93.98 31.75 0) (effects (font (size 1.27 1.27))))
@@ -12641,7 +12884,7 @@
 		(property "Datasheet" "" (at 93.98 35.56 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 93.98 35.56 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "246f484d-8e3a-4370-9079-e5824cfeff84"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG3") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG3") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 182.88 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "e749ccec-2ace-49aa-80ee-cb00f21d3604")
 		(property "Reference" "#PWR9" (at 182.88 52.07 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 182.88 49.53 0) (effects (font (size 1.27 1.27))))
@@ -12649,7 +12892,7 @@
 		(property "Datasheet" "" (at 182.88 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 182.88 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "fb64084e-ab29-45f6-b6b8-9fb0d6e0d250"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR9") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR9") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 236.22 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "7949dca2-7683-46a3-9e95-7810e6f0e45e")
 		(property "Reference" "#PWR10" (at 236.22 52.07 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 236.22 49.53 0) (effects (font (size 1.27 1.27))))
@@ -12657,7 +12900,7 @@
 		(property "Datasheet" "" (at 236.22 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 236.22 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "6f09e293-d4ff-49fc-ac9d-9dcbfc855be5"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR10") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR10") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 177.8 73.66 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "45d5653e-c0e4-4e60-8cfa-c50496d50005")
 		(property "Reference" "#PWR11" (at 177.8 80.01 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 177.8 77.47 0) (effects (font (size 1.27 1.27))))
@@ -12665,7 +12908,7 @@
 		(property "Datasheet" "" (at 177.8 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 177.8 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "5b3b4a93-f094-444a-a0a2-8147a669bf7d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR11") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR11") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 203.2 73.66 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "cff9e848-cece-42c8-9869-63932a61c7df")
 		(property "Reference" "#PWR12" (at 203.2 80.01 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 203.2 77.47 0) (effects (font (size 1.27 1.27))))
@@ -12673,7 +12916,7 @@
 		(property "Datasheet" "" (at 203.2 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 203.2 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "54be9bb9-6a41-4313-86b3-8c20b11faa94"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR12") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR12") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 193.04 66.04 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "6e0177f8-f324-4a5e-934c-1f10f863816c")
 		(property "Reference" "#FLG4" (at 193.04 64.135 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 193.04 62.23 0) (effects (font (size 1.27 1.27))))
@@ -12681,7 +12924,7 @@
 		(property "Datasheet" "" (at 193.04 66.04 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 193.04 66.04 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "52ee90a0-3703-443f-ac47-6b79daa50228"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG4") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG4") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 307.34 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "46125d4c-260c-48c4-a15e-985673021570")
 		(property "Reference" "#PWR13" (at 307.34 52.07 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 307.34 49.53 0) (effects (font (size 1.27 1.27))))
@@ -12689,7 +12932,7 @@
 		(property "Datasheet" "" (at 307.34 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 307.34 45.72 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "043e98da-f865-49ad-a527-16c7169db43b"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR13") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR13") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 337.82 55.88 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "c82af507-bd14-4edb-af5e-ea576f7471a5")
 		(property "Reference" "#PWR14" (at 337.82 62.23 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 337.82 59.69 0) (effects (font (size 1.27 1.27))))
@@ -12697,7 +12940,7 @@
 		(property "Datasheet" "" (at 337.82 55.88 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 337.82 55.88 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "a91e1f65-11b9-4ecd-907e-e78a991a32ec"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR14") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR14") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 307.34 73.66 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "3266680a-0a5b-4a1d-9c3f-b653c67ac14f")
 		(property "Reference" "#PWR15" (at 307.34 80.01 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 307.34 77.47 0) (effects (font (size 1.27 1.27))))
@@ -12705,7 +12948,7 @@
 		(property "Datasheet" "" (at 307.34 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 307.34 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "f6ce110d-7971-4437-89d4-1b73eb89966d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR15") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR15") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 337.82 83.82 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "de931974-909e-4e54-9576-a8cbb541239b")
 		(property "Reference" "#PWR16" (at 337.82 90.17 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 337.82 87.63 0) (effects (font (size 1.27 1.27))))
@@ -12713,7 +12956,7 @@
 		(property "Datasheet" "" (at 337.82 83.82 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 337.82 83.82 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "8bddf10d-ca53-430d-9f57-3a3efb0aa1dc"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR16") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR16") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 340.36 38.1 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "e676531f-4a24-44c9-bb0f-0deb179d2033")
 		(property "Reference" "#FLG5" (at 340.36 36.195 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 340.36 34.29 0) (effects (font (size 1.27 1.27))))
@@ -12721,7 +12964,7 @@
 		(property "Datasheet" "" (at 340.36 38.1 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 340.36 38.1 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "5add6073-9f88-44f7-91bf-d24f7bf767e3"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG5") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG5") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 347.98 66.04 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "7be19fa4-1a16-421c-a779-873d1d4fc83e")
 		(property "Reference" "#FLG6" (at 347.98 64.135 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 347.98 62.23 0) (effects (font (size 1.27 1.27))))
@@ -12729,7 +12972,7 @@
 		(property "Datasheet" "" (at 347.98 66.04 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 347.98 66.04 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "b2021156-b26b-4634-a4a7-47c29bc56b97"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG6") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG6") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 353.06 73.66 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "7c0869bf-edd8-497b-a57e-a162a6c4c919")
 		(property "Reference" "#PWR17" (at 353.06 80.01 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 353.06 77.47 0) (effects (font (size 1.27 1.27))))
@@ -12737,7 +12980,7 @@
 		(property "Datasheet" "" (at 353.06 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 353.06 73.66 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "53505567-bbe8-4f38-91d4-1cfe04ded1ad"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR17") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR17") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 68.58 130.81 270) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "3e48716f-251e-4423-81cd-882aaa7c3c18")
 		(property "Reference" "#PWR18" (at 62.23 130.81 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 64.77 130.81 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12745,7 +12988,7 @@
 		(property "Datasheet" "" (at 68.58 130.81 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 68.58 130.81 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "4e8be826-684e-4be6-891b-38f8ffd14529"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR18") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR18") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 137.16 140.97 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "52746296-ff36-4acd-a1d9-e7ea9e8a84eb")
 		(property "Reference" "#PWR19" (at 143.51 140.97 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 140.97 140.97 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12753,7 +12996,7 @@
 		(property "Datasheet" "" (at 137.16 140.97 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 137.16 140.97 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "d7129022-0195-4c0c-87e6-ccd2e5523012"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR19") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR19") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 137.16 148.59 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "54cb9795-eef6-4384-9f76-c08b632ccd5d")
 		(property "Reference" "#PWR20" (at 143.51 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 140.97 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12761,7 +13004,7 @@
 		(property "Datasheet" "" (at 137.16 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 137.16 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "2aba5db9-9033-42b8-af8a-ece836c77d21"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR20") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR20") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 137.16 156.21 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "fd925f0c-89a7-4625-8c71-cdd110fe32bf")
 		(property "Reference" "#PWR21" (at 143.51 156.21 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 140.97 156.21 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12769,7 +13012,7 @@
 		(property "Datasheet" "" (at 137.16 156.21 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 137.16 156.21 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "a1def06d-7e49-41c9-9fd8-9b639218fd1c"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR21") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR21") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 78.74 153.67 270) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "5e5557f2-87b2-4fb1-8c9b-36f2d9cf6d83")
 		(property "Reference" "#PWR22" (at 72.39 153.67 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 74.93 153.67 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12777,7 +13020,7 @@
 		(property "Datasheet" "" (at 78.74 153.67 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 78.74 153.67 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "a0705a34-9d99-47eb-8de1-6069b3c6f293"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR22") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR22") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 104.14 177.8 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "93d7017f-6eae-43e7-a087-38d83faac13b")
 		(property "Reference" "#PWR23" (at 104.14 184.15 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 104.14 181.61 0) (effects (font (size 1.27 1.27))))
@@ -12785,7 +13028,7 @@
 		(property "Datasheet" "" (at 104.14 177.8 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 104.14 177.8 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "e780f35e-f5da-4e3e-8d64-69af7493d969"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR23") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR23") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 27.94 144.78 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "789d99b5-6ca3-49a7-9cfa-595f4251813e")
 		(property "Reference" "#PWR24" (at 27.94 151.13 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 27.94 148.59 0) (effects (font (size 1.27 1.27))))
@@ -12793,7 +13036,7 @@
 		(property "Datasheet" "" (at 27.94 144.78 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 27.94 144.78 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "dd984175-1f92-4a11-9d51-b33c9457aa12"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR24") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR24") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 50.8 144.78 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "1678d503-c0be-4e69-89bc-ea7edbc52fa8")
 		(property "Reference" "#PWR25" (at 50.8 151.13 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 50.8 148.59 0) (effects (font (size 1.27 1.27))))
@@ -12801,7 +13044,7 @@
 		(property "Datasheet" "" (at 50.8 144.78 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 50.8 144.78 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "7009e924-7845-41f1-8b45-b24f99b9e0a9"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR25") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR25") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 43.18 160.02 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "fb880e4a-e7dc-4b5e-bbd6-029ca0c407d3")
 		(property "Reference" "#PWR26" (at 43.18 166.37 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 43.18 163.83 0) (effects (font (size 1.27 1.27))))
@@ -12809,7 +13052,7 @@
 		(property "Datasheet" "" (at 43.18 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 43.18 160.02 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "81cad569-e268-450c-a29c-1e1de8496336"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR26") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR26") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 43.18 167.64 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "26c23bee-dcc7-4e7e-ac5b-a6854aeda3be")
 		(property "Reference" "#PWR27" (at 43.18 173.99 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 43.18 171.45 0) (effects (font (size 1.27 1.27))))
@@ -12817,7 +13060,7 @@
 		(property "Datasheet" "" (at 43.18 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 43.18 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "ec5f1dd6-3f13-42ae-8af7-0254968cee27"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR27") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR27") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 43.18 175.26 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "42926f1b-3e3b-47a1-97d2-08816a0bc82c")
 		(property "Reference" "#PWR28" (at 43.18 181.61 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 43.18 179.07 0) (effects (font (size 1.27 1.27))))
@@ -12825,7 +13068,7 @@
 		(property "Datasheet" "" (at 43.18 175.26 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 43.18 175.26 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "c964b528-6b26-450f-a034-831d505991bf"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR28") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR28") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 53.34 213.36 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "e3cf3131-9b3b-42f6-a52a-ea6d2c95bc38")
 		(property "Reference" "#FLG7" (at 53.34 211.455 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 53.34 209.55 0) (effects (font (size 1.27 1.27))))
@@ -12833,7 +13076,7 @@
 		(property "Datasheet" "" (at 53.34 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 53.34 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "5bfb3783-06b3-41b2-a445-7de162bb2efe"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG7") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG7") (unit 1)))))
 	(symbol (lib_id "power:PWR_FLAG") (at 147.32 213.36 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "15930b7e-7af3-47b3-bff7-e1c550f7eff5")
 		(property "Reference" "#FLG8" (at 147.32 211.455 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "PWR_FLAG" (at 147.32 209.55 0) (effects (font (size 1.27 1.27))))
@@ -12841,7 +13084,7 @@
 		(property "Datasheet" "" (at 147.32 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 147.32 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "4df0297e-c81a-4f38-8995-cff2ddf93d86"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG8") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#FLG8") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 58.42 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "42a5bd3e-f601-4dd9-a337-971fe4781848")
 		(property "Reference" "#PWR29" (at 58.42 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 58.42 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12849,7 +13092,7 @@
 		(property "Datasheet" "" (at 58.42 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 58.42 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "bc61c35a-a9f0-42af-8a8d-efad01fa7cea"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR29") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR29") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 76.2 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "b3ebe737-03ac-43b8-8b77-55c10eaea805")
 		(property "Reference" "#PWR30" (at 76.2 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 76.2 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12857,7 +13100,7 @@
 		(property "Datasheet" "" (at 76.2 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 76.2 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "fdb0cb82-f296-4d46-92f1-a4b51966fd92"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR30") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR30") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 91.44 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "a4e679a2-7fd3-4ef4-9553-0befc39d2719")
 		(property "Reference" "#PWR31" (at 91.44 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 91.44 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12865,7 +13108,7 @@
 		(property "Datasheet" "" (at 91.44 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 91.44 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "caa28175-baa7-4d5a-a719-a5b06dbb3e8b"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR31") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR31") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 106.68 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "78058574-4ec4-44d7-acc9-1d1f38466e23")
 		(property "Reference" "#PWR32" (at 106.68 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 106.68 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12873,7 +13116,7 @@
 		(property "Datasheet" "" (at 106.68 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 106.68 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "d6b46037-cfcf-4fea-bd1d-d665d23bc2ca"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR32") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR32") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 139.7 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "88e307c9-48a1-487c-a259-5a4dc30ead77")
 		(property "Reference" "#PWR33" (at 139.7 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 139.7 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12881,7 +13124,7 @@
 		(property "Datasheet" "" (at 139.7 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 139.7 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "17a9514a-2f18-438c-9ed6-0bfa0a911ddc"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR33") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR33") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 154.94 220.98 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "3041e358-dd1c-467a-bfff-dceac77a8c66")
 		(property "Reference" "#PWR34" (at 154.94 227.33 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 154.94 224.79 0) (effects (font (size 1.27 1.27))))
@@ -12889,7 +13132,7 @@
 		(property "Datasheet" "" (at 154.94 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 154.94 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "cd9460ca-8d82-4d14-845b-95887fd48e8d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR34") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR34") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 218.44 134.62 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "5e8d200f-0437-4548-9ed6-08b640a3bf2e")
 		(property "Reference" "#PWR35" (at 218.44 140.97 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 218.44 138.43 0) (effects (font (size 1.27 1.27))))
@@ -12897,7 +13140,7 @@
 		(property "Datasheet" "" (at 218.44 134.62 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 218.44 134.62 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "c2c37d42-75d6-4d29-879a-9254b9a7af2d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR35") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR35") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 218.44 111.76 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "2cba2fa9-5cf3-487f-9610-15597b037009")
 		(property "Reference" "#PWR36" (at 218.44 118.11 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 218.44 115.57 0) (effects (font (size 1.27 1.27))))
@@ -12905,7 +13148,7 @@
 		(property "Datasheet" "" (at 218.44 111.76 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 218.44 111.76 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "bfc8e140-6a67-4a92-8813-eaf2d2df511f"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR36") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR36") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 205.74 187.96 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "7b5110bf-b72d-4c0c-adbf-b8e36d2b7ba0")
 		(property "Reference" "#PWR37" (at 205.74 194.31 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 205.74 191.77 0) (effects (font (size 1.27 1.27))))
@@ -12913,7 +13156,7 @@
 		(property "Datasheet" "" (at 205.74 187.96 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 205.74 187.96 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "88bc2cca-3601-41ef-b737-3af14ff29168"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR37") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR37") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 236.22 213.36 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "03ac8981-3621-404f-b51b-e2228b0f0160")
 		(property "Reference" "#PWR38" (at 242.57 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 240.03 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12921,7 +13164,7 @@
 		(property "Datasheet" "" (at 236.22 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 236.22 213.36 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "ec19e8fd-f0a0-4b96-bd5c-b1a874b428f1"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR38") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR38") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 236.22 220.98 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "195a2b4b-c9a9-4a3e-bc5b-897b7a50b58e")
 		(property "Reference" "#PWR39" (at 242.57 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 240.03 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12929,7 +13172,7 @@
 		(property "Datasheet" "" (at 236.22 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 236.22 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "950b8672-70c7-453b-8f14-752fed99e75d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR39") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR39") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 236.22 228.6 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "1b08dc40-df94-409d-9310-b61737e369f6")
 		(property "Reference" "#PWR40" (at 242.57 228.6 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 240.03 228.6 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12937,7 +13180,7 @@
 		(property "Datasheet" "" (at 236.22 228.6 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 236.22 228.6 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "d258d30d-0649-4984-9158-f2657b5213b9"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR40") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR40") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 236.22 236.22 90) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "13ed523a-aa33-4f43-9f90-1f935b039bc5")
 		(property "Reference" "#PWR41" (at 242.57 236.22 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 240.03 236.22 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -12945,7 +13188,7 @@
 		(property "Datasheet" "" (at 236.22 236.22 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 236.22 236.22 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "eb6b23ef-687e-4c17-ab2e-a49f17abf309"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR41") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR41") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 274.32 127 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "85f73ae9-f741-47ee-aeac-b6437e044406")
 		(property "Reference" "#PWR42" (at 274.32 133.35 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 274.32 130.81 0) (effects (font (size 1.27 1.27))))
@@ -12953,7 +13196,7 @@
 		(property "Datasheet" "" (at 274.32 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 274.32 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "51885901-e8a0-4b8a-a81b-4c1f030fc884"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR42") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR42") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 340.36 111.76 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "adfb3c35-81fe-445d-acaf-73ff247eb11d")
 		(property "Reference" "#PWR43" (at 340.36 118.11 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 340.36 115.57 0) (effects (font (size 1.27 1.27))))
@@ -12961,7 +13204,7 @@
 		(property "Datasheet" "" (at 340.36 111.76 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 340.36 111.76 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "0c287e89-fa86-42b0-98cc-f2ae27c510f5"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR43") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR43") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 375.92 127 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "ca451eab-4bb6-40bf-aedb-868b508b385f")
 		(property "Reference" "#PWR44" (at 375.92 133.35 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 375.92 130.81 0) (effects (font (size 1.27 1.27))))
@@ -12969,7 +13212,7 @@
 		(property "Datasheet" "" (at 375.92 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 375.92 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "4949412c-1585-4a03-8d98-7f9578abe0d9"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR44") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR44") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 388.62 127 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "bf674d17-e383-4422-b195-8d6e27c9c640")
 		(property "Reference" "#PWR45" (at 388.62 133.35 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 388.62 130.81 0) (effects (font (size 1.27 1.27))))
@@ -12977,7 +13220,7 @@
 		(property "Datasheet" "" (at 388.62 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 388.62 127 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "c23b372b-b88d-4a0c-a668-d8bf9ad3eac6"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR45") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR45") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 322.58 139.7 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "d2a81272-84f5-4057-8836-1776134027ed")
 		(property "Reference" "#PWR46" (at 322.58 146.05 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 322.58 143.51 0) (effects (font (size 1.27 1.27))))
@@ -12985,7 +13228,7 @@
 		(property "Datasheet" "" (at 322.58 139.7 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 322.58 139.7 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "1c06038c-a771-4250-8f4b-f8131903dfc8"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR46") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR46") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 325.12 162.56 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "7fc47828-2aa5-489c-bce9-ae3dee2aaf88")
 		(property "Reference" "#PWR47" (at 325.12 168.91 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 325.12 166.37 0) (effects (font (size 1.27 1.27))))
@@ -12993,7 +13236,7 @@
 		(property "Datasheet" "" (at 325.12 162.56 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 325.12 162.56 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "b9a063d5-6ce0-471b-a802-41c3b252dd0e"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR47") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR47") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 297.18 198.12 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "08542491-0700-46e4-a1a3-d63eaf44e7e3")
 		(property "Reference" "#PWR48" (at 297.18 204.47 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Value" "GND" (at 297.18 201.93 0) (effects (font (size 1.27 1.27))))
@@ -13001,7 +13244,7 @@
 		(property "Datasheet" "" (at 297.18 198.12 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 297.18 198.12 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "005f7dd7-5c86-4370-a851-eb78cb3bb08d"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR48") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR48") (unit 1)))))
 	(wire (pts (xy 349.25 167.64) (xy 351.79 167.64)) (stroke (width 0) (type default)) (uuid "e1f92505-33c0-4456-90fe-ad343bbd9d56"))
 	(label "AMP_PVCC" (at 351.79 167.64 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "7f42cd1b-77b4-49ea-9221-d56806fbcbf9"))
 	(wire (pts (xy 341.63 167.64) (xy 339.09 167.64)) (stroke (width 0) (type default)) (uuid "7f403b62-87a4-45e6-aa7e-3228aba873b6"))
@@ -13016,8 +13259,17 @@
 		(property "Manufacturer" "onsemi" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "DigiKey" "NSVBAT54HT1GOSCT-ND" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "LCSC" "C179609" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "Clamp U101's SDZ and MUTE to PVCC"
+			(at 345.44 167.64 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "cc438cfd-0119-4382-9414-051d794d356f")) (pin "2" (uuid "bbd9f20f-4281-41c4-9fad-d092019a524a"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D103") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D103") (unit 1)))))
 	(wire (pts (xy 369.57 148.59) (xy 372.11 148.59)) (stroke (width 0) (type default)) (uuid "3a5726de-d3c1-4c73-a661-e7aa461c4e25"))
 	(label "AMP_PVCC" (at 372.11 148.59 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fdebc5e7-bcde-4e9a-9661-23ed3eb38ac0"))
 	(wire (pts (xy 361.95 148.59) (xy 359.41 148.59)) (stroke (width 0) (type default)) (uuid "39dbc9ca-b757-44b6-9f91-124df8c63f29"))
@@ -13032,8 +13284,17 @@
 		(property "Manufacturer" "onsemi" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "DigiKey" "NSVBAT54HT1GOSCT-ND" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "LCSC" "C179609" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "Clamp U101's SDZ and MUTE to PVCC"
+			(at 365.76 148.59 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "1a8c59ec-b52f-4d97-b766-2d3d4a8add61")) (pin "2" (uuid "8e144371-8a61-46ea-8ad2-b55f1991fc38"))
-		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D102") (unit 1)))))
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D102") (unit 1)))))
 	(embedded_fonts no)
 	(symbol
 		(lib_id "Connector:TestPoint")
@@ -13116,7 +13377,7 @@
 			(uuid "a9697907-db67-4f81-9c9d-9a90f94c3f3c")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP103")
 					(unit 1)
@@ -13205,7 +13466,7 @@
 			(uuid "5053bc61-aff3-4f8a-b371-b8792eaf710b")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP104")
 					(unit 1)
@@ -13294,7 +13555,7 @@
 			(uuid "fc798ff4-ef72-4bde-8725-fe4c1f95b8a9")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP105")
 					(unit 1)
@@ -13383,7 +13644,7 @@
 			(uuid "af164e82-f491-4990-a979-a58f2e1cf3d9")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP106")
 					(unit 1)
@@ -13472,7 +13733,7 @@
 			(uuid "12876c2c-bbf4-42a4-9dd5-d81b84aaa799")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP107")
 					(unit 1)
@@ -13561,7 +13822,7 @@
 			(uuid "a8158b73-154d-4705-a6d0-2fc3ff151939")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP108")
 					(unit 1)
@@ -13650,7 +13911,7 @@
 			(uuid "6d0806f3-9949-4f31-9c7e-cc576ac13a81")
 		)
 		(instances
-			(project "seed3-carrier"
+			(project "amp-board"
 				(path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac"
 					(reference "TP109")
 					(unit 1)

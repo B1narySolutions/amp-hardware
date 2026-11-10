@@ -1,13 +1,13 @@
-# Audio board rev 3 — Post-Assembly Test Plan
+# Amp board — Post-Assembly Test Plan
 
-Bring-up and acceptance tests for one hand-assembled **rev 3** board, built from `seed3-carrier.kicad_sch` (sheet 2 is
-`power.kicad_sch`), `fab/B1NARY_SOLUTIONS_gerber.zip` and `seed3-carrier-digikey.csv`. Record the package name in the log.
-Expected numbers come from the rev 3 netlist and the parts' datasheets. `DESIGN.md` has the design and its reasons,
-`CHANGES.md` the differences from audio rev 2 and power rev 1, and `../TEST_PLAN.md` is rev 2's plan. Stage 1A keeps rev 2's
-item numbers so results compare across revisions.
+Bring-up and acceptance tests for one assembled amp board, built from `amp-board.kicad_sch` (sheet 2 is
+`power.kicad_sch`) and the fab and order files of its order (the git tag and release named for the order). Record the
+tag in the log. Expected numbers come from the netlist and the parts' datasheets. `DESIGN.md` has the design and its
+reasons. `../legacy/audio-board/TEST_PLAN.md` is the legacy audio board's plan; stage 1A keeps its item numbers where
+the check is the same, so results compare.
 
 Work through the stages in order and stop at the first failure: each stage assumes the one before it passed. Record results
-in the log at the end (one copy per board serial). DESIGN.md "Open items" has audio rev 2 and power rev 1 brought up first:
+in the log at the end (one copy per board serial). DESIGN.md "Open items" has the two legacy boards brought up first:
 set this board's jumpers and experiment parts from their results, and record the settings in the log.
 
 ## Powering rule: 12 V on J101, never 5 V alone on J107
@@ -81,9 +81,9 @@ depend on them.
 | JP105 (manual reset) | Open (shunted only in 3B and to clear a fault) | Shunted: SDZ held low, `AMP_MR` → GND 0 Ω, TP106 → GND ≈ 4.7 kΩ |
 | F101 | Bel 0683G3150-01, T3.15A SMD, soldered (no holder, no spare values) | None |
 | R105 | 0 Ω RC2512JK-070RL (2 A); spare CRCW2512 0 Ω | None |
-| R106 (AVCC filter) | 10 Ω, 0603; no spares in rev 3's order (the earlier build's 4.7 Ω and 22 Ω are 1206 and don't fit) | 1.31: TP103 → C115 pad 1 |
+| R106 (AVCC filter) | 10 Ω, 0603; no spares in the order (the legacy build's 4.7 Ω and 22 Ω are 1206 and don't fit) | 1.31: TP103 → C115 pad 1 |
 | C108/C109 | 470 nF 25 V C0G, 1206 (GRM31C5C1E474JE01L); no spare pair in the order | None (4C.4 checks the 20 Hz loss) |
-| C121/C122 | 680 nF, 0805; no spare pair in rev 3's order (the earlier build's 470 nF pair is 1206 and doesn't fit) | 4C.4: filter corner 61 kHz; a 470 nF pair would move it to 73 kHz |
+| C121/C122 | 680 nF, 0805; no spare pair in the order (the legacy build's 470 nF pair is 1206 and doesn't fit) | 4C.4: filter corner 61 kHz; a 470 nF pair would move it to 73 kHz |
 | L101/L102 | 10 µH; spare pairs 6.8 µH, 15 µH | 4C.3/4C.4: corner 74 / 50 kHz, ripple up / down |
 
 ## Equipment
@@ -148,7 +148,7 @@ lower a reading, by an amount that depends on the meter's test voltage; the tabl
 - Readings from `+5V` or `+5V_RAW` to GND also reach PVCC through R107–R110 and the diodes: they start low and climb over
   about 10 s to ≈ 9–10 kΩ where the table says 10.0 kΩ.
 
-**1A. Audio section (rev 2's item numbers, where rev 2 has the same check)**
+**1A. Audio section (the legacy audio board's item numbers, where it has the same check)**
 
 | # | Measure | Expect | A wrong reading means |
 |---|---|---|---|
@@ -266,7 +266,7 @@ one node, so with J106 wired, J107's wires swapped short its output to GND (3B.1
 
 **3A. The DFR0571 on its own (off the board)**
 
-U1 and U2 are rated 5.5 V, U103 6 V, and the 5 V contract (`power-board/README.md`) is 4.75–5.25 V. The module has no
+U1 and U2 are rated 5.5 V, U103 6 V, and the 5 V range (DESIGN.md "5 V supply and distribution") is 4.75–5.25 V. The module has no
 short-circuit or reverse protection (DESIGN.md "5 V supply and distribution" has its datasheet figures).
 
 | # | Measure / do | Expect | A wrong reading means |
@@ -329,7 +329,7 @@ Power off for every jumper change. Record each configuration tested in the log. 
 | 3D.1 | Shunt JP101 and JP103 (beads bypassed); repeat 3B.5 and 3C.2 | The same readings: at a few mA the beads drop well under 1 mV | |
 | 3D.2 | C104/C106 are DNP. If they're fitted for the bulk experiment (`+` toward JP102/JP104): shunt JP102/JP104 and repeat 3C.1 | `+5V_RAW` still rises monotonically and the DFR0571 starts first time; SDZ's delay unchanged. Record the rise time with and without | DFR0571 hiccups into the extra 200 µF: record it |
 
-Return the jumpers to the defaults (or to what rev 1's bring-up chose) before going on.
+Return the jumpers to the defaults (or to what the legacy power board's bring-up chose) before going on.
 
 ## Stage 4 — Analog paths and speaker amp, Daisy removed
 

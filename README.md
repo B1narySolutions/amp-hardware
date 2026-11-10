@@ -1,48 +1,40 @@
 # Amp hardware
 
-The circuit boards for our capstone guitar amp, designed in KiCad 10.
+The circuit board for our capstone guitar amp, designed in KiCad 10.
 
-The latest board, audio board rev 3 (top, then bottom seen from below):
+The amp board (top, then bottom seen from below):
 
-![Audio board rev 3, top](audio-board/rev3/render/top.png)
+![Amp board, top](amp-board/render/top.png)
 
-![Audio board rev 3, bottom](audio-board/rev3/render/bottom.png)
+![Amp board, bottom](amp-board/render/bottom.png)
 
-## Boards
+## The amp board
 
-| Board | Folder | Status |
-|---|---|---|
-| Audio board (Daisy Seed3) | `audio-board/rev2/` | Rev 2, ordered |
-| Power board | `power-board/` | Rev 1, ordered |
-| Audio board rev 3 (audio + power on one board) | `audio-board/rev3/` | Laid out; not ordered until rev 2 and rev 1 are brought up |
+One 4-layer, 100 × 78 mm board, in `amp-board/`. It holds the Daisy Seed3 that does the audio processing, the guitar and
+AUX inputs, an I2C headphone amp (TPA6130A2), the battery input, the 5 V distribution and the class D speaker amp
+(TPA3118D2). The Daisy stands upright in the middle and divides the board: audio on its left and in front of it, the
+battery entry and class D amp on its right, all over a solid ground plane. The 5 V buck stays off the board. JLCPCB
+assembles the surface-mount parts; the rest is soldered by hand from a DigiKey order.
 
-**Audio board.** Holds the Daisy Seed3 that does the audio processing, the guitar and AUX inputs, the headphone amp, and
-screw terminals to the power board and the display. It's a 2-layer board, hand-soldered, with every part from DigiKey.
-
-**Power board.** Supplies 5 V and the battery level to the audio board, and drives the speaker. Its `README.md` lists what
-each board expects from the other.
-
-**Audio board rev 3.** The audio board rev 2 and power board rev 1 on one 4-layer, 100 × 78 mm board. The circuits are
-theirs, with the changes `audio-board/rev3/CHANGES.md` lists: mainly an I2C headphone amp (TPA6130A2) for JLC assembly,
-an SMD fuse, a speaker-fault signal to the Daisy, and more input and supply protection. The Daisy stands upright in the middle and divides the board: audio on its left and in front of it, the battery
-entry and class D amp on its right, all over a solid ground plane. The 5 V buck stays off the board.
+Status: laid out, not ordered. Its open items wait for the bring-up of the two legacy boards.
 
 ## Where to look
 
-- `audio-board/rev2/DESIGN.md`: how the audio board works and why
-- `audio-board/rev2/CHANGES.md`: what changed from rev 1
-- `audio-board/TEST_PLAN.md`: bring-up and test steps
-- `audio-board/rev2/seed3-carrier-digikey.csv`: the audio board's parts order
-- `audio-board/rev2/fab/`: the Gerber zip sent to JLCPCB
-- `power-board/README.md`: the power board's contract with the audio board
-- `power-board/DigiKey_Import.csv`: the power board's parts order
-- `amp-digikey-order.csv`: one build of both boards in a single DigiKey order, with the power board's experiment parts,
-  stock substitutes and notes; `amp-digikey-cart.csv` is the same order in DigiKey's cart upload format
-- `audio-board/rev3/`: rev 3's `DESIGN.md`, `CHANGES.md` (the difference from rev 2 and power rev 1), `TEST_PLAN.md`, parts
-  order and Gerber zip
+- `amp-board/DESIGN.md`: how the board works and why, the decisions made, and what is still open
+- `amp-board/TEST_PLAN.md`: bring-up and test steps
+- `amp-board/amp-board.kicad_pro`: the KiCad project. Part numbers (DigiKey, LCSC) are fields on the schematic's
+  parts; the order files are generated from them into `amp-board/fab/`, which git ignores
+- `amp-board/order-extras.csv`: the few order lines that aren't parts on the schematic
+- Each ordered revision is a git tag (`amp-board-v1`, ...) with its Gerbers, assembly files and DigiKey order attached
+  to the GitHub release
 
-## Opening the designs
+## Legacy boards
 
-Open the `.kicad_pro` file in a board's folder with KiCad 10. The project's own footprints and symbols live in
-`audio-board/Seed3_Carrier.pretty`, `audio-board/seed3-carrier.kicad_sym` and `power-board/Halliquest_Power.*`; the
-library tables point to them, so no setup is needed.
+`legacy/` holds the two boards the amp board grew out of, kept as they were ordered on 2026-11-05: the audio board rev 2
+(`legacy/audio-board/`, 2-layer, hand-soldered) and the power board rev 1 (`legacy/power-board/`), joined by screw
+terminals and wires. `legacy/README.md` lists their files. They are no longer developed.
+
+## Opening the design
+
+Open `amp-board/amp-board.kicad_pro` with KiCad 10. The board's own footprints, symbols and 3D models are in
+`amp-board/lib/`, and the library tables point to them, so no setup is needed.
