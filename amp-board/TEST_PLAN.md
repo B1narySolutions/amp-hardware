@@ -2,13 +2,13 @@
 
 Bring-up and acceptance tests for one assembled amp board, built from `amp-board.kicad_sch` (sheet 2 is
 `power.kicad_sch`) and the fab and order files of its order (the git tag and release named for the order). Record the
-tag in the log. Expected numbers come from the netlist and the parts' datasheets. `DESIGN.md` has the design and its
-reasons. `../legacy/audio-board/TEST_PLAN.md` is the legacy audio board's plan; stage 1A keeps its item numbers where
-the check is the same, so results compare.
+tag in the log. Expected numbers come from the netlist and the parts' datasheets; stage 1's resistances can be recomputed with
+the `kicad-view` skill's `view.py ohms` (it treats the beads as open, so `+5V` and `+5V_RAW` come out as two nets).
+`DESIGN.md` has the design and its reasons.
 
 Work through the stages in order and stop at the first failure: each stage assumes the one before it passed. Record results
-in the log at the end (one copy per board serial). DESIGN.md "Open items" has the two legacy boards brought up first:
-set this board's jumpers and experiment parts from their results, and record the settings in the log.
+in the log at the end (one copy per board serial). Bring up with the default jumpers and parts in "Options and
+experiments", and record every setting in the log.
 
 ## Powering rule: 12 V on J101, never 5 V alone on J107
 
@@ -28,25 +28,16 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
 
 ## Circuit summary (what is being tested)
 
-DESIGN.md describes each block, its parts and its values. The pinouts and probe points the tests use are below.
+DESIGN.md describes each block. IC and Daisy pin numbers are the schematic's (`A1.n` = Daisy pin n; print it with
+`kicad-cli sch export pdf`). Probe the Daisy's sockets while it is out; with it fitted the checks name a part on the
+same net. What the schematic doesn't show is below.
 
-**Pinouts used below**
+**Probe points and orientation**
 
-- U101 TPA3118D2 (HTSSOP-32, exposed pad = GND): 1 MODSEL (GND), 2 SDZ, 3 FAULTZ, 4 RINP, 5 RINN, 6 PLIMIT, 7 GVDD,
-  8 GAIN/SLV, 9 GND, 10 LINP (GND), 11 LINN (GND), 12 MUTE, 13–15 AM2/AM1/AM0 (GND through JP106–JP108), 16 SYNC (not
-  connected), 17 AVCC, 18/19 PVCC, 20 BSNL, 21 OUTNL, 22 GND, 23 OUTPL, 24 BSPL, 25 GND, 26 BSNR, 27 OUTNR, 28 GND,
-  29 OUTPR, 30 BSPR, 31/32 PVCC. `OUT_P` = pins 27 + 29 (→ L101 → SPK+), `OUT_N` = pins 21 + 23 (→ L102 → SPK−)
-- U103 TPS3808EG50 (SOT-23-6): 1 RESET (`AMP_PG`), 2 GND, 3 MR (`AMP_MR`, 90 kΩ internal pull-up), 4 CT (open: 20 ms),
-  5 SENSE and 6 VDD (both `+5V_RAW`)
-- Q101 IRF4905 (TO-220): 1 G, 2 D (SW101.2), 3 S (`VBAT_PROTECTED`). D101 (SOD-123): cathode on `VBAT_PROTECTED`, anode on
-  Q101's gate
-- Q102 AO3401A, Q2 2N7002 (SOT-23): 1 G, 2 S, 3 D. Q102: G GND, S `+5V_RAW`, D `+5V_DFR`. Q2: G `SPK_EN`, S GND, D `SPK_MUTE`
-- U1 TLV9061 (SOT-23-5): 1 OUT, 2 V−, 3 IN+, 4 IN−, 5 V+
-- U2 TPA6130A2 (WQFN-20, exposed pad 21 = GND): 1 LEFTINM, 2 LEFTINP, 3 GND, 4 RIGHTINP, 5 RIGHTINM, 6 SD, 7 SDA, 8 SCL,
-  9/10 GND, 11 HPRIGHT, 12 VDD, 13 GND, 14 HPLEFT, 15/16 CPVSS, 17 CPN, 18 CPP, 19 GND, 20 VDD. − inputs from `HP_SOURCE`
-  through C10 (left) and C11 (right); + inputs to GND through C22 (left) and C23 (right); both VDD pins on `HP_5V`; C13
-  between CPP and CPN, C14 on CPVSS. Registers: 1 control (0xC0 = both outputs on, stereo), 2 volume and mutes (bits 7:6
-  mute, 5:0 volume; 0x35 = +0.1 dB), 4 version (bits 3:0 read 0010)
+- U101: `OUT_P` = pins 27 + 29 (→ L101 → SPK+), `OUT_N` = pins 21 + 23 (→ L102 → SPK−). U103: CT open (20 ms); MR has a
+  90 kΩ internal pull-up
+- U2 registers: 1 control (0xC0 = both outputs on, stereo), 2 volume and mutes (bits 7:6 mute, 5:0 volume; 0x35 =
+  +0.1 dB), 4 version (bits 3:0 read 0010)
 - J101: 1 centre pin (+), 2 sleeve (GND), 3 switched contact (not connected). SW101: 1 from F101, 2 to Q101's drain
 - D102, D103 BAT54H (SOD-323): 1 cathode (band) on `AMP_PVCC`; 2 anode, D102 on `AMP_SDZ`, D103 on `AMP_MUTE`. Both bands
   face right, D102's toward R105 and D103's toward R106
@@ -57,12 +48,6 @@ DESIGN.md describes each block, its parts and its values. The pinouts and probe 
 - JP101: 1 `+5V_RAW`, 2 `+5V`. JP102: 1 `+5V`, 2 C104 `+`. JP103: 1 `+5V_RAW`, 2 `+5V_DISPLAY`. JP104: 1 `+5V_DISPLAY`,
   2 C106 `+`. JP105: 1 `AMP_MR`, 2 GND
 - DFR0571 (U102, off-board): VIN+, GND, 5V OUT, GND. It isn't isolated: its two GND pads are one node
-- J4 / J2 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J2's 5/6 not connected)
-- A1 (Daisy sockets, `A1.n` = Daisy pin n): 12 `I2C_SCL`, 13 `I2C_SDA`, 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`,
-  17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`, 19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 27 `HP_SD`,
-  28 `SPK_EN`, 32 `AMP_FAULTZ` through R30 (1k; input: low = speaker fault), 38 `3V3_D` (the I2C pull-ups), 39 `+5V`
-  (VIN), 40 GND. All other pins are not connected. Probe the sockets while the Daisy is out; with it fitted the checks
-  name a part on the same net
 - Test points: TP1 `HP_DETECT`, TP101 `VBAT_PROTECTED`, TP103 `AMP_PVCC`, TP104 `AMP_SDZ`, TP106 `+5V_RAW`, TP109
   `AMP_FAULTZ`; TP102, TP105, TP107, TP108 GND
 - Other probe points: `BATT_SENSE` at C17 pad 1 (or A1.25); `HP_5V` at C21 pad 1 or C12 pad 1; `+5V` on the power sheet's
@@ -80,11 +65,11 @@ depend on them.
 | JP102 / JP104 (optional bulk) | Open; C104 and C106 are DNP | None until C104/C106 are fitted (3D.2) |
 | JP105 (manual reset) | Open (shunted only in 3B and to clear a fault) | Shunted: SDZ held low, `AMP_MR` → GND 0 Ω, TP106 → GND ≈ 4.7 kΩ |
 | F101 | Bel 0683G3150-01, T3.15A SMD, soldered (no holder, no spare values) | None |
-| R105 | 0 Ω RC2512JK-070RL (2 A); spare CRCW2512 0 Ω | None |
-| R106 (AVCC filter) | 10 Ω, 0603; no spares in the order (the legacy build's 4.7 Ω and 22 Ω are 1206 and don't fit) | 1.31: TP103 → C115 pad 1 |
+| R105 | 0 Ω RC2512JK-070RL (2 A) | None |
+| R106 (AVCC filter) | 10 Ω, 0603; no other values in the order | 1.31: TP103 → C115 pad 1 |
 | C108/C109 | 470 nF 25 V C0G, 1206 (GRM31C5C1E474JE01L); no spare pair in the order | None (4C.4 checks the 20 Hz loss) |
-| C121/C122 | 680 nF, 0805; no spare pair in the order (the legacy build's 470 nF pair is 1206 and doesn't fit) | 4C.4: filter corner 61 kHz; a 470 nF pair would move it to 73 kHz |
-| L101/L102 | 10 µH; spare pairs 6.8 µH, 15 µH | 4C.3/4C.4: corner 74 / 50 kHz, ripple up / down |
+| C121/C122 | 680 nF, 0805; no other pair in the order | 4C.4: filter corner 61 kHz; a 470 nF pair would move it to 73 kHz |
+| L101/L102 | 10 µH; no other values in the order | 4C.3/4C.4: 6.8 µH or 15 µH would move the corner to 74 / 50 kHz, ripple up / down |
 
 ## Equipment
 
@@ -148,7 +133,7 @@ lower a reading, by an amount that depends on the meter's test voltage; the tabl
 - Readings from `+5V` or `+5V_RAW` to GND also reach PVCC through R107–R110 and the diodes: they start low and climb over
   about 10 s to ≈ 9–10 kΩ where the table says 10.0 kΩ.
 
-**1A. Audio section (the legacy audio board's item numbers, where it has the same check)**
+**1A. Audio section**
 
 | # | Measure | Expect | A wrong reading means |
 |---|---|---|---|
@@ -329,7 +314,7 @@ Power off for every jumper change. Record each configuration tested in the log. 
 | 3D.1 | Shunt JP101 and JP103 (beads bypassed); repeat 3B.5 and 3C.2 | The same readings: at a few mA the beads drop well under 1 mV | |
 | 3D.2 | C104/C106 are DNP. If they're fitted for the bulk experiment (`+` toward JP102/JP104): shunt JP102/JP104 and repeat 3C.1 | `+5V_RAW` still rises monotonically and the DFR0571 starts first time; SDZ's delay unchanged. Record the rise time with and without | DFR0571 hiccups into the extra 200 µF: record it |
 
-Return the jumpers to the defaults (or to what the legacy power board's bring-up chose) before going on.
+Return the jumpers to the defaults before going on, unless 3D chose otherwise (record it).
 
 ## Stage 4 — Analog paths and speaker amp, Daisy removed
 

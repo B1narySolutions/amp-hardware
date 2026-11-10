@@ -605,7 +605,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "2bb2fb01-487b-4f10-b7be-966bf14518b1")
@@ -719,6 +719,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "99b6f599-32a4-412e-a437-a580fe5f28f3")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -1023,7 +1034,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "cdfc2b0b-c633-4d72-bc35-11324f5828c8")
@@ -1125,6 +1136,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a9117d4e-68a4-427f-bbac-c53fece8344b")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -1856,7 +1878,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 0 1.43 270)
 			(layer "F.Fab")
 			(uuid "365d3004-c95f-4416-8eac-ace626b73e44")
@@ -1970,6 +1992,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bfaa2ea4-ac02-406f-9f1b-9e2326554b2e")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -2860,7 +2893,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "8b6e5a97-89ba-4589-8716-6b6d93473880")
@@ -2974,6 +3007,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f679bd67-537f-4126-b32a-5773f0e1c2d6")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -3696,7 +3740,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "312dafad-8d10-4471-bf8e-a427d586192b")
@@ -3810,6 +3854,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "74fb5ffb-a223-48a5-90d9-99548cb92282")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -4190,6 +4245,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/06640832-b770-4b81-99fb-e75471b8b5c9")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -5009,7 +5065,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 50V"
+		(property "Value" "100nF"
 			(at 0 1.43 180)
 			(layer "F.Fab")
 			(uuid "900dd1ce-76a3-4251-9281-c8fa02523dd2")
@@ -5123,6 +5179,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "48b6a58e-6fad-4139-afa9-89c7564739a0")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -5659,7 +5726,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "66ed8e76-4602-4f75-b32d-4439788fa08c")
@@ -5773,6 +5840,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "903093da-c4cf-4cda-a6bd-f299ae67db3a")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -6275,7 +6353,7 @@
 				)
 			)
 		)
-		(property "Value" "1u 10V"
+		(property "Value" "1uF"
 			(at 0 1.68 90)
 			(layer "F.Fab")
 			(uuid "22ff8b53-7036-4f33-8c84-1bd0e2c32df7")
@@ -6392,6 +6470,17 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1b6e2de6-46c0-4ca4-a9fb-d3d6211ab85d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/ea71524b-6ee1-4538-93a8-7cb7aa474f4e")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -6496,7 +6585,7 @@
 				)
 			)
 		)
-		(property "Value" "5.6k 1%"
+		(property "Value" "5.6k"
 			(at 0 1.43 270)
 			(layer "F.Fab")
 			(uuid "8a09a620-6baa-43ea-bafb-814cdd2d4c56")
@@ -7687,7 +7776,7 @@
 				)
 			)
 		)
-		(property "Value" "1u 16V"
+		(property "Value" "1uF"
 			(at 0 1.68 270)
 			(layer "F.Fab")
 			(uuid "c5aa7367-6bbd-43db-835c-a7b8067d2f40")
@@ -7801,6 +7890,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "895e0521-23bf-440b-a747-f0551fd8625d")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -9800,6 +9900,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/88950264-bb7d-4a54-9a8c-48d3d1434918")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -10661,6 +10762,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/0fc0d661-ec2b-4fc4-9055-d4e83d42bace")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -10721,7 +10823,7 @@
 				)
 			)
 		)
-		(property "Value" "10u 16V"
+		(property "Value" "10uF"
 			(at 0 1.68 90)
 			(layer "F.Fab")
 			(uuid "c9449e44-c40d-47f3-b7e7-0bf1e38be90f")
@@ -10811,6 +10913,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d24b4ffa-6139-40ed-9f47-6033794960af")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -11246,7 +11359,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 90)
 			(layer "F.Fab")
 			(uuid "6ecea0c2-900a-441f-b456-8eb11093cc67")
@@ -11363,6 +11476,17 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9d8d1bb1-b13f-4e61-b3c1-215e7adcf3f6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/f484f0bb-8f46-4dfd-a62c-9ec1d94ee895")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -11467,7 +11591,7 @@
 				)
 			)
 		)
-		(property "Value" "1u 25V"
+		(property "Value" "1uF"
 			(at 0 1.68 270)
 			(layer "F.Fab")
 			(uuid "5a8f0aea-39e1-4db2-a1de-3f0e5f668f41")
@@ -11581,6 +11705,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "385ebd3f-fa61-427c-b5d3-c0d69f29608e")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -12059,6 +12194,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/9c9a9741-10f0-4725-be35-add0d4cb6fd4")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -12725,7 +12861,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "d6a9ebb3-2037-4139-bd48-5137aae20e8e")
@@ -12827,6 +12963,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cc392796-a222-4f1b-a9de-f8ca12835899")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -13800,7 +13947,7 @@
 				)
 			)
 		)
-		(property "Value" "680n 50V X7R"
+		(property "Value" "680nF"
 			(at 0 1.68 270)
 			(layer "F.Fab")
 			(uuid "b65d6323-64ea-40bd-b29e-66229cada740")
@@ -13914,6 +14061,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e33a581d-7964-4bf6-aa06-9c7022d240ba")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -14230,7 +14388,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 25V"
+		(property "Value" "100nF"
 			(at 0 1.43 270)
 			(layer "F.Fab")
 			(uuid "af69f4cb-0041-4ec7-9f82-cdf0c6844406")
@@ -14347,6 +14505,17 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "be2cb54e-bb76-44dd-93d4-f13c7e4d3ee1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/04b84016-6ae3-4607-93fe-c5af957de01c")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -14451,7 +14620,7 @@
 				)
 			)
 		)
-		(property "Value" "1u 10V"
+		(property "Value" "1uF"
 			(at 0 1.68 180)
 			(layer "F.Fab")
 			(uuid "65941693-300e-4c2f-924a-a2c49122c48e")
@@ -14565,6 +14734,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8142caee-1076-4a45-8bf4-7f4815611935")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -15855,6 +16035,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/3663e199-68a8-4e76-8c0c-5b27f51519b3")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -15915,7 +16096,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 1.25 4.4 0)
 			(layer "F.Fab")
 			(uuid "ab32aa66-2956-4fd0-8b20-dc402af400e6")
@@ -16017,6 +16198,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b695d385-d3d0-4319-8a27-b305ba849475")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -17754,6 +17946,7 @@
 				(pins "1")
 			)
 		)
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -18025,7 +18218,7 @@
 				)
 			)
 		)
-		(property "Value" "10u 10V"
+		(property "Value" "10uF"
 			(at 0 1.68 90)
 			(layer "F.Fab")
 			(uuid "04b61d91-7181-4703-8fc1-d2c4400c2ac8")
@@ -18142,6 +18335,17 @@
 				)
 			)
 		)
+		(property "Voltage" "16V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d313ee3f-7bb5-4652-91bc-2bfb24e43ddf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/8791d5ff-fdd4-4dd3-992f-c38965c4d687")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -18246,7 +18450,7 @@
 				)
 			)
 		)
-		(property "Value" "47uF 16V"
+		(property "Value" "47uF"
 			(at 1 3.75 180)
 			(layer "F.Fab")
 			(uuid "befbfbc7-c29b-49ca-bc7d-fb951aa3f1b4")
@@ -18324,6 +18528,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7f7d10cc-d10f-4314-a3ba-e64163bbaefa")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -20169,7 +20384,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 1.25 4.4 0)
 			(layer "F.Fab")
 			(uuid "bcd3acde-e2de-4e3b-8250-7635a3c2a3b3")
@@ -20271,6 +20486,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0d7704c9-c41d-4dcc-9e53-434af0800b97")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -21752,7 +21978,7 @@
 				)
 			)
 		)
-		(property "Value" "100k 1%"
+		(property "Value" "100k"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "ca95e90b-6ab6-409c-94f2-746ecd48e2bd")
@@ -21973,7 +22199,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 1.25 4.4 90)
 			(layer "F.Fab")
 			(uuid "dcf22594-41cd-45b1-9c75-0c04e1aefb16")
@@ -22075,6 +22301,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "aa60a531-bee0-49a3-8094-c0672d901e87")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -23556,7 +23793,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "8d117f66-56a6-4efe-a33c-f51d7f312e1f")
@@ -23658,6 +23895,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d30a1d2d-35a7-479f-a217-71900b11314e")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -24084,7 +24332,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "3e3d2fab-0a49-41b8-a2ec-2f4e6af7a3c7")
@@ -24186,6 +24434,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "58298414-6a67-4862-8643-542cbf225ad2")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -26565,7 +26824,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "45936c6d-7810-47e4-8277-b4b8850cf66a")
@@ -26679,6 +26938,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a8f1902c-cb08-4f57-8871-74937731fb9d")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -27634,7 +27904,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "905c9f40-ad01-4282-aa37-b3b3644e2693")
@@ -27751,6 +28021,17 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4ed1d159-ae1b-4bba-bc88-48cba149c5f1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/99ae3cab-20f6-45ea-9d22-5704ba35327c")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -27855,7 +28136,7 @@
 				)
 			)
 		)
-		(property "Value" "10k 1%"
+		(property "Value" "10k"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "dd0b5ff7-7953-46dc-a04f-b31aee87d944")
@@ -29278,7 +29559,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 1.25 4.4 0)
 			(layer "F.Fab")
 			(uuid "ee27d4d3-a443-44ea-9438-e41101b1a20a")
@@ -29380,6 +29661,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f9219b00-cd17-4703-8370-6396867b5630")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -31761,6 +32053,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/70b82d51-7f77-432a-8b0f-1736e3c1da34")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -31873,6 +32166,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/5e5650fb-9f38-4edd-8372-0f9c0f858e72")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -32572,7 +32866,7 @@
 				)
 			)
 		)
-		(property "Value" "100n 50V"
+		(property "Value" "100nF"
 			(at 0 1.43 270)
 			(layer "F.Fab")
 			(uuid "768124dc-b46e-41a3-8d81-2991989f3e67")
@@ -32689,6 +32983,17 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "931c0ec4-139b-4e91-9edc-0c8c9846cdbf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/750293f7-1168-40d2-8fe7-1f229a88d910")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
@@ -32793,7 +33098,7 @@
 				)
 			)
 		)
-		(property "Value" "680n 50V X7R"
+		(property "Value" "680nF"
 			(at 0 1.68 90)
 			(layer "F.Fab")
 			(uuid "3344dae8-c0a8-4dec-9c45-6a96c3df042b")
@@ -32907,6 +33212,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "209c0dec-74af-4afc-9b7e-0df61623eac9")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -35949,6 +36265,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/67fa29df-4b18-4db2-b5ec-86a45fea2ee8")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -36462,7 +36779,7 @@
 				)
 			)
 		)
-		(property "Value" "47uF 16V"
+		(property "Value" "47uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "89fd28cb-d35d-49f6-ad97-6c64a3249b86")
@@ -36564,6 +36881,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "17470cc5-8ac7-40d6-aa61-f22be023248f")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -37052,6 +37380,7 @@
 		(path "/f6736f7f-a886-45cd-a179-bb502f0835ac/081bce88-558a-4b4e-ba95-2b264c4b9108")
 		(sheetname "/Power/")
 		(sheetfile "power.kicad_sch")
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -37974,7 +38303,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 0 1.85 90)
 			(layer "F.Fab")
 			(uuid "740b03ba-aeca-4cb5-ac11-a5c4b8426358")
@@ -38088,6 +38417,17 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "25V"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "36d2913b-9505-4d00-82df-dbe4fb852e6d")
+			(effects
+				(font
+					(size 1.27 1.27)
 				)
 			)
 		)
@@ -38245,7 +38585,7 @@
 				)
 			)
 		)
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -1.58 -1.7)

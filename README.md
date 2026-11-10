@@ -16,7 +16,7 @@ AUX inputs, an I2C headphone amp (TPA6130A2), the battery input, the 5 V distrib
 battery entry and class D amp on its right, all over a solid ground plane. The 5 V buck stays off the board. JLCPCB
 assembles the surface-mount parts; the rest is soldered by hand from a DigiKey order.
 
-Status: laid out, not ordered. Its open items wait for the bring-up of the two legacy boards.
+Status: laid out, not ordered. `amp-board/DESIGN.md` lists what is still open.
 
 ## Where to look
 
@@ -24,7 +24,6 @@ Status: laid out, not ordered. Its open items wait for the bring-up of the two l
 - `amp-board/TEST_PLAN.md`: bring-up and test steps
 - `amp-board/amp-board.kicad_pro`: the KiCad project. Part numbers (DigiKey, LCSC) are fields on the schematic's
   parts; the order files are generated from them into `amp-board/fab/`, which git ignores
-- `amp-board/order-extras.csv`: the few order lines that aren't parts on the schematic
 - Each ordered revision is a git tag (`amp-board-v1`, ...) with its Gerbers, assembly files and DigiKey order attached
   to the GitHub release
 

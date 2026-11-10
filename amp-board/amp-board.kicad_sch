@@ -8264,7 +8264,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "47uF 16V"
+		(property "Value" "47uF"
 			(at 77.47 193.0335 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8351,6 +8351,15 @@
 			)
 		)
 		(property "Purchase_Note" "Murata lists it Not For New Designs; in stock"
+			(at 74.93 191.77 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "16V"
 			(at 74.93 191.77 0)
 			(hide yes)
 			(effects
@@ -8802,7 +8811,7 @@
 				)
 			)
 		)
-		(property "Value" "47uF 16V"
+		(property "Value" "47uF"
 			(at 101.98 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8871,6 +8880,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 93.98 137.16 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12950,7 +12968,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13301,7 +13319,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -16339,7 +16357,7 @@
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR5") (unit 1)))))
 	(symbol (lib_id "Device:C_Small") (at 386.08 43.18 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "da546fc4-162f-4044-923b-593eeeb4dda4")
 		(property "Reference" "C21" (at 388.62 42.545 0) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10u 16V" (at 388.62 45.085 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10uF" (at 388.62 45.085 0) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://datasheets.kyocera-avx.com/KGM_X7R.pdf" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -16347,6 +16365,15 @@
 		(property "Manufacturer" "KYOCERA AVX" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "DigiKey" "478-KGM21AR71C106KUCT-ND" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "LCSC" "C15850" (at 386.08 43.18 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Voltage" "16V"
+			(at 386.08 43.18 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "f3a2679b-3bcf-4a4c-b794-8834c1342455")) (pin "2" (uuid "e3284626-a7a5-4ee5-bb76-568d9ad0e7cc"))
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C21") (unit 1)))))
 	(symbol (lib_id "power:GND") (at 386.08 45.72 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board no) (dnp no) (uuid "c5619f67-2cc9-45fd-8311-fccfee2486e3")
@@ -16542,7 +16569,7 @@
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "#PWR52") (unit 1)))))
 	(symbol (lib_id "Device:C_Small") (at 332.74 53.34 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "98dd684c-60d2-41ea-9f8c-8b52befbc492")
 		(property "Reference" "C22" (at 332.74 55.118 90) (effects (font (size 1.27 1.27))))
-		(property "Value" "470n 25V C0G" (at 332.74 51.562 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "470nF" (at 332.74 51.562 90) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 332.74 53.34 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23" (at 332.74 53.34 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 332.74 53.34 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -16559,11 +16586,20 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 332.74 53.34 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "aacacbfd-bc18-4416-8a70-51359d56f483")) (pin "2" (uuid "4a3565bb-9daf-4fe0-b780-261a27237fb1"))
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C22") (unit 1)))))
 	(symbol (lib_id "Device:C_Small") (at 332.74 58.42 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "70718be6-f08d-4d57-9caf-4852104240ac")
 		(property "Reference" "C10" (at 332.74 60.198 90) (effects (font (size 1.27 1.27))))
-		(property "Value" "470n 25V C0G" (at 332.74 56.642 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "470nF" (at 332.74 56.642 90) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 332.74 58.42 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23" (at 332.74 58.42 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 332.74 58.42 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -16580,11 +16616,20 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 332.74 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "d8192b0b-072d-43a1-83b2-f91235e492b7")) (pin "2" (uuid "53536ed6-d6a3-4d73-b12a-aa7254a02301"))
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C10") (unit 1)))))
 	(symbol (lib_id "Device:C_Small") (at 332.74 63.5 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "0b178280-fe22-4f22-a8d6-a32e53d1b8af")
 		(property "Reference" "C23" (at 332.74 65.278 90) (effects (font (size 1.27 1.27))))
-		(property "Value" "470n 25V C0G" (at 332.74 61.722 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "470nF" (at 332.74 61.722 90) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 332.74 63.5 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23" (at 332.74 63.5 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 332.74 63.5 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -16601,11 +16646,20 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 332.74 63.5 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1" (uuid "5a1ed8e0-5d81-410d-8b9e-4c55c2726c0c")) (pin "2" (uuid "7b1a1d0f-814b-4c72-ad74-ff3b119fef06"))
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "C23") (unit 1)))))
 	(symbol (lib_id "Device:C_Small") (at 332.74 68.58 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "114111bd-7176-49c1-8f58-2acb493a00a9")
 		(property "Reference" "C11" (at 332.74 70.358 90) (effects (font (size 1.27 1.27))))
-		(property "Value" "470n 25V C0G" (at 332.74 66.802 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "470nF" (at 332.74 66.802 90) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 332.74 68.58 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "https://www.murata.com/en-us/products/productdetail?partno=GRM31C5C1E474JE01%23" (at 332.74 68.58 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Description" "" (at 332.74 68.58 0) (hide yes) (effects (font (size 1.27 1.27))))
@@ -16614,6 +16668,15 @@
 		(property "DigiKey" "490-GRM31C5C1E474JE01LCT-ND" (at 332.74 68.58 90) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "LCSC" "C6049896" (at 332.74 68.58 90) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Purchase_Note" "Input caps of U2 and U101"
+			(at 332.74 68.58 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "25V"
 			(at 332.74 68.58 0)
 			(hide yes)
 			(effects

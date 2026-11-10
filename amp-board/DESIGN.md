@@ -1,20 +1,19 @@
 # Amp board — design
 
-How the board works now, and why. `TEST_PLAN.md` is the bring-up procedure. Each fact has one home in this file; other sections point to it. Write the design as it
-stands, not its history (git has that).
+Why the board is the way it is. The schematic holds the circuit, the values and the part numbers, and its notes say
+what each part does; this file holds the reasons, the limits and the decisions. `TEST_PLAN.md` is the bring-up
+procedure. Each fact has one home; write the design as it stands, not its history (git has that).
 
 The board holds a Daisy Seed3 (A1, in two 1×20 sockets), the analog inputs and outputs, the headphone amp, the battery
 input, the 5 V distribution and the TPA3118D2 speaker amp, on one 4-layer board. The schematic has two sheets:
 - **Sheet 1, `amp-board.kicad_sch`:** the audio circuit. Its designators start at 1.
 - **Sheet 2, `power.kicad_sch`:** the battery input, 5 V distribution and speaker amp (first designed by William Anderson
-  as a separate power board). Its designators start at 101.
+  as a separate power board). Its designators start at 101; X101–X109 are ordered parts that aren't on the board.
 
 The 5 V buck, a DFRobot DFR0571 module, stays off the board on J106 and J107. Volume, tone, input trim and mute come from
 the touchscreen over the UART, so the board has no pots or encoder.
 
-**Where it came from:** the circuits began as the audio board rev 2 and power board rev 1 in `../legacy/`, which were
-ordered as separate boards. This board is its own design and need not match them: where a circuit is still the same,
-their bring-up results apply here, and nothing here has to be kept the same for their sake.
+The circuits began as the two boards in `../legacy/`. This board is its own design and doesn't have to match them.
 
 ## Signal paths
 
@@ -89,7 +88,6 @@ pin 17). J2's detect switch is not connected.
 - **Supply filter (`HP_5V`):** R29 (2.2 Ω) from `+5V` and C21 (10 µF X7R), about 6–10 kHz, so the charge pump's ripple
   reaches `+5V` about 30 dB lower. A bead wouldn't do it: beads are a few ohms at 400 kHz. R29 drops up to ≈ 0.2 V at
   full scale into 16 Ω.
-- **Footprint:** KiCad's `WQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm` matches TI's RTJ0020D land pattern.
 
 ### Headphone detect (`HP_DETECT`)
 J4 (Same Sky SJ3-35063AG; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)): pins 1/2/3 are
@@ -97,8 +95,6 @@ sleeve/ring/tip. Pins 5 and 6 are an isolated switch that closes when a plug is 
 (Daisy pin 23, PA3), with TP1. **Low = headphones in.**
 - **No external pull-up or RC.** The firmware enables PA3's pull-up and debounces, as in the Seed3 datasheet's switch
   circuits (Figures 2.1, 2.2).
-- **Footprint:** `lib/amp-board.pretty/Jack_3.5mm_SameSky_SJ3-35063AG_Horizontal`, from the datasheet's recommended layout,
-  jack face at the board edge. J2 uses the same part.
 
 ### Speaker send (`AUDIO_OUT_2` → U101)
 `AUDIO_OUT_2` (Daisy pin 19) → R11/C16 (1k/3.3 nF, ≈ 48 kHz) → `LINE_OUT`, with R12 (100k) to GND, → C108 → U101 IN+.
@@ -138,8 +134,6 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 - **Trade-off:** the watchdog is inside the chip it watches. Never feed it from the main loop.
 
 ## Power section (sheet 2)
-`../legacy/power-board/README.md` holds the original power board's reasoning and the battery and speaker details.
-
 ### Battery input
 - **The battery** is a Talentcell power bank (72 W, 100 Wh). The board takes its 12 V output, assumed 9.0 V empty to
   12.6 V full (unregulated or not, the listing doesn't say).
@@ -165,7 +159,7 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   - **Audio:** FB101 (220 Ω at 100 MHz) → `+5V`, with C105; optional bulk C104 through JP102.
   - **Display:** FB102 → `+5V_DISPLAY` → J105, with C107; optional bulk C106 through JP104.
   - JP101 and JP103 bypass the beads. The jumpers are experiments: set them from bring-up.
-- **Budget:** `+5V` must stay at 4.75 V or more. Q102 and FB101 cost about 45 mV, so a DFR0571 at 4.85 V is enough.
+- **Budget:** `+5V` must stay within 4.75–5.25 V. Q102 and FB101 cost about 45 mV, so a DFR0571 at 4.85 V is enough.
 
 ### Supervisor, shutdown and mute
 - **U103** (TPS3808EG50, 4.65 V threshold, 20 ms delay) watches `+5V_RAW`. Its open-drain output (`AMP_PG`, R109 10k
@@ -245,18 +239,6 @@ Power states: **on**; **Daisy out**; **USB only** (see "Running from USB alone")
 plays; **reversed** (battery at J101, or J107's wires). **Never 5 V alone on J107** (see "Decisions"). The jack pins are
 touched by people, so each has an ESD diode; the speaker outputs see ESD through C121/C122.
 
-### Links between the sheets
-| Sheet 1 net | Sheet 2 net | From | Promise |
-|---|---|---|---|
-| `+5V` | `+5V_AUDIO` | FB101 / JP101 | 4.75–5.25 V |
-| `BATT_SENSE` | `BATT_SENSE` | R102/R103 | VBAT / 11 from 9.1 kΩ, 1.15 V at most in use |
-| `SPK_MUTE` | `SPK_MUTE` | R107 pull-up, Q2 pull-down | ≈ 5 V muted, a few mV playing |
-| `LINE_OUT` | `LINE_OUT` | R11 (1k) | Audio, 1 Vrms full scale, ≈ 0 V DC, into 60 kΩ |
-| `LINE_REF` | `LINE_REF` | R21 (1k) to GND | 0 V ± 10 mV, into 60 kΩ |
-| `AMP_FAULTZ` | `AMP_FAULTZ` | U101 FAULTZ, R112/R114 | ≈ 3.2 V, no fault; < 0.8 V, a latched fault; 0 V with `+5V_RAW` off |
-
-One ground net joins the sheets, through the planes.
-
 ### Display connector (J3)
 J3 is a 3-way screw terminal on the left edge: 1 GND, 2 TX, 3 RX. The display takes its power from J105, beside it.
 - **R8, R9 (10k)** in series with TX and RX limit the current when a wire lands on the wrong terminal, or when the
@@ -266,11 +248,6 @@ J3 is a 3-way screw terminal on the left edge: 1 GND, 2 TX, 3 RX. The display ta
   pull-up must stay off.
 - **C19/C20 (10 pF C0G)** on the Daisy side of R8/R9 cut 2.4 GHz by ≈ 60 dB.
 - **Baud rate:** 10k with ≈ 60 pF is ≈ 0.6 µs: fine to 230400 baud, not 921600.
-
-### Daisy pins
-12/13 I2C1 to U2, 14/15 display UART, 16/17 audio in, 18/19 audio out, 20/40 GND, 22 `5V_SENSE`, 23 `HP_DETECT`,
-25 `BATT_SENSE`, 27 `HP_SD`, 28 `SPK_EN`, 32 `AMP_FAULTZ` (through R30), 38 `3V3_D` (I2C pull-ups), 39 VIN. Every other
-pin is no-connect. With the Daisy out, its sockets give probe access to every net. USB stays on the module.
 
 ## Firmware requirements
 - **IWDG:** start it early in boot, ≈ 10 ms timeout, fed **only** from the audio callback.
@@ -306,21 +283,15 @@ Decisions the user accepted, with the reason.
   and power-down never get there, so the rule is procedural.
 - **FAULTZ latches** until a power cycle or JP105: a fault does no damage, and an automatic retry would pulse a shorted
   speaker wire. It is not tied to SDZ.
-- **J106 is a keyed JST XH header (2026-11-09).** With two identical screw terminals side by side, the module's wire
+- **J106 is a keyed JST XH header.** With two identical screw terminals side by side, the module's wire
   pairs could go in swapped, putting 12 V on everything on `+5V`. Still possible and accepted: J107's wires swapped, the
   input cable crimped backwards (TEST_PLAN 3A.3 and 3B.1 check for it), and J107 and J105 swapped (harmless).
-- **D102/D103 clamp SDZ and MUTE to PVCC (2026-11-09).** See "Power sequence".
-- **R30 in series with Daisy pin 32 (2026-11-09).** A firmware mistake can't short the STM32's output into FAULTZ.
-- **U2 is a TPA6130A2 (2026-11-09).** JLC assembles the board, so a hand-solderable package (the MAX9722A in TSSOP,
-  on the legacy audio board) no longer matters, and JLC's stock and price favoured it. It adds a hardware mute, I2C volume, and inputs rated with the
-  supply off. It costs Daisy pins 12, 13, 27 and 38. The + inputs have no resistor to match R10: no room, and the
-  MAX9722A's were grounded at the amp too.
-- **Noise and fault changes (2026-11-08):** U2's supply filter, C0G C108/C109 in place of 1.5 µF X7R (the corner moves
-  from 1.7 Hz to 5.6 Hz), and FAULTZ to the Daisy. More bulk on PVCC waits for bring-up.
-- **Under 100 × 100 mm (2026-11-07),** for JLC's 4-layer price break: the board is 100 × 78 mm. F101 became an SMD fuse
-  (same rating and interrupting class as the 5 × 20 mm one), L101/L102 stand upright, and Q1, R23 and the second battery
-  divider went (Q102 covers Q1; R102 is 100k so the ×11 constant holds).
-- **Floorplan (2026-11-08).** U2's input network is 20 mm from the class D's switching nodes, because the left column is
+- **U2 is a TPA6130A2:** JLC assembles the board, so the package needn't be hand-solderable, and JLC's stock and price
+  favoured it. It has a hardware mute, I2C volume, and inputs rated with the supply off, for Daisy pins 12, 13, 27 and
+  38. The + inputs have no resistor to match R10: no room.
+- **Under 100 × 100 mm,** for JLC's 4-layer price break: the board is 100 × 78 mm. That is why F101 is a soldered SMD
+  fuse and not a 5 × 20 mm fuse in a holder, and why L101/L102 stand upright.
+- **Floorplan.** U2's input network is 20 mm from the class D's switching nodes, because the left column is
   full. The display's ground terminals are 26–31 mm from the guitar input's 1 MΩ node. `AUDIO_OUT_2` runs 32 mm on In2
   and `AUDIO_IN_2` 16 mm on B.Cu under the Daisy. TEST_PLAN stage 7 checks the noise.
 - **J102's pins swapped** (pin 2 SPK+), so the speaker traces don't cross.
@@ -329,10 +300,14 @@ Decisions the user accepted, with the reason.
 - **Vias in U2's and U101's exposed pads** may wick some solder; ask JLC to plug or tent them if the order offers it.
 - **The VBAT branch to J106 runs on In2** (1 mm, 0.5 oz): it carries only the DFR0571's ≈ 0.75 A.
 - **0.8 mm silkscreen text** in the dense areas (JLC recommends 1.0 mm): it prints with a 0.15 mm stroke.
+- **Order without waiting for the legacy boards (2026-11-10).** The board is ordered when its own open items are
+  acceptable. The legacy boards' bring-up informs the next revision, not this order. The cost is a possible respin if
+  they turn up a fault in a circuit this board shares.
 
 ## Open items
-- **Bring up the two legacy boards first** (`../legacy/`), and fold in the results before ordering: the Daisy outputs' DC level,
-  the switch-on surge through F101, beads or bypass, the optional bulk caps, L101/L102's value, and headphone clicks.
+- **Questions this board's own bring-up answers** (the board carries the means to act on each): the Daisy outputs' DC
+  level (TEST_PLAN 6.16; fix in "Speaker send"), the switch-on surge through F101 (3C), beads or bypass (JP101, JP103),
+  the optional bulk caps (C104/C106 with JP102, JP104), more bulk on PVCC, L101/L102's value, and headphone clicks.
 - **AUX at pro line level with the board off:** ±5 V reaches the unpowered codec at ≈ ±0.4 V and ≈ 0.3 mA, past its
   rating. Rare, and the current is small; R5 at 330 Ω fixes it for ≈ 3 dB less level.
 - **The DFR0571's output current limit** is not stated. Only the accepted mistakes that short its output depend on it.
@@ -377,17 +352,11 @@ the same stackup on JLC's order page. Black mask, white silkscreen; the narrowes
    left edge with J3, J105 and J107.
 6. **Thermal:** U101's pad has nine vias and ten more under the body, with a mask opening on the back.
 
-### Board outline and placement
-100 × 78 mm, 2 mm corner radius; the front panel is the bottom edge. The board file has the positions; the reasons:
-- **J1, J2, J4** on the front edge; **J106, J107, J105, J3** together on the left edge at the 5 V entry; **SW101, F101,
-  J101** along the rear edge; **J102** on the right edge between L101 and L102.
-- **U1 and the input network** behind J1; **the AUX sum** between J2 and the Daisy's front end.
-- **U2** right of the Daisy's front end, above J4: inputs toward its four C0G caps, outputs toward J4, charge-pump caps
-  at their pins with no vias (TPA6130A2 Layout Guidelines).
-- **R11, R12, C16, R21** in a column 6 mm from C108/C109; **R17, Q2, C17, R18, R19** beside their Daisy pins.
-- **D102, D103** at C125's and C124's RC; **JP106–JP108** on the back.
-
-### Routing
+### Outline, placement and routing
+- **100 × 78 mm,** 2 mm corner radius; the front panel is the bottom edge. Jacks on the front edge; the 5 V and display
+  terminals together on the left edge; the battery entry along the rear edge; the speaker terminal on the right edge.
+- **U2:** inputs toward its four C0G caps, outputs toward J4, charge-pump caps at their pins with no vias (TPA6130A2
+  Layout Guidelines).
 - **Widths:** battery, PVCC, output and speaker paths 1.5 mm; 5 V nets 1.0 mm (0.6 mm on the smaller branches); signals
   0.2–0.3 mm.
 - **Around the Daisy's USB end:** its pins fill all four layers, so the three supply crossings go around the rear end,
@@ -398,37 +367,17 @@ the same stackup on JLC's order page. Black mask, white silkscreen; the narrowes
 `amp-board.kicad_pro` holds the minimums and net classes; `amp-board.kicad_dru` adds the per-class ranges. All are
 within JLC's standard 4-layer limits.
 
-| Item | Min | Default | Max |
-|---|---|---|---|
-| Signal track | 0.2 mm | 0.2 mm | 0.5 mm |
-| GND track | 0.2 mm | 0.5 mm | 2 mm |
-| `Power` class track | 0.5 mm | 1 mm | 2 mm |
-| `HighCurrent` class track | 0.5 mm | 1.5 mm | 3 mm |
-| Via | 0.6 / 0.35 mm | | 0.8 / 0.4 mm |
-| Clearance | 0.2 mm | | |
-| Copper to board edge | 0.5 mm | | |
-
 - **`Power`:** the 5 V nets. **`HighCurrent`:** the battery, PVCC, output and speaker nets, sized for the 3.15 A fuse.
 - **Thermal reliefs** on every GND pad, for an iron, except those in "Decisions".
-- **Expected DRC warnings:** 29 `silk_edge_clearance`, from the edge-mounted connectors. Don't trim their footprints.
-  JLC's recommended pass also flags the test points' silk circles, 71 texts under 1.0 mm and U101's silk over its pad.
 
 ## Parts sourcing
-- **Build:** JLC assembles the SMD parts from their `LCSC` fields. The through-hole parts and F101 are soldered by hand
-  from the DigiKey order. Check stock before ordering.
-- **Fields:** the schematic's `MPN`, `Manufacturer`, `DigiKey`, `LCSC` and `Purchase_Note` fields are the only record of
-  the parts. `digikey-order.kicad_jobset` writes the DigiKey order from them (`fab/amp-board-digikey.csv`, in DigiKey's
-  upload columns); its one line with no part number lists what isn't bought (the Daisy and the test points).
-  `order-extras.csv` holds the few order lines that aren't parts on the schematic.
+The schematic's fields are the only record of the part numbers (`../CLAUDE.md`, "Where each fact lives").
+- **Build:** JLC assembles the SMD parts, all on top. The through-hole parts and F101 are soldered by hand from the
+  DigiKey order. Check every polarised part in JLC's preview before paying.
 - **Passive sizes:** resistors 0603 (R105 2512). Capacitors 0603 up to 220 nF and 0805 from 680 nF, since a ceramic
   loses capacitance with DC voltage, more in smaller cases. The C0G parts are larger for their value (C2 0805, the
   470 nF parts 1206), and C7 is 1210.
 - **C0G** for every capacitor on the audio path (C2, C10/C11, C22/C23, C108/C109) and the filter caps (C1, C3, C9, C16,
   C18–C20).
-- **JLC assembly:** `jlc-assembly.kicad_jobset` writes the BOM and position file; `jlc_asm.py cpl` makes `_cpl.csv`. All
-  placed parts are on top. Check every polarised part in JLC's preview before paying. The BOM rows with no part number
-  are the hand-soldered parts, the test points and U102.
-- **J106's mate:** a JST XHP-2 housing (455-2266-ND) and one ASXHSXH22K305 lead (455-3241-ND), cut in half. VIN+ goes in
-  position 1 (J106's triangle). Mark it: both wires are black.
-- **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND). **TP1, TP101–TP109** are bare pads.
-- **The S1B panel switch** is obsolete at NKK; pick another for later builds.
+- **J106's mate** (X103, X104): one lead cut in half, crimped into the housing. VIN+ goes in position 1 (J106's
+  triangle). Mark it: both wires are black.

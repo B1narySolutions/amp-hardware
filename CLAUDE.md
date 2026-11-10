@@ -8,12 +8,13 @@ Hardware for a capstone guitar amp, in KiCad 10:
 - `amp-board/` is **the amp board**, the only live design: a Daisy Seed3 (A1, socketed) with the guitar and AUX inputs,
   the headphone amp (U2, TPA6130A2), the battery input, the 5 V distribution and the class D speaker amp (U101,
   TPA3118D2), on one 4-layer board that JLC assembles. Sheet 1 (`amp-board.kicad_sch`) is the audio circuit; sheet 2
-  (`power.kicad_sch`) is the power section, with designators from 101. Not ordered yet. It is its own design: change
+  (`power.kicad_sch`) is the power section, with designators from 101. Not ordered yet; its order doesn't wait for
+  the legacy boards (DESIGN.md, "Decisions"). It is its own design: change
   its parts and circuits freely.
 - `legacy/` holds the two boards it grew out of, **frozen as ordered** (2026-11-05): `legacy/audio-board/rev2/` (2-layer,
   hand-soldered, MAX9722A headphone amp), `legacy/power-board/` (rev 1, designed by a teammate) and their joint DigiKey
   order. Don't edit anything under `legacy/` unless the user asks or a bring-up result has to be written into their
-  test plan. Nothing in `amp-board/` has to match them. Their bring-up results feed the amp board's "Open items".
+  test plan. Nothing in `amp-board/` has to match them or wait for them. Their bring-up results inform the amp board's next revision.
 
 The repo has no scripts of its own. Every view, check, edit and export goes through KiCad's own interfaces
 (`kicad-cli`, jobsets, the IPC API), following the skills from
@@ -57,16 +58,18 @@ Each fact has one home. Don't copy it into a second file; point to it.
 - **The schematic and board** are the design. Part numbers live in the schematic's `MPN`, `Manufacturer`, `DigiKey`,
   `LCSC` and `Purchase_Note` fields and nowhere else: there is no hand-kept BOM, order or cart file. Changing a part
   means changing its fields (`kicad-part-selection`, `kicad-schematic`), then `board.py sync`.
+  - **Values** are the bare value (`100nF`, `10k`); a capacitor's voltage rating is its hidden `Voltage` field.
+  - **Ordered parts that aren't on the board** (the Daisy's sockets, J106's mating housing and lead, jumper shunts, the
+    panel switch, the DFR0571) are symbols marked "not on board", one per piece: X101–X109 and U102 on sheet 2.
+  - **Not in the BOM:** the Daisy (A1) and the test points, which aren't bought.
 - **`amp-board/DESIGN.md`** is the reasons: how the board works and why, "What each connector can see" (the environment a
   design review checks against, `kicad-schematic-review` skill), "Decisions" the user accepted, and "Open items". It
   describes the design as it stands, not its history. Git is the history: there is no change list.
 - **`amp-board/TEST_PLAN.md`**: its expected readings must match the schematic. After a schematic change, recheck the
-  affected readings (`kicad-bringup` skill computes them from the netlist).
-- **`amp-board/order-extras.csv`** is the only hand-kept order file: the few DigiKey lines that aren't parts on the
-  schematic (the Daisy's sockets, J106's mating housing and leads, jumper shunts, the panel switch).
+  affected readings (`kicad-bringup` skill; `view.py ohms` recomputes stage 1's resistances from the netlist).
 - **`amp-board/fab/`** is generated and ignored by git: the Gerber zip, `assembly/` (JLC BOM and CPL) and
-  `amp-board-digikey.csv` (the DigiKey order in DigiKey's upload columns; its one line with no part number is the
-  Daisy and the test points, which aren't bought). Never edit a file in it; regenerate it.
+  `amp-board-digikey.csv` (the whole DigiKey order, in DigiKey's upload columns). Never edit a file in it; regenerate
+  it.
 - **`amp-board/lib/`** holds the board's own symbols (`amp-board.kicad_sym`), footprints (`amp-board.pretty`) and 3D
   models. The project's tables reach only it and KiCad's standard libraries, so the folder works when copied anywhere.
 - **`legacy/power-board/README.md`** was the contract between the two legacy boards. It binds only them.
@@ -101,7 +104,7 @@ Two gates: a light one on every commit, a full one when the board is ordered.
    --quality high --width 1600 --height 1250 -o render/top.png amp-board.kicad_pcb`, and the same with `--side bottom
    --quality basic` for `render/bottom.png` (high quality's floor shadows show the top-side parts through it).
 4. Commit, tag the commit `amp-board-vN` (N = the schematic's title-block revision), push the tag, and attach `fab/`'s
-   files and `order-extras.csv` to a GitHub release of that tag. The tag is the revision: there are no revision
+   files to a GitHub release of that tag. The tag is the revision: there are no revision
    folders. Raise the title-block revision in the first commit after an order.
 
 **Always:**

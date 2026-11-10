@@ -4346,6 +4346,319 @@
 							(font
 								(size 1.27 1.27))))))
 			(embedded_fonts no))
+	
+		(symbol "Mechanical:Housing"
+			(pin_names
+				(offset 1.016))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "N"
+				(at 3.81 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))
+					(justify left)))
+			(property "Value" "Housing"
+				(at 3.81 -1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))
+					(justify left)))
+			(property "Footprint" ""
+				(at 1.27 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Datasheet" ""
+				(at 1.27 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Description" "Housing"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_keywords" "housing enclosure"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_fp_filters" "Enclosure* Housing*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(symbol "Housing_0_1"
+				(polyline
+					(pts
+						(xy -5.715 0)
+						(xy -0.635 0)
+						(xy 3.175 3.81))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -5.715 0)
+						(xy -5.715 -4.445)
+						(xy -0.635 -4.445)
+						(xy 3.175 -0.635)
+						(xy 3.175 3.81)
+						(xy -1.905 3.81)
+						(xy -5.715 0))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type background)))
+				(rectangle
+					(start -5.08 -0.635)
+					(end -1.27 -1.905)
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -4.5212 -1.5748)
+						(xy -4.4704 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(circle
+					(center -4.445 -3.175)
+					(radius 0.635)
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type outline)))
+				(polyline
+					(pts
+						(xy -4.4196 -1.2192)
+						(xy -4.3688 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -4.4196 -1.6764)
+						(xy -4.064 -1.6764))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -4.318 -1.3208)
+						(xy -4.0132 -1.3208))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -4.2164 -0.9144)
+						(xy -3.9116 -0.9144))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.9116 -1.6256)
+						(xy -3.8608 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.81 -1.2192)
+						(xy -3.7592 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.6068 -1.5748)
+						(xy -3.556 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.5052 -1.2192)
+						(xy -3.4544 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.5052 -1.6764)
+						(xy -3.1496 -1.6764))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.4036 -1.3208)
+						(xy -3.0988 -1.3208))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -3.302 -0.9144)
+						(xy -2.9972 -0.9144))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.9972 -1.6256)
+						(xy -2.9464 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.8956 -1.2192)
+						(xy -2.8448 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.6924 -1.5748)
+						(xy -2.6416 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.5908 -1.2192)
+						(xy -2.54 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.5908 -1.6764)
+						(xy -2.2352 -1.6764))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.4892 -1.3208)
+						(xy -2.1844 -1.3208))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.3876 -0.9144)
+						(xy -2.0828 -0.9144))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -2.0828 -1.6256)
+						(xy -2.032 -1.3716))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy -1.9812 -1.2192)
+						(xy -1.9304 -0.9652))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none)))
+				(circle
+					(center -1.905 -3.175)
+					(radius 0.635)
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type outline)))
+				(polyline
+					(pts
+						(xy -0.635 0)
+						(xy -0.635 -4.445))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none))))
+			(embedded_fonts no))
 	)
 	(symbol
 		(lib_id "Device:R")
@@ -4511,7 +4824,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 25V"
+		(property "Value" "100nF"
 			(at 158.75 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4608,6 +4921,15 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 154.94 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 154.94 217.17 0)
 			(hide yes)
 			(effects
@@ -4925,7 +5247,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 311.15 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5030,6 +5352,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 307.34 41.91 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "8bfc995a-89f1-42d8-a127-f565d8585caa")
 		)
@@ -5066,7 +5397,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 162.56 118.11 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5170,6 +5501,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 162.56 120.65 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f7009412-d837-4ffe-94d8-edb88993b78d")
 		)
@@ -5207,7 +5547,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k 1%"
+		(property "Value" "10k"
 			(at 209.55 185.42 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5623,7 +5963,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1u 16V"
+		(property "Value" "1uF"
 			(at 31.75 142.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5728,6 +6068,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 27.94 140.97 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "0dd7cfd5-3094-4b98-9b61-7a53543cddec")
 		)
@@ -5749,7 +6098,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -6123,7 +6472,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "680n 50V X7R"
+		(property "Value" "680nF"
 			(at 222.25 132.08 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6220,6 +6569,15 @@
 			)
 		)
 		(property "LCSC" "C22402009"
+			(at 218.44 130.81 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 218.44 130.81 0)
 			(hide yes)
 			(effects
@@ -6517,7 +6875,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 162.56 107.95 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6613,6 +6971,15 @@
 			)
 		)
 		(property "LCSC" "C21120"
+			(at 162.56 110.49 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 162.56 110.49 0)
 			(hide yes)
 			(effects
@@ -7020,7 +7387,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1u 10V"
+		(property "Value" "1uF"
 			(at 379.73 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7125,6 +7492,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 375.92 123.19 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "30b194fe-efeb-4aff-b36c-cdb5c77cce8b")
 		)
@@ -7162,7 +7538,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 50V"
+		(property "Value" "100nF"
 			(at 110.49 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7267,6 +7643,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 106.68 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "8039d3e0-b0a9-4c3a-a283-36acead050bc")
 		)
@@ -7303,7 +7688,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 40.64 111.252 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7407,6 +7792,15 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 40.64 115.57 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "610a22ec-5b92-441c-a2f7-c1b1cc2d52d5")
 		)
@@ -7444,7 +7838,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1u 25V"
+		(property "Value" "1uF"
 			(at 143.51 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7549,6 +7943,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 139.7 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "284a1daa-a9a2-471a-9f11-02efe6476a91")
 		)
@@ -7586,7 +7989,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10u 10V"
+		(property "Value" "10uF"
 			(at 207.01 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7683,6 +8086,15 @@
 			)
 		)
 		(property "LCSC" "C15850"
+			(at 203.2 69.85 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "16V"
 			(at 203.2 69.85 0)
 			(hide yes)
 			(effects
@@ -7858,7 +8270,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 341.63 53.34 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7953,6 +8365,15 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 337.82 52.07 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "516f1ee5-4884-4eb9-8e9e-9e0ab3630ccb")
 		)
@@ -7990,7 +8411,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 311.15 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8095,6 +8516,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 307.34 69.85 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "44a50768-3818-4459-ab53-4646d96f4376")
 		)
@@ -8116,7 +8546,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -8512,7 +8942,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 80.01 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8599,6 +9029,15 @@
 			)
 		)
 		(property "DigiKey" "10-EEU-FM1E101HCT-ND"
+			(at 76.2 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "25V"
 			(at 76.2 217.17 0)
 			(hide yes)
 			(effects
@@ -8783,7 +9222,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 50V"
+		(property "Value" "100nF"
 			(at 95.25 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8880,6 +9319,15 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 91.44 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 91.44 217.17 0)
 			(hide yes)
 			(effects
@@ -9060,7 +9508,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "680n 50V X7R"
+		(property "Value" "680nF"
 			(at 222.25 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9157,6 +9605,15 @@
 			)
 		)
 		(property "LCSC" "C22402009"
+			(at 218.44 107.95 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 218.44 107.95 0)
 			(hide yes)
 			(effects
@@ -9482,7 +9939,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 162.56 128.27 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9578,6 +10035,15 @@
 			)
 		)
 		(property "LCSC" "C21120"
+			(at 162.56 130.81 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 162.56 130.81 0)
 			(hide yes)
 			(effects
@@ -9755,7 +10221,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 62.23 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9850,6 +10316,15 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 58.42 217.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "59b187a9-a7a9-424e-9e99-8a1d3b5deb97")
 		)
@@ -9887,7 +10362,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100u 25V"
+		(property "Value" "100uF"
 			(at 341.63 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9982,6 +10457,15 @@
 				)
 			)
 		)
+		(property "Voltage" "25V"
+			(at 337.82 80.01 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "525fbf8e-cc63-44c0-ba38-8dee4476366e")
 		)
@@ -10019,7 +10503,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 10V"
+		(property "Value" "100nF"
 			(at 344.17 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10116,6 +10600,15 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 340.36 107.95 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 340.36 107.95 0)
 			(hide yes)
 			(effects
@@ -10300,7 +10793,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k 1%"
+		(property "Value" "100k"
 			(at 209.55 173.99 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11146,7 +11639,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.6k 1%"
+		(property "Value" "5.6k"
 			(at 54.61 142.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11561,7 +12054,7 @@
 				)
 			)
 		)
-		(property "Value" "220n 25V"
+		(property "Value" "220nF"
 			(at 162.56 138.43 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11665,6 +12158,15 @@
 				)
 			)
 		)
+		(property "Voltage" "50V"
+			(at 162.56 140.97 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "870d19a3-67ff-40ff-8afa-146af7585652")
 		)
@@ -11702,7 +12204,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1u 10V"
+		(property "Value" "1uF"
 			(at 328.93 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11799,6 +12301,15 @@
 			)
 		)
 		(property "LCSC" "C28323"
+			(at 325.12 158.75 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
 			(at 325.12 158.75 0)
 			(hide yes)
 			(effects
@@ -12112,7 +12623,7 @@
 				)
 			)
 		)
-		(property "Value" "470n 25V C0G"
+		(property "Value" "470nF"
 			(at 38.862 101.6 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12208,6 +12719,15 @@
 			)
 		)
 		(property "LCSC" "C6049896"
+			(at 40.64 105.41 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "25V"
 			(at 40.64 105.41 0)
 			(hide yes)
 			(effects
@@ -13295,6 +13815,117 @@
 		)
 		(pin "1" (uuid "1a8c59ec-b52f-4d97-b766-2d3d4a8add61")) (pin "2" (uuid "8e144371-8a61-46ea-8ad2-b55f1991fc38"))
 		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D102") (unit 1)))))
+	(rectangle (start 267.97 205.74) (end 406.4 247.65) (stroke (width 0.254) (type dash)) (fill (type none)) (uuid "99595088-954a-4e80-b811-d3b520c2e87d"))
+	(text "ORDERED PARTS NOT ON THE BOARD" (exclude_from_sim no) (at 269.97 210.74 0) (effects (font (size 2 2) (thickness 0.31) (bold yes)) (justify left bottom)) (uuid "58567da3-506a-471b-810f-dd01ee37f562"))
+	(text "X101, X102: sockets for the Daisy (A1). X103, X104: the DFR0571 input cable (J106).\nX105-X108: shunts for JP101-JP104. X109: panel switch, wired to SW101." (exclude_from_sim no) (at 270.51 240.03 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "cc40fd01-8be8-46a5-9c7a-8534de2d56ab"))
+	(symbol (lib_id "Mechanical:Housing") (at 276.86 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "ced3fbd7-5f98-4204-9c6e-2c2a851bed04")
+		(property "Reference" "X101" (at 276.86 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Daisy socket 1x20" (at 276.86 229.87 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 278.13 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 278.13 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 276.86 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "S7018-ND" (at 276.86 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "PPTC201LFBN-RC" (at 276.86 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Sullins Connector Solutions" (at 276.86 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For the Daisy Seed3 (A1): two per board. S6104-ND, in earlier orders, is a 2x20 socket" (at 276.86 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X101") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 290.83 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "313b576d-56bb-4fbf-959f-f48450a92149")
+		(property "Reference" "X102" (at 290.83 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Daisy socket 1x20" (at 290.83 233.68 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 292.1 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 292.1 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 290.83 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "S7018-ND" (at 290.83 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "PPTC201LFBN-RC" (at 290.83 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Sullins Connector Solutions" (at 290.83 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For the Daisy Seed3 (A1): two per board. S6104-ND, in earlier orders, is a 2x20 socket" (at 290.83 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X102") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 304.8 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "9192ca1a-46bb-496b-997c-6b150063395c")
+		(property "Reference" "X103" (at 304.8 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "J106 mate XHP-2" (at 304.8 229.87 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 306.07 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 306.07 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 304.8 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "455-2266-ND" (at 304.8 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "XHP-2" (at 304.8 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "JST Sales America Inc." (at 304.8 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "Housing of the DFR0571 input cable" (at 304.8 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X103") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 318.77 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "503c4252-0a49-4fb2-bd86-aecedb474553")
+		(property "Reference" "X104" (at 318.77 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "J106 cable lead" (at 318.77 233.68 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 320.04 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 320.04 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 318.77 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "455-3241-ND" (at 318.77 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "ASXHSXH22K305" (at 318.77 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "JST Sales America Inc." (at 318.77 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "XH lead 12in 22AWG. Cut in half: VIN+ and GND for the DFR0571's input cable" (at 318.77 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X104") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 332.74 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "22e6ad33-fad2-4786-b192-2089016b4065")
+		(property "Reference" "X105" (at 332.74 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Jumper shunt" (at 332.74 229.87 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 334.01 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 334.01 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 332.74 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "952-2171-ND" (at 332.74 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "M7567-05" (at 332.74 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Harwin" (at 332.74 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For JP101-JP104. JP105 stays open (manual reset)" (at 332.74 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X105") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 346.71 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "9e98f18d-1ce5-461b-8521-63bb19b0ea0c")
+		(property "Reference" "X106" (at 346.71 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Jumper shunt" (at 346.71 233.68 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 347.98 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 347.98 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 346.71 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "952-2171-ND" (at 346.71 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "M7567-05" (at 346.71 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Harwin" (at 346.71 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For JP101-JP104. JP105 stays open (manual reset)" (at 346.71 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X106") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 360.68 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "1a608f2e-8c49-4daa-8952-54465ee3ef12")
+		(property "Reference" "X107" (at 360.68 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Jumper shunt" (at 360.68 229.87 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 361.95 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 361.95 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 360.68 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "952-2171-ND" (at 360.68 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "M7567-05" (at 360.68 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Harwin" (at 360.68 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For JP101-JP104. JP105 stays open (manual reset)" (at 360.68 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X107") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 374.65 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "1ad26434-20c4-471e-b054-51cd503152cf")
+		(property "Reference" "X108" (at 374.65 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Jumper shunt" (at 374.65 233.68 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 375.92 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 375.92 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 374.65 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "952-2171-ND" (at 374.65 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "M7567-05" (at 374.65 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "Harwin" (at 374.65 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "For JP101-JP104. JP105 stays open (manual reset)" (at 374.65 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X108") (unit 1)))))
+	(symbol (lib_id "Mechanical:Housing") (at 388.62 222.25 0) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files no) (on_board no) (dnp no) (uuid "837dd73a-bc07-4747-9cc3-8b651bc9f63a")
+		(property "Reference" "X109" (at 388.62 215.9 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "Panel switch S1B" (at 388.62 229.87 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "" (at 389.89 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "~" (at 389.89 220.98 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 388.62 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "6281-S1B-ND" (at 388.62 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "S1B" (at 388.62 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "NKK Switches" (at 388.62 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Purchase_Note" "Wired to SW101. SPST toggle 5A 30VDC. Substitute for S301T ($15.78): same NKK S series, 12.5mm M12x1 panel hole and lever; rated 5A AC/DC instead of 20A DC; solder lugs, not screw terminals. NKK lists it obsolete; DigiKey still stocks it, but pick another for later builds" (at 388.62 222.25 0) (hide yes) (effects (font (size 1.27 1.27))))
+		
+		(instances (project "amp-board" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "X109") (unit 1)))))
 	(embedded_fonts no)
 	(symbol
 		(lib_id "Connector:TestPoint")
@@ -13302,7 +13933,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13391,7 +14022,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13480,7 +14111,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13569,7 +14200,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13658,7 +14289,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13747,7 +14378,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -13836,7 +14467,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
