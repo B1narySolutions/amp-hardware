@@ -23,7 +23,9 @@ constants. Three simplifications the merge made possible are done, to fit the bo
 25 still reads VBAT / 11). F101 is an SMD fuse instead of a 5 × 20 mm holder. Three noise and fault changes followed
 (2026-11-08, see "Decisions"): U2's own supply filter (R29/C21), C0G caps at the speaker amp's inputs (C108/C109), and
 FAULTZ to Daisy pin 32 (R114). Three protection changes followed the schematic review (2026-11-09, see "Decisions"):
-J106 is a keyed JST XH header, D102/D103 clamp U101's SDZ and MUTE to PVCC, and R30 sits in series with Daisy pin 32.
+J106 is a keyed JST XH header, D102/D103 clamp U101's SDZ and MUTE to PVCC, and R30 sits in series with Daisy pin 32. U2,
+the headphone amp, is a TPA6130A2 controlled over I2C instead of rev 2's MAX9722A (2026-11-09, see "Headphone output"),
+since JLC assembles rev 3.
 
 ## Signal paths
 
@@ -88,8 +90,9 @@ and C3 (1 nF, RF filter) → `AUDIO_IN_2` (Daisy pin 17) directly. J2's detect s
 - **Use:** backing tracks bypass NAM. The firmware mixes `AUDIO_IN_2` in after the amp model, to both outputs.
 
 ### Headphone output (`AUDIO_OUT_1` → J4)
-`AUDIO_OUT_1` (Daisy pin 18) → R10 (3.3k) / C9 (1 nF to GND) → `HP_SOURCE` → C10/C11 (4.7 µF each) → R25/R27 (10k) → U2 INL−/INR−,
-with R26/R28 (10k) from each output back to its input. U2 (MAX9722AEUE+) drives J4 (`HP_L` tip, `HP_R` ring) directly.
+`AUDIO_OUT_1` (Daisy pin 18) → R10 (3.3k) / C9 (1 nF to GND) → `HP_SOURCE` → C10/C11 (470 nF C0G) → U2 LEFTINM/RIGHTINM.
+U2's + inputs (LEFTINP/RIGHTINP) go to GND through C22/C23 (470 nF C0G). U2 (TPA6130A2RTJR) drives J4 (`HP_L` tip, `HP_R`
+ring) directly. The Daisy sets U2's volume and mute over I2C (pins 12/13) and shuts it down with `HP_SD` (pin 27).
 - **What the Seed3 outputs are rated for:** 1 Vrms at 0 dBFS (Seed3 datasheet, Table 3). The datasheet gives no output impedance,
   minimum load or coupling-cap value for pins 18/19, and says only the *inputs* are AC-coupled.
   - **Line-out mode, not headphones.** The TAC5242 drives 16 Ω headphones (62.5 mW) only in its differential or pseudo-differential
@@ -99,40 +102,50 @@ with R26/R28 (10k) from each output back to its input. U2 (MAX9722AEUE+) drives 
     (Seed3 datasheet, Figure 3.9) also adds an amp (TPA6110A2).
   - **DC level: probably 0 V, not confirmed.** Figure 3.9 wires pin 18 straight across a volume pot to GND, which only works if the pin
     sits at 0 V DC, so the outputs are most likely AC-coupled on the module. TEST_PLAN measures it with the Daisy fitted.
-- **No buffer between the Daisy and U2.** U2's inverting inputs are virtual grounds, so the Daisy sees R10 plus R25 ‖ R27 (5k),
-  ≈ 8.3 kΩ, far above the 600 Ω line-out minimum. Electrosmith's reference circuits load the pin with 10k through a 10 µF cap (line out,
-  Figure 3.3) and with a pot to GND (headphone amp, Figure 3.9).
-- **R10/C9** filter the DAC's out-of-band noise before U2. With R25 ‖ R27 as the load the corner is ≈ 80 kHz (R10 ‖ 5k with 1 nF).
-- **Level:** R10 and R25 ‖ R27 form a −4.4 dB divider, so full scale reaches `HP_SOURCE` at ≈ 0.60 Vrms, and U2's gain of −1
-  (R26/R25 = R28/R27 = 10k/10k) puts ≈ 0.60 Vrms on each output: 22 mW into 16 Ω, 11 mW into 32 Ω.
-- **Why unity gain:** U2 delivers 70 mW into 16 Ω and 130 mW into 32 Ω at 1 % THD with both channels driven in phase, which is the mono
-  case here (MAX9722A datasheet, Electrical Characteristics and "Output Power"): ≈ 1.06 and 2.0 Vrms. Full scale leaves 4.9 dB of
-  margin at 16 Ω and 10 dB at 32 Ω, and 11 mW is ≈ 108 dB SPL in typical 98 dB/mW headphones. The datasheet asks for 10k feedback
-  resistors, since larger ones raise the output offset through the 50 nA input bias current. To lower the gain, raise R25/R27 instead.
-- **Low end:** C10/C11 into R25/R27 is a 3.4 Hz high-pass. The Daisy's own output coupling cap adds a second one; its value isn't published.
-- **U2, MAX9722A (DirectDrive):** an internal charge pump inverts the supply onto PVSS, so its outputs swing about 0 V with no output
-  caps and the bass stays flat to a few Hz. It has built-in click-and-pop suppression, short-circuit and thermal protection, and ±8 kV
-  HBM protection on its outputs. It runs from 2.4–5.5 V, from `+5V` through R29 (see "U2's supply filter"). The charge pump switches at 600 kHz (505–800 kHz), far above
-  the audio band. PSRR is 80 dB at 217 Hz and the output noise 6 µVrms (22 Hz–22 kHz).
-- **Why the MAX9722A:** it comes in a 16-pin TSSOP (0.65 mm pitch, no exposed pad), so the whole board can be soldered with an iron.
-  The TPA6132A2 it replaces was a 3 × 3 mm QFN with an exposed pad. It keeps the same architecture: outputs at 0 V, no output caps,
-  one 5 V supply.
-- **U2 wiring** (datasheet Typical Application Circuit and Figure 7): inverting, with external gain resistors. INL+/INR+ go straight
-  to SGND, as the datasheet says to when the jack's ground isn't sensed. SHDN (active low) is tied to U2's supply (`HP_5V`), so U2 is on whenever
-  `+5V` is up (see "Output mute"). C13 is the flying cap (C1P/C1N), C14 holds PVSS to PGND, C12 bypasses PVDD to PGND and C15
-  bypasses SVDD to SGND: 1 µF each, the datasheet's value, 0805 X7R 50 V. PVSS and SVSS are tied together at the device, as are PVDD
-  and both SVDD pins.
+- **No buffer between the Daisy and U2.** U2's differential input impedance is 37 kΩ at its highest gain and more at lower
+  settings (TPA6130A2 datasheet, 9.2.2.1 and Figure 33), so each − input loads `HP_SOURCE` with ≥ 18.5 kΩ. With both channels
+  in parallel the Daisy sees R10 plus ≥ 9.2 kΩ, ≥ 12.5 kΩ in all, far above the 600 Ω line-out minimum.
+- **R10/C9** filter the DAC's out-of-band noise before U2: ≈ 50–65 kHz (R10 ‖ U2's inputs, 1 nF).
+- **Level and volume:** U2's gain is set over I2C in 64 audio-taper steps from −59.5 dB to +4.0 dB, with a mute bit per
+  channel (datasheet Table 2). R10 against both − inputs costs ≈ 2–2.7 dB, so the Daisy's 1 Vrms full scale reaches U2 at
+  ≈ 0.75 Vrms. At volume word 0x35 (+0.1 dB) that is ≈ 0.75 Vrms per output: 35 mW into 16 Ω, 18 mW into 32 Ω. Word 0x30
+  (−2.1 dB) gives ≈ 0.6 Vrms, rev 2's level. The datasheet's 138 mW into 16 Ω is for out-of-phase stereo; this board drives
+  both channels in phase, so cap the firmware's maximum at 0x35 until TEST_PLAN 8.8 has checked clipping into 16 Ω.
+- **Low end:** each channel's two input caps in series (235 nF) with ≥ 37 kΩ (+ R10): ≈ 17 Hz at the highest gain, lower at
+  lower settings. TI sizes 470 nF for ≤ 20 Hz at every gain (9.2.2.1). The Daisy's own output coupling cap adds a second
+  high-pass; its value isn't published.
+- **U2, TPA6130A2 (DirectPath):** an internal charge pump makes a negative rail (CPVSS), so the outputs swing about 0 V with no
+  output caps. Pop and click suppression, thermal shutdown, and 8 kV HBM and IEC contact ESD protection on the outputs. It
+  runs from 2.5–5.5 V, from `+5V` through R29: 4 mA playing, 1.4 mA with the outputs disabled, 0.4 µA in hardware shutdown.
+  PSRR 109 dB (inputs grounded), output noise 9 µVrms A-weighted, THD+N 0.0055 % at 35 mW into 16 Ω, output offset 0.4 mV
+  maximum (datasheet 7.5, 7.6). The charge pump switches at 300–500 kHz, near U101's 400 kHz (see "Speaker amp").
+- **Why the TPA6130A2 (2026-11-09, user's decision):** rev 3 is assembled by JLC, so U2 no longer has to be hand-solderable,
+  which was the reason for the MAX9722A's TSSOP. LCSC had 76 MAX9722AEUE+ at $5.03 and 3,842 TPA6130A2RTJR at $0.99 (C130046,
+  2026-11-09). It also gives the headphones a hardware mute (see "Output mute"), volume in the amp rather than only in the
+  codec, and inputs that survive the Daisy playing into them with `+5V` off (see "Running from USB alone"). Audio rev 2
+  keeps the MAX9722A.
+- **U2 wiring** (datasheet Figure 45 and Pin Functions): single-ended input on each − pin (`HP_SOURCE` through C10/C11), and
+  each + pin AC-grounded through C22/C23 at U2, as for single-ended inputs. That makes U2 inverting, as the MAX9722A was.
+  Both channels are driven, so either stereo mode or dual-mono mode (register 1) plays on both outputs. C13 is the flying
+  cap (CPP/CPN), C14 holds CPVSS, C15 bypasses the charge pump's VDD (pin 20) and C12 the analog VDD (pin 12): 1 µF each,
+  the datasheet's value, 0805 X7R 50 V. The exposed pad and GND pins 3, 9, 10, 13 and 19 are one ground.
+- **I2C and shutdown:** address 0x60 (fixed). SDA and SCL come from Daisy pins 13 and 12 (I2C1, libDaisy D12/D11), pulled up
+  to the Daisy's `3V3_D` (pin 38) by R33/R32 (2.2k: TI asks for 1–2k on a 5 V bus; ≈ 1.5 mA at 3.3 V). `HP_SD` comes from
+  Daisy pin 27 (ADC_5, libDaisy D20) with R34 (100k) to GND, so U2 stays in hardware shutdown while the Daisy is out,
+  booting or in reset. SD, SDA and SCL are 5 V tolerant and rated −0.3 to 7 V whatever VDD is (datasheet 7.1), so the
+  Daisy can drive them with `+5V` off. Hardware shutdown clears the registers; U2 restarts muted, outputs disabled.
 - **U2's supply filter (`HP_5V`):** R29 (2.2 Ω) from `+5V`, and C21 (10 µF X7R 0805) beside C12/C15: about 6–10 kHz with
-  the ceramics' derating, so the charge pump's 600 kHz ripple reaches `+5V` about 30 dB lower. `+5V` also feeds U1, `VREF`
-  and the Daisy, and less 600 kHz there also means less to beat with U101's switching. A ferrite bead wouldn't do it: beads
-  like FB101 block 100 MHz-class noise and are a few ohms at 600 kHz. R29 drops ≈ 10 mV at idle and up to ≈ 0.15 V at full
-  scale into 16 Ω, so U2 still has ≥ 4.6 V of its 2.4–5.5 V range.
-- **Output offset:** ±2.5 mV maximum input offset at a noise gain of 2, plus 50 nA through 10k: at most ≈ ±5.5 mV at J4, ≈ 0.3 mA into
-  16 Ω.
-- **No click from the input caps at power-up:** `HP_SOURCE` sits at 0 V and U2's inverting inputs at SGND, so C10/C11 have nothing to
-  charge to. The datasheet's advice to delay SHDN by a few RC time constants only applies to a source with a DC bias.
-- **Symbol:** `seed3-carrier:MAX9722AEUE` in `seed3-carrier.kicad_sym`, drawn for this board: inputs on the left, outputs and
-  charge-pump pins on the right, supplies and SHDN on top, IN+ and grounds on the bottom.
+  the ceramics' derating, so the charge pump's 300–500 kHz ripple reaches `+5V` about 30 dB lower. `+5V` also feeds U1, `VREF`
+  and the Daisy, and less ripple there also means less to beat with U101's switching. A ferrite bead wouldn't do it: beads
+  like FB101 block 100 MHz-class noise and are a few ohms at 400 kHz. R29 drops ≈ 9 mV playing quietly and up to ≈ 0.2 V
+  at full scale into 16 Ω, so U2 keeps ≥ 4.5 V of its 2.5–5.5 V range.
+- **Output offset:** 0.4 mV maximum: 25 µA into 16 Ω.
+- **No click at power-up:** U2 starts with its outputs disabled and muted, and the firmware enables them only after U2's 5 ms
+  start-up and the input caps have settled (see "Firmware requirements").
+- **Symbol and footprint:** `seed3-carrier:TPA6130A2RTJ` in `seed3-carrier.kicad_sym`, drawn for this board: inputs, SD and
+  I2C on the left, outputs and charge pump on the right, the two VDD pins on top, grounds and the exposed pad (pin 21) on the
+  bottom. KiCad's `Package_DFN_QFN:WQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm` matches TI's RTJ0020D land pattern: 0.5 mm pitch,
+  2.7 mm exposed pad, and pads (0.25 × 0.83 mm at ±1.96 mm) that cover TI's 0.24 × 0.6 mm at ±1.9 mm.
 
 ### Headphone detect (`HP_DETECT`)
 J4 (Same Sky SJ3-35063AG, 3.5 mm stereo, through hole; [datasheet](https://www.sameskydevices.com/product/resource/sj3-3506x.pdf)):
@@ -187,8 +200,9 @@ Every jack contact that carries a signal has a bidirectional ESD diode to GND, p
 
 ### Output mute (STM32 watchdog)
 A hung Daisy can loop its last audio buffer at full level, so every output must go silent when audio stops.
-- **Headphones: no hardware mute.** U2's SHDN is tied to `+5V`. The codec mutes the headphones (see "The codec mutes"), the
-  same way it mutes the speaker send. U2's own click-and-pop suppression covers its power-up and power-down.
+- **Headphones: U2's SD and mute bits.** R34 holds `HP_SD` low while the Daisy is out, booting or in reset, so an IWDG
+  reset shuts U2 down (outputs off, 0.4 µA). Running, the firmware mutes U2 over I2C. The codec also mutes its DAC when its
+  clocks stop (see "The codec mutes").
 - `SPK_EN` (Daisy pin 28) drives Q2's gate, with R17 (100k) pull-down. Q2 (2N7002) pulls `SPK_MUTE` to GND, which
   means speaker on. R107 (10k, sheet 2) pulls `SPK_MUTE` up to `+5V_RAW`, which means muted. R108 (2.2k) and
   C124 (1 µF) carry it to U101's MUTE pin (active high).
@@ -204,8 +218,8 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
   on its own clock, so if the callback stops (hung firmware, stalled DMA, fault handler), it resets the STM32. During a
   reset, and while the Daisy is booting or in DFU, its pins float, and R17 holds `SPK_EN` low (speaker amp muted).
 - **The codec mutes.** The STM32 clocks the TAC5242, and the TAC5242 powers down its DAC by itself when its audio clocks
-  stop (TAC5242 datasheet, section 7.4.1). An IWDG reset therefore silences pins 18/19, and with them J4 and U101. The
-  headphones have no amp mute. This doesn't help while the clocks keep running, such as a DMA looping a stale buffer with the
+  stop (TAC5242 datasheet, section 7.4.1). An IWDG reset therefore silences pins 18/19, and with them J4 and U101, and
+  R34 shuts U2 down as well. This doesn't help while the clocks keep running, such as a DMA looping a stale buffer with the
   CPU hung, which is why the IWDG has to reset the chip. The datasheet doesn't say whether the power-down clicks.
 - **Why Q2 instead of driving `SPK_MUTE` from the Daisy pin:** R107 holds `SPK_MUTE` at `+5V_RAW` whenever the battery is on,
   including while the Daisy is unpowered or out of its sockets. An open-drain Q2 keeps the Daisy from being back-powered
@@ -213,10 +227,8 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 - **Trade-off:** an external retriggerable one-shot watching an audio-callback toggle would watch the audio from outside the
   STM32. The IWDG is inside the chip, so the mute depends on the firmware feeding it only from the audio callback. Never
   feed it from the main loop.
-- **Why U2's SHDN isn't driven from the Daisy:** the Daisy can run from USB while `+5V` (U2's supply) is off (see "Running
-  from USB alone"), and SHDN is rated to SVDD + 0.3 V. A Daisy pin on SHDN would need a level translator. The codec's
-  power-down already covers a hung Daisy. The cost: U2 is on whenever `+5V` is, so anything on pin 18 while the Daisy boots
-  reaches the headphones.
+- **Why U2's SD can come from the Daisy:** SD, SDA and SCL are 5 V tolerant and rated to 7 V whatever U2's supply is, so
+  the Daisy can drive them on USB alone, with `+5V` off, and no level translator is needed.
 
 ## Power section (sheet 2)
 Sheet 2 is power board rev 1's circuit. `../../power-board/README.md` holds rev 1's original reasoning and the battery and
@@ -317,8 +329,8 @@ speaker details; this section is the design as it stands on rev 3.
   (100 nF) at the two PVCC pin pairs.
   AVCC through R106 (10 Ω), with C115 (1 µF) and C116 (100 nF). GVDD has C110 (1 µF); PLIMIT ties to GVDD (no power limit).
   MODSEL goes to GND: BD mode. AM0–AM2 go to GND through JP106–JP108, solder jumpers bridged in copper on the back:
-  the default switching frequency (≈ 400 kHz). U101's harmonics and U2's charge pump (505–800 kHz) can beat into the
-  audio band (3 × 400 kHz and 2 × 600 kHz are both near 1.2 MHz). If a steady tone shows up with no signal, cut one jumper
+  the default switching frequency (≈ 400 kHz). U2's charge pump runs at 300–500 kHz (TPA6130A2 datasheet 7.6), so the two
+  can beat into the audio band, directly or through harmonics. If a steady tone shows up with no signal, cut one jumper
   to move U101's frequency (the datasheet's AM2–AM0 table), and record the setting.
 - **Output:** bootstrap caps C117–C120 (220 nF), then the LC filter L101/L102 (10 µH, Bourns SRP1038A) with C121/C122
   (680 nF), into J102. J102 pin 2 is SPK+ and pin 1 SPK−, marked on the silkscreen. The output is bridged, so neither
@@ -339,7 +351,7 @@ not from here.
   the Seed3's 0–5 V GPIO rating.
 - **Bulk at the entry:** C5 (47 µF electrolytic) and C4 (100 nF) after FB101. C5's ESR damps ringing between the DFR0571's
   wiring and the ceramics; C104/C105 sit at FB101.
-- **Local decoupling:** C6 at U1 pin 5, and C12 (PVDD), C15 (SVDD) and C21 at U2, behind R29.
+- **Local decoupling:** C6 at U1 pin 5, and C12 (VDD, pin 12), C15 (VDD, pin 20) and C21 at U2, behind R29.
 - **Display supply:** the display's current pulses (ESP32 Wi-Fi, backlight PWM) flow through FB102 and J105, never through FB101
   or `+5V`, and they return to J107's ground on the left edge, behind the input buffer (see "Isolation").
 
@@ -352,20 +364,20 @@ through that part's input protection diodes.
   current toward the DFR0571. Nothing on the board back-powers `+5V`.
 - **Display UART:** with the battery off, the display is unpowered too, and Daisy TX idles high into it. R8 (10k) limits that
   current to ≈ 0.27 mA. See "Display connector (J3)".
-- **Headphone input (`5V_SENSE`):** C10/C11 pass pin 18's audio through R25/R27 to U2's inputs, which are rated only from
-  SVSS − 0.3 V to SVDD + 0.3 V (MAX9722A datasheet, Absolute Maximum Ratings). U2's charge pump makes SVSS, so with `+5V`
-  off both rails sit at 0 V and the inputs may only see ±0.3 V. Full scale is ±1.4 V. R10 and R25/R27 limit the current into
-  U2's protection diodes to ≈ 0.07 mA (worst case), but that is still outside the rating. So the firmware has to know whether
-  `+5V` is up: R18/R19 (100k/100k) divide `+5V` to ≈ 2.5 V on `5V_SENSE` (Daisy pin 22, ADC_0). While it reads low, the
-  firmware keeps both outputs at digital silence (see "Firmware requirements").
+- **Headphone amp:** C10/C11 pass pin 18's audio to U2's − inputs, which are rated −2.5 V to 3.6 V absolute, not relative
+  to U2's supply (TPA6130A2 datasheet 7.1), so the Daisy's ±1.4 V full scale is safe with `+5V` off. The firmware still
+  keeps `HP_SD` low until `+5V` is up.
+- **`5V_SENSE`:** the firmware has to know whether `+5V` is up, for U101's inputs (below) and before it enables U2:
+  R18/R19 (100k/100k) divide `+5V` to ≈ 2.5 V on `5V_SENSE` (Daisy pin 22, ADC_0). While it reads low, the firmware keeps
+  `AUDIO_OUT_2` at digital silence and U2 shut down (see "Firmware requirements").
   - **Why not `BATT_SENSE`:** it reads the battery, not the 5 V; a DFR0571 that fails or is unplugged would leave it reading
     normal.
   - **Why 100k/100k:** 2.5 V is well inside the ADC range and the divider draws 25 µA. The Daisy's VIN is `+5V`, so whenever
     `+5V` is up the Daisy is powered too, and the divider can't back-power it. With `+5V` off, R19 holds the pin at 0 V.
   - **No filter cap:** the source impedance is 50k, so the firmware uses a long ADC sample time.
   - **Limit: a fast power loss.** The firmware reacts within one or two audio blocks plus the codec's output delay, a few ms.
-    If `+5V` collapses faster than that (the battery switched off under load), the last few ms of audio still reach U2's
-    unpowered inputs, limited to ≈ 0.07 mA by R10 and R25/R27. The TEST_PLAN measures this.
+    If `+5V` collapses faster than that (the battery switched off under load), the last few ms of audio still reach
+    U101's unpowered inputs (next item). The TEST_PLAN measures this.
 - **Speaker amp inputs:** the same silence covers U101. Its inputs are rated −0.3 V to 6.3 V, absolute rather than relative
   to AVCC (SLOS708G 6.1), and full-scale negative peaks through R11 and C108 would put up to ≈ 0.8 mA into an input's
   protection until C108 charged.
@@ -396,7 +408,7 @@ off, see "Running from USB alone"); **off** (everything off while a guitar or ph
 reversed at J101, or J107's wires swapped). **Bench supply: never 5 V alone on J107** (see "Decisions"); bring the board up
 from a current-limited 12 V supply on J101 with the DFR0571 connected, as in use. The jack pins (J1, J2, J4) are touched by
 people, so each has an ESD diode (D1–D5, see "Jack ESD protection"). The speaker outputs see ESD through C121/C122 (680 nF to
-GND). Every capacitor on the audio path should be C0G or film. Today C10/C11 (X5R) aren't: see "Open items".
+GND). Every capacitor on the audio path is C0G: C2, C10/C11, C22/C23 and C108/C109.
 
 ### Links between the sheets
 The first five nets were the screw-terminal contract between audio rev 2 and power rev 1 (`power-board/README.md`). On one
@@ -440,8 +452,8 @@ different times, and add a little ESD margin.
 
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
-32 (`AMP_FAULTZ` through R30), 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
-marked no-connect. With the Daisy out, its sockets (A1) give probe access to every audio board net, so there are no breakout headers.
+32 (`AMP_FAULTZ` through R30), 39 VIN; 12/13 (I2C1 to U2), 27 `HP_SD` and 38 `3V3_D` (the I2C pull-ups). Every other pin,
+including `3V3_A` (21) and USB D−/D+ (36/37), is marked no-connect. With the Daisy out, its sockets (A1) give probe access to every audio board net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
 ## Firmware requirements
@@ -459,15 +471,20 @@ USB stays on the Daisy's own connector.
   time.
 - Initialise `SPK_EN` (pin 28) as a low output. Drive it high to enable the speaker amp after the first audio callback has
   started, low when headphones are in.
-- Start the codec with its output at digital silence and ramp up. U2 is always on, so the headphones hear whatever pin 18
-  does from boot.
+- Start the codec with its output at digital silence and ramp up.
+- **U2 (TPA6130A2, I2C1 at 0x60, 100 or 400 kHz):** initialise `HP_SD` (pin 27, D20) as a low output. Once `5V_SENSE` has
+  met the start-up condition below, drive `HP_SD` high, wait at least 5 ms, write register 1 = 0xC0 (both outputs on,
+  stereo; 0xD0 for dual mono) and register 2 = volume with the mute bits clear, ramping from a low word. Keep the volume
+  word at or below 0x35 (+0.1 dB) until TEST_PLAN 8.8 has checked 16 Ω; 0x30 matches rev 2's level. Mute (register 2 bits
+  7:6) before changing modes and before driving `HP_SD` low. If the I2C write fails (no ACK), keep `HP_SD` low and report it.
+  U2 inverts the signal; negate it in firmware if absolute polarity matters.
 - Read `BATT_SENSE` (pin 25, ADC) and send the battery level to the display every few seconds: VBAT = 11 × V(pin 25) (see
   "Battery level"). Warn on the display when it gets low.
 - Read `5V_SENSE` (pin 22, ADC_0) with the longest ADC sample time (its source impedance is 50k). It reads ≈ 2.4–2.5 V with
   `+5V` at 4.85–5.0 V.
   - **Before starting audio:** require it above 2.35 V (`+5V` ≥ 4.7 V) for at least 10 ms. Then ramp the outputs up.
   - **While running:** sample it from the audio callback on every block. Below 2.2 V (`+5V` < 4.4 V) write silence from that
-    block on. Hold the outputs silent until the start-up condition above is met again.
+    block on and drive `HP_SD` low. Hold the outputs silent until the start-up condition above is met again.
   - This applies on USB alone on the bench too.
 - Read `AMP_FAULTZ` (pin 32, SAI2_SD_B: libDaisy's D25, PA0) as an input with no pull: **low = speaker amp fault** (a shorted speaker wire,
   overheating, or DC at its output). Trust it only once `+5V` has been good for 50 ms (U103 holds U101 in shutdown for the
@@ -506,14 +523,22 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
   C124's RC, take that current. Power rev 1 has the same weakness: its bring-up (3C.9) shows the real numbers.
 - **R30 (1k) in series with Daisy pin 32 (2026-11-09, user's decision).** A firmware mistake that drives PA0 high while
   FAULTZ is low would otherwise short the STM32's output into U101's open drain.
+- **U2 is a TPA6130A2 (2026-11-09, user's decision).** JLC assembles rev 3, so the hand-solderable TSSOP that chose the
+  MAX9722A no longer matters, and LCSC had only 76 MAX9722As at $5 each against 3,842 TPA6130A2s at $0.99. The swap adds a
+  hardware headphone mute (SD from the Daisy, R34 holding it off through a reset), I2C volume, and inputs rated to
+  −2.5…3.6 V with the supply off. It costs three Daisy pins (12, 13, 27), pin 38's 3.3 V for the pull-ups, and the
+  firmware has to enable U2 before the headphones play. The + inputs are AC-grounded at U2 with no resistor to match R10:
+  the input-cap layout leaves no room for one, and the MAX9722A's + inputs were grounded at the amp too.
 - **J102's pins swapped** (pin 2 SPK+, pin 1 SPK−), so the speaker traces from L101/L102 don't cross. The silkscreen marks them.
-- **U101's and C110's ground pads join the F.Cu pour solidly** (pad-level zone connection). They are boxed in by 0.65 mm pitch
-  routing and tied to ground by tracks, so the pour can't reach them with two thermal spokes. U101 is soldered with hot air or
-  through its pad vias anyway.
+- **U101's, C110's and U2's ground pads join the F.Cu pour solidly** (pad-level zone connection). They are boxed in by
+  0.5–0.65 mm pitch routing and tied to ground by tracks and pad vias, so the pour can't reach them with two thermal spokes.
+  U101 and U2 are reflowed (or soldered with hot air) anyway.
+- **U2's exposed pad has four vias** (0.6/0.35 mm) into In1, In2 and B.Cu ground, as U101's has. They sit under paste, so
+  some solder may wick into them; ask JLC to plug or tent them if the order offers it.
 - **The VBAT branch to J106 runs on In2** (1 mm, 0.5 oz): it carries only the DFR0571's input current, ≈ 0.75 A at most. All
   battery, PVCC and speaker current paths are on the 1 oz outer layers.
 - **Nine references are 0.8 mm tall** (C113, C124, C125, D102, D103, R106, R109, R111, U101) in the dense area around
-  U101's control pins, and R30's beside JP105. JLC's
+  U101's control pins, R30's beside JP105, and thirteen around U2 (U2, C3, C10–C15, C22, C23, R10, R32–R34). JLC's
   recommended minimum is 1.0 mm; 0.8 mm with a 0.15 mm stroke prints.
 - **Under 100 × 100 mm (2026-11-07, user's decision).** The board is 100 × 78 mm, from 122 × 78, for JLC's 4-layer price
   break. To get there: the Daisy and the power side moved 10 mm left; F101 became an SMD fuse (Bel 0683G, same 3.15 A
@@ -523,14 +548,14 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
   constant (×11) is unchanged. The switching nodes are 60 mm from the guitar input (66 before) and 20 mm from U2's input
   network, as before.
 - **Noise and fault changes (2026-11-08, user's decision).** Three of the noise review's items, done together:
-  - U2 gets its own RC supply filter (R29 2.2 Ω, C21 10 µF), to keep its 600 kHz charge pump off `+5V`.
+  - U2 gets its own RC supply filter (R29 2.2 Ω, C21 10 µF), to keep its charge pump off `+5V`.
   - C108/C109 are 470 nF C0G (1206) instead of 1.5 µF X7R (0805): no microphonics at the speaker amp's inputs. 1 µF C0G
     isn't made in 1206 or 1210 in stock; 470 nF moves the corner from 1.7 Hz to 5.6 Hz.
   - FAULTZ reaches Daisy pin 32 through the R112/R114 divider, so a latched speaker fault shows on the display.
   The fourth item, more bulk on PVCC, waits for bring-up (rev 1's optional bulk caps).
 - **Floorplan (accepted 2026-11-08, user's decision).** The 2026-11-07 layouts stand:
-  - U2's input network is 20 mm from the class D's switching nodes. It's a low-impedance node (R10 and U2's virtual
-    grounds) over the In1 plane; U2 sits in front of the power section because the left column is full.
+  - U2's input network is 20 mm from the class D's switching nodes, over the In1 plane; U2 sits in front of the power
+    section because the left column is full.
   - The display's ground terminals (J3, J105) are 26–31 mm from the guitar input's 1 MΩ node. The display current loop
     stays at the left edge, behind the input buffer.
   - About 50 references and legends are 0.8 mm tall, in the dense areas: the 5 V filter column, the columns beside the
@@ -555,22 +580,17 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and the speaker go silent and
   `SPK_MUTE` mutes within ~10 ms.
 - **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for R107's 0.5 mA, but check it on the board.
-- **Headphone level:** full scale is ≈ 0.60 Vrms per channel. If that's too loud, or the hiss is audible with sensitive
-  headphones, raise R25 and R27 together (20k gives −6 dB) and keep R26/R28 at 10k.
+- **Headphone level:** set by U2's volume register. Check the maximum into 16 Ω for clipping (TEST_PLAN 8.8) before raising
+  the firmware's cap above word 0x35, and listen for hiss at quiet settings with sensitive headphones.
+- **U2's charge pump against U101:** U2's charge pump runs at 300–500 kHz and U101 at ≈ 400 kHz, so their difference can land
+  in the audio band. If a steady tone shows up on J4 or the speaker with no signal, cut one of JP106–JP108 to move U101's
+  frequency (TEST_PLAN 4C.10).
 - **AUX input level:** check the level with the Daisy fitted; 2 Vrms should reach ≈ 0.44–0.45 Vpp. R5 can go up to 560 Ω
   (≈ 1.2 dB louder); at 680 Ω a source playing into the unpowered codec passes ±0.3 V.
 - **Hot passive pickups:** the Daisy's full scale is reached at ≈ 3.9 Vpp at J1. Play the hottest passive guitar available
   hard and confirm its peaks stay below that.
-- **Polarity:** U2 inverts the signal. Decide whether the firmware negates the output.
-- **Class II ceramics on the audio path:** C10/C11 (4.7 µF X5R) are in series with the headphone path. X5R capacitance
-  moves with voltage and the material is piezoelectric, so knocks can become signal. They sit at a 10 kΩ node, where that
-  matters far less than at the guitar input (C2 is C0G) or the speaker amp's inputs (C108/C109, C0G). Tap the board with a
-  guitar plugged in and listen.
-- **USB-alone power transitions:** scope U2's input and rails while the battery is switched off and on with USB connected
-  and audio playing. If U2's inputs stay outside SVSS − 0.3 V … SVDD + 0.3 V for more than a few ms at full scale, raise the
-  firmware's 2.2 V threshold or shorten the audio block.
-- **Soldering U2 and U101:** U2's TSSOP takes flux and a fine tip or drag soldering. U101's exposed pad takes hot air, or
-  solder fed from the back through its vias (the back has a mask opening under the pad).
+- **Soldering U2 and U101 by hand** (if not assembled by JLC): both have exposed pads. U2's QFN and U101's pad take hot air;
+  U101's can also be soldered from the back through its vias (the back has a mask opening under the pad).
 - **Mechanical:** the outline, jack and hole positions have no enclosure drawing yet (a combo cabinet with a 10-inch speaker
   and a large battery pack). Recheck them against it: the front-panel jacks, the battery jack and switch terminal on the rear
   edge, the speaker terminal on the right edge, and the 5 V and display terminals on the left edge. The Seed3's USB-C
@@ -593,8 +613,8 @@ narrowest web on the board is 0.20 mm (U101's pins). Page numbers below refer to
 |---|---|
 | F.Cu | Every part; every audio net; the class D's power, output and speaker paths; a GND pour around the routing |
 | In1.Cu | Solid GND under the whole board. No tracks |
-| In2.Cu | GND fill, with the nets that have to cross the Daisy: the VBAT branch to J106 (around the USB end), `+5V` to U1, U2 and R18, `SPK_MUTE`, and `AUDIO_OUT_2` from Daisy pin 19 to R11 |
-| B.Cu | GND pour; a PVCC pour under the class D; the `+5V_RAW` trunk (around the USB end), `+5V` down the Daisy's left side, `BATT_SENSE`, `AUDIO_IN_2` and `HP_DETECT` under the Daisy, the `SPK+` branch to C121 |
+| In2.Cu | GND fill, with the nets that have to cross the Daisy: the VBAT branch to J106 (around the USB end), `+5V` to U1, R29 and R18, `HP_5V` from beside C21 to U2's VDD caps, `SPK_MUTE`, `AUDIO_OUT_2` from Daisy pin 19 to R11, and under the module `I2C_SCL` (pin 12) and `3V3_D` (pin 38) |
+| B.Cu | GND pour; a PVCC pour under the class D; the `+5V_RAW` trunk (around the USB end), `+5V` down the Daisy's left side, `BATT_SENSE`, `AUDIO_IN_2`, `HP_DETECT` and `I2C_SDA` under the Daisy, four lanes (`HP_SD`, `I2C_SDA`, `I2C_SCL`, `3V3_D`) from the Daisy's right row down to U2's pull-ups, the `SPK+` branch to C121 |
 
 - **In1 is the reference for everything on F.Cu,** 0.21 mm below it. Every audio net and every switching node sees an
   unbroken plane, so return currents run directly under their traces at high frequencies and spread by resistance at audio
@@ -643,7 +663,8 @@ between blocks were routed for this floorplan.
 | J1, J2, J4 | Front edge: J1 at the left, J2 and J4 in front of the Daisy | All panel jacks on one edge (rev 2's reasons) |
 | U1 and the input network | Behind J1, left of the Daisy's front end | `AUDIO_IN_1` reaches pin 16 in about 17 mm on F.Cu |
 | R3–R5, C3 | Between J2 and the Daisy's front end | The AUX sum feeds pin 17 from under the module |
-| U2 block | Right of the Daisy's front end, above J4 | R10 takes `AUDIO_OUT_1` from pin 18; the left column is full |
+| U2 block | Right of the Daisy's front end, above J4 | R10 takes `AUDIO_OUT_1` from pin 18; the left column is full. U2 (rotated 90°) has its inputs up toward the four C0G caps, its outputs down toward J4, the charge-pump caps on its right and SD/SDA/SCL on its left |
+| R32–R34 | Left of U2, beside C3 | The I2C pull-ups and SD pull-down, at the vias where the B.Cu lanes from the Daisy arrive |
 | J106, J107, J105, J3 | Left edge, top to bottom, wire openings (J106's plug opening) facing out | The DFR0571's input and output, the display's power and UART together, at the 5 V entry |
 | FB101, JP101, JP102, C104, C105, C4, C5 | Between the harness block and the Daisy (x 20–31) | The audio 5 V filter and the C5 star sit between `+5V_RAW` and both of their loads |
 | SW101, F101, J101 | Rear edge, left to right (x 52–86): switch terminal, fuse, 12 V jack | The battery path runs along the edge to J101, beside the class D; F101's 10 mm pad pitch fits between them |
@@ -656,7 +677,7 @@ between blocks were routed for this floorplan.
 | R17, Q2, C17, R19, R107, R18 | Two columns right of the Daisy | Mute, battery sense and 5 V sense, each beside its Daisy pin (28, 25, 22) |
 | C18 | Below R2, its pad under R2's U1 end | RF filter at U1A's + input, 2.5 mm from the pin |
 | JP106–JP108 | Back, left of U101 (x 182, y 52–57) | AM2–AM0 drop through vias beside pins 13–15; the 2 mm between those pins and the `AMP_MUTE` track has no room for three jumpers on the front |
-| R29, C21 | Above U2's charge-pump cap C13, left of FID2 | `+5V` comes up the via at R18; `HP_5V` drops to U2's supply bus through one In2 hop under `HP_SOURCE` |
+| R29, C21 | Above U2's input caps, left of FID2 | `+5V` comes up the via at R18; `HP_5V` drops through a via beside C21 and runs on In2 to C15 (pin 20) and to C12 and pin 12 |
 | R114 | Beside R112 and TP109, above U101's input pins | FAULTZ drops to In2 beside it and runs 16 mm west to R30 |
 | R30 | Beside JP105, right of Daisy pin 32 | In the `AMP_FAULTZ` In2 line: a via at each end, then In2 to pin 32 |
 | D102 | Under R105, above U101's pins 1–2 | Anode on the SDZ track, cathode straight up into R105's PVCC pad |
@@ -675,20 +696,21 @@ between blocks were routed for this floorplan.
   carries tracks (no parts). `AUDIO_IN_2` comes up on B.Cu from a via by R5 to pin 17. `AUDIO_IN_1` runs on F.Cu along the
   Daisy's front end and up the outside of the left pin row to pin 16. `AUDIO_OUT_1` leaves pin 18 on F.Cu and exits between
   pins 21 and 22 to R10. `AUDIO_OUT_2` leaves pin 19 on In2 and exits between pins 23 and 24. `HP_DETECT` leaves pin 23 on
-  B.Cu and goes out the front end to J4.
+  B.Cu and goes out the front end to J4. U2's control lines cross from the left row: `I2C_SDA` (pin 13) on B.Cu and
+  `I2C_SCL` (pin 12) on In2, crossing each other, then through the right row's gaps on B.Cu (pins 26/27 and 25/26) to join
+  `HP_SD` (pin 27) and `3V3_D` (pin 38, on In2 down the inside of the right row, out between pins 24/25) as four lanes.
 - **Display UART:** R8/R9/R24 sit next to J3, C19/C20 on the Daisy side of R8/R9. TX and RX run on F.Cu to the outer side
   of pins 14 and 15; RX passes below H1.
 - **The blocks kept whole keep their routing.** The nets that joined blocks were routed by hand; stitching vias that ended
   up under moved parts were removed. The new SMD parts each have a GND via at their ground pad.
 
-### U2 (TSSOP-16)
-- U2's footprint is `Package_SO:TSSOP-16_4.4x5mm_P0.65mm`: 0.65 mm pitch and no exposed pad, so it's soldered with an iron (flux, a
-  fine tip or drag soldering, then a check for bridges under magnification: TEST_PLAN).
-- **Under the body:** the SVSS–PVSS and SVDD–PVDD links on F.Cu, the B.Cu hop for SVDD pin 11, and GND vias for PGND, SGND, INL+ and
-  INR+. They're board items, not part of the footprint: move them with U2.
-- **The datasheet's layout advice** (Layout and Grounding): charge-pump caps to PGND, PVDD tied to SVDD and PVSS to SVSS at the device,
-  and switching traces kept away from SGND and the audio path. C13 and C14 sit on the top row's side, away from the inputs and outputs on
-  the bottom row.
+### U2 (WQFN-20)
+- U2's footprint is KiCad's `WQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm` (TI RTJ): 0.5 mm pitch with an exposed pad. JLC places it.
+- **Ground:** four vias in the exposed pad, and short stubs from GND pins 3, 9, 10, 13 and 19 into the pad.
+- **The datasheet's layout advice** (Layout Guidelines): charge-pump caps close to their pins with no vias, VDD decoupled to
+  its own GND pin. C15 sits right of pins 19/20, C13 below it at CPP/CPN, C14 below-right at both CPVSS pins (15, 16), and
+  C12 below pin 12 behind the `HP_5V` via. The outputs leave the bottom edge on either side of C12; the inputs leave the top
+  edge to C10/C11/C22/C23, with one ground via between C22 and C23 for the + inputs.
 
 ### Design rules
 Board Setup (`seed3-carrier.kicad_pro`) holds the absolute minimums and net class defaults. `seed3-carrier.kicad_dru` adds the
@@ -708,11 +730,11 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
 - **`Power` class:** `+5V`, `+5V_RAW`, `+5V_DFR`, `+5V_DISPLAY`, `CAP_BANK_A`, `CAP_BANK_D`.
 - **`HighCurrent` class:** `VBAT_PROTECTED`, `AMP_PVCC`, `OUT_P`, `OUT_N`, `SPK+`, `SPK−`, and the battery nets between J101,
   F101, SW101 and Q101. Sized for the 3.15 A fuse on 1 oz outer copper.
-- **Thermal reliefs:** every pad joins the GND pours with 0.5 mm spokes and a 0.5 mm gap, for an iron, except U101's and C110's
-  ground pads (see "Decisions"). Vias stay solid.
+- **Thermal reliefs:** every pad joins the GND pours with 0.5 mm spokes and a 0.5 mm gap, for an iron, except U101's, C110's
+  and U2's ground pads (see "Decisions"). Vias stay solid.
 - **Expected DRC warnings:** 29 `silk_edge_clearance`, all from edge-mounted connectors (J1, J2, J4, J102, J105, J106, J107,
   J3, SW101). Don't trim their footprints. JLC's recommended pass also flags the test points' silk circles (0.14 mm from
-  their pads, JLC prefers 0.15 mm), the text under 1.0 mm (58 items: references and legends at 0.8 mm, all with a 0.15 mm
+  their pads, JLC prefers 0.15 mm), the text under 1.0 mm (71 items: references and legends at 0.8 mm, all with a 0.15 mm
   stroke), and U101's footprint silk over its own pad; all print fine. On KiCad 10.0.8 DRC also reports `lib_footprint_mismatch` for the three fiducials,
   against that version's library; the board is unaffected.
 
@@ -725,7 +747,8 @@ For a hand-soldered build every part comes from DigiKey; for JLC assembly, JLC f
 `seed3-carrier-digikey-cart.csv` the same in DigiKey's cart format. Both come from the build that was ordered for audio rev 2
 and power rev 1 (`amp-digikey-order.csv`, with its stock substitutes and notes), without the four inter-board terminals,
 with Q102, C18, FB1, C19/C20, R29, C21, R114, D102/D103, R30, the SMD fuse and J106's JST XH header (with the module cable's
-housing and pre-crimped leads) added, C0G C108/C109, without Q1, R13, R22 and R23, and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
+housing and pre-crimped leads) added, U2 a TPA6130A2 (with C22/C23, R32–R34 added, R25–R28 gone and C10/C11 470 nF C0G),
+C0G C108/C109, without Q1, R13, R22 and R23, and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
 - **Passive sizes:** resistors are 0603 (R105 stays 2512 for the amp's supply current). Capacitors are 0603 up to 220 nF
   and 0805 from 680 nF: a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
   0805 body. C7 stays 1210: 47 µF on `VREF` sets the 0.7 Hz filter that keeps `+5V` noise off the guitar input. All use
@@ -733,12 +756,12 @@ housing and pre-crimped leads) added, C0G C108/C109, without Q1, R13, R22 and R2
 - **JLC assembly:** every SMD part carries an `LCSC` field. Semiconductors, the beads, the inductors and the parts with no JLC
   Basic equivalent use the `MPN` itself. The resistors and most capacitors use a JLC **Basic** part (no loading fee) of the same
   value, size, tolerance and dielectric, with an equal or higher voltage rating: UNI-ROYAL 0603WAF resistors; Samsung or YAGEO
-  for 100 pF, 100 nF, 220 nF (25 V, as required), 1 µF, 4.7 µF and 10 µF (25 V X5R). C108/C109 are Murata GRM31C5C1E474JE01L on
-  both orders (JLC C6049896, 546 in stock on 2026-11-08). D1–D5 are C19224, Nexperia's PESD5V0S1BA in SOD-323: the same diode as the DigiKey
+  for 100 pF, 100 nF, 220 nF (25 V, as required), 1 µF and 10 µF (25 V X5R). C10/C11, C22/C23 and C108/C109 are Murata
+  GRM31C5C1E474JE01L on both orders (JLC C6049896, 546 in stock on 2026-11-08: six per board). D1–D5 are C19224, Nexperia's PESD5V0S1BA in SOD-323: the same diode as the DigiKey
   order's SOD-323F PESD5V0S1BAF. D102/D103 are onsemi NSVBAT54HT1G on both orders (JLC C179609, 63,040 in stock on 2026-11-09).
   18 Extended parts carry JLC's loading fee: C2, C3/C9, C16, C108/C109, C121/C122, C7, R105,
-  FB1, FB101/FB102, D1–D5, D101, D102/D103, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
-  on 2026-11-07.
+  FB1, FB101/FB102, D1–D5, D101, D102/D103, L101/L102, Q2, U1, U2, U101 and U103. U103 had the lowest JLC stock (10 on 2026-11-07); U2, the
+  TPA6130A2RTJR, is C130046 (3,842 on 2026-11-09).
 - **Assembly files:** `jlc-assembly.kicad_jobset` writes `fab/assembly/seed3-carrier_bom.csv` and `_cpl-all-pos.csv` (SMD
   parts only); `jlc_asm.py cpl` turns the latter into `_cpl.csv` with `jlc-rotations.csv` (empty until JLC's placement preview
   shows a part rotated). All placed parts are on the top side, so JLC's Economic assembly applies. Check every polarised part
@@ -749,8 +772,10 @@ housing and pre-crimped leads) added, C0G C108/C109, without Q1, R13, R22 and R2
 - **Sheet 1's parts** carry `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields. Sheet 2's carry `MPN` and `Manufacturer`
   matching `power-board/DigiKey_Import.csv` (substitutes included), except the resized passives, which carry the 0603/0805
   part and its `DigiKey` and `Datasheet` fields too.
-- **U2:** the EUE suffix is the TSSOP. Don't substitute the MAX9722B: it has a fixed −2 V/V gain.
-- **C0G for the filter caps** C1, C18, C9, C16, C3, C19 and C20, and for C2 (on the guitar signal).
+- **U2:** TPA6130A2RTJR (RTJ is the 4 × 4 mm WQFN; the YZH is a 2 × 2 mm ball-grid package that doesn't fit this footprint).
+  The I2C address is fixed at 0x60.
+- **C0G for the filter caps** C1, C18, C9, C16, C3, C19 and C20, and for the caps in the signal path: C2, C10/C11, C22/C23 and
+  C108/C109.
 - **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND).
 - **J106's mate (the DFR0571's input cable):** a JST XHP-2 housing (455-2266-ND) and one ASXHSXH22K305 lead (455-3241-ND,
   12 in of 22 AWG with an XH contact at each end). Cut the lead in half for the two wires; VIN+ goes in housing position 1

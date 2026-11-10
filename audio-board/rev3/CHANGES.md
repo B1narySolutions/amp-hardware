@@ -31,12 +31,12 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   Bulgin FX0457 holder: same rating, 12 × 4.65 mm instead of 36 × 13 mm. Soldered, not swappable.
 - **C18 (100 pF C0G) added** from U1A's + input to GND: RF filtering at the op-amp pin against the display's Wi-Fi bursts.
 - **JP106–JP108 added:** U101's AM2–AM0 reach GND through solder jumpers bridged in copper (on the back), instead of
-  straight to GND. Same circuit as built; cutting one moves the class D's switching frequency if it beats with U2's charge pump.
+  straight to GND. Cutting one moves the class D's switching frequency if it beats with U2's charge pump.
 - **FB1 (BLM18HG601SN1D) added** between C1 and C2 on the guitar input: with C1 and C18 it blocks Wi-Fi RF before the board's
   input traces.
 - **C2 is 47 nF C0G** (was 1 µF X7R): not microphonic at the 1 MΩ input. The input's high-pass moves from 0.16 Hz to 3.4 Hz.
 - **C19/C20 (10 pF C0G) added** on `DISPLAY_UART_TX`/`DISPLAY_UART_RX`, the Daisy side of R8/R9: RF filtering on the display UART.
-- **U2 has its own supply filter:** R29 (2.2 Ω) from `+5V` and C21 (10 µF) form `HP_5V` for U2's supply pins, so its 600 kHz
+- **U2 has its own supply filter:** R29 (2.2 Ω) from `+5V` and C21 (10 µF) form `HP_5V` for U2's supply pins, so its
   charge pump stays off `+5V` (which also feeds U1, `VREF` and the Daisy).
 - **C108/C109 are 470 nF C0G 1206** (were 1.5 µF X7R 0805): not microphonic at the speaker amp's inputs. Its high-pass moves
   from 1.7 Hz to 5.6 Hz.
@@ -47,16 +47,23 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **D102/D103 (BAT54H Schottkys) added** from U101's SDZ and MUTE to PVCC: at switch-off C125 and C124 held those pins
   above a falling PVCC and discharged into U101's unrated protection diodes.
 - **R30 (1k) added** between `AMP_FAULTZ` and Daisy pin 32, in case the firmware drives the pin.
+- **U2 is a TPA6130A2RTJR** (4 × 4 mm WQFN, I2C volume) instead of the MAX9722AEUE+ (TSSOP-16), since JLC assembles rev 3:
+  3,842 at $0.99 on LCSC against 76 at $5.03. Signal on the − inputs through C10/C11 (now 470 nF C0G), + inputs to GND
+  through C22/C23 (470 nF C0G); the gain resistors R25–R28 are gone, and the gain is set over I2C. New Daisy pins: 12/13
+  (I2C1, R32/R33 2.2k pull-ups to `3V3_D`, pin 38) and 27 (`HP_SD`, R34 100k pull-down): U2 is off until the firmware
+  enables it, and through every reset.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
   nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20, JP106–JP108, the removed Q1/R23/R13/R22, R102's
-  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value, R114 and R30 with the `AMP_FAULTZ` link, D102/D103 and J106's part.
+  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value, R114 and R30 with the `AMP_FAULTZ` link, D102/D103, J106's part, and the U2 block
+  (U2, C10–C15, C22/C23, R32–R34, no R25–R28) with Daisy pins 12, 13, 27 and 38.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
 - **4 layers, JLC04161H-7628:** In1 is solid GND with no tracks; In2 is GND fill with the slow and DC nets that cross; B.Cu
   is GND with a PVCC pour under the class D. Rev 2's 2-layer hops stay, now over In1.
 - **Layout:** the Daisy stands upright in the middle, USB on the rear edge, between the audio side (left and front) and the
-  power side (right). The jacks stay on the front edge. Rev 2's input buffer and U2 blocks keep their routing. The class D
+  power side (right). The jacks stay on the front edge. Rev 2's input buffer block keeps its routing; the U2 block is new
+  (QFN). The class D
   is near the right edge with L101 and L102 upright above and below its outputs and the speaker terminal between them; the
   switch terminal, fuse and 12 V jack run along the rear edge, and the 5 V and display terminals sit on the left edge.
 - **Moved from rev 2:** J3 to the left edge, R8/R9/R24 next to it; the AUX sum, mute, sense and speaker-send parts beside the
@@ -75,7 +82,8 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
   these changes: no four-way terminals and three fewer two-way ones (J106 is a JST XH header); Q102 in place of Q1 (one AO3401A); C18, FB1, C19/C20, R29, C21 and R114
-  added; D102/D103 (NSVBAT54HT1G) and R30 added; J106 a JST S2B-XH-A, with an XHP-2 housing and a pre-crimped lead for the
+  added; D102/D103 (NSVBAT54HT1G) and R30 added; U2 a TPA6130A2RTJR, with C22/C23 (470 nF C0G), R32/R33 (2.2k) and R34
+  (100k) added, R25–R28 gone and C10/C11 470 nF C0G instead of 4.7 µF X5R; J106 a JST S2B-XH-A, with an XHP-2 housing and a pre-crimped lead for the
   module's cable; C108/C109 470 nF C0G; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
   and none of rev 1's experiment parts, which that build's spares cover.
 - **New part numbers for every resized passive,** same value with equal or better rating, except C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
@@ -83,7 +91,6 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 - **LCSC numbers on every SMD part** for JLC assembly (JLC Basic equivalents for the commodity passives), with
   `jlc-assembly.kicad_jobset`, `jlc-rotations.csv` and the exported BOM and CPL in `fab/assembly/`. F101 is hand-soldered
   (no JLC stock) and left out of the CPL.
-- **C10/C11's DigiKey number** is DigiKey's renumbered listing, 1276-CL21A475KACLRNCCT-ND (same part).
 
 ## Designators
 Sheet 1 keeps rev 2's designators (`../rev2/CHANGES.md` maps them to rev 1). On sheet 2, every part is power rev 1's number
