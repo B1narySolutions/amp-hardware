@@ -42,9 +42,14 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
   from 1.7 Hz to 5.6 Hz.
 - **FAULTZ reaches Daisy pin 32:** R114 (18k) to GND divides R112's pull-up to ≈ 3.2 V, through a sixth sheet pin, so the
   firmware can show a latched speaker fault. Power rev 1 left FAULTZ on a test point only.
+- **J106 is a JST XH header** (S2B-XH-A, keyed) instead of a 2-way screw terminal like J107 beside it: the DFR0571's two
+  wire pairs can no longer go in swapped, which put 12 V on the 5 V side through the module (power rev 1's J6/J7 allow it).
+- **D102/D103 (BAT54H Schottkys) added** from U101's SDZ and MUTE to PVCC: at switch-off C125 and C124 held those pins
+  above a falling PVCC and discharged into U101's unrated protection diodes.
+- **R30 (1k) added** between `AMP_FAULTZ` and Daisy pin 32, in case the firmware drives the pin.
 - **Nothing else changed electrically.** A netlist comparison against audio rev 2 and power rev 1 shows only the five joined
   nets, the four removed terminals, Q102, C18, FB1, C2's value, C19/C20, JP106–JP108, the removed Q1/R23/R13/R22, R102's
-  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value and R114 with the `AMP_FAULTZ` link.
+  value, F101's part, R29/C21 (`HP_5V`), C108/C109's value, R114 and R30 with the `AMP_FAULTZ` link, D102/D103 and J106's part.
 
 ## Board
 - **Black solder mask** on both sides, white silkscreen, set in the stackup. Choose them on JLC's order page too.
@@ -69,8 +74,9 @@ Designators are rev 3's: sheet 1 keeps rev 2's, sheet 2 is power rev 1's plus 10
 
 ## Parts
 - **The order** (`seed3-carrier-digikey.csv`) is the ordered build of rev 2 and rev 1 (`../../amp-digikey-order.csv`) with
-  these changes: no four-way terminals and two fewer two-way ones; Q102 in place of Q1 (one AO3401A); C18, FB1, C19/C20, R29, C21 and R114
-  added; C108/C109 470 nF C0G; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
+  these changes: no four-way terminals and three fewer two-way ones (J106 is a JST XH header); Q102 in place of Q1 (one AO3401A); C18, FB1, C19/C20, R29, C21 and R114
+  added; D102/D103 (NSVBAT54HT1G) and R30 added; J106 a JST S2B-XH-A, with an XHP-2 housing and a pre-crimped lead for the
+  module's cable; C108/C109 470 nF C0G; R13, R22 and R23 gone and R102 100k; the Bel 0683G SMD fuse in place of the FX0457 holder and its 5 × 20 mm fuse;
   and none of rev 1's experiment parts, which that build's spares cover.
 - **New part numbers for every resized passive,** same value with equal or better rating, except C103 (10 µF 16 V X7R 0805). The 10k, 100k and 10 Ω resistors are Stackpole RMCF0603: YAGEO's
   0603 versions had none in stock.

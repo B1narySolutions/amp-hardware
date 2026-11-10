@@ -4222,6 +4222,130 @@
 							(font
 								(size 1.27 1.27))))))
 			(embedded_fonts no))
+	
+		(symbol "Device:D_Schottky"
+			(pin_numbers
+				(hide yes))
+			(pin_names
+				(offset 1.016)
+				(hide yes))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Value" "D_Schottky"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "Description" "Schottky diode"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_keywords" "diode Schottky"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(symbol "D_Schottky_0_1"
+				(polyline
+					(pts
+						(xy -1.905 0.635)
+						(xy -1.905 1.27)
+						(xy -1.27 1.27)
+						(xy -1.27 -1.27)
+						(xy -0.635 -1.27)
+						(xy -0.635 -0.635))
+					(stroke
+						(width 0.254)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy 1.27 1.27)
+						(xy 1.27 -1.27)
+						(xy -1.27 0)
+						(xy 1.27 1.27))
+					(stroke
+						(width 0.254)
+						(type default))
+					(fill
+						(type none)))
+				(polyline
+					(pts
+						(xy 1.27 0)
+						(xy -1.27 0))
+					(stroke
+						(width 0)
+						(type default))
+					(fill
+						(type none))))
+			(symbol "D_Schottky_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27))))
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)))))
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27))))
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27))))))
+			(embedded_fonts no))
 	)
 	(symbol
 		(lib_id "Device:R")
@@ -9356,7 +9480,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal"
+		(property "Footprint" "Connector_JST:JST_XH_S2B-XH-A_1x02_P2.50mm_Horizontal"
 			(at 165.1 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -9367,8 +9491,9 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
 			(at 165.1 33.02 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9387,7 +9512,7 @@
 				)
 			)
 		)
-		(property "Footprint_Review" "Package mapping checked; exact purchased part still to confirm"
+		(property "Footprint_Review" "Checked against JST S2B-XH-A (eXH.pdf), 2026-11-09"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9398,7 +9523,7 @@
 				)
 			)
 		)
-		(property "MPN" "1984617"
+		(property "MPN" "S2B-XH-A"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9409,7 +9534,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Phoenix Contact"
+		(property "Manufacturer" "JST Sales America Inc."
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -9420,11 +9545,20 @@
 				)
 			)
 		)
-		(property "Purchase_Note" "2-position 3.5mm PT 1.5; SW1 is panel-switch terminal"
+		(property "Purchase_Note" "JST XH 2-pos side entry, keyed. Mates XHP-2; only the DFR0571 input cable fits"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey" "455-S2B-XH-A-ND"
+			(at 165.1 33.02 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12211,7 +12345,7 @@
 	(label "+5V_DFR" (at 167.64 66.04 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0db01dda-ba60-4104-98ac-16ef2de8c34e"))
 	(wire (pts (xy 182.88 66.04) (xy 215.9 66.04)) (stroke (width 0) (type default)) (uuid "43cdd5aa-f8a9-420b-80dc-3a04e0bfaa9b"))
 	(label "+5V_RAW" (at 215.9 66.04 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "c9a5f124-4df7-4723-85d0-f773ba4dafc6"))
-	(text "U102: DFR0571 buck module, off board, on J106 and J107.\nQ102: blocks a reversed 5 V wire on J107." (exclude_from_sim no) (at 147.32 78.74 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "1065860b-546f-4a37-ba1a-d5395d9c8985"))
+	(text "U102: DFR0571 buck module, off board, on J106 and J107.\nQ102: blocks a reversed 5 V wire on J107.\nJ106: JST XH. Only the module input cable fits." (exclude_from_sim no) (at 147.32 78.74 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "1065860b-546f-4a37-ba1a-d5395d9c8985"))
 	(rectangle (start 266.7 15.24) (end 405.13 88.9) (stroke (width 0.254) (type dash)) (fill (type none)) (uuid "a89cd006-526d-4fcd-a495-efed99c634e0"))
 	(text "5 V FILTERS" (exclude_from_sim no) (at 269.24 17.78 0) (effects (font (size 2 2) (bold yes)) (justify left top)) (uuid "9844ca88-461c-4afa-8290-c697d72bc8bb"))
 	(label "+5V_RAW" (at 278.13 38.1 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "77a8f891-d621-4897-a475-1c2ce3bb3066"))
@@ -12410,7 +12544,7 @@
 	(wire (pts (xy 369.57 119.38) (xy 388.62 119.38)) (stroke (width 0) (type default)) (uuid "140ac0e3-beea-4645-b01a-670a47a220ae"))
 	(label "AMP_SDZ" (at 377.19 119.38 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fd3645af-b08c-47dc-9e30-12ef1d5862b7"))
 	(no_connect (at 337.82 129.54) (uuid "bd0d6fa0-2b12-477c-9f4a-c6f0c80becab"))
-	(text "U103: holds U101 in shutdown\nuntil +5V_RAW is above 4.65 V\nfor 20 ms.\nR110, C125: SDZ delay.\nJP105: short to clear a fault." (exclude_from_sim no) (at 345.44 133.35 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "b6b5d09c-1b63-40ab-a34c-dc9a855ed95f"))
+	(text "U103: holds U101 in shutdown\nuntil +5V_RAW is above 4.65 V\nfor 20 ms.\nR110, C125: SDZ delay.\nJP105: short to clear a fault.\nD102: holds SDZ near PVCC or below." (exclude_from_sim no) (at 345.44 133.35 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "b6b5d09c-1b63-40ab-a34c-dc9a855ed95f"))
 	(hierarchical_label "SPK_MUTE" (shape input) (at 284.48 154.94 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "47cefede-282a-43a0-b3a4-583b89bec65b"))
 	(wire (pts (xy 284.48 154.94) (xy 308.61 154.94)) (stroke (width 0) (type default)) (uuid "840f40a1-e4b2-4825-9580-c2cd2082e9c8"))
 	(wire (pts (xy 297.18 147.32) (xy 297.18 144.78)) (stroke (width 0) (type default)) (uuid "6163af95-91ba-4be1-8e62-2d69fbe1c608"))
@@ -12419,7 +12553,7 @@
 	(wire (pts (xy 297.18 154.94) (xy 297.18 154.94)) (stroke (width 0) (type default)) (uuid "03d69548-bee7-4ffa-b05c-bce9f8d83789"))
 	(wire (pts (xy 316.23 154.94) (xy 337.82 154.94)) (stroke (width 0) (type default)) (uuid "9abd4cbc-6d7f-41c8-83a7-010819e05ad9"))
 	(label "AMP_MUTE" (at 337.82 154.94 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ccf93ffb-c0c4-4e57-aa6f-65b8ec46f96b"))
-	(text "SPK_MUTE high (R107): muted.\nQ2 (sheet 1) pulls it low to play.\nR108, C124: mute ramp." (exclude_from_sim no) (at 350.52 152.4 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "95c70ed2-38a6-4687-95ea-adf16ac603d2"))
+	(text "SPK_MUTE high (R107): muted.\nQ2 (sheet 1) pulls it low to play.\nR108, C124: mute ramp.\nD103: holds MUTE near PVCC or below." (exclude_from_sim no) (at 350.52 154.94 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "95c70ed2-38a6-4687-95ea-adf16ac603d2"))
 	(wire (pts (xy 297.18 179.07) (xy 297.18 176.53)) (stroke (width 0) (type default)) (uuid "0cdd92e2-e750-4fb0-b9c2-00583ff5ed7c"))
 	(wire (pts (xy 297.18 176.53) (xy 302.26 176.53)) (stroke (width 0) (type default)) (uuid "5f24b72a-d4ed-4158-ba32-9bee3faecfe3"))
 	(label "+5V_RAW" (at 302.26 176.53 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "e55aa86a-71d1-43d5-8ed5-8d5da3fc858b"))
@@ -12868,6 +13002,38 @@
 		(property "Description" "" (at 297.18 198.12 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "005f7dd7-5c86-4370-a851-eb78cb3bb08d"))
 		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "#PWR48") (unit 1)))))
+	(wire (pts (xy 349.25 167.64) (xy 351.79 167.64)) (stroke (width 0) (type default)) (uuid "e1f92505-33c0-4456-90fe-ad343bbd9d56"))
+	(label "AMP_PVCC" (at 351.79 167.64 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "7f42cd1b-77b4-49ea-9221-d56806fbcbf9"))
+	(wire (pts (xy 341.63 167.64) (xy 339.09 167.64)) (stroke (width 0) (type default)) (uuid "7f403b62-87a4-45e6-aa7e-3228aba873b6"))
+	(label "AMP_MUTE" (at 339.09 167.64 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0c1a075a-777e-437f-ae1f-fbe4cff46eaf"))
+	(symbol (lib_id "Device:D_Schottky") (at 345.44 167.64 180) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "90331641-3277-4e61-8e06-7a0fc6e9cde3")
+		(property "Reference" "D103" (at 345.44 170.18 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "BAT54H" (at 345.44 165.1 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Diode_SMD:D_SOD-323" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/bat54ht1-d.pdf" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "NSVBAT54HT1G" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "onsemi" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "NSVBAT54HT1GOSCT-ND" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C179609" (at 345.44 167.64 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "cc438cfd-0119-4382-9414-051d794d356f")) (pin "2" (uuid "bbd9f20f-4281-41c4-9fad-d092019a524a"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D103") (unit 1)))))
+	(wire (pts (xy 369.57 148.59) (xy 372.11 148.59)) (stroke (width 0) (type default)) (uuid "3a5726de-d3c1-4c73-a661-e7aa461c4e25"))
+	(label "AMP_PVCC" (at 372.11 148.59 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fdebc5e7-bcde-4e9a-9661-23ed3eb38ac0"))
+	(wire (pts (xy 361.95 148.59) (xy 359.41 148.59)) (stroke (width 0) (type default)) (uuid "39dbc9ca-b757-44b6-9f91-124df8c63f29"))
+	(label "AMP_SDZ" (at 359.41 148.59 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "89ce036c-9251-4c5c-93ab-6adf45f3068b"))
+	(symbol (lib_id "Device:D_Schottky") (at 365.76 148.59 180) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "efed0be9-a7e7-4824-93b8-9a557742c266")
+		(property "Reference" "D102" (at 365.76 151.13 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "BAT54H" (at 365.76 146.05 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Diode_SMD:D_SOD-323" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/bat54ht1-d.pdf" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "NSVBAT54HT1G" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "onsemi" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "NSVBAT54HT1GOSCT-ND" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C179609" (at 365.76 148.59 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "1a8c59ec-b52f-4d97-b766-2d3d4a8add61")) (pin "2" (uuid "8e144371-8a61-46ea-8ad2-b55f1991fc38"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9/f6736f7f-a886-45cd-a179-bb502f0835ac" (reference "D102") (unit 1)))))
 	(embedded_fonts no)
 	(symbol
 		(lib_id "Connector:TestPoint")

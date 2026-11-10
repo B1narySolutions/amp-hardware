@@ -110,15 +110,15 @@ reaches `power-board/Halliquest_Power.*` through `${KIPRJMOD}/../..`), so a copy
   part to `power.kicad_sch`, set its reference by hand (the next free +100 number) and its instance path to
   `/<root uuid>/<sheet uuid>` (copy them from a neighbouring symbol), then run ERC on the root sheet.
 - **Expected DRC warnings:** rev 2 has 21 `silk_edge_clearance` warnings from the edge-mounted connectors (J1–J6); rev 3
-  has 32 (J1, J2, J4, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
+  has 29 (J1, J2, J4, J102, J105, J106, J107, J3, SW101). Don't trim their footprints to clear them. The JLC
   recommended pass also flags the test points' silk circles (0.14 mm from their pads, JLC prefers 0.15 mm) and stock
-  footprints' 0.12 mm silk lines; on rev 3 also 54 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
+  footprints' 0.12 mm silk lines; on rev 3 also 58 texts under 1.0 mm (0.8 mm references and legends in the dense areas) and U101's
   footprint silk over its own pad.
   All print fine. The JLC limits pass reports nothing else on either board.
 - **Re-render rev 3 after a board change.** The README shows `audio-board/rev3/render/top.png` and `bottom.png`; overwrite
   them in the same commit: `"$K" pcb render --use-board-stackup-colors --background transparent --side top --quality high
   --width 1600 --height 1250 -o audio-board/rev3/render/top.png audio-board/rev3/seed3-carrier.kicad_pcb`, and the same with
   `--side bottom --quality basic` for `bottom.png` (high quality's floor shadows show the top-side parts through it).
-- **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V drives U101's SDZ and MUTE above its
-  PVCC + 0.3 V rating. Bench supplies go on J101 (12 V, current-limited) with the DFR0571 connected (rev 3 DESIGN.md,
+- **Never power rev 3 from 5 V alone on J107.** With the battery side off, the 5 V feeds PVCC through R107–R110 and
+  D102/D103 and leaves U101 at its 4.5 V minimum supply with SDZ high. Bench supplies go on J101 (12 V, current-limited) with the DFR0571 connected (rev 3 DESIGN.md,
   "Decisions").

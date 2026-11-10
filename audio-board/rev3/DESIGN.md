@@ -22,7 +22,8 @@ constants. Three simplifications the merge made possible are done, to fit the bo
 (redundant with Q102), R23 (Q2's series resistor), and the second battery divider (R13/R22, with R102 raised to 100k so pin
 25 still reads VBAT / 11). F101 is an SMD fuse instead of a 5 × 20 mm holder. Three noise and fault changes followed
 (2026-11-08, see "Decisions"): U2's own supply filter (R29/C21), C0G caps at the speaker amp's inputs (C108/C109), and
-FAULTZ to Daisy pin 32 (R114).
+FAULTZ to Daisy pin 32 (R114). Three protection changes followed the schematic review (2026-11-09, see "Decisions"):
+J106 is a keyed JST XH header, D102/D103 clamp U101's SDZ and MUTE to PVCC, and R30 sits in series with Daisy pin 32.
 
 ## Signal paths
 
@@ -194,6 +195,9 @@ A hung Daisy can loop its last audio buffer at full level, so every output must 
 - **Levels:** low (playing) is a few mV (Q2's on-resistance against R107's 0.5 mA), against U101's 0.8 V VIL. High (muted) is ≈ 5 V, against
   2 V VIH and MUTE's PVCC + 0.3 V maximum. After an IWDG reset, MUTE rises through R107 + R108 (12.2 kΩ) into C124 and passes
   2 V in ≈ 5.6 ms. Both edges slew ≈ 2.3 V/ms or slower, inside the TPA3118's 10 V/ms limit for MUTE and SDZ.
+- **D103 (BAT54H Schottky, anode on MUTE, cathode on PVCC)** holds MUTE near PVCC when PVCC falls first (see "Power
+  sequence"). Reverse-biased in use; its leakage (2 µA maximum at 25 V and 25 °C, NSVBAT54HT1G) flows through R108 and Q2
+  while playing, a few millivolts against the 0.8 V VIL.
 - **No series resistor:** rev 2's R23 (470 Ω) limited Q2's current if a wire on the old inter-board terminal drove
   `SPK_MUTE`. On one board only R107 drives it (0.5 mA), so R23 is gone.
 - **How it works:** the firmware feeds the STM32's independent watchdog (IWDG) only from the audio callback. The IWDG runs
@@ -268,17 +272,26 @@ speaker details; this section is the design as it stands on rev 3.
   (`AMP_PG`, R109 10k pull-up) drives `AMP_SDZ` through R110 (2.2k), with R111 (100k) to GND and C125 (1 µF). U101 stays shut
   down until the 5 V has been good for 20 ms, and shuts down as soon as it sags. JP105 (left open) pulls MR low to force a
   reset, which also clears U101's fault latch.
+- **D102 (BAT54H Schottky, anode on SDZ, cathode on PVCC)** holds SDZ near PVCC when PVCC falls first, as D103 does for
+  MUTE. Its leakage into SDZ (2 µA maximum at 25 °C, tens of µA when hot) sees R110 ‖ R111 (2.15 kΩ) while U103 holds
+  `AMP_PG` low: under 0.25 V, against SDZ's 0.8 V VIL.
 - **MUTE:** see "Output mute". R107 pulls `SPK_MUTE` up; Q2 on sheet 1 pulls it down to play.
 - **FAULTZ** (R112 10k pull-up, R114 18k to GND, TP109): U101 latches its outputs off on an output short, overtemperature or
   too much DC at the output (TPA3118 datasheet, Table 4). The latch clears when SDZ goes low, by a power cycle or JP105.
-  FAULTZ reaches Daisy pin 32 (`AMP_FAULTZ`, the sixth sheet pin), so the firmware can show the fault. R112/R114 divide its
+  FAULTZ reaches Daisy pin 32 (`AMP_FAULTZ`, the sixth sheet pin, then R30 on sheet 1), so the firmware can show the fault. R112/R114 divide its
   high level to `+5V_RAW` × 18/28: ≈ 3.2 V, 3.05 V at 4.75 V and 3.54 V at 5.5 V, a logic high for the 3.3 V pin and below
   its VDD + 0.3 V. When `+5V_RAW` is off, the Daisy's pin sees 0 V through R114 (on USB alone, for example). FAULTZ still
-  isn't tied to SDZ: no automatic retry into a short.
+  isn't tied to SDZ: no automatic retry into a short. R30 (1k) limits the current to ≈ 3.3 mA if the firmware ever sets
+  pin 32 as a high output while U101 holds FAULTZ low; with the pin an input, it carries no current and changes no level.
 - **Power sequence:** with the switch on, `VBAT_PROTECTED` and PVCC rise first, then the DFR0571's 5 V. U103 releases SDZ
   20 ms after `+5V_RAW` passes 4.65 V. On switch-off, `+5V_RAW` stays at or below PVCC, because the DFR0571 runs from PVCC's
-  node, and U103 pulls SDZ low as it falls. So MUTE and SDZ never exceed PVCC + 0.3 V in use. On the bench they can (see
-  "Decisions": no 5 V alone on J107).
+  node, and U103 pulls SDZ low as it falls. But C124 holds MUTE (R108 2.2k, 1 µF) and C125 holds SDZ ((R110 ‖ R111), 1 µF)
+  for milliseconds, and PVCC falls faster: about 1.2 V/ms with 0.25 A of load on C111/C112's 200 µF. With MUTE high
+  (headphones in, or the Daisy booting), MUTE and SDZ would sit volts above PVCC as it falls through 4.7 V, with C124 and
+  C125 discharging into U101's protection diodes at ≈ 1 µF × 1.2 V/ms ≈ 1.2 mA each, which TI doesn't rate. D103 and D102
+  take that current instead: a BAT54 drops 0.32 V at most at 1 mA (Diodes Inc. BAT54WS datasheet; onsemi's own page didn't
+  download, and its listed 2 µA at 25 V and 0.8 V at 100 mA match), where U101's silicon diodes pass far less. TEST_PLAN 3C.9
+  measures MUTE − PVCC and SDZ − PVCC. On the bench, 5 V alone on J107 is still ruled out (see "Decisions").
 
 ### Battery level
 - R102/R103 (100k/10k, 1 %) divide `VBAT_PROTECTED` straight onto `BATT_SENSE`, Daisy pin 25: **VBAT / 11**, from a
@@ -367,8 +380,8 @@ a time with everything else normal, in each power state. Misuse may stop the boa
 |---|---|---|
 | J101 (12 V jack) | The power bank's 12 V output, 9.0–12.6 V, fused at 3.15 A | Reversed (Q101 blocks); a 19–24 V adapter (the board survives; the DFR0571's limit is unknown) |
 | SW101 (panel switch) | The switch's two contacts, in series with the battery | — |
-| J106 (to the DFR0571's input) | The module's input | Its two wires swapped: `VBAT_PROTECTED` shorts to GND through the module's ground and J107's ground wire. F101 or the pack's own protection stops it; the module's ground track may not survive (accepted, see "Decisions") |
-| J107 (from the DFR0571's output) | 5.0 V ± 0.1 V | Its two wires swapped: the module's output is shorted, and its own current limit has to hold. A reversed source that doesn't share J106's ground (a bench supply): Q102 blocks |
+| J106 (to the DFR0571's input) | The module's input cable, a JST XH 2-way plug (XHP-2): pin 1 BAT+, pin 2 GND | Keyed: only the module's input cable fits, one way round, and the bare 5 V and display wires fit only the screw terminals. A cable crimped with its two wires swapped still shorts `VBAT_PROTECTED` to GND through the module's ground and J107's ground wire: F101 or the pack's own protection stops it; the module's ground track may not survive (accepted, see "Decisions") |
+| J107 (from the DFR0571's output) | 5.0 V ± 0.1 V | Its two wires swapped: the module's output is shorted, and its own current limit has to hold. A reversed source that doesn't share J106's ground (a bench supply): Q102 blocks. J107's and J105's wire pairs swapped with each other: everything still works (the module feeds `+5V_RAW` through FB102, the display gets 5 V through Q102) |
 | J105 (display 5 V) | The display's supply, up to ≈ 0.5 A | Shorted: limited only by the DFR0571 |
 | J102 (speaker) | A 4 Ω speaker, bridged | Shorted, or one wire to GND: U101 latches off (FAULTZ low); a power cycle or JP105 clears it |
 | J3.2 TX | The display's RX: high impedance, clamped to −0.5…3.8 V, 1 mA at most | A 5 V wire on TX |
@@ -396,7 +409,7 @@ board they are traces, and the numbers still hold. `AMP_FAULTZ` is new in rev 3.
 | `SPK_MUTE` | `SPK_MUTE` | R107 pull-up, Q2 pull-down | ≈ 5 V muted, a few mV playing |
 | `LINE_OUT` | `LINE_OUT` | R11 (1k) | Audio, 1 Vrms full scale, ≈ 0 V DC, into 60 kΩ |
 | `LINE_REF` | `LINE_REF` | R21 (1k) to GND | 0 V ± 10 mV, into 60 kΩ |
-| `AMP_FAULTZ` | `AMP_FAULTZ` | U101 FAULTZ, R112/R114 | ≈ 3.2 V, no fault; < 0.8 V, a latched fault; 0 V with `+5V_RAW` off |
+| `AMP_FAULTZ` | `AMP_FAULTZ` | U101 FAULTZ, R112/R114; R30 (1k) to pin 32 | ≈ 3.2 V, no fault; < 0.8 V, a latched fault; 0 V with `+5V_RAW` off |
 
 One ground net joins the sheets, through the planes.
 
@@ -427,7 +440,7 @@ different times, and add a little ESD margin.
 
 ### Daisy pins
 Used: 14/15 (display UART), 16/17 (audio in), 18/19 (audio out), 20/40 (GND), 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
-32 `AMP_FAULTZ`, 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
+32 (`AMP_FAULTZ` through R30), 39 VIN. Every other pin, including `3V3_A` (21), `3V3_D` (38) and USB D−/D+ (36/37), is
 marked no-connect. With the Daisy out, its sockets (A1) give probe access to every audio board net, so there are no breakout headers.
 USB stays on the Daisy's own connector.
 
@@ -459,7 +472,7 @@ USB stays on the Daisy's own connector.
 - Read `AMP_FAULTZ` (pin 32, SAI2_SD_B: libDaisy's D25, PA0) as an input with no pull: **low = speaker amp fault** (a shorted speaker wire,
   overheating, or DC at its output). Trust it only once `+5V` has been good for 50 ms (U103 holds U101 in shutdown for the
   first 20 ms). On a fault, mute the speaker send, drive `SPK_EN` low and show "speaker fault" on the display; only a
-  power cycle or JP105 clears U101's latch.
+  power cycle or JP105 clears U101's latch. Never set pin 32 as an output: R30 only limits the current if it is.
 - Read `AUDIO_IN_2` (the AUX input, mono) and mix it in after the NAM model and cabinet EQ, with its own level control from
   the display. It goes to both outputs. It arrives ≈ 22 dB below the source, so apply gain before the mix.
 
@@ -472,23 +485,35 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
   Q1 only covered the audio branch (Q1 is now gone, see below). The design review assumed the DFR0571's own wires could do that; they can't, because its
   grounds are common (swapped J107 wires short its output instead). Q102 stays for a reversed bench supply or a module whose
   input-side ground isn't connected: one SOT-23 and ≈ 45 mV.
-- **No 5 V alone on J107, ever: bench supply on J101 only.** With PVCC at 0 V and 5 V on `+5V_RAW`, U103 releases SDZ to
-  ≈ 4.5 V through R109 + R110 and R107/R108 pull MUTE to 5 V: up to ≈ 0.36 mA into each pin's protection diode. The TPA3118
-  rates both at −0.3 V to PVCC + 0.3 V and publishes no injection rating. Normal power-up and power-down never get there (see "Power
-  sequence"), so the rule is procedural; a circuit fix would change rev 1's control block. Raise it with the power board's
-  designer before a rev 4.
+- **No 5 V alone on J107, ever: bench supply on J101 only.** With PVCC at 0 V and 5 V on `+5V_RAW`, U103 releases SDZ and
+  R107/R108 pull MUTE high. D102 and D103 then conduct and charge PVCC through R107–R110 (12.2 kΩ per pin) to about 4.5 V
+  against the battery divider's 110 kΩ. SDZ and MUTE stay within ≈ 0.3 V of PVCC, but U101 sits at its 4.5 V minimum supply
+  with SDZ high and may start and stop. Without the diodes, the same ≈ 0.36 mA per pin went into U101's own protection
+  diodes, which TI doesn't rate. Normal power-up and power-down never get there (see "Power sequence"), so the rule stays
+  procedural.
 - **FAULTZ latches until power cycle or JP105.** Rev 1's choice, kept: a fault does no damage, and an automatic retry would
   pulse a shorted speaker wire. The Daisy now sees it (pin 32), so the display can say why the speaker went silent.
-- **The DFR0571's four wires can be swapped in pairs.** J106 swapped shorts the battery through the module's ground (F101 or
-  the pack's protection stops it); J107 swapped shorts the module's output. Accepted for now, with silkscreen labels that tell
-  J106, J107 and J105 apart and a wiring check before power (TEST_PLAN); a keyed connector for the module would prevent it.
+- **J106 is a keyed JST XH header (2026-11-09, user's decision).** With J106 and J107 identical screw terminals side by side,
+  the module's two wire pairs could go in swapped: 12 V on the module's 5 V output reaches its input through the buck's
+  high-side MOSFET body diode, then J107, Q102 and all of `+5V_RAW` and `+5V` (U1, U2, U103, the Daisy, the display). The
+  display's lead on J106 would put 12 V on the display. J106 is now a JST S2B-XH-A (side entry, 3 A per contact; the module
+  draws ≈ 0.75 A): only the module's input cable fits it, one way round. Still possible, and accepted: J107's two wires
+  swapped (shorts the module's output, whose current limit has to hold), the input cable crimped with its wires swapped
+  (shorts the battery through the module's ground; F101 or the pack's protection stops it; TEST_PLAN 3A.3 and 3B.1 check
+  for it), and J107 and J105 swapped with each other (harmless, see "What each connector can see").
+- **D102/D103 clamp SDZ and MUTE to PVCC (2026-11-09, user's decision).** Every switch-off with the speaker muted took
+  C124 and C125 into U101's unrated protection diodes (see "Power sequence"). Two SOD-323 Schottkys, beside C125's and
+  C124's RC, take that current. Power rev 1 has the same weakness: its bring-up (3C.9) shows the real numbers.
+- **R30 (1k) in series with Daisy pin 32 (2026-11-09, user's decision).** A firmware mistake that drives PA0 high while
+  FAULTZ is low would otherwise short the STM32's output into U101's open drain.
 - **J102's pins swapped** (pin 2 SPK+, pin 1 SPK−), so the speaker traces from L101/L102 don't cross. The silkscreen marks them.
 - **U101's and C110's ground pads join the F.Cu pour solidly** (pad-level zone connection). They are boxed in by 0.65 mm pitch
   routing and tied to ground by tracks, so the pour can't reach them with two thermal spokes. U101 is soldered with hot air or
   through its pad vias anyway.
 - **The VBAT branch to J106 runs on In2** (1 mm, 0.5 oz): it carries only the DFR0571's input current, ≈ 0.75 A at most. All
   battery, PVCC and speaker current paths are on the 1 oz outer layers.
-- **Five references are 0.8 mm tall** (C124, C125, R109, R111, U101) in the dense area around U101's control pins. JLC's
+- **Nine references are 0.8 mm tall** (C113, C124, C125, D102, D103, R106, R109, R111, U101) in the dense area around
+  U101's control pins, and R30's beside JP105. JLC's
   recommended minimum is 1.0 mm; 0.8 mm with a 0.15 mm stroke prints.
 - **Under 100 × 100 mm (2026-11-07, user's decision).** The board is 100 × 78 mm, from 122 × 78, for JLC's 4-layer price
   break. To get there: the Daisy and the power side moved 10 mm left; F101 became an SMD fuse (Bel 0683G, same 3.15 A
@@ -515,6 +540,9 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **The 5 V bench check order** is in TEST_PLAN.md: the DFR0571 connected, 12 V current-limited on J101, then each block.
 
 ## Open items
+- **AUX input at pro line level with the board off:** a ±5 V source on J2 reaches the unpowered codec at ≈ ±0.4 V, past its
+  −0.3 V … AVDD + 0.3 V rating, at ≈ 0.3 mA (R3 ‖ R4 = 5k into R5). Not changed: the case is rare and the current small.
+  If it matters, R5 at 330 Ω brings it to ≈ ±0.29 V for ≈ 3 dB less level (a value change only, see "AUX input").
 - **Bring up audio rev 2 and power rev 1 first,** and fold their results into rev 3 before ordering it: the Daisy outputs'
   DC level (the speaker send has no DC block on this side), the fuse rating and the switch-on surge through F101, beads or bypass, the optional bulk caps, L101/L102's
   value, R105, and headphone clicks at boot. Set the jumpers and parts to match.
@@ -616,7 +644,7 @@ between blocks were routed for this floorplan.
 | U1 and the input network | Behind J1, left of the Daisy's front end | `AUDIO_IN_1` reaches pin 16 in about 17 mm on F.Cu |
 | R3–R5, C3 | Between J2 and the Daisy's front end | The AUX sum feeds pin 17 from under the module |
 | U2 block | Right of the Daisy's front end, above J4 | R10 takes `AUDIO_OUT_1` from pin 18; the left column is full |
-| J106, J107, J105, J3 | Left edge, top to bottom, wire openings facing out | The DFR0571's input and output, the display's power and UART together, at the 5 V entry |
+| J106, J107, J105, J3 | Left edge, top to bottom, wire openings (J106's plug opening) facing out | The DFR0571's input and output, the display's power and UART together, at the 5 V entry |
 | FB101, JP101, JP102, C104, C105, C4, C5 | Between the harness block and the Daisy (x 20–31) | The audio 5 V filter and the C5 star sit between `+5V_RAW` and both of their loads |
 | SW101, F101, J101 | Rear edge, left to right (x 52–86): switch terminal, fuse, 12 V jack | The battery path runs along the edge to J101, beside the class D; F101's 10 mm pad pitch fits between them |
 | Q101, D101, R101 | Under SW101 | Q101's drain on SW101, its source on `VBAT_PROTECTED` toward R105 |
@@ -629,7 +657,10 @@ between blocks were routed for this floorplan.
 | C18 | Below R2, its pad under R2's U1 end | RF filter at U1A's + input, 2.5 mm from the pin |
 | JP106–JP108 | Back, left of U101 (x 182, y 52–57) | AM2–AM0 drop through vias beside pins 13–15; the 2 mm between those pins and the `AMP_MUTE` track has no room for three jumpers on the front |
 | R29, C21 | Above U2's charge-pump cap C13, left of FID2 | `+5V` comes up the via at R18; `HP_5V` drops to U2's supply bus through one In2 hop under `HP_SOURCE` |
-| R114 | Beside R112 and TP109, above U101's input pins | FAULTZ drops to In2 beside it and runs 22 mm west to Daisy pin 32 |
+| R114 | Beside R112 and TP109, above U101's input pins | FAULTZ drops to In2 beside it and runs 16 mm west to R30 |
+| R30 | Beside JP105, right of Daisy pin 32 | In the `AMP_FAULTZ` In2 line: a via at each end, then In2 to pin 32 |
+| D102 | Under R105, above U101's pins 1–2 | Anode on the SDZ track, cathode straight up into R105's PVCC pad |
+| D103 | Below C124 and R106 | Anode on the MUTE track to R108, cathode on R106's PVCC track, whose via to the B.Cu PVCC pour moved 1.1 mm down |
 | R12, C16, R11, R21 | Column left of C108/C109 | The speaker send's filter and LINE− reference, 6 mm from U101's input caps |
 | H1–H4 | (22.3, 41.5), (96.5, 63.5), (90, 74), (4, 4) | The front-left corner is J1's; the rear-right holds L101 |
 
@@ -679,9 +710,9 @@ per-class ranges, including the maximums. All values are within JLC's standard 4
   F101, SW101 and Q101. Sized for the 3.15 A fuse on 1 oz outer copper.
 - **Thermal reliefs:** every pad joins the GND pours with 0.5 mm spokes and a 0.5 mm gap, for an iron, except U101's and C110's
   ground pads (see "Decisions"). Vias stay solid.
-- **Expected DRC warnings:** 32 `silk_edge_clearance`, all from edge-mounted connectors (J1, J2, J4, J102, J105, J106, J107,
+- **Expected DRC warnings:** 29 `silk_edge_clearance`, all from edge-mounted connectors (J1, J2, J4, J102, J105, J106, J107,
   J3, SW101). Don't trim their footprints. JLC's recommended pass also flags the test points' silk circles (0.14 mm from
-  their pads, JLC prefers 0.15 mm), the text under 1.0 mm (54 items: references and legends at 0.8 mm, all with a 0.15 mm
+  their pads, JLC prefers 0.15 mm), the text under 1.0 mm (58 items: references and legends at 0.8 mm, all with a 0.15 mm
   stroke), and U101's footprint silk over its own pad; all print fine. On KiCad 10.0.8 DRC also reports `lib_footprint_mismatch` for the three fiducials,
   against that version's library; the board is unaffected.
 
@@ -693,7 +724,8 @@ For a hand-soldered build every part comes from DigiKey; for JLC assembly, JLC f
 `seed3-carrier-digikey.csv` is one build's order (DigiKey's BOM upload format, one line per part number) and
 `seed3-carrier-digikey-cart.csv` the same in DigiKey's cart format. Both come from the build that was ordered for audio rev 2
 and power rev 1 (`amp-digikey-order.csv`, with its stock substitutes and notes), without the four inter-board terminals,
-with Q102, C18, FB1, C19/C20, R29, C21, R114 and the SMD fuse added, C0G C108/C109, without Q1, R13, R22 and R23, and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
+with Q102, C18, FB1, C19/C20, R29, C21, R114, D102/D103, R30, the SMD fuse and J106's JST XH header (with the module cable's
+housing and pre-crimped leads) added, C0G C108/C109, without Q1, R13, R22 and R23, and without rev 1's experiment parts, which that build's spares cover. Check stock before ordering.
 - **Passive sizes:** resistors are 0603 (R105 stays 2512 for the amp's supply current). Capacitors are 0603 up to 220 nF
   and 0805 from 680 nF: a ceramic's capacitance falls with DC voltage, more in smaller cases, so the 1–10 µF parts keep the
   0805 body. C7 stays 1210: 47 µF on `VREF` sets the 0.7 Hz filter that keeps `+5V` noise off the guitar input. All use
@@ -703,13 +735,14 @@ with Q102, C18, FB1, C19/C20, R29, C21, R114 and the SMD fuse added, C0G C108/C1
   value, size, tolerance and dielectric, with an equal or higher voltage rating: UNI-ROYAL 0603WAF resistors; Samsung or YAGEO
   for 100 pF, 100 nF, 220 nF (25 V, as required), 1 µF, 4.7 µF and 10 µF (25 V X5R). C108/C109 are Murata GRM31C5C1E474JE01L on
   both orders (JLC C6049896, 546 in stock on 2026-11-08). D1–D5 are C19224, Nexperia's PESD5V0S1BA in SOD-323: the same diode as the DigiKey
-  order's SOD-323F PESD5V0S1BAF. 17 Extended parts carry JLC's loading fee: C2, C3/C9, C16, C108/C109, C121/C122, C7, R105,
-  FB1, FB101/FB102, D1–D5, D101, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
+  order's SOD-323F PESD5V0S1BAF. D102/D103 are onsemi NSVBAT54HT1G on both orders (JLC C179609, 63,040 in stock on 2026-11-09).
+  18 Extended parts carry JLC's loading fee: C2, C3/C9, C16, C108/C109, C121/C122, C7, R105,
+  FB1, FB101/FB102, D1–D5, D101, D102/D103, L101/L102, Q2, U1, U2, U101 and U103. U103 (10 in stock) and U2 (76) had the lowest JLC stock
   on 2026-11-07.
 - **Assembly files:** `jlc-assembly.kicad_jobset` writes `fab/assembly/seed3-carrier_bom.csv` and `_cpl-all-pos.csv` (SMD
   parts only); `jlc_asm.py cpl` turns the latter into `_cpl.csv` with `jlc-rotations.csv` (empty until JLC's placement preview
   shows a part rotated). All placed parts are on the top side, so JLC's Economic assembly applies. Check every polarised part
-  (U1, U2, U101, U103, Q2, Q102, D1–D5, D101) in JLC's preview before paying. The BOM's rows without a part number are the
+  (U1, U2, U101, U103, Q2, Q102, D1–D5, D101, D102, D103) in JLC's preview before paying. The BOM's rows without a part number are the
   hand-soldered parts, the test-point pads and the off-board DFR0571 (U102): leave them unselected.
 - **Edge clearance for assembly:** JLC wants placed part bodies 2.5 mm from the edge. Every placed part's courtyard clears
   it (L101's top edge is exactly 2.5 mm from the rear edge); F101, at the rear edge, is hand-soldered.
@@ -719,6 +752,9 @@ with Q102, C18, FB1, C19/C20, R29, C21, R114 and the SMD fuse added, C0G C108/C1
 - **U2:** the EUE suffix is the TSSOP. Don't substitute the MAX9722B: it has a fixed −2 V/V gain.
 - **C0G for the filter caps** C1, C18, C9, C16, C3, C19 and C20, and for C2 (on the guitar signal).
 - **Daisy sockets:** two 1×20 2.54 mm female headers (S7018-ND).
+- **J106's mate (the DFR0571's input cable):** a JST XHP-2 housing (455-2266-ND) and one ASXHSXH22K305 lead (455-3241-ND,
+  12 in of 22 AWG with an XH contact at each end). Cut the lead in half for the two wires; VIN+ goes in housing position 1
+  (J106's triangle, BAT+). Mark the VIN+ wire: the lead is black.
 - **The DFR0571** is in the order as an off-board part (U102 on sheet 2, no footprint).
 - **The S1B panel switch** is obsolete at NKK (DigiKey still stocks it); pick another for later builds.
 - **TP1 and TP101–TP109** are bare copper pads, not parts.

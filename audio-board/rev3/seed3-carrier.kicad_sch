@@ -8182,7 +8182,7 @@
 		)
 		(uuid "2b447b59-2ceb-43d4-991e-bd710ee1cb8f")
 	)
-	(text "Sheet 2: power board rev 1, references +100.\n+5V_AUDIO: +5V after FB101 (or JP101).\nBATT_SENSE = VBAT / 11 (R102, R103).\nSPK_MUTE: R107 pulls it up (muted). SPK_EN high: play.\nAMP_FAULTZ ≈ 3.2 V. Low = latched speaker fault (pin 32).\nLINE_OUT, LINE_REF: to the U101 inputs."
+	(text "Sheet 2: power board rev 1, references +100.\n+5V_AUDIO: +5V after FB101 (or JP101).\nBATT_SENSE = VBAT / 11 (R102, R103).\nSPK_MUTE: R107 pulls it up (muted). SPK_EN high: play.\nAMP_FAULTZ ≈ 3.2 V. Low = latched speaker fault (pin 32).\nR30: limits the current if pin 32 is set as an output.\nLINE_OUT, LINE_REF: to the U101 inputs."
 		(exclude_from_sim no)
 		(at 35.56 264.16 0)
 		(effects
@@ -18604,8 +18604,6 @@
 	(wire (pts (xy 360.68 35.56) (xy 360.68 38.1)) (stroke (width 0) (type default)) (uuid "34ee4d83-bf4c-467e-8647-1bbe92a29aa1"))
 	(label "HP_5V" (at 360.68 38.1 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "dd619b5b-af86-43f3-b852-b7ae07f8b38c"))
 	(wire (pts (xy 375.92 40.64) (xy 386.08 40.64)) (stroke (width 0) (type default)) (uuid "f2ea8f87-fa84-41fa-af11-43cecb3cc05d"))
-	(wire (pts (xy 173.99 91.44) (xy 171.45 91.44)) (stroke (width 0) (type default)) (uuid "9f4874d0-985d-4289-8ab9-3ade65f00394"))
-	(label "AMP_FAULTZ" (at 171.45 91.44 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "cbca57a7-77f1-4924-a7c9-ae977309fba7"))
 	(wire (pts (xy 45.72 243.84) (xy 50.8 243.84)) (stroke (width 0) (type default)) (uuid "12826979-7495-4f69-925a-61a80ed4b3b2"))
 	(label "AMP_FAULTZ" (at 50.8 243.84 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fc23635f-2f61-42df-a522-600fd2b649c6"))
 	(junction (at 375.92 40.64) (diameter 0) (color 0 0 0 0) (uuid "78f9cc41-de18-4e34-a8ea-8666f6442cf3"))
@@ -18662,6 +18660,21 @@
 	(wire (pts (xy 337.82 68.58) (xy 322.58 68.58)) (stroke (width 0) (type default)) (uuid "7460d309-0fa5-40ae-960e-415ede4a837e"))
 	(text "C17: BATT_SENSE filter." (exclude_from_sim no) (at 91.44 246.38 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "1214ac4c-4aba-4064-a0d0-66415da554da"))
 	(text "Q2: SPK_EN high pulls SPK_MUTE low (play)." (exclude_from_sim no) (at 152.4 262.89 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid "a2f807e3-e732-4bc4-90e2-7fa02148d724"))
+	(wire (pts (xy 166.37 91.44) (xy 173.99 91.44)) (stroke (width 0) (type default)) (uuid "5a3e6438-b0c6-4e97-9969-6cbb3d3374f6"))
+	(wire (pts (xy 161.29 91.44) (xy 158.75 91.44)) (stroke (width 0) (type default)) (uuid "183bfe6a-340e-45f1-b207-c3d01983b7d4"))
+	(label "AMP_FAULTZ" (at 158.75 91.44 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d55590ae-557c-49c9-9bbf-8643add22cde"))
+	(symbol (lib_id "Device:R_Small_US") (at 163.83 91.44 90) (unit 1) (exclude_from_sim no) (in_bom yes) (in_pos_files yes) (on_board yes) (dnp no) (uuid "68827e99-f2d5-404c-a21c-7bf7de378fa5")
+		(property "Reference" "R30" (at 163.83 88.9 90) (effects (font (size 1.27 1.27))))
+		(property "Value" "1k" (at 163.83 93.98 90) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 163.83 91.44 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L" (at 163.83 91.44 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 163.83 91.44 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "MPN" "RC0603FR-071KL" (at 163.83 91.44 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Manufacturer" "YAGEO" (at 163.83 91.44 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "DigiKey" "311-1.00KHRCT-ND" (at 163.83 91.44 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C21190" (at 163.83 91.44 90) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "21d5ec2c-03e2-4016-826b-1e18dd874930")) (pin "2" (uuid "3d194215-2471-4849-9835-6fc86fd7d3d7"))
+		(instances (project "seed3-carrier" (path "/94ecceca-f8ce-4e68-9c84-99ac5115dfb9" (reference "R30") (unit 1)))))
 	(sheet_instances
 		(path "/"
 			(page "1")
