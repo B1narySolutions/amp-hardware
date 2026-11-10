@@ -260,7 +260,7 @@ One ground net joins the sheets, through the planes.
 J3 is a 3-way screw terminal on the left edge: 1 GND, 2 TX, 3 RX. The display takes its power from J105, beside it.
 - **R8, R9 (10k)** in series with TX and RX limit the current when a wire lands on the wrong terminal, or when the
   display and the Daisy power up at different times.
-- **R24 (100k)** pulls RX to GND. With R9 it divides a 5 V wire on RX to 4.78 V at pin 15 (PB7, a 5 V tolerant pin); the
+- **R24 (100k)** pulls RX to GND. With R9 it divides a 5 V wire on RX to at most 4.78 V (from 5.25 V) at pin 15 (PB7, a 5 V tolerant pin); the
   display's 3.3 V high arrives at ≈ 3.0 V. It also detects the display: a line held low means none. PB7's internal
   pull-up must stay off.
 - **C19/C20 (10 pF C0G)** on the Daisy side of R8/R9 cut 2.4 GHz by ≈ 60 dB.

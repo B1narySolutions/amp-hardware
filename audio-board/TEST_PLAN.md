@@ -1,54 +1,53 @@
 # Audio board — Post-Assembly Test Plan
 
-Bring-up and acceptance tests for one hand-assembled **rev 2** board built from the rev 2 schematic
-(`rev2/seed3-carrier.kicad_sch`), its fabrication package and its BOM. Record the package name in the log.
-`rev2/DESIGN.md` describes the design and the reasons for it, and `rev2/CHANGES.md` lists what changed from rev 1.
+Bring-up and acceptance tests for one hand-assembled **rev 2** board (`rev2/seed3-carrier.kicad_sch`).
+`rev2/DESIGN.md` has the design and its reasons.
 
-Work through the stages in order. Each stage assumes the one before it passed,
-so a failure stays localized: unpowered checks first, then the board powered
-**without** the Daisy, and only then with the Daisy fitted. Record results in
-the log at the end (one copy per board serial).
+Work through the stages in order: each assumes the one before it passed. Record results in the log at the end, one
+copy per board serial, with the fab package name.
 
 ## Circuit summary (what is being tested)
 
 | Block | Parts | Function |
 |---|---|---|
-| Power input | J6 (4-way 3.5 mm screw terminal), Q1 (AO3401A) | `5V_IN` on J6.1 (5V), GND on J6.2; P-FET reverse-polarity protection onto `+5V`, probe at C5 `+` |
-| 5 V decoupling | C6, C4, C5, C12, C15 | Bulk/HF decoupling on `+5V` (C12 at U2 PVDD, C15 at U2 SVDD) |
-| Power board signals | R13/R22/C17, Q2/R17/R23 | J6.3 (BAT) `BATT_SENSE_CONN` → R13/R22 (halved) → Daisy pin 25; pin 28 `SPK_EN` → Q2 → R23 → J6.4 (MUTE) `SPK_MUTE` (open drain, low = speaker on). The power switch is on the power board |
+| Power input | J6, Q1 (AO3401A) | `5V_IN` (J6.1) → reverse-polarity P-FET → `+5V`, probe at C5 `+` |
+| 5 V decoupling | C6, C4, C5, C12, C15 | On `+5V` (C12 at U2 PVDD, C15 at U2 SVDD) |
+| Power board signals | R13/R22/C17, Q2/R17/R23 | J6.3 `BATT_SENSE_CONN` → R13/R22 (halved) → Daisy pin 25; pin 28 `SPK_EN` → Q2 → R23 → J6.4 `SPK_MUTE` (open drain, low = speaker on) |
 | Mid-rail reference | R7, R6 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
-| Guitar input | J1, C1, C2, R1 (1M), R2, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; unity-gain buffer → R20 (470 Ω series) → Daisy `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
-| AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ~400 kHz RF filter, straight into Daisy `AUDIO_IN_2` (no buffer). R5 (470 Ω) sets the level: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
-| Headphone filter | R10, C9 | Daisy `AUDIO_OUT_1` (expected to be AC-coupled on the module; 5.16 checks) → ~80 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
-| Headphone amp | U2 (MAX9722A), R25–R28, C10/C11, C12–C15 | DirectDrive stereo amp, inverting at a gain of −1 set by R26/R25 and R28/R27 (mono source on both channels), outputs at 0 V straight to J4 (`HP_L` tip, `HP_R` ring). SHDN tied to `+5V`: U2 is on whenever `+5V` is up |
-| Headphone detect | J4.5/J4.6, TP1 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 23, wired directly; STM32 internal pull-up, enabled by the firmware). **Low = headphones in.** Probe at **TP1** (`TP_HP_DET`) |
-| Jack ESD | D1–D5 (PESD5V0S1BA) | Bidirectional ESD diode from each jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring |
-| Speaker send | R11, C16, R12, R21 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass (R11/C16, no buffer) → `LINE_OUT` on J5.1 (LINE+); J5.2 (LINE−) is `LINE_REF`, 1k (R21) to GND, for the speaker amp's differential input |
-| `+5V` sense | R18, R19 (100k/100k) | `+5V` divided to ≈ 2.5 V → `5V_SENSE` (Daisy pin 22, ADC_0). The firmware keeps both outputs silent while it reads low (USB alone) |
-| Display | J3, R8, R9 | 3-way screw terminal: GND / `UART_TX_CONN` / `UART_RX_CONN`; series resistors to Daisy USART1 (R8 10k on TX, R9 10k on RX); R24 (100k) holds RX low with no display. The display is powered from the power board |
+| Guitar input | J1, C1, C2, R1 (1M), R2, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; unity-gain buffer → R20 (470 Ω) → `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
+| AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ~400 kHz RF filter, unbuffered into `AUDIO_IN_2`: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
+| Headphone filter | R10, C9 | `AUDIO_OUT_1` (expected to be AC-coupled on the module; 5.16 checks) → ~80 kHz low-pass → `HP_SOURCE` → U2 |
+| Headphone amp | U2 (MAX9722A), R25–R28, C10/C11, C12–C15 | Stereo amp, gain −1 (R26/R25, R28/R27), mono source on both channels, outputs at 0 V to J4 (`HP_L` tip, `HP_R` ring). SHDN tied to `+5V`: on whenever `+5V` is up |
+| Headphone detect | J4.5/J4.6, TP1 | Switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 23, firmware pull-up). **Low = headphones in.** Probe at **TP1** (`TP_HP_DET`) |
+| Jack ESD | D1–D5 (PESD5V0S1BA) | Bidirectional diode to GND from J1 tip, J2 tip/ring, J4 tip/ring |
+| Speaker send | R11, C16, R12, R21 | `AUDIO_OUT_2` → ~48 kHz low-pass (R11/C16) → `LINE_OUT` on J5.1 (LINE+); J5.2 (LINE−) is `LINE_REF`, 1k (R21) to GND |
+| `+5V` sense | R18, R19 (100k/100k) | `+5V` halved → `5V_SENSE` (Daisy pin 22, ADC_0). The firmware silences both outputs while it reads low (USB alone) |
+| Display | J3, R8, R9 | GND / `UART_TX_CONN` / `UART_RX_CONN`; 10k series to USART1 (R8 TX, R9 RX); R24 (100k) holds RX low with no display |
 | Daisy | A1 + two 1×20 sockets | Plug-in module. R17 holds `SPK_EN` low (speaker muted) while it is absent, booting or reset. The firmware feeds the STM32 IWDG only from the audio callback; a reset stops the codec's clocks, which silences J4 and J5 |
 
 **Pinouts used below**
 
 - U1 TLV9061 (SOT-23-5): 1 OUT, 2 V−, 3 IN+, 4 IN−, 5 V+
-- U2 MAX9722A (TSSOP-16): 1 INL+, 2 SHDN, 3 PVDD, 4 C1P, 5 PGND, 6 C1N, 7 PVSS, 8 SGND, 9 INR+, 10 INR−, 11 SVDD, 12 OUTR, 13 SVSS,
-  14 OUTL, 15 SVDD, 16 INL−. INL+, INR+, PGND and SGND to GND; SHDN, PVDD and SVDD to `+5V`; PVSS tied to SVSS
+- U2 MAX9722A (TSSOP-16): 1 INL+, 2 SHDN, 3 PVDD, 4 C1P, 5 PGND, 6 C1N, 7 PVSS, 8 SGND, 9 INR+, 10 INR−, 11 SVDD,
+  12 OUTR, 13 SVSS, 14 OUTL, 15 SVDD, 16 INL−. INL+, INR+, PGND and SGND to GND; SHDN, PVDD and SVDD to `+5V`; PVSS
+  tied to SVSS
 - Q1 AO3401A, Q2 2N7002 (SOT-23): 1 G, 2 S, 3 D
 - J6: 1 `5V_IN` (5V), 2 GND, 3 `BATT_SENSE_CONN` (BAT), 4 `SPK_MUTE` (MUTE)
 - J3: 1 GND, 2 `UART_TX_CONN` (TX), 3 `UART_RX_CONN` (RX)
 - J5: 1 `LINE_OUT` (LINE+), 2 `LINE_REF` (LINE−)
 - J4 / J2 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J2's 5/6 not connected)
-- A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`,
-  19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`,
-  39 `+5V`, 40 GND. All other Daisy pins are not connected on the audio board. Probe the sockets while the Daisy is out. With it fitted
-  they are covered, so the checks name an audio board part on the same net instead
+- A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`,
+  18 `AUDIO_OUT_1`, 19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`, 39 `+5V`,
+  40 GND. No other Daisy pin is connected on the audio board. With the Daisy fitted the sockets are covered, so
+  those checks name an audio board part on the same net
 
 ## Equipment
 
 - Current-limited bench supply (0–6 V), DMM, oscilloscope (≥ 20 MHz)
-- Signal generator or audio interface (sine 20 Hz – 20 kHz, ≥ 2 Vpp); a phone/laptop
-  headphone output works for listening tests
-- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), 32 Ω and 16 Ω dummy loads (one per channel)
+- Signal generator or audio interface (sine 20 Hz – 20 kHz, ≥ 2 Vpp); a phone/laptop headphone output works for
+  listening tests
+- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), 32 Ω and 16 Ω dummy loads
+  (one per channel)
 - Hook-up wire with ferrules (or solid wire) for J6, J5 and J3, and a small screwdriver for the 3.5 mm terminals
 - 10k resistor and clip leads to pull `SPK_MUTE` (J6.4) up to 3.3 V
 - USB cable for the Daisy, USB-serial adapter (3.3 V) for J3
@@ -58,27 +57,27 @@ the log at the end (one copy per board serial).
 
 | # | Check | Pass criteria |
 |---|---|---|
-| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1 SOT-23-5 pins, U2 TSSOP pins, Q1, Q2, the SOD-323 ESD diodes D1–D5), no cold/dull joints, no solder balls |
+| 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1, U2, Q1, Q2, D1–D5), no cold/dull joints, no solder balls |
 | 0.2 | IC orientation | U1 and U2 pin-1 marks match silkscreen; U1 = TLV9061, U2 = MAX9722AEUE+ |
-| 0.3 | U2 (TSSOP-16) | All 16 pins soldered with visible fillets and the part flat on the board; no bridge between neighbouring pins (0.65 mm pitch) |
-| 0.4 | Q1 and Q2 | Both SOT-23: confirm markings match AO3401A (Q1) and 2N7002 (Q2) — not swapped; seated on correct pads |
+| 0.3 | U2 (TSSOP-16) | All 16 pins have visible fillets, part flat on the board, no bridge between neighbouring pins |
+| 0.4 | Q1 and Q2 | Markings match AO3401A (Q1) and 2N7002 (Q2), not swapped; seated on the correct pads |
 | 0.5 | Electrolytic polarity | C5 `+` to `+5V` |
 | 0.6 | Passive values vs BOM | Spot-check R1 (1M), R3/R4/R6/R7/R8/R9/R13/R22 and R25–R28 (10k), R12/R17/R18/R19/R24 (100k), R10 (3.3k), R5/R20/R23 (470), R2/R11/R21 (1k); C7 is the 1210 part, C1, C10/C11 and C12–C16 the 0805 parts (R5/R10/R20/R23 and R25–R28 are 0805 too) |
 | 0.7 | J6, J5, J3 (screw terminals) | Seated flat, wire openings facing the board edge, screws turn freely. J6 is one 4-way block |
 | 0.8 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
-| 0.9 | Terminal labels | Silkscreen labels legible next to every terminal: 5V/GND/BAT/MUTE, RX/TX/GND, LINE+/LINE− |
-| 0.10 | Jacks J1, J4, J2 | Fully seated, flush to board edge, plugs insert/eject cleanly. J2/J4 noses overhang the edge as drawn; note any footprint mismatch (the J2/J4 footprint was checked against the datasheet only) |
+| 0.9 | Terminal labels | Legible next to every terminal: 5V/GND/BAT/MUTE, RX/TX/GND, LINE+/LINE− |
+| 0.10 | Jacks J1, J4, J2 | Fully seated, flush to board edge, plugs insert/eject cleanly. J2/J4 noses overhang the edge as drawn; note any footprint mismatch (checked against the datasheet only) |
 | 0.11 | Enclosure fit (if available) | Jacks, USB and J3/J5/J6 cables line up with panel holes and cable routes |
 
 ## Stage 1 — Unpowered resistance checks (no Daisy)
 
-Measure with the DMM; let capacitors charge before reading. Probe on IC pins,
-test pads or the Daisy sockets (A1), not on connector shells.
+Measure with the DMM; let capacitors charge before reading. Probe on IC pins, test pads or the Daisy sockets (A1), not
+on connector shells.
 
 | # | Measure | Expect | Fail indicates |
 |---|---|---|---|
-| 1.1 | `+5V` (C5 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on 5 V rail — check C4/C5/C6/C12/C15, U1.5, and U2.2 (SHDN) bridged to U2.1 (INL+, GND) |
-| 1.2 | J6.1 → GND | High; diode mode shows Q1's body diode into the `+5V` rail, not a short | Q1 shorted or bridged |
+| 1.1 | `+5V` (C5 `+`) → GND | Rises to > 1 kΩ (caps charging), not < 50 Ω | Short on `+5V`: C4/C5/C6/C12/C15, U1.5, or U2.2 (SHDN) bridged to U2.1 (INL+, GND) |
+| 1.2 | J6.1 → GND | High; diode mode shows Q1's body diode into `+5V`, not a short | Q1 shorted or bridged |
 | 1.3 | J6.2 → GND, J3.1 → GND | ≈ 0 Ω | J6/J3 joint open |
 | 1.4 | `VREF` (C7) → GND | 5–10 kΩ (R7, in parallel with R6 through the unpowered `+5V` rail) | < 1 kΩ = C7 shorted; > 10 kΩ = R7 open or wrong |
 | 1.5 | J3.2 → GND; J3.3 → GND | Open; ≈ 110 kΩ (R9 + R24) | UART pins shorted to GND; ≈ 100 kΩ = R9 shorted, open = R9 or R24 open |
@@ -88,7 +87,7 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.8 | U2 pin bridges: J4 tip → GND, J4 ring → GND, J4 ring → `+5V`, J4 tip → J4 ring | High (no short), not < 100 Ω | TSSOP bridge: OUTR (12) to SVDD (11), an output to SVSS (13), or OUTR (12) to OUTL (14) |
 | 1.8a | J4 tip → C10 pad 2; J4 ring → C11 pad 2 | ≈ 20 kΩ (R26 + R25; R28 + R27) | A gain resistor missing, open or the wrong value |
 | 1.9 | J1 tip → GND, no plug | ≈ 0 Ω (tip-normal shorts to GND) | J1 switch / footprint issue |
-| 1.10 | J1 tip → GND, plug inserted (other end open) | Open once C1 and C2 charge (both block DC); not ≈ 0 Ω | ≈ 0 Ω = plug not lifting the switch |
+| 1.10 | J1 tip → GND, plug inserted (other end open) | Open once C1 and C2 charge; not ≈ 0 Ω | ≈ 0 Ω = plug not lifting the switch |
 | 1.11 | J2 tip → ring | ≈ 20 kΩ (R3 + R4) | R3/R4 open |
 | 1.12 | J2 tip → GND | ≈ 10.5 kΩ (R3 + R5) | ≈ 10.0 kΩ = R5 or C3 shorted; ≈ 13.3 kΩ = a 3.3k fitted for R5 |
 | 1.13 | TP1 (`HP_DETECT`) → GND, no plug in J4 | Open | J4 detect switch closed or bridged |
@@ -97,109 +96,112 @@ test pads or the Daisy sockets (A1), not on connector shells.
 | 1.16 | J5.1 → GND; J5.2 → GND | ≈ 100 kΩ (R12); ≈ 1 kΩ (R21) | R12 or R21 missing; J5 joints |
 | 1.17 | J5.1 → A1.19 (`AUDIO_OUT_2`) | ≈ 1 kΩ (R11) | R11 open or wrong value |
 | 1.18 | J6.3 → A1.25; A1.25 → GND | ≈ 10 kΩ (R13); ≈ 10 kΩ (R22) once C17 charges | `BATT_SENSE` series resistor and divider |
-| 1.19 | A1.26, A1.27 → anything | Open (no-connect since the power button moved to the power board) | Stray bridge |
+| 1.19 | A1.26, A1.27 → anything | Open (not connected) | Stray bridge |
 | 1.20 | A1.28 (`SPK_EN`) → GND; J6.4 → GND; J6.4 → Q2 pin 3 | ≈ 100 kΩ (R17); open (Q2 off); ≈ 470 Ω (R23) | R17 missing; Q2 shorted or swapped with Q1; R23 open |
 | 1.21 | J3.2 → A1.14; J3.3 → A1.15; A1.15 → GND | ≈ 10 kΩ (R8), ≈ 10 kΩ (R9), ≈ 100 kΩ (R24) | UART series resistors, RX pull-down |
 | 1.21a | A1.22 (`5V_SENSE`) → GND | Below 100 kΩ (R19, with R18 through the `+5V` loads); not ≈ 0 Ω | R18/R19 missing or shorted |
 | 1.21b | A1.16 (`AUDIO_IN_1`) → U1.1 | ≈ 470 Ω (R20) | Open = R20 open; ≈ 0 Ω = shorted |
-| 1.21c | ESD diodes: J1 tip, J2 tip, J2 ring, J4 tip, J4 ring → GND, in DMM diode mode both ways | No conduction below ≈ 5 V either way (bidirectional TVS; the meter reads open) | A reading = D1–D5 shorted, fitted wrong, or a solder bridge |
+| 1.21c | ESD diodes: J1 tip, J2 tip, J2 ring, J4 tip, J4 ring → GND, in DMM diode mode both ways | Meter reads open both ways (bidirectional TVS, no conduction below ≈ 5 V) | A reading = D1–D5 shorted, fitted wrong, or a solder bridge |
 | 1.22 | Daisy socket (A1) adjacent pins: A1.17 (`AUDIO_IN_2`) → A1.18 (`AUDIO_OUT_1`); A1.18 → A1.19 (`AUDIO_OUT_2`); then spot-check the rest | Open on both (C9–C11 block DC on `AUDIO_OUT_1`); no shorts between other neighbouring pins, esp. A1.39 (+5V) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge. A1.17–A1.18 loads the DAC output below its 600 Ω minimum (R5); A1.18–A1.19 ties the two DAC outputs together; **A1.39–A1.38 puts 5 V into 3V3_D and would damage the Daisy** |
 
 ## Stage 2 — First power-up, Daisy **removed**
 
-Supply on J6 (+ to J6.1 "5V", − to J6.2 "GND"): start at 0 V, current limit **50 mA**, ramp to 5.0 V.
-U2's SHDN is tied to `+5V`, so U2 turns on with the supply.
+Supply on J6 (+ to J6.1 "5V", − to J6.2 "GND"): start at 0 V, current limit **50 mA**, ramp to 5.0 V. U2 turns on
+with the supply.
 
 | # | Check | Expect |
 |---|---|---|
-| 2.1 | Supply current at 5.0 V | A few mA (TLV9061 quiescent + 0.25 mA divider + U2's 5.5 mA quiescent, 13 mA at most); < 20 mA. Stop if it hits the limit |
+| 2.1 | Supply current at 5.0 V | A few mA, < 20 mA (U2's quiescent is 5.5 mA, 13 mA at most). Stop if it hits the limit |
 | 2.2 | `+5V` at C5 `+` | 4.9–5.0 V (Q1 drop is tens of mV) |
 | 2.3 | `VREF` at C7 | 2.45–2.55 V |
-| 2.4 | U1.1 (output); A1.16 | ≈ 2.5 V (the buffer sits at VREF); ≈ 2.5 V at A1.16 too (through R20) |
+| 2.4 | U1.1 (output); A1.16 | ≈ 2.5 V (VREF) on both (A1.16 through R20) |
 | 2.5 | U1.3 (IN+) | ≈ 2.5 V |
-| 2.6 | U2 charge pump | PVSS (C14 pad 1) ≈ −4.3 to −5.0 V, roughly the supply inverted; record it. ≈ 0 V = charge-pump fault (C13, pins 4/6/7) |
-| 2.7 | J4 tip and ring (DC) | Within ±10 mV of 0 V (DirectDrive, no output caps; worst-case offset ≈ ±5.5 mV) |
+| 2.6 | U2 charge pump | PVSS (C14 pad 1) ≈ −4.3 to −5.0 V; record it. ≈ 0 V = charge-pump fault (C13, pins 4/6/7) |
+| 2.7 | J4 tip and ring (DC) | Within ±10 mV of 0 V (worst-case offset ≈ ±5.5 mV) |
 | 2.8 | J5.1 (DC) | ≈ 0 V (R12 to GND) |
 | 2.9 | A1.39 | +5 V; J3.1 and A1.40 are GND. A1.22 (`5V_SENSE`) ≈ 2.5 V (R18/R19) |
-| 2.10 | J6.4 (`SPK_MUTE`) with 10k pull-up to 3.3 V | ≈ 3.3 V (Q2 off = speaker muted while the Daisy is absent) |
+| 2.10 | J6.4 (`SPK_MUTE`) with 10k pull-up to 3.3 V | ≈ 3.3 V (Q2 off = speaker muted) |
 | 2.11 | Thermal | Nothing warm to the touch after 2 min, U2 included |
-| 2.12 | **Reverse polarity** — swap leads on J6, limit 50 mA, apply 5 V | ≈ 0 mA drawn, `+5V` stays at 0 V. Restore correct polarity and repeat 2.2 to confirm nothing was damaged |
+| 2.12 | **Reverse polarity** — swap leads on J6, limit 50 mA, apply 5 V | ≈ 0 mA drawn, `+5V` stays at 0 V. Restore correct polarity and repeat 2.2 |
 | 2.13 | **5 V on a signal terminal** — a second supply at 5.0 V, limited to 50 mA, on J6.3, then J3.3, then J6.4 with A1.28 (`SPK_EN`) pulled to 3.3 V through 1k | A1.25 ≈ 2.5 V (R13/R22); A1.15 ≈ 4.55 V (R9/R24); ≈ 10.5 mA into J6.4 (R23 with Q2 on). Much more on J6.4 = R23 shorted or bypassed |
 
 ## Stage 3 — Analog paths, Daisy **removed**
 
-With the module out, its sockets (A1) reach the Daisy-side nets, so the analog
-stages can be tested on their own. Supply 5.0 V, limit 50 mA.
+With the module out, its sockets (A1) reach the Daisy-side nets. Supply 5.0 V, limit 50 mA.
 
 **3A. Guitar input buffer (J1 → AUDIO_IN_1)**
 
-1. Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `A1.16` (AUDIO_IN_1) or U1.1.
-2. | # | Check | Expect |
-   |---|---|---|
-   | 3A.1 | Output level | U1.1: 1 kHz sine riding on ≈ 2.5 V DC, amplitude ≈ input (unity gain). A1.16: the same through R20 (no Daisy load) |
-   | 3A.2 | Input load: add 1 MΩ in series with the generator | Output drops to ≈ half (≈ 1 MΩ input impedance, R1) |
-   | 3A.3 | Unplug J1 | Output goes quiet (tip shorted to GND) |
-   | 3A.4 | Raise amplitude until clipping | Clips symmetrically near the rails: ≈ 4.8 Vpp at U1.1 and A1.16 (no Daisy load); record the input level |
-   | 3A.5 | Sweep 20 Hz – 20 kHz | Flat within about ±1 dB |
+Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `A1.16` (AUDIO_IN_1) or U1.1.
+
+| # | Check | Expect |
+|---|---|---|
+| 3A.1 | Output level | U1.1: sine on ≈ 2.5 V DC, amplitude ≈ input (unity gain). A1.16: the same through R20 |
+| 3A.2 | Input load: add 1 MΩ in series with the generator | Output drops to ≈ half (≈ 1 MΩ input impedance, R1) |
+| 3A.3 | Unplug J1 | Output goes quiet (tip shorted to GND) |
+| 3A.4 | Raise amplitude until clipping | Clips symmetrically near the rails: ≈ 4.8 Vpp at U1.1 and A1.16; record the input level |
+| 3A.5 | Sweep 20 Hz – 20 kHz | Flat within about ±1 dB |
 
 **3B. Headphone filter + headphone amp (AUDIO_OUT_1 → J4)**
 
-1. Inject 1 kHz, 1 Vpp sine into `A1.18` (AUDIO_OUT_1), ground at `A1.20`.
-   Load J4 tip and ring with 32 Ω each (or headphones at low level).
-2. | # | Check | Expect |
-   |---|---|---|
-   | 3B.1 | C9 (`HP_SOURCE`) | ≈ 0.60 Vpp centred on 0 V (R10 into R25 ‖ R27, −4.4 dB). Set the generator's DC offset to 0 V |
-   | 3B.2 | J4 tip and ring | ≈ 0.60 Vpp centred on 0 V, inverted relative to `HP_SOURCE` (gain −1); both channels equal within ~0.5 dB |
-   | 3B.3 | Frequency sweep 20 Hz – 20 kHz into 32 Ω | Flat in the audio band; low-end corner ≈ 3.4 Hz (C10/C11 into R25/R27); falls off above ≈ 80 kHz (R10/C9 with R25 ‖ R27 as the load) |
-   | 3B.4 | Listening test with headphones | Clean tone, no hum/hiss above expected level, no oscillation (check scope for HF ringing on the outputs and on PVSS) |
-   | 3B.5 | Power-on/off with headphones in | Note any pop level (U2 has built-in pop suppression; Stage 7 is the full test) |
+Inject 1 kHz, 1 Vpp sine, 0 V DC offset, into `A1.18` (AUDIO_OUT_1), ground at `A1.20`. Load J4 tip and ring with
+32 Ω each (or headphones at low level).
+
+| # | Check | Expect |
+|---|---|---|
+| 3B.1 | C9 (`HP_SOURCE`) | ≈ 0.60 Vpp centred on 0 V (R10 into R25 ‖ R27, −4.4 dB) |
+| 3B.2 | J4 tip and ring | ≈ 0.60 Vpp centred on 0 V, inverted relative to `HP_SOURCE` (gain −1); channels equal within ~0.5 dB |
+| 3B.3 | Frequency sweep 20 Hz – 20 kHz into 32 Ω | Flat in the audio band; low-end corner ≈ 3.4 Hz (C10/C11 into R25/R27); falls off above ≈ 80 kHz (R10/C9 with R25 ‖ R27 as the load) |
+| 3B.4 | Listening test with headphones | Clean tone, no hum or hiss, no oscillation (scope the outputs and PVSS for HF ringing) |
+| 3B.5 | Power-on/off with headphones in | Note any pop level (Stage 7 is the full test) |
 
 **3C. Speaker send (AUDIO_OUT_2 → J5)**
 
-1. Inject 1 kHz, 1 Vpp sine into `A1.19` (AUDIO_OUT_2), ground at `A1.20`.
-2. | # | Check | Expect |
-   |---|---|---|
-   | 3C.1 | J5.1, nothing plugged in | ≈ 1 Vpp centred on 0 V (R11 into R12, −0.1 dB), same phase as the input. Set the generator's DC offset to 0 V |
-   | 3C.2 | Load J5 with 10 kΩ from J5.1 to J5.2 (like a differential amp input) | ≈ 0.83 Vpp across the 10 kΩ, J5.1 to J5.2 (R11 + R21 = 2k into 10k, with R12, −1.7 dB) |
-   | 3C.3 | Frequency sweep 20 Hz – 20 kHz | Flat in the audio band; falls off above ≈ 48 kHz (R11/C16) |
-   | 3C.4 | Insert and remove a plug in J4 | J5 unchanged (rev 2 has no tip-switch; speaker muting is in firmware) |
+Inject 1 kHz, 1 Vpp sine, 0 V DC offset, into `A1.19` (AUDIO_OUT_2), ground at `A1.20`.
+
+| # | Check | Expect |
+|---|---|---|
+| 3C.1 | J5.1, nothing plugged in | ≈ 1 Vpp centred on 0 V (R11 into R12, −0.1 dB), same phase as the input |
+| 3C.2 | Load J5 with 10 kΩ from J5.1 to J5.2 (like a differential amp input) | ≈ 0.83 Vpp across the 10 kΩ (R11 + R21 = 2k into 10k, with R12, −1.7 dB) |
+| 3C.3 | Frequency sweep 20 Hz – 20 kHz | Flat in the audio band; falls off above ≈ 48 kHz (R11/C16) |
+| 3C.4 | Insert and remove a plug in J4 | J5 unchanged (speaker muting is in firmware) |
 
 **3D. AUX input (J2 → AUDIO_IN_2)**
 
-With the Daisy out, only R5 loads the summing node, so these levels are slightly higher than in use. 5.17 checks the real level with
-the Daisy fitted.
+With the Daisy out, only R5 loads the summing node, so these levels are slightly higher than in use; 5.17 checks the
+level with the Daisy fitted.
 
-1. Inject 1 kHz, 2 Vpp sine into J2 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or C3.
-2. | # | Check | Expect |
-   |---|---|---|
-   | 3D.1 | Tip and ring driven together | ≈ 0.17 Vpp centred on 0 V (R3‖R4 into R5, −21.3 dB) |
-   | 3D.2 | Tip only, ring grounded (TS plug) | ≈ 0.09 Vpp |
-   | 3D.3 | Unplug J2 | Output goes quiet (R5 holds the summing node at GND) |
-   | 3D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat (C3's pole is ≈ 370 kHz with no Daisy load, ≈ 400 kHz with the Daisy fitted) |
+Inject 1 kHz, 2 Vpp sine into J2 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or C3.
+
+| # | Check | Expect |
+|---|---|---|
+| 3D.1 | Tip and ring driven together | ≈ 0.17 Vpp centred on 0 V (R3‖R4 into R5, −21.3 dB) |
+| 3D.2 | Tip only, ring grounded (TS plug) | ≈ 0.09 Vpp |
+| 3D.3 | Unplug J2 | Output goes quiet (R5 holds the summing node at GND) |
+| 3D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat (C3's pole is ≈ 370 kHz with no Daisy load) |
 
 Remove the injected signal before going on.
 
 ## Stage 4 — Power-up with Daisy fitted
 
-1. **Power off.** Insert the Daisy, checking orientation against the silkscreen
-   and that no pins are offset by one position.
-2. Supply 5.0 V on J6 with the limit set to **300 mA**. Keep USB **unplugged** for this stage.
-   Keep the 10k pull-up from J6.4 to 3.3 V.
+1. **Power off.** Insert the Daisy, checking orientation against the silkscreen and that no pins are offset by one
+   position.
+2. Supply 5.0 V on J6 with the limit set to **300 mA**. Keep USB **unplugged** for this stage. Keep the 10k pull-up
+   from J6.4 to 3.3 V.
 
 | # | Check | Expect |
 |---|---|---|
 | 4.1 | Supply current | Within the Daisy's normal draw (roughly 100–200 mA depending on firmware); record value |
 | 4.2 | `+5V` (C5 `+`) | ≥ 4.85 V under load |
-| 4.3 | `3V3_D` (Daisy pin 38, probed on top of the module) | 3.3 V ± 5 % (from the Daisy regulator) |
+| 4.3 | `3V3_D` (Daisy pin 38, probed on top of the module) | 3.3 V ± 5 % |
 | 4.4 | `VREF`, U1 biases | Same as Stage 2 |
-| 4.5 | `HP_DETECT` (TP1) with a plug in J4 | ≈ 0 V. With J4 empty it floats until the firmware enables the internal pull-up, so that case is checked in 5.7 |
+| 4.5 | `HP_DETECT` (TP1) with a plug in J4 | ≈ 0 V. With J4 empty it floats until the firmware enables the pull-up; 5.7 checks that case |
 | 4.6 | Hold the Daisy in reset (RESET button held) | J4 quiet (headphones on), Q2 pin 1 (`SPK_EN`) 0 V, J6.4 ≈ 3.3 V (muted) |
 | 4.7 | Daisy LED / existing firmware | Boots normally |
 | 4.8 | Thermal after 5 min | Nothing hot; Q1 and U2 at most warm |
 | 4.9 | Back-power: J6 supply **off**, 3.3 V on J6.3 (`BATT_SENSE_CONN`) | ≈ 0.17 mA drawn (R13 + R22 to GND) and A1.25 ≈ 1.65 V; record `3V3_D`, which should stay near 0 V. More current, or `3V3_D` rising, means the Daisy is being back-powered |
 
-Then plug in USB with J6 still powered and confirm current/voltages don't jump
-unexpectedly. The Seed3 datasheet allows both sources together (a diode from each, Figure 1.0).
+Then plug in USB with J6 still powered and confirm current and voltages don't jump. The Seed3 datasheet allows both
+sources together (a diode from each, Figure 1.0).
 
 ## Stage 5 — Functional tests with test firmware
 
@@ -215,23 +217,23 @@ Keep the 10k pull-up from J6.4 to 3.3 V unless the power board is connected.
 
 | # | Check | Expect |
 |---|---|---|
-| 5.1 | USB enumeration / DFU flashing | Flashes and enumerates (USB is on the module's own connector; A1.36 and A1.37 aren't connected on this board) |
+| 5.1 | USB enumeration / DFU flashing | Flashes and enumerates (on the module's own USB connector) |
 | 5.2 | Audio passthrough: 1 kHz into J1 → J4 headphones | Clean tone on both channels |
 | 5.3 | Passthrough: J1 → J5 | Signal present (output 2) |
-| 5.4 | Noise floor: J1 unplugged, firmware gain max | Only low-level hiss; no hum, whine, or digital noise from USB/codec; record level on the scope at J4 and J5 |
-| 5.5 | Guitar test | Real guitar into J1, headphones on J4: clean signal, no clipping at normal pick strength; record the peak level the firmware logs |
+| 5.4 | Noise floor: J1 unplugged, firmware gain max | Only low-level hiss: no hum, whine or digital noise. Record the level at J4 and J5 on the scope |
+| 5.5 | Guitar test: real guitar into J1, headphones on J4 | Clean signal, no clipping at normal pick strength; record the peak level the firmware logs |
 | 5.6 | AUX: phone/laptop into J2 at full volume | Heard on J4 and J5; record the logged peak and whether input 2 clips |
-| 5.7 | `HP_DETECT` | Prints high with J4 empty (internal pull-up), low with a plug in; TP1 ≈ 3.3 V empty, ≈ 0 V with a plug in. No chatter after debounce |
-| 5.8 | Headphones through a reset: 1 kHz into J1, headphones on J4, hold RESET, then release | J4 goes silent while RESET is held (codec clocks stopped) and the tone returns after boot. Note any click at each step |
-| 5.9 | `SPK_EN` toggled high/low | Q2 pin 1 follows; J6.4 ≈ 0.15 V while high (Q2 on through R23 against the 10k pull-up, speaker playing), ≈ 3.3 V while low. Record the low level (Q2 gate drive from 3.3 V) |
+| 5.7 | `HP_DETECT` | Prints high with J4 empty, low with a plug in; TP1 ≈ 3.3 V empty, ≈ 0 V with a plug in. No chatter after debounce |
+| 5.8 | Headphones through a reset: 1 kHz into J1, headphones on J4, hold RESET, then release | J4 silent while RESET is held (codec clocks stopped); the tone returns after boot. Note any click at each step |
+| 5.9 | `SPK_EN` toggled high/low | Q2 pin 1 follows; J6.4 ≈ 0.15 V while high (R23 against the 10k pull-up), ≈ 3.3 V while low. Record the low level |
 | 5.10 | Settings survive a hard power cut: change a setting on the display, wait for the debounce, pull the 5 V wire from J6, restore it | The setting is kept |
 | 5.11 | Wiring check before connecting the power board and amp | Every wire in J6, J3 and J5 sits on the terminal its silkscreen label names. LINE− goes to the amp's IN− only, not to its GND |
 | 5.12 | `BATT_SENSE`: known voltage from a bench supply (e.g. 3.0 V) on J6.3 | A1.25 and the ADC read half of it (1.50 V, R13/R22) within a few % |
 | 5.13 | UART on J3 with a 3.3 V USB-serial adapter (adapter TX → J3.3, RX → J3.2, GND → J3.1) | Heartbeat received; echo works. Unplug the adapter: the firmware reports no display (R24 holds RX low), and recovers when it is plugged back in. **Before connecting the real display**, confirm its TX idles at ≤ 3.3 V |
 | 5.14 | Display on J3, powered from the power board | Shows data from the Daisy. Scope `+5V` at C5 with Wi-Fi/backlight active: no display current pulses on it |
-| 5.15 | USB alone: J6 supply **off**, display unplugged, Daisy on USB, 1 kHz into J1, `SPK_EN` driven high | `+5V` (C5 `+`) ≈ 0 V and `5V_SENSE` prints ≈ 0 V. A1.18 (`AUDIO_OUT_1`, on top of the module) and C9 carry no signal: the firmware keeps the outputs silent. Then power J6: `5V_SENSE` prints ≈ 2.5 V and the tone returns on J4 without a click. Record all of it |
-| 5.16 | Output DC with the codec running: firmware outputs digital silence, nothing plugged into J5. Measure DC at A1.18 and A1.19 (on top of the module) and at J5.1 (`LINE_OUT`). Then hold RESET (clocks stop, codec powers down) and release, watching J5.1 on the scope | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled on the module. More than a few tens of mV at A1.19 or J5.1: the power board's C8/C9 still block it from the amp; if it clicks, the speaker send needs a 10 µF DC-blocking cap in series (see DESIGN.md "Speaker send"). Record any step or pop on J5.1 at reset and release |
-| 5.17 | AUX level with the Daisy fitted: 1 kHz, 2 Vpp into J2, same signal on tip and ring, then tip only with ring grounded. Scope A1.17 (on top of the module) and read the firmware's input-2 peak | Tip and ring: 0.155–0.160 Vpp (−22.2 to −21.9 dB, the Daisy's input at 4–6 kΩ). Tip only: ≈ 0.08 Vpp. Record both. ≈ 0.17 Vpp means the module adds almost no load; much lower means its input is well below 4 kΩ (see DESIGN.md "AUX input") |
+| 5.15 | USB alone: J6 supply **off**, display unplugged, Daisy on USB, 1 kHz into J1, `SPK_EN` driven high | `+5V` (C5 `+`) ≈ 0 V and `5V_SENSE` prints ≈ 0 V. A1.18 (`AUDIO_OUT_1`, on top of the module) and C9 carry no signal. Then power J6: `5V_SENSE` prints ≈ 2.5 V and the tone returns on J4 without a click. Record it |
+| 5.16 | Output DC: firmware outputs digital silence, J5 open. Measure DC at A1.18 and A1.19 (on top of the module) and J5.1 (`LINE_OUT`). Then hold RESET (codec powers down) and release, scoping J5.1 | All three within ±20 mV of 0 V (the Seed3 outputs are AC-coupled on the module). More than a few tens of mV at A1.19 or J5.1: the power board's C8/C9 still block it from the amp; if it clicks, the speaker send needs a 10 µF series cap (DESIGN.md "Speaker send"). Record any step or pop on J5.1 at reset and release |
+| 5.17 | AUX level with the Daisy fitted: 1 kHz, 2 Vpp into J2, same signal on tip and ring, then tip only with ring grounded. Scope A1.17 (on top of the module) and read the firmware's input-2 peak | Tip and ring: 0.155–0.160 Vpp (−22.2 to −21.9 dB, the Daisy's input at 4–6 kΩ). Tip only: ≈ 0.08 Vpp. Record both. ≈ 0.17 Vpp = the module adds almost no load; much lower = its input is well below 4 kΩ (DESIGN.md "AUX input") |
 | 5.18 | `+5V` transitions on USB: Daisy on USB, J6 powered, full-scale 1 kHz to J4 (32 Ω load). Scope `+5V` (C5 `+`), PVSS (C14 pad 1) and U2's INL− (R25's U2 side). Remove J6 power, then restore it | Power off: INL− goes silent before `+5V`/PVSS collapse, or stays outside PVSS − 0.3 V … `+5V` + 0.3 V for no more than a few ms. Record the time. Power on: audio returns ≥ 10 ms after `+5V` and PVSS settle, with no click on J4 |
 | 5.19 | Hot passive pickups: the hottest passive guitar available into J1, played as hard as possible | Record the logged peak. It should stay below full scale (≈ 3.9 Vpp at J1). Active pickups are out of scope |
 
@@ -243,26 +245,26 @@ Keep the 10k pull-up from J6.4 to 3.3 V unless the power board is connected.
 | 6.2 | Plug/unplug J1, J4, J2 repeatedly while running | No resets, no lasting noise, jacks stay mechanically solid; `HP_DETECT` reports every J4 change |
 | 6.3 | Wiggle the J6, J3 and J5 cables while running | No crackle, dropouts or resets |
 | 6.4 | Full-level 1 kHz into 32 Ω on J4 for 10 min | U2 at most warm; no shutdown or distortion change |
-| 6.5 | Light flex/tap test on the board and Daisy | No crackle or resets (would point to a cracked joint or loose socket pin) |
-| 6.6 | Board off, a phone or laptop at full volume into J2. Scope A1.17 (on top of the module) | At most ≈ 0.46 Vpp (±0.23 V) for a 2 Vrms source: the unpowered codec's input stays within its ±0.3 V rating. Record the peak |
+| 6.5 | Light flex/tap test on the board and Daisy | No crackle or resets (a cracked joint or loose socket pin) |
+| 6.6 | Board off, a phone or laptop at full volume into J2. Scope A1.17 (on top of the module) | At most ≈ 0.46 Vpp (±0.23 V) for a 2 Vrms source: within the unpowered codec input's ±0.3 V rating. Record the peak |
 
 ## Stage 7 — Pops, hiss and mute (rev 2)
 
-Rev 2 only. Needs the product firmware (volume ramps, headphone detect, settings saved on change, `SPK_EN` delay) and an
-audio interface on the laptop. Record J4 (into a 32 Ω load or EarPods) and J5 (`LINE_OUT`) into the interface, and look at each
-recording for spikes. Pass means no audible click and no spike more than ~10 dB above the recording's noise floor.
-On the bench, pull J6.4 (`SPK_MUTE`) up to 3.3 V with 10k so it can be probed without the power board.
+Needs the product firmware (volume ramps, headphone detect, settings saved on change, `SPK_EN` delay) and an audio
+interface on the laptop. Record J4 (into a 32 Ω load or EarPods) and J5 (`LINE_OUT`) into the interface, and look at
+each recording for spikes. Pass means no audible click and no spike more than ~10 dB above the recording's noise floor.
+Without the power board, keep the 10k pull-up from J6.4 (`SPK_MUTE`) to 3.3 V so it can be probed.
 
 | # | Check | Expect |
 |---|---|---|
-| 7.1 | Power-on pop: record J4 and J5, then power the board | No click on either output. U2 turns on with `+5V`, before the Daisy boots, so listen for anything on J4 while the codec starts up |
-| 7.2 | Speaker power-on: scope `+5V` (C5 `+`), `SPK_EN` (Q2 pin 1) and J5.1 (`LINE_OUT`) at power-on, J5 open and then into the speaker amp | `SPK_EN` goes high after audio starts. `LINE_OUT` stays near 0 V (no bias network to settle). Record any step at the Daisy's output, and listen for a thump from the speaker |
+| 7.1 | Power-on pop: record J4 and J5, then power the board | No click on either output. U2 is on before the Daisy boots, so listen on J4 while the codec starts up |
+| 7.2 | Speaker power-on: scope `+5V` (C5 `+`), `SPK_EN` (Q2 pin 1) and J5.1 (`LINE_OUT`) at power-on, J5 open and then into the speaker amp | `SPK_EN` goes high after audio starts. `LINE_OUT` stays near 0 V. Record any step at the Daisy's output, and listen for a thump from the speaker |
 | 7.3 | Power-off pop: record J4 and J5, switch off at the power board's switch | Note the result. U2's pop suppression and R17 (speaker muted once the Daisy stops) should keep it quiet |
-| 7.4 | Hard power cut: record J4 and J5, unplug J6 while playing | Note the result. A small click is acceptable here, a loud bang is not |
+| 7.4 | Hard power cut: record J4 and J5, unplug J6 while playing | Note the result. A small click is acceptable, a loud bang is not |
 | 7.5 | Headphone plug-in and removal while playing a 1 kHz tone | `SPK_EN` goes low while headphones are in and high again when they come out. No click on J4 or J5 |
 | 7.6 | Watchdog mute: debug build that stops the audio callback on a USB serial command | J4 and J5 go silent (codec DAC power-down) and `SPK_MUTE` goes to muted within ~10–20 ms. The Daisy resets and boots back into silence. Record any click on J4 |
-| 7.7 | Hiss with EarPods: J1 unplugged, firmware volume at a quiet listening level, then at max | No hiss audible at a normal listening level (U2 runs at a gain of −1; DESIGN.md "Headphone level" says how to lower it). Record whether hiss is audible at max |
-| 7.8 | Maximum level: full-scale 1 kHz into a 32 Ω load on J4 | ≈ 0.60 Vrms per channel (1 Vrms Daisy full scale, −4.4 dB at R10 into R25 ‖ R27, gain −1 in U2), no clipping: U2's 1 % THD limit is ≈ 2.0 Vrms into 32 Ω and ≈ 1.06 Vrms into 16 Ω. Repeat into 16 Ω. Listening check with the intended headphones: loud enough with margin (if not, see DESIGN.md "Headphone level") |
+| 7.7 | Hiss with EarPods: J1 unplugged, firmware volume at a quiet listening level, then at max | No hiss audible at a normal listening level (if there is, see DESIGN.md "Headphone level"). Record whether hiss is audible at max |
+| 7.8 | Maximum level: full-scale 1 kHz into a 32 Ω load on J4, then into 16 Ω | ≈ 0.60 Vrms per channel (1 Vrms Daisy full scale, −4.4 dB at R10 into R25 ‖ R27, gain −1), no clipping: U2's 1 % THD limit is ≈ 2.0 Vrms into 32 Ω and ≈ 1.06 Vrms into 16 Ω. With the intended headphones: loud enough with margin (if not, see DESIGN.md "Headphone level") |
 
 ## Fault-finding hints
 

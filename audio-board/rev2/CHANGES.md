@@ -1,67 +1,58 @@
 # Rev 2 changes
 
-What changed from rev 1, and why, in one or two lines each. `DESIGN.md` describes the current design in full.
-Keep this list to the net difference from rev 1. Parts that were added and then removed during rev 2 don't belong here (git has that history).
-Designators are rev 2's (see "Designators" below). A part that no longer exists is named by its rev 1 designator, marked "rev 1".
+The net difference from rev 1, one or two lines each. `DESIGN.md` has the design and the reasons. Parts added and then
+removed during rev 2 don't belong here (git has that history). Designators are rev 2's (see "Designators"); a part that
+no longer exists is named by its rev 1 designator, marked "rev 1".
 
 ## Inputs
-- **Pots removed (rev 1 RV1 input level, RV2 volume, RV3 tone, C10, C11).** Level, volume and tone move to the touchscreen. With the
-  input-level pot at mid travel, U1A saw about 250 kΩ of source impedance, which added noise and an ~80 kHz pole.
-  R1 (1M to `VREF`) now sets the 1 MΩ guitar load, and U1A runs at unity gain.
-- **R20 (470 Ω) added after U1.** It limits current into the Daisy pin if U1 is ever overdriven, and costs ≈ 0.8 dB. Passive
-  pickups only: active pickups are out of scope, so there is no pad.
-- **Rev 1 R5 removed.** R1 biases U1A+ through R2, so rev 1 R5 only sat in parallel and lowered the guitar load to ≈ 0.91 MΩ.
-- **AUX input added (J2 → passive sum → `AUDIO_IN_2`).** For backing tracks from a phone or laptop, mixed in after the amp model.
-  No buffer: the Seed3's AC-coupled input loads the R3/R4 sum directly. R5 (470 Ω to GND) sets the level whatever the module's
-  unpublished input impedance is, and is the DC return. It is low enough that a source left playing with the board off can't drive the
-  unpowered codec's input past its ±0.3 V rating.
+- **Pots removed (rev 1 RV1 input level, RV2 volume, RV3 tone, C10, C11).** Level, volume and tone move to the
+  touchscreen. R1 (1M to `VREF`) now sets the 1 MΩ guitar load, and U1A runs at unity gain.
+- **R20 (470 Ω) added after U1,** to limit current into the Daisy pin. Passive pickups only, so there is no pad.
+- **Rev 1 R5 removed.** It sat in parallel with R1 and lowered the guitar load to ≈ 0.91 MΩ.
+- **AUX input added (J2 → R3/R4 passive sum → `AUDIO_IN_2`),** with R5 (470 Ω to GND) and C3, and no buffer.
 
 ## Outputs
-- **Headphone amp: TPA6111A2 → MAX9722A (DirectDrive, TSSOP-16).** It removes rev 1 C14/C15 (470 µF output caps, the two largest parts
-  in the headphone section), rev 1 R9–R16 and rev 1 C16, flattens the bass and adds click-and-pop suppression. R25–R28 (10k) set its gain
-  to −1: full scale is ≈ 0.6 Vrms, inside its 70 mW rating into 16 Ω. The TSSOP has no exposed pad, so the board solders with an iron.
-- **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's outputs drive U2 through R10 directly.
+- **Headphone amp: TPA6111A2 → MAX9722A (DirectDrive, TSSOP-16),** at a gain of −1 set by R25–R28 (10k). It removes
+  rev 1 C14/C15 (470 µF output caps), rev 1 R9–R16 and rev 1 C16.
+- **Headphone buffer removed (the second op-amp of rev 1's dual U1, with rev 1 C5 and rev 1 R6).** The Seed3's output
+  drives U2 through R10 directly.
 - **U1: TLV9062 dual (SOIC-8) → TLV9061 single (SOT-23-5).** Only the guitar input still needs a buffer.
-- **Speaker send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer; with R11 and R21 at 1k each, it loses ≈ 1.7 dB into a 10k differential input) instead of
-  rev 1's tip-switch line out on the headphone jack. Muting the speaker amp in firmware saves battery, ramps without clicks and gives
-  the speaker and headphones independent levels.
+- **Speaker send driven by `AUDIO_OUT_2`** (R11/C16, R12, no buffer) instead of rev 1's tip-switch line out on the
+  headphone jack, so the firmware mutes and levels the speaker separately.
 - **¼" line out removed.** The sponsor doesn't ask for one, and recording to a DAW goes through the Daisy's USB-C.
-- **J5 added:** a 2-way 3.5 mm screw terminal to the speaker amp's differential input: LINE+ (`LINE_OUT`) and LINE− (`LINE_REF`).
-  R21 (1k to GND) gives LINE− the same source impedance as LINE+, so the amp rejects ground noise between the boards.
-- **The headphone jack (J4) is now a Same Sky SJ3-35063AG,** with an isolated detect switch read by the firmware on `HP_DETECT`.
+- **J5 added:** a 2-way 3.5 mm screw terminal to the speaker amp's differential input, LINE+ (`LINE_OUT`) and LINE−
+  (`LINE_REF`, GND through R21, 1k).
+- **The headphone jack (J4) is now a Same Sky SJ3-35063AG,** with an isolated detect switch on `HP_DETECT`.
 
 ## Power and control
-- **J6: 2-pin 5 V header → 4-way 3.5 mm screw terminal to the power board:** 5V, GND, battery sense and the speaker mute. Adds R13,
-  R22, C17, Q2, R17 and R23. Q1 still provides reverse-polarity protection. The power switch is on the power board; power rev 1 has no low-battery cutoff.
-- **Screw terminals for every board-to-board connection (J3, J5, J6),** so prototype wiring needs no crimping. Each terminal's function
-  is printed on the silkscreen.
-- **Output mute on the STM32's independent watchdog.** The IWDG resets the STM32 if the audio callback stops. The codec's clocks
-  stop with it, so its DAC powers down and both outputs go silent. R17 holds the speaker amp off whenever the Daisy is absent, booting or reset.
-- **U2's SHDN tied to `+5V`.** The headphone amp has no hardware mute, as in rev 1 (whose TPA6111A2 had SHUTDOWN tied to GND). The
-  codec does the muting, as it does for the speaker send. Driving SHDN from the Daisy would need a level translator, because the Daisy can
-  run from USB while `+5V` is off.
-- **R18/R19 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`).** On USB alone, `+5V` and U2's rails are off, and pin 18's audio would
-  reach U2's inputs through C10/C11 and R25/R27. The firmware keeps the outputs silent while `5V_SENSE` is low.
-- **Display: J3 carries only the UART and GND.** The display takes its power from the power board, so its current pulses stay off
-  the audio board's `+5V`. **R8/R9 (10k each) added** in series with the UART against miswired terminals and the two boards powering up at
-  different times.
-- **R22, R23 and R24 added against a 5 V wire on a signal terminal.** R13/R22 halve BAT, so Daisy pin 25 (a 4.0 V pin with no clamp)
-  stays below 2.65 V. R23 limits Q2's current to ≈ 11 mA if 5 V lands on MUTE while Q2 is on. R24 divides RX with R9 to ≤ 4.78 V, and
-  lets the firmware tell when no display is connected.
+- **J6: 2-pin 5 V header → 4-way 3.5 mm screw terminal to the power board:** 5V, GND, battery sense and the speaker
+  mute. Adds R13, R22, C17, Q2, R17 and R23. Q1 still provides reverse-polarity protection. The power switch is on the
+  power board; power rev 1 has no low-battery cutoff.
+- **Screw terminals for every board-to-board connection (J3, J5, J6),** each labelled on the silkscreen.
+- **Output mute on the STM32's independent watchdog,** fed only from the audio callback. A reset stops the codec's
+  clocks, which silences both outputs, and R17 holds the speaker amp muted.
+- **U2's SHDN tied to `+5V`.** The headphone amp has no hardware mute, as in rev 1 (whose TPA6111A2 had SHUTDOWN tied to
+  GND).
+- **R18/R19 added: `+5V` sense on Daisy pin 22 (`5V_SENSE`),** so the firmware keeps the outputs silent while `+5V` is
+  off and the Daisy runs from USB.
+- **Display: J3 carries only the UART and GND.** The display takes its power from the power board. **R8/R9 (10k each)
+  added** in series with the UART.
+- **R22, R23 and R24 added against a 5 V wire on a signal terminal:** R13/R22 halve BAT, R23 limits Q2's current, and
+  R24 divides RX with R9. R24 also lets the firmware tell when no display is connected.
 - **Rev 1 C9 removed.** It sat on the same node as C5 and C4.
-- **Rev 1 TP5, TP9, TP10 removed.** Each duplicated an easy-to-probe pad. TP1 (`HP_DETECT`) is the only test point.
+- **Rev 1 TP5, TP9, TP10 removed.** TP1 (`HP_DETECT`) is the only test point.
 
 ## Board
 - **ESD diodes added (D1–D5, PESD5V0S1BA)** from every jack signal contact to GND: J1 tip, J2 tip/ring, J4 tip/ring.
-- **New layout:** 2-layer, 90 × 56.5 mm, with GND pours on both sides tied by stitching vias, so it fits a free capstone fab (2 layers,
-  under 100 × 100 mm). Every audio net stays on the top layer, over the back ground pour. The Daisy lies flat along the rear edge and
-  every panel jack sits on the front edge, body faces on the edge. Three M2.5 mounting holes and three fiducials for JLC assembly.
-- **Every part hand-solderable with an iron:** 0805 and larger passives on hand-solder pads, SOT-23, SOD-323 and the TSSOP U2.
+- **New layout:** 2-layer, 90 × 56.5 mm, with GND pours on both sides tied by stitching vias, so it fits a free capstone
+  fab (2 layers, under 100 × 100 mm). Every audio net stays on the top layer. The Daisy lies flat along the rear edge
+  and every panel jack sits on the front edge. Three M2.5 mounting holes and three fiducials.
+- **Every part hand-solderable with an iron:** 0805 and larger passives on hand-solder pads, SOT-23, SOD-323 and the
+  TSSOP U2.
 - **Parts sourced from DigiKey:** `MPN`, `Manufacturer`, `DigiKey` and `Datasheet` fields in the schematic, and
   `seed3-carrier-digikey.csv` as the order.
-- **Re-annotated** in sheet order (left to right, then top to bottom by section). R20 (after U1), R21 (J5's LINE−), R22–R24 (the
-  wrong-terminal protection) and R25–R28 (U2's gain resistors) were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were removed afterwards (the power button and display supply moved to the
-  power board), which leaves gaps in the designators.
+- **Re-annotated** in sheet order. R20–R28 were added afterwards and are numbered last. R14–R16, C8, C18 and FB1 were
+  removed afterwards, which leaves gaps in the designators.
 
 ## Designators
 Rev 2 was re-annotated on 2026-10-26. U1, U2 and A1 kept their numbers. Commits before then, and rev 1, use the old

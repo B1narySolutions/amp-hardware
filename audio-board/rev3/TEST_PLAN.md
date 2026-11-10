@@ -1,40 +1,26 @@
 # Audio board rev 3 — Post-Assembly Test Plan
 
-Bring-up and acceptance tests for one hand-assembled **rev 3** board: audio board rev 2 and power board rev 1 on one 4-layer
-board, built from the rev 3 schematic (`seed3-carrier.kicad_sch`, with the power sheet `power.kicad_sch` as sheet 2), its
-fabrication package (`fab/B1NARY_SOLUTIONS_gerber.zip`) and its order (`seed3-carrier-digikey.csv`). Record the package name
-in the log. Every expected number was computed from the rev 3 netlist (KiCad 10 export, 2026-11-07, after Q1, R13, R22 and R23 were removed and R102 became 100k; recomputed 2026-11-08 after U2's supply filter R29/C21, FAULTZ to the Daisy with R114, and C108/C109 becoming 470 nF C0G; and 2026-11-09 after D102/D103, R30, J106's JST XH header and U2 becoming a TPA6130A2) and the parts'
-datasheets, with the working shown so it can be redone after a change. `DESIGN.md` describes the design and the reasons for
-it, `CHANGES.md` lists what changed from audio rev 2 and power rev 1, and `../TEST_PLAN.md` is rev 2's plan, which this one
-follows. Stage 1A keeps rev 2's item numbers so results compare across revisions.
+Bring-up and acceptance tests for one hand-assembled **rev 3** board, built from `seed3-carrier.kicad_sch` (sheet 2 is
+`power.kicad_sch`), `fab/B1NARY_SOLUTIONS_gerber.zip` and `seed3-carrier-digikey.csv`. Record the package name in the log.
+Expected numbers come from the rev 3 netlist and the parts' datasheets. `DESIGN.md` has the design and its reasons,
+`CHANGES.md` the differences from audio rev 2 and power rev 1, and `../TEST_PLAN.md` is rev 2's plan. Stage 1A keeps rev 2's
+item numbers so results compare across revisions.
 
-Work through the stages in order and stop at the first failure. Each stage assumes the one before it passed, so a failure
-stays localized: unpowered checks first, then the battery side alone, then the 5 V rails with the DFR0571, the analog paths
-and the speaker amp **without** the Daisy, and only then with the Daisy fitted. Record results in the log at the end (one
-copy per board serial). DESIGN.md "Open items" has audio rev 2 and power rev 1 brought up first: set this board's jumpers and
-experiment parts from their results, and record the settings in the log.
+Work through the stages in order and stop at the first failure: each stage assumes the one before it passed. Record results
+in the log at the end (one copy per board serial). DESIGN.md "Open items" has audio rev 2 and power rev 1 brought up first:
+set this board's jumpers and experiment parts from their results, and record the settings in the log.
 
 ## Powering rule: 12 V on J101, never 5 V alone on J107
 
 Every powered stage runs from a current-limited 12 V bench supply on J101 (centre positive), with the DFR0571 wired to J106
-and J107 as in use. Stage 2 and step 5.9 leave the DFR0571 disconnected, with nothing on J106 or J107, to check the battery
-side on its own. **Never power the board from 5 V on J107 alone**, whether from a bench supply or from a DFR0571 fed from
-anything but J106.
-
-Why: U103 and the MUTE pull-up R107 run from `+5V_RAW`, while U101's PVCC comes from the battery. With `+5V_RAW` up and PVCC
-at 0 V, U103 releases SDZ and R107/R108 pull MUTE high. D102 and D103 then conduct and charge PVCC through R107–R110
-(12.2 kΩ per pin) to about 4.5 V against the battery divider's 110 kΩ: SDZ and MUTE stay within ≈ 0.3 V of PVCC (the
-TPA3118D2 rates both at −0.3 V to PVCC + 0.3 V, SLOS708G 6.1), but U101 sits at its 4.5 V minimum supply with SDZ high and
-may start and stop. Fed from J101 the
-order is safe: PVCC rises with the battery, and the DFR0571, a buck running from `VBAT_PROTECTED`, can't hold `+5V_RAW` above
-it (3C.1 and 3C.9 check both edges). DESIGN.md "Decisions" records the rule.
+and J107 as in use. Stage 2 and step 5.9 leave the DFR0571 disconnected, with nothing on J106 or J107. **Never power the
+board from 5 V on J107 alone**, whether from a bench supply or from a DFR0571 fed from anything but J106. The reason is in
+DESIGN.md "Decisions"; 3C.1 and 3C.9 check both edges of the normal sequence.
 
 The same applies to anything else that could lift `+5V_RAW` while the battery is off:
-- **R105** (0 Ω, "amp isolation") stays fitted whenever U101 is. Without it PVCC sits at 0 V while `+5V_RAW` is up.
-- **The Daisy on USB:** `+5V` and `+5V_RAW` are one node at DC (FB101, no Q1 since rev 3), so anything that lifts `+5V`
-  lifts `+5V_RAW`.
-  The Seed3 doesn't drive its VIN pin from USB (a diode on the module, Seed3 datasheet Figure 1.0); step 5.0 confirms it
-  on this module before USB is used with the battery off.
+- **R105** (0 Ω) stays fitted whenever U101 is. Without it PVCC sits at 0 V while `+5V_RAW` is up.
+- **The Daisy on USB:** `+5V` and `+5V_RAW` are one node at DC (FB101). The Seed3 doesn't drive its VIN pin from USB
+  (Seed3 datasheet Figure 1.0); step 5.0 confirms it on this module before USB is used with the battery off.
 - **The display:** if it has a USB port of its own, don't plug it into a computer while it is wired to J105 and the battery
   is off. Its 5 V would reach `+5V_RAW` through FB102.
 - **Jumpers:** change JP101–JP104 only with the power off (JP102/JP104 would connect an uncharged 100 µF to a live rail).
@@ -42,45 +28,16 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
 
 ## Circuit summary (what is being tested)
 
-**Power section (sheet 2)**
-
-| Block | Parts | Function |
-|---|---|---|
-| Battery input | J101 (PJ-102AH), F101 (Bel 0683G3150-01, 3.15 A slow-blow SMD, 4818 size, soldered), SW101 (terminal for the S1B panel switch), Q101 (IRF4905), R101, D101 (BZT52C12) | 9.0–12.6 V from the Talentcell pack → fuse → switch → Q101 → `VBAT_PROTECTED`, probe at **TP101**. Q101 is the reverse-polarity protection: the body diode lifts the source, R101 pulls the gate to GND, D101 holds VGS near −12 V |
-| Battery level | R102/R103 (100k/10k, 1 %), C17 | `VBAT_PROTECTED` ÷ 11 straight onto `BATT_SENSE` (Daisy pin 25) from 9.1 kΩ, C17 on the node: **VBAT = 11 × V(pin 25)**, ±1.8 % with 1 % parts. Switched by SW101 |
-| 5 V buck (off-board) | J106 (JST XH, keyed), DFR0571, J107, Q102 (AO3401A), C103, C123 | J106 (only the module's input cable fits) sends `VBAT_PROTECTED` to the module; its 5 V comes back on J107 as `+5V_DFR` and through Q102 (reverse protection, gate to GND) onto `+5V_RAW`, probe at **TP106** |
-| Audio 5 V | FB101 (bypass JP101), C105, C104 (DNP, through JP102), C4, C5 | `+5V_RAW` → bead → `+5V`, probe at C5 `+`. No Q1 since rev 3: Q102 is the only reverse protection on the 5 V side |
-| Display 5 V | FB102 (bypass JP103), C107, C106 (DNP, through JP104), J105 | `+5V_RAW` → bead → `+5V_DISPLAY` → J105, the display's own supply pair |
-| Supervisor | U103 (TPS3808EG50), R109/R110/R111/C125, R113, JP105, D102 | Holds U101's SDZ (**TP104**) low until `+5V_RAW` has been above 4.65 V for 20 ms (CT open), and pulls it low as soon as it sags. JP105 (normally open) forces a reset, which also clears U101's fault latch. D102 (Schottky, SDZ to PVCC) holds SDZ within ≈ 0.3 V of PVCC when PVCC falls first |
-| Speaker mute | R107 (10k to `+5V_RAW`), R108/C124, Q2/R17, D103 | `SPK_MUTE` pulled up = U101 muted (MUTE high: outputs Hi-Z). `SPK_EN` (Daisy pin 28) high turns Q2 (drain straight on `SPK_MUTE`) on and pulls it below 0.1 V = play. R17 keeps it muted while the Daisy is absent, booting or reset. D103 (Schottky, MUTE to PVCC) holds MUTE within ≈ 0.3 V of PVCC when PVCC falls first |
-| Speaker amp | U101 (TPA3118D2), R104, R105, R106, C108–C116, C117–C120, R112, R114, JP106–JP108 | Mono PBTL (LINP/LINN to GND), 20 dB master (R104 5.6k, 60 kΩ input per leg ±20 %), BD modulation at 400 kHz (MODSEL to GND, AM0–AM2 to GND through the bridged JP106–JP108), no power limit (PLIMIT to GVDD). Inputs from `LINE_OUT`/`LINE_REF` through C108/C109 (470 nF C0G), biased at 3 V inside. PVCC (**TP103**) from `VBAT_PROTECTED` through R105, AVCC through R106. FAULTZ (**TP109**, `AMP_FAULTZ`) goes low on a latched fault: R112 (10k to `+5V_RAW`) and R114 (18k to GND) hold it at ≈ 3.2 V (0.64 × `+5V_RAW`) otherwise, a level Daisy pin 32 reads through R30 (1k) |
-| Speaker output | L101/L102 (10 µH), C121/C122 (680 nF), J102 | LC filter into J102: **pin 2 SPK+, pin 1 SPK−** (swapped from power rev 1). Bridged: neither terminal may touch GND |
-
-**Audio section (sheet 1, from rev 2's circuit)**
-
-| Block | Parts | Function |
-|---|---|---|
-| 5 V decoupling | C6, C4, C5; R29, C21, C12, C15 | Bulk/HF decoupling on `+5V`. U2 has its own filtered rail, `HP_5V`: `+5V` through R29 (2.2 Ω), with C21 (10 µF) beside C12 (U2 VDD, pin 12) and C15 (U2 VDD, pin 20). Probe at C21 pad 1 or C12 pad 1 |
-| Mid-rail reference | R7, R6 (10k/10k), C7 | `VREF` ≈ 2.5 V, probe at C7 |
-| Guitar input | J1, C1, FB1, C2, R1 (1M), R2, C18, U1A, R20 | ¼" input, tip shorted to GND when unplugged; 1 MΩ load; C1, FB1 and C18 filter RF; C2 is 47 nF C0G; unity-gain buffer → R20 (470 Ω series) → Daisy `AUDIO_IN_1`. U1 is clean to ≈ 4.8 Vpp; the Daisy's full scale is 3.6 Vpp |
-| AUX input | J2, R3/R4, R5, C3 | 3.5 mm TRS, passive stereo-to-mono sum, ≈ 400 kHz RF filter (C3), straight into Daisy `AUDIO_IN_2` (no buffer). R5 (470 Ω) sets the level: ≈ −22 dB with the same signal on both channels and the Daisy's ≈ 5k input, never more than −21.3 dB |
-| Headphone filter | R10, C9 | Daisy `AUDIO_OUT_1` → ≈ 50–65 kHz RC low-pass → `HP_SOURCE`, driving U2 directly |
-| Headphone amp | U2 (TPA6130A2), C10/C11, C22/C23, C12–C15, R32–R34 | DirectPath stereo amp with I2C volume (address 0x60): − inputs from `HP_SOURCE` through C10/C11, + inputs to GND through C22/C23, so inverting; outputs at 0 V straight to J4 (`HP_L` tip, `HP_R` ring). Off until `HP_SD` (A1.27) is high: R34 holds it low with the Daisy out or in reset. Then it starts muted with its outputs disabled until it is enabled over I2C (A1.12 SCL, A1.13 SDA, R32/R33 2.2k pull-ups to `3V3_D`, A1.38) |
-| Headphone detect | J4.5/J4.6, TP1 | Normally-open switch closes to GND on plug insertion → `HP_DETECT` (Daisy pin 23, STM32 internal pull-up). **Low = headphones in.** Probe at **TP1** |
-| Jack ESD | D1–D5 (PESD5V0S1BA) | Bidirectional ESD diode from each jack signal contact to GND |
-| Speaker send | R11, C16, R12, R21 | Daisy `AUDIO_OUT_2` → ~48 kHz low-pass (R11/C16) → `LINE_OUT` → C108 → U101 IN+; `LINE_REF` (R21, 1k to GND) → C109 → IN−. R12 is `LINE_OUT`'s DC return |
-| `+5V` sense | R18, R19 (100k/100k) | `+5V` divided to ≈ 2.5 V → `5V_SENSE` (Daisy pin 22). The firmware keeps both outputs silent while it reads low |
-| Display UART | J3, R8, R9, R24 | GND / `UART_TX_CONN` / `UART_RX_CONN`; R8/R9 10k in series, R24 100k holds RX low with no display. The display is powered from J105 |
-| Daisy | A1 + two 1×20 sockets | Plug-in module. R17 holds `SPK_EN` low (speaker muted) while it is absent, booting or reset. The firmware feeds the IWDG only from the audio callback; a reset stops the codec's clocks, which silences J4 and the speaker |
+DESIGN.md describes each block, its parts and its values. The pinouts and probe points the tests use are below.
 
 **Pinouts used below**
 
-- U101 TPA3118D2 (HTSSOP-32, exposed pad = GND): 1 MODSEL (GND), 2 SDZ, 3 FAULTZ, 4 RINP, 5 RINN, 6 PLIMIT, 7 GVDD, 8 GAIN/SLV,
-  9 GND, 10 LINP (GND), 11 LINN (GND), 12 MUTE, 13–15 AM2/AM1/AM0 (GND through JP106–JP108), 16 SYNC (not connected), 17 AVCC, 18/19 PVCC, 20 BSNL,
-  21 OUTNL, 22 GND, 23 OUTPL, 24 BSPL, 25 GND, 26 BSNR, 27 OUTNR, 28 GND, 29 OUTPR, 30 BSPR, 31/32 PVCC. `OUT_P` = pins 27 + 29
-  (→ L101 → SPK+), `OUT_N` = pins 21 + 23 (→ L102 → SPK−)
-- U103 TPS3808EG50 (SOT-23-6): 1 RESET (`AMP_PG`), 2 GND, 3 MR (`AMP_MR`, 90 kΩ internal pull-up), 4 CT (open: 20 ms), 5 SENSE
-  and 6 VDD (both `+5V_RAW`)
+- U101 TPA3118D2 (HTSSOP-32, exposed pad = GND): 1 MODSEL (GND), 2 SDZ, 3 FAULTZ, 4 RINP, 5 RINN, 6 PLIMIT, 7 GVDD,
+  8 GAIN/SLV, 9 GND, 10 LINP (GND), 11 LINN (GND), 12 MUTE, 13–15 AM2/AM1/AM0 (GND through JP106–JP108), 16 SYNC (not
+  connected), 17 AVCC, 18/19 PVCC, 20 BSNL, 21 OUTNL, 22 GND, 23 OUTPL, 24 BSPL, 25 GND, 26 BSNR, 27 OUTNR, 28 GND,
+  29 OUTPR, 30 BSPR, 31/32 PVCC. `OUT_P` = pins 27 + 29 (→ L101 → SPK+), `OUT_N` = pins 21 + 23 (→ L102 → SPK−)
+- U103 TPS3808EG50 (SOT-23-6): 1 RESET (`AMP_PG`), 2 GND, 3 MR (`AMP_MR`, 90 kΩ internal pull-up), 4 CT (open: 20 ms),
+  5 SENSE and 6 VDD (both `+5V_RAW`)
 - Q101 IRF4905 (TO-220): 1 G, 2 D (SW101.2), 3 S (`VBAT_PROTECTED`). D101 (SOD-123): cathode on `VBAT_PROTECTED`, anode on
   Q101's gate
 - Q102 AO3401A, Q2 2N7002 (SOT-23): 1 G, 2 S, 3 D. Q102: G GND, S `+5V_RAW`, D `+5V_DFR`. Q2: G `SPK_EN`, S GND, D `SPK_MUTE`
@@ -91,29 +48,31 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
   between CPP and CPN, C14 on CPVSS. Registers: 1 control (0xC0 = both outputs on, stereo), 2 volume and mutes (bits 7:6
   mute, 5:0 volume; 0x35 = +0.1 dB), 4 version (bits 3:0 read 0010)
 - J101: 1 centre pin (+), 2 sleeve (GND), 3 switched contact (not connected). SW101: 1 from F101, 2 to Q101's drain
-- D102, D103 BAT54H (SOD-323): 1 cathode (band) on `AMP_PVCC`; 2 anode, D102 on `AMP_SDZ`, D103 on `AMP_MUTE`. Both bands face
-  right, D102's toward R105 and D103's toward R106
-- Left edge, rear to front: J106 (JST XH header: 1 `VBAT_PROTECTED` "BAT+", marked with a triangle, 2 GND), J107 (1 `+5V_DFR` "5V", 2 GND), J105 (1 `+5V_DISPLAY`
-  "DISP", 2 GND), J3 (1 GND, 2 `UART_TX_CONN` TX, 3 `UART_RX_CONN` RX). J106 and J107, side by side, are the DFR0571's
-  input and return.
+- D102, D103 BAT54H (SOD-323): 1 cathode (band) on `AMP_PVCC`; 2 anode, D102 on `AMP_SDZ`, D103 on `AMP_MUTE`. Both bands
+  face right, D102's toward R105 and D103's toward R106
+- Left edge, rear to front: J106 (JST XH header: 1 `VBAT_PROTECTED` "BAT+", marked with a triangle, 2 GND), J107
+  (1 `+5V_DFR` "5V", 2 GND), J105 (1 `+5V_DISPLAY` "DISP", 2 GND), J3 (1 GND, 2 `UART_TX_CONN` TX, 3 `UART_RX_CONN` RX).
+  J106 and J107 are the DFR0571's input and return
 - J102 (right edge): 1 SPK−, 2 SPK+
 - JP101: 1 `+5V_RAW`, 2 `+5V`. JP102: 1 `+5V`, 2 C104 `+`. JP103: 1 `+5V_RAW`, 2 `+5V_DISPLAY`. JP104: 1 `+5V_DISPLAY`,
   2 C106 `+`. JP105: 1 `AMP_MR`, 2 GND
 - DFR0571 (U102, off-board): VIN+, GND, 5V OUT, GND. It isn't isolated: its two GND pads are one node
 - J4 / J2 (SJ3-35063AG): 1 sleeve, 2 ring, 3 tip, 5 detect common, 6 detect NO (J2's 5/6 not connected)
-- A1 (Daisy sockets, `A1.n` = Daisy pin n): 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`, 17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`,
-  19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 28 `SPK_EN`, 32 (`AMP_FAULTZ` through R30, 1k; input: low = speaker fault), 39 `+5V` (VIN), 40 GND; 12 `I2C_SCL`,
-  13 `I2C_SDA`, 27 `HP_SD`, 38 `3V3_D` (U2's control and the I2C pull-ups). All other
-  Daisy pins are not connected. Probe the sockets while the Daisy is out; with it fitted the checks name a part on the same net
-- Test points: TP1 `HP_DETECT`, TP101 `VBAT_PROTECTED`, TP103 `AMP_PVCC`, TP104 `AMP_SDZ`, TP106 `+5V_RAW`, TP109 `AMP_FAULTZ` (Daisy pin 32 through R30);
-  TP102, TP105, TP107, TP108 GND
-- Other probe points: `BATT_SENSE` at C17 pad 1 (or A1.25); `HP_5V` (U2's supply) at C21 pad 1 or C12 pad 1; `+5V` on the power sheet's side of FB101 at C105 pad 1; `AMP_AVCC` at C115 pad 1; GVDD at C110 pad 1;
-  `AMP_GAIN` at R104 pad 1; `AMP_PG` at R110 pad 1; `AMP_MR` at JP105 pin 1; `SPK_MUTE` at R107 pad 2; U101's MUTE at C124
-  pad 1; `LINE_OUT`/`LINE_REF` at C108/C109 pad 1 and U101's inputs at their pad 2; `OUT_P`/`OUT_N` at L101/L102 pad 1; the
-  bootstrap pins at C117–C120 pad 1 (`BSPR`, `BSNR`, `BSPL`, `BSNL`; pad 2 is the output); Q101's gate at R101 pad 1
+- A1 (Daisy sockets, `A1.n` = Daisy pin n): 12 `I2C_SCL`, 13 `I2C_SDA`, 14 USART1 TX, 15 USART1 RX, 16 `AUDIO_IN_1`,
+  17 `AUDIO_IN_2`, 18 `AUDIO_OUT_1`, 19 `AUDIO_OUT_2`, 20 GND, 22 `5V_SENSE`, 23 `HP_DETECT`, 25 `BATT_SENSE`, 27 `HP_SD`,
+  28 `SPK_EN`, 32 `AMP_FAULTZ` through R30 (1k; input: low = speaker fault), 38 `3V3_D` (the I2C pull-ups), 39 `+5V`
+  (VIN), 40 GND. All other pins are not connected. Probe the sockets while the Daisy is out; with it fitted the checks
+  name a part on the same net
+- Test points: TP1 `HP_DETECT`, TP101 `VBAT_PROTECTED`, TP103 `AMP_PVCC`, TP104 `AMP_SDZ`, TP106 `+5V_RAW`, TP109
+  `AMP_FAULTZ`; TP102, TP105, TP107, TP108 GND
+- Other probe points: `BATT_SENSE` at C17 pad 1 (or A1.25); `HP_5V` at C21 pad 1 or C12 pad 1; `+5V` on the power sheet's
+  side of FB101 at C105 pad 1; `AMP_AVCC` at C115 pad 1; GVDD at C110 pad 1; `AMP_GAIN` at R104 pad 1; `AMP_PG` at R110
+  pad 1; `AMP_MR` at JP105 pin 1; `SPK_MUTE` at R107 pad 2; U101's MUTE at C124 pad 1; `LINE_OUT`/`LINE_REF` at C108/C109
+  pad 1 and U101's inputs at their pad 2; `OUT_P`/`OUT_N` at L101/L102 pad 1; the bootstrap pins at C117–C120 pad 1
+  (`BSPR`, `BSNR`, `BSPL`, `BSNL`; pad 2 is the output); Q101's gate at R101 pad 1
 
-**Options and experiments.** Power rev 1's jumpers and experiment parts are kept. Bring up with the defaults below, then
-record every setting in the log, since some readings depend on them.
+**Options and experiments.** Bring up with the defaults below, then record every setting in the log, since some readings
+depend on them.
 
 | Option | Default for bring-up | Readings it moves |
 |---|---|---|
@@ -123,7 +82,7 @@ record every setting in the log, since some readings depend on them.
 | F101 | Bel 0683G3150-01, T3.15A SMD, soldered (no holder, no spare values) | None |
 | R105 | 0 Ω RC2512JK-070RL (2 A); spare CRCW2512 0 Ω | None |
 | R106 (AVCC filter) | 10 Ω, 0603; no spares in rev 3's order (the earlier build's 4.7 Ω and 22 Ω are 1206 and don't fit) | 1.31: TP103 → C115 pad 1 |
-| C108/C109 | 470 nF 25 V C0G, 1206 (GRM31C5C1E474JE01L); no spare pair in the order | None. 4C.4: input corner ≈ 5.6 Hz (7 Hz at U101's −20 % input), −0.3 to −0.5 dB at 20 Hz. A larger value isn't needed |
+| C108/C109 | 470 nF 25 V C0G, 1206 (GRM31C5C1E474JE01L); no spare pair in the order | None (4C.4 checks the 20 Hz loss) |
 | C121/C122 | 680 nF, 0805; no spare pair in rev 3's order (the earlier build's 470 nF pair is 1206 and doesn't fit) | 4C.4: filter corner 61 kHz; a 470 nF pair would move it to 73 kHz |
 | L101/L102 | 10 µH; spare pairs 6.8 µH, 15 µH | 4C.3/4C.4: corner 74 / 50 kHz, ripple up / down |
 
@@ -135,16 +94,18 @@ record every setting in the log, since some readings depend on them.
   A1.28 and 2.14
 - DMM with diode mode, oscilloscope (≥ 20 MHz, 4 channels; 2 with A − B math at the least)
 - 4 Ω dummy load, 25 W or more (50 W preferred)
-- The DFR0571 with its input cable (an XHP-2 housing and the ASXHSXH22K305 lead cut in two) and two output wires (ferrules), the S1B panel switch wired to SW101 (or a wire link), a 47 Ω 1 W resistor (3A.2),
-  the four 2.54 mm shunts
-- Signal generator or audio interface (sine 20 Hz – 20 kHz, ≥ 2 Vpp); a phone/laptop headphone output works for listening tests
-- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), 32 Ω and 16 Ω dummy loads (one per channel)
+- The DFR0571 with its input cable (an XHP-2 housing and the ASXHSXH22K305 lead cut in two) and two output wires
+  (ferrules), the S1B panel switch wired to SW101 (or a wire link), a 47 Ω 1 W resistor (3A.2), the four 2.54 mm shunts
+- Signal generator or audio interface (sine 20 Hz – 20 kHz, ≥ 2 Vpp); a phone/laptop headphone output works for listening
+  tests
+- ¼" mono cable, 3.5 mm stereo (TRS) cable, 3.5 mm mono (TS) plug, headphones (≈ 32 Ω), 32 Ω and 16 Ω dummy loads (one per
+  channel)
 - Two 1 kΩ resistors and clip leads to pull A1.28 (`SPK_EN`) and A1.27 (`HP_SD`) to 3.3 V with the Daisy out
 - A 3.3 V I2C master for U2 with the Daisy out (a USB-I2C adapter, or a Raspberry Pi Pico or 3.3 V Arduino), with clip
   leads to A1.12 (SCL), A1.13 (SDA), A1.20 (GND) and its 3.3 V to A1.38 (`3V3_D`, which feeds R32/R33)
 - USB cable for the Daisy, USB-serial adapter (3.3 V) for J3, the display and its J105 power lead
-- A 4 Ω speaker (Jensen MOD10-50 or Skar FSX10-4) with crimped quick-disconnects, and a microphone (or phone) for the speaker
-  pop tests
+- A 4 Ω speaker (Jensen MOD10-50 or Skar FSX10-4) with crimped quick-disconnects, and a microphone (or phone) for the
+  speaker pop tests
 - The Talentcell battery (Stage 7)
 - Magnifier/microscope, flux, isopropyl alcohol, solder wick, a needle probe; hot air for U101's exposed pad
 
@@ -153,16 +114,16 @@ record every setting in the log, since some readings depend on them.
 | # | Check | Pass criteria |
 |---|---|---|
 | 0.1 | Clean flux residue; inspect every joint under magnification | No bridges (esp. U1, U2, U101, U103, Q2, Q102, D1–D5, D101, D102, D103), no cold/dull joints, no solder balls |
-| 0.2 | IC orientation and type | U1, U2, U101 and U103 pin-1 marks match the silkscreen; U1 = TLV9061, U2 = TPA6130A2 (TI RTJ, 4 × 4 mm), U101 = TPA3118D2, U103 = TPS3808EG50. A rotated U101 can't be found by resistance: check it here |
-| 0.3 | U2 (WQFN-20, 0.5 mm) | Every pin wetted at the package edge and the part flat; no bridge between neighbouring pins. The exposed pad can't be seen; stage 1 (1.6–1.8b) and 4B check it electrically |
-| 0.4 | U101 (HTSSOP-32, 0.65 mm) | All 32 pins with fillets, part flat. Exposed pad soldered: solder visible in the back-side mask opening and its vias, none squeezed out toward the pins. No bridge between neighbours. The bridges that do damage at first power are 5–6 (RINN to PLIMIT/GVDD: 6.4–7.4 V on an input rated 6.3 V), 19–20 and 30–31 (PVCC on a bootstrap pin); 15–16 (SYNC to GND) can only be seen |
-| 0.5 | Q102 and Q2 | Both SOT-23: Q102 is the AO3401A, Q2 is 2N7002, not swapped (Q2 in Q102's place leaves `+5V_RAW` dead; an AO3401A in Q2's place holds `SPK_MUTE` near 1 V). Seated on the correct pads |
+| 0.2 | IC orientation and type | U1, U2, U101 and U103 pin-1 marks match the silkscreen; U1 = TLV9061, U2 = TPA6130A2 (TI RTJ, 4 × 4 mm), U101 = TPA3118D2, U103 = TPS3808EG50. A rotated U101 can't be found by resistance |
+| 0.3 | U2 (WQFN-20, 0.5 mm) | Every pin wetted at the package edge, part flat, no bridges. The exposed pad can't be seen; 1.6–1.8b and 4B check it electrically |
+| 0.4 | U101 (HTSSOP-32, 0.65 mm) | All 32 pins with fillets, part flat, no bridges. Exposed pad: solder visible in the back-side mask opening and its vias, none squeezed out toward the pins. The bridges that do damage at first power: 5–6 (1.45), 19–20 and 30–31 (PVCC on a bootstrap pin); 15–16 (SYNC to GND) can only be seen |
+| 0.5 | Q102 and Q2 | Q102 is the AO3401A, Q2 the 2N7002, each on the correct pads. Q2 in Q102's place leaves `+5V_RAW` dead; an AO3401A in Q2's place holds `SPK_MUTE` near 1 V |
 | 0.6 | Q101 and D101 | Q101 is the IRF4905, legs in the holes the silkscreen marks, tab facing as drawn. D101's cathode band on the side the silkscreen marks (cathode on `VBAT_PROTECTED`) |
-| 0.7 | Polarised parts | C5 `+` to `+5V`. C111 and C112 `+` to PVCC (fitted backwards they fail at first power). C104 and C106 not fitted (DNP). D102 and D103: cathode bands to the right (toward R105 and R106) |
-| 0.8 | Passive values vs BOM | Sheet 1: R1 (1M), R3/R4/R6/R7/R8/R9 (10k), R12/R17/R18/R19/R24/R34 (100k), R32/R33 (2.2k), R10 (3.3k), R5/R20 (470), R2/R11/R21/R30 (1k); C7 is the 1210 part; C2 (47 nF C0G), C12–C15 and C21 (10 µF) are 0805; C10/C11/C22/C23 (470 nF C0G) are 1206; R29 is 2.2 Ω; C1, C3, C4, C6, C9, C16–C20 are 0603; FB1 is the 0603 bead marked on its tape BLM18HG601 (not FB101/FB102's MPZ1608). Sheet 2: R101/R103/R107/R109/R112/R113 (10k), R114 (18k), R102 (100k 1 %), R104 (5.6k), R106 (10 Ω), R108/R110 (2.2k), R111 (100k), R105 (0 Ω 2512). Every other resistor is 0603, often unmarked, so take values from the tape and confirm the swaps that matter by resistance in stage 1: R102/R103 (swapped, pin 25 sees ≈ 10/11 of VBAT), a 10k for R106 (AVCC starved), R104 (gain). Ceramic caps aren't marked: fit C108/C109 (470 nF C0G, 1206), C121/C122 (680 nF), C117–C120 (220 nF), C110 (1 µF) and C103 (10 µF) straight from their tapes |
+| 0.7 | Polarised parts | C5 `+` to `+5V`. C111 and C112 `+` to PVCC (backwards they fail at first power). C104 and C106 not fitted (DNP). D102 and D103: cathode bands to the right (toward R105 and R106) |
+| 0.8 | Passive values vs BOM | Sheet 1: R1 (1M), R3/R4/R6/R7/R8/R9 (10k), R12/R17/R18/R19/R24/R34 (100k), R32/R33 (2.2k), R10 (3.3k), R5/R20 (470), R2/R11/R21/R30 (1k); C7 is the 1210 part; C2 (47 nF C0G), C12–C15 and C21 (10 µF) are 0805; C10/C11/C22/C23 (470 nF C0G) are 1206; R29 is 2.2 Ω; C1, C3, C4, C6, C9, C16–C20 are 0603; FB1 is the 0603 bead marked on its tape BLM18HG601 (not FB101/FB102's MPZ1608). Sheet 2: R101/R103/R107/R109/R112/R113 (10k), R114 (18k), R102 (100k 1 %), R104 (5.6k), R106 (10 Ω), R108/R110 (2.2k), R111 (100k), R105 (0 Ω 2512). The other resistors are 0603, often unmarked: take values from the tape (stage 1 catches R102/R103 swapped, a 10k for R106, R104). Ceramic caps aren't marked: fit C108/C109 (470 nF C0G, 1206), C121/C122 (680 nF), C117–C120 (220 nF), C110 (1 µF) and C103 (10 µF) straight from their tapes |
 | 0.9 | F101 | The Bel 0683G3150-01 (marked "3.15A S G"), flat on its pads, both end terminations soldered with fillets, no solder bridging along the body. Record the part fitted |
 | 0.10 | Screw terminals J3, J102, J105, J107, SW101; JST header J106 | Seated flat, wire openings (J106's plug opening) facing the board edge, screws turn freely; the module's input cable plugs into J106 one way round and latches |
-| 0.11 | Silkscreen legends | GND/TX/RX (J3), BAT+/GND (J106, to the DFR0571's input), 5V/GND (J107, from its output), DISP/GND (J105, the display's supply), SPK+/SPK− (J102, SPK+ on pin 2, toward the rear), 12V IN (J101); each test point's net beside its reference (VBAT, PVCC, SDZ, FAULT, 5V RAW, HP DET, GND) |
+| 0.11 | Silkscreen legends | GND/TX/RX (J3), BAT+/GND (J106), 5V/GND (J107), DISP/GND (J105), SPK+/SPK− (J102, SPK+ on pin 2, toward the rear), 12V IN (J101); each test point's net beside its reference (VBAT, PVCC, SDZ, FAULT, 5V RAW, HP DET, GND) |
 | 0.12 | Jumper headers | JP101–JP105 fitted, all shunts off. JP106–JP108 (back, left of U101) bridged in copper, none cut |
 | 0.13 | Daisy sockets | Both A1 1×20 sockets flush and parallel; Daisy inserts with moderate force, all pins engaged, USB connector on the correct end |
 | 0.14 | Jacks J1, J4, J2 and J101 | Fully seated, flush to the board edge, plugs insert/eject cleanly |
@@ -170,37 +131,36 @@ record every setting in the log, since some readings depend on them.
 
 ## Stage 1 — Unpowered resistance checks (no Daisy, no DFR0571)
 
-Nothing on any terminal, the panel switch off, every shunt off, Daisy out. Measure with the DMM, red lead on the first point
-named and black on the second, and let capacitors charge before reading. Probe on IC pins, test points, pads or the Daisy
-sockets (A1), not on connector shells.
+Nothing on any terminal, the panel switch off, every shunt off, Daisy out. DMM red lead on the first point named, black on
+the second; let capacitors charge before reading. Probe on IC pins, test points, pads or the Daisy sockets (A1), not on
+connector shells.
 
-The numbers are the resistor network with every IC and diode open, from the netlist. Where an unpowered IC pin or a diode sits
-in a parallel path the reading can be lower, by an amount that depends on the meter's test voltage, and the table gives the
-lower bound. `+5V_RAW` and `+5V` are one node at DC (FB101, a fraction of an ohm), so every reading through either rail sees
-both rails' loads: (R6 + R7) ∥ (R18 + R19) ∥ (R109 + R110 + R111) ∥ (R112 + R114) = 20k ∥ 200k ∥ 112.2k ∥ 28k = 10.0 kΩ
-(15.6 kΩ without R112 + R114, 11.0 kΩ without R109–R111). `HP_5V` hangs off `+5V` through R29 (2.2 Ω) with only U2 and
-capacitors on it, so it reads the same plus 2.2 Ω. `VBAT_PROTECTED` carries 200 µF (C111/C112)
-behind 110 kΩ (R102 + R103), so its readings take a minute or two to settle.
-
-D102 and D103 join `AMP_SDZ` and `AMP_MUTE` to PVCC through Schottky diodes. In a row that measures from SDZ (TP104),
-MUTE (C124 pad 1), `SPK_MUTE` (R107 pad 2) or `AMP_PG` (R110 pad 1), put the **black** lead on that point and the red on the
-other: the diode is then reverse-biased and the reading is the value given. With the red lead there, the diode conducts into
-PVCC's 200 µF and the reading dips, then settles lower. Readings from `+5V` or `+5V_RAW` to GND also reach PVCC through
-R107–R110 and the diodes: they start low and climb over about 10 s to ≈ 9–10 kΩ where the table says 10.0 kΩ.
+The numbers are the resistor network with every IC and diode open. An unpowered IC pin or a diode in a parallel path can
+lower a reading, by an amount that depends on the meter's test voltage; the table gives the lower bound.
+- **The rails' 10.0 kΩ.** `+5V_RAW` and `+5V` are one node at DC (FB101), so every reading through either rail sees both
+  rails' loads: (R6 + R7) ∥ (R18 + R19) ∥ (R109 + R110 + R111) ∥ (R112 + R114) = 20k ∥ 200k ∥ 112.2k ∥ 28k = 10.0 kΩ
+  (15.6 kΩ without R112 + R114, 11.0 kΩ without R109–R111). `HP_5V` reads the same plus R29's 2.2 Ω.
+- **`VBAT_PROTECTED`** carries 200 µF (C111/C112) behind 110 kΩ (R102 + R103): its readings take a minute or two to settle.
+- **D102 and D103** join `AMP_SDZ` and `AMP_MUTE` to PVCC. In a row that measures from SDZ (TP104), MUTE (C124 pad 1),
+  `SPK_MUTE` (R107 pad 2) or `AMP_PG` (R110 pad 1), put the **black** lead on that point and the red on the other, so the
+  diode is reverse-biased. With the red lead there, the diode conducts into PVCC's 200 µF and the reading dips, then
+  settles lower.
+- Readings from `+5V` or `+5V_RAW` to GND also reach PVCC through R107–R110 and the diodes: they start low and climb over
+  about 10 s to ≈ 9–10 kΩ where the table says 10.0 kΩ.
 
 **1A. Audio section (rev 2's item numbers, where rev 2 has the same check)**
 
 | # | Measure | Expect | A wrong reading means |
 |---|---|---|---|
-| 1.1 | `+5V` (C5 `+`) → GND | Rises to ≈ 10.0 kΩ ((R6 + R7) ∥ (R18 + R19) ∥ (R109 + R110 + R111) ∥ (R112 + R114), through FB101), less with U1/U2/U103's supply pins; never below 50 Ω | Short on the 5 V rail: C4/C5/C6, C103/C105/C107/C123, U1.5. A short on `HP_5V` (C12/C15/C21, U2's VDD pin 12 or 20 bridged to its neighbouring GND pin 13 or 19) shows here too, through R29's 2.2 Ω |
-| 1.2 | C105 pad 1 → C5 `+` | < 1 Ω (one `+5V` net; Q1 removed in rev 3) | Open: the `+5V` trace from the power sheet's FB101 to the audio side broken |
-| 1.2a | C12 pad 1 (`HP_5V`) → C5 `+`; C12 pad 1 → C21 pad 1 and → C15 pad 1 | ≈ 2 Ω (R29, 2.2 Ω: subtract the leads' own reading); < 1 Ω each (one `HP_5V` net) | Open on the first: R29 open or missing (U2 unpowered). Open on the others: C21 or C15 not on `HP_5V` (broken trace) |
+| 1.1 | `+5V` (C5 `+`) → GND | Rises to ≈ 10.0 kΩ, less with U1/U2/U103's supply pins; never below 50 Ω | Short on the 5 V rail: C4/C5/C6, C103/C105/C107/C123, U1.5. Or on `HP_5V`, through R29: C12/C15/C21, U2's VDD pin 12 or 20 bridged to GND pin 13 or 19 |
+| 1.2 | C105 pad 1 → C5 `+` | < 1 Ω (one `+5V` net) | Open: the `+5V` trace from FB101 to the audio side broken |
+| 1.2a | C12 pad 1 (`HP_5V`) → C5 `+`; C12 pad 1 → C21 pad 1 and → C15 pad 1 | ≈ 2 Ω (R29, 2.2 Ω: subtract the leads' own reading); < 1 Ω each | Open on the first: R29 open or missing (U2 unpowered). Open on the others: C21 or C15 not on `HP_5V` |
 | 1.3 | J3.1, J101 sleeve (pin 2), J105.2, J106.2, J107.2, TP102, TP105, TP107, TP108 → A1.40 | < 1 Ω each | Open joint |
-| 1.4 | `VREF` (C7) → GND | ≈ 7.5 kΩ (R7 ∥ (R6 + (R18 + R19) ∥ (R109 + R110 + R111) ∥ (R112 + R114))); down to ≈ 5 kΩ with U1/U2's supply pins | < 1 kΩ = C7 shorted; > 10 kΩ = R7 open or wrong |
+| 1.4 | `VREF` (C7) → GND | ≈ 7.5 kΩ (R7 ∥ (R6 + the other 5 V loads)); down to ≈ 5 kΩ with U1/U2's supply pins | < 1 kΩ = C7 shorted; > 10 kΩ = R7 open or wrong |
 | 1.5 | J3.2 → GND; J3.3 → GND | Open; ≈ 110 kΩ (R9 + R24) | UART pins shorted to GND; ≈ 100 kΩ = R9 shorted, open = R9 or R24 open |
 | 1.6 | CPVSS (C14 pad 1) → GND and → `+5V` (C5 `+`) | High (no short) | C14 shorted; U2.15 (CPVSS) bridged to U2.14 (HPLEFT) or U2.16 to U2.17 (CPN) |
-| 1.6a | U2 charge-pump pins: C13 pad 1 (CPP) → C13 pad 2 (CPN), → `+5V` and → GND; C13 pad 2 → GND and → C14 pad 1 (CPVSS) | High (no short) on all five | C13 shorted; U2 pins 16–17, 17–18, 18–19 or 19–20 bridged |
-| 1.7 | A1.33 → GND and → `+5V`; A1.38 → GND and → `+5V` | Open (A1.38 is `3V3_D`, which reaches only R32/R33: see 1.8b) | Stray copper or a socket bridge |
+| 1.6a | C13 pad 1 (CPP) → C13 pad 2 (CPN), → `+5V` and → GND; C13 pad 2 → GND and → C14 pad 1 (CPVSS) | High (no short) on all five | C13 shorted; U2 pins 16–17, 17–18, 18–19 or 19–20 bridged |
+| 1.7 | A1.33 → GND and → `+5V`; A1.38 → GND and → `+5V` | Open (A1.38, `3V3_D`, reaches only R32/R33: see 1.8b) | Stray copper or a socket bridge |
 | 1.8 | J4 tip → GND, J4 ring → GND, J4 ring → `+5V`, J4 tip → J4 ring | High (no short), not < 100 Ω | U2 bridge: HPRIGHT (11) to VDD (12), HPLEFT (14) to GND (13) or CPVSS (15) |
 | 1.8a | U2 inputs: C10 pad 2 → C22 pad 2, C22 pad 2 → GND, C11 pad 2 → C23 pad 2, C23 pad 2 → GND | Not a short (> 1 kΩ) each | U2's input row bridged: pins 1–2, 2–3 (GND), 3–4 or 4–5 |
 | 1.8b | U2 control: A1.12 → A1.38 and A1.13 → A1.38; A1.27 → GND; A1.12 → GND, A1.13 → GND and A1.27 → A1.13 | ≈ 2.2 kΩ each (R32, R33); ≈ 100 kΩ (R34); open on the last three | Open on the first: a pull-up or a B.Cu lane missing. ≈ 0 to GND: U2 pins 8–9 (SCL–GND) bridged. A1.27 low to A1.13: U2 pins 6–7 (SD–SDA) bridged. A1.27 ≈ 0: R34 shorted or SD bridged |
@@ -213,14 +173,14 @@ R107–R110 and the diodes: they start low and climb over about 10 s to ≈ 9–
 | 1.15 | TP1 → A1.23 | < 1 Ω (direct trace) | Open trace or J4 pin 6 joint |
 | 1.16 | C108 pad 1 (`LINE_OUT`) → GND; C109 pad 1 (`LINE_REF`) → GND | ≈ 100 kΩ (R12); ≈ 1 kΩ (R21) | R12 or R21 missing or wrong |
 | 1.17 | C108 pad 1 → A1.19 (`AUDIO_OUT_2`) | ≈ 1 kΩ (R11) | R11 open or wrong value |
-| 1.18 | A1.25 (`BATT_SENSE`) → GND, once C17 and C111/C112 charge | Climbs to ≈ 10 kΩ (R103; R102's far end reaches GND only through `VBAT_PROTECTED`'s caps), lower if U101's PVCC pins conduct | ≈ 100 kΩ = R102 and R103 swapped; open = R103 missing; ≈ 0 = C17 shorted |
-| 1.19 | A1.26 → anything | Open (A1.27 is `HP_SD` on rev 3: see 1.8b) | Stray bridge |
-| 1.20 | A1.28 (`SPK_EN`) → GND; R107 pad 2 (`SPK_MUTE`) → GND | ≈ 100 kΩ (R17); ≈ 20 kΩ (R107, then the rails' 10.0 kΩ), less with U1/U2/U103's supply pins, never below 10 kΩ | R17 missing; below 10 kΩ = Q2 shorted (≈ 0: its drain is straight on `SPK_MUTE`), or an AO3401A fitted as Q2 (its body diode conducts) |
+| 1.18 | A1.25 (`BATT_SENSE`) → GND, once C17 and C111/C112 charge | Climbs to ≈ 10 kΩ (R103), lower if U101's PVCC pins conduct | ≈ 100 kΩ = R102 and R103 swapped; open = R103 missing; ≈ 0 = C17 shorted |
+| 1.19 | A1.26 → anything | Open (A1.27 is `HP_SD`: see 1.8b) | Stray bridge |
+| 1.20 | A1.28 (`SPK_EN`) → GND; R107 pad 2 (`SPK_MUTE`) → GND | ≈ 100 kΩ (R17); ≈ 20 kΩ (R107, then the rails' 10.0 kΩ), less with U1/U2/U103's supply pins, never below 10 kΩ | R17 missing; below 10 kΩ = Q2 shorted (≈ 0), or an AO3401A fitted as Q2 (its body diode conducts) |
 | 1.21 | J3.2 → A1.14; J3.3 → A1.15; A1.15 → GND | ≈ 10 kΩ (R8), ≈ 10 kΩ (R9), ≈ 100 kΩ (R24) | UART series resistors, RX pull-down |
-| 1.21a | A1.22 (`5V_SENSE`) → GND | ≈ 53 kΩ (R19 ∥ (R18 + (R6 + R7) ∥ (R109 + R110 + R111) ∥ (R112 + R114))), less with U1/U2; not ≈ 0 Ω | R18/R19 missing or shorted |
+| 1.21a | A1.22 (`5V_SENSE`) → GND | ≈ 53 kΩ (R19 ∥ (R18 + the other 5 V loads)), less with U1/U2; not ≈ 0 Ω | R18/R19 missing or shorted |
 | 1.21b | A1.16 (`AUDIO_IN_1`) → U1.1 | ≈ 470 Ω (R20) | Open = R20 open; ≈ 0 Ω = shorted |
 | 1.21c | ESD diodes: J1 tip, J2 tip, J2 ring, J4 tip, J4 ring → GND, diode mode both ways | No conduction below ≈ 5 V either way (the meter reads open) | D1–D5 shorted, fitted wrong, or a solder bridge |
-| 1.22 | Daisy socket (A1) adjacent pins: A1.17 (`AUDIO_IN_2`) → A1.18 (`AUDIO_OUT_1`); A1.18 → A1.19 (`AUDIO_OUT_2`); then spot-check the rest | Open on both (C9–C11 block DC on `AUDIO_OUT_1`); no shorts between other neighbouring pins, esp. A1.39 (`+5V`) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge. A1.17–A1.18 loads the DAC output below its 600 Ω minimum (R5); A1.18–A1.19 ties the two DAC outputs together; **A1.39–A1.38 puts 5 V into 3V3_D and would damage the Daisy** |
+| 1.22 | Daisy socket (A1) adjacent pins: A1.17 (`AUDIO_IN_2`) → A1.18 (`AUDIO_OUT_1`); A1.18 → A1.19 (`AUDIO_OUT_2`); then spot-check the rest | Open on both (C9–C11 block DC on `AUDIO_OUT_1`); no shorts between other neighbouring pins, esp. A1.39 (`+5V`) ↔ A1.38 (3V3_D) and A1.40 (GND) | Socket bridge. **A1.39–A1.38 puts 5 V into 3V3_D and would damage the Daisy** |
 
 **1B. Power section**
 
@@ -229,23 +189,23 @@ R107–R110 and the diodes: they start low and climb over about 10 s to ≈ 9–
 | 1.23 | J101 pin 1 (its solder joint) → SW101.1 | < 1 Ω (F101) | Fuse missing, blown or an end joint open |
 | 1.24 | SW101.1 → SW101.2 with the panel switch wired: off, then on | Open; < 1 Ω | Switch wiring, terminal joints |
 | 1.25 | SW101.2 (Q101 drain) → TP101 in diode mode, then reversed | ≈ 0.4–0.7 V (Q101's body diode); reversed: OL | ≈ 0 both ways: Q101 shorted (no reverse protection); OL both ways: Q101 missing or its legs in the wrong holes |
-| 1.26 | GND → R101 pad 1 (Q101 gate) | ≈ 10 kΩ (R101) | Open = R101 missing (Q101 would stay off and run on its body diode); ≈ 0 = gate bridged to GND |
-| 1.27 | R101 pad 1 → TP101 in diode mode, then reversed | ≈ 0.6–0.8 V (D101 forward); reversed: OL (a 12 V zener) | The two readings swapped: D101 backwards (it would hold VGS at −0.7 V and leave Q101 off); ≈ 0 both ways: Q101's gate and source bridged |
+| 1.26 | GND → R101 pad 1 (Q101 gate) | ≈ 10 kΩ (R101) | Open = R101 missing; ≈ 0 = gate bridged to GND |
+| 1.27 | R101 pad 1 → TP101 in diode mode, then reversed | ≈ 0.6–0.8 V (D101 forward); reversed: OL (a 12 V zener) | The two readings swapped: D101 backwards (VGS held at −0.7 V, Q101 off); ≈ 0 both ways: Q101's gate and source bridged |
 | 1.28 | R101 pad 1 → SW101.2 (gate–drain) | Not a short | Q101's G and D legs bridged |
 | 1.29 | TP101 → GND | Climbs over a minute or two to ≈ 110 kΩ (R102 + R103), lower if U101's PVCC pins conduct; never below 50 Ω | Short on the battery rail: C111/C112 (reversed?), C113/C114, U101's PVCC pins to its pad |
-| 1.30 | TP101 → A1.25 (or C17 pad 1) | ≈ 100 kΩ (R102) | ≈ 10 kΩ = R102/R103 swapped; ≈ 30 kΩ = power rev 1's 30k fitted for R102; open = R102 missing |
+| 1.30 | TP101 → A1.25 (or C17 pad 1) | ≈ 100 kΩ (R102) | ≈ 10 kΩ = R102/R103 swapped; ≈ 30 kΩ = a 30k fitted for R102; open = R102 missing |
 | 1.31 | TP101 → TP103; TP103 → C115 pad 1 | < 1 Ω (R105); ≈ 10 Ω (R106) | R105 missing (PVCC would stay at 0 V: see "Powering rule"); ≈ 10 kΩ = a 10k fitted for R106 |
 | 1.32 | J107.1 → TP106 in diode mode, then reversed | ≈ 0.4–0.7 V (Q102's body diode); reversed: OL | ≈ 0 both ways: Q102 shorted (no reverse protection: don't run 2.14); OL both ways: Q102 missing or rotated; the two readings swapped: a 2N7002 fitted as Q102 |
-| 1.33 | Q102 pin 1 → GND | < 1 Ω | Q102's gate not at GND: it would pass `+5V_RAW` on its body diode only |
+| 1.33 | Q102 pin 1 → GND | < 1 Ω | Q102's gate not at GND |
 | 1.34 | TP106 → C105 pad 1; TP106 → J105.1 (JP101 and JP103 open) | < 1 Ω each (FB101, FB102) | Open = a bead missing or cracked. With JP101/JP103 shunted these read 0 Ω whatever the beads are |
-| 1.35 | TP106 (`+5V_RAW`) → GND | ≈ 10.0 kΩ, as 1.1 (FB101 joins it to `+5V`), less with U1/U2/U103's supply pins; never below 1 kΩ | Short on `+5V_RAW`: C103, C123, C105, C107, U103, or 1.1's list; ≈ 4.7 kΩ = a shunt left on JP105 (10.0 kΩ ∥ R113 ∥ U103's 90 kΩ); ≈ 15.6 kΩ = R112 or R114 open (1.39) |
+| 1.35 | TP106 (`+5V_RAW`) → GND | ≈ 10.0 kΩ, as 1.1, less with U1/U2/U103's supply pins; never below 1 kΩ | Short on `+5V_RAW`: C103, C123, C105, C107, U103, or 1.1's list; ≈ 4.7 kΩ = a shunt left on JP105 (10.0 kΩ ∥ R113 ∥ U103's 90 kΩ); ≈ 15.6 kΩ = R112 or R114 open (1.39) |
 | 1.36 | R107 pad 2 → TP106; C124 pad 1 → R107 pad 2 | ≈ 10 kΩ (R107); ≈ 2.2 kΩ (R108) | R107/R108 open, or swapped with each other |
-| 1.37 | TP104 → TP106; R110 pad 1 → TP106 | ≈ 11 kΩ ((R110 + R109) ∥ (R111 + the other 5 V loads' 11.0 kΩ)); ≈ 9.2 kΩ (R109 ∥ (R110 + R111 + 11.0 kΩ)) | ≈ 111 kΩ on the first = R109 or R110 open; ≈ 2.2 kΩ on the second = R109 and R110 swapped |
-| 1.38 | TP104 (SDZ) → GND | ≈ 19 kΩ (R111 ∥ (R110 + R109 + the other 5 V loads' 11.0 kΩ)), less with U1/U2/U103's supply pins; never below 10 kΩ | ≈ 0 = U101 pins 1–2 (MODSEL, SDZ) bridged or C125 shorted |
-| 1.39 | TP109 → TP106; TP109 → GND | ≈ 7.7 kΩ (R112 ∥ (R114 + the rails' other 15.6 kΩ)); ≈ 10.6 kΩ (R114 ∥ (R112 + 15.6 kΩ)) | ≈ 34 kΩ on the first, 18 kΩ on the second = R112 open; ≈ 10 kΩ on the first, ≈ 26 kΩ on the second = R114 open (FAULTZ would sit at 5 V on Daisy pin 32) |
-| 1.39a | A1.32 → TP109; A1.31 and A1.33 → A1.32 | ≈ 1 kΩ (R30, `AMP_FAULTZ` to Daisy pin 32, Daisy out); open | Open on the first: R30 missing, its vias or the trace to the socket. ≈ 0: R30 shorted. A short to a neighbour: socket bridge |
+| 1.37 | TP104 → TP106; R110 pad 1 → TP106 | ≈ 11 kΩ ((R110 + R109) ∥ (R111 + 11.0 kΩ)); ≈ 9.2 kΩ (R109 ∥ (R110 + R111 + 11.0 kΩ)) | ≈ 111 kΩ on the first = R109 or R110 open; ≈ 2.2 kΩ on the second = R109 and R110 swapped |
+| 1.38 | TP104 (SDZ) → GND | ≈ 19 kΩ (R111 ∥ (R110 + R109 + 11.0 kΩ)), less with U1/U2/U103's supply pins; never below 10 kΩ | ≈ 0 = U101 pins 1–2 (MODSEL, SDZ) bridged or C125 shorted |
+| 1.39 | TP109 → TP106; TP109 → GND | ≈ 7.7 kΩ (R112 ∥ (R114 + 15.6 kΩ)); ≈ 10.6 kΩ (R114 ∥ (R112 + 15.6 kΩ)) | ≈ 34 kΩ on the first, 18 kΩ on the second = R112 open; ≈ 10 kΩ on the first, ≈ 26 kΩ on the second = R114 open (FAULTZ would sit at 5 V on Daisy pin 32) |
+| 1.39a | A1.32 → TP109; A1.31 and A1.33 → A1.32 | ≈ 1 kΩ (R30); open | Open on the first: R30 missing, its vias or the trace to the socket. ≈ 0: R30 shorted. A short to a neighbour: socket bridge |
 | 1.40 | JP105 pin 1 → TP106 | ≈ 9 kΩ (R113 ∥ U103's internal 90 kΩ MR pull-up) | Open/high = R113 open |
-| 1.41 | J102.1 → J102.2; J102.1 → GND; J102.2 → GND | Open once C121/C122 charge (the outputs are bridged: no DC path); not a short | ≈ 0 between them = `OUT_P` and `OUT_N` joined (U101's output pins, L101/L102 pads); to GND = C121/C122 shorted or an output pin bridged to GND |
+| 1.41 | J102.1 → J102.2; J102.1 → GND; J102.2 → GND | Open once C121/C122 charge; not a short | ≈ 0 between them = `OUT_P` and `OUT_N` joined (U101's output pins, L101/L102 pads); to GND = C121/C122 shorted or an output pin bridged to GND |
 | 1.42 | J102.2 → L101 pad 1; J102.1 → L102 pad 1 | < 1 Ω (L101, L102) | Inductor joint open |
 
 **1C. U101 and U103 neighbouring pins**
@@ -255,68 +215,65 @@ short" means above 100 Ω.
 
 | # | Measure | Expect | A wrong reading means |
 |---|---|---|---|
-| 1.43 | TP104 → TP109 (U101 pins 2–3) | ≈ 18 kΩ (SDZ to the 5 V node through R110 + R109, then R112, with R111 and R114 to GND in parallel; solved from the network) | ≈ 0 = SDZ–FAULTZ bridged |
+| 1.43 | TP104 → TP109 (U101 pins 2–3) | ≈ 18 kΩ (through R110 + R109 and R112, with R111 and R114 to GND) | ≈ 0 = SDZ–FAULTZ bridged |
 | 1.44 | TP109 → C108 pad 2 (3–4); C108 pad 2 → C109 pad 2 (4–5) | Not a short | FAULTZ–RINP or RINP–RINN bridged |
 | 1.45 | C109 pad 2 → C110 pad 1 (5–6) | Not a short | RINN–PLIMIT bridged: GVDD (6.4–7.4 V) on an input rated 6.3 V. **Fix before power** |
 | 1.46 | C110 pad 1 → R104 pad 1 (7–8) | Starts near 5.6 kΩ and climbs (C110 charging through R104) | ≈ 0 = GVDD–GAIN bridged |
 | 1.47 | R104 pad 1 → GND (8–9) | ≈ 5.6 kΩ (R104) | ≈ 0 = GAIN–GND bridged; 2.2 kΩ or 10 kΩ = the wrong part (another gain or slave mode) |
-| 1.48 | C124 pad 1 (MUTE) → GND (11–12–13) | ≈ 22 kΩ (R108 + R107, then the rails' 10.0 kΩ), less with U1/U2/U103's supply pins; never below 10 kΩ | ≈ 0 = MUTE bridged to LINN or AM2 (both GND): the speaker would never mute |
+| 1.48 | C124 pad 1 (MUTE) → GND (11–12–13) | ≈ 22 kΩ (R108 + R107, then the rails' 10.0 kΩ), less with U1/U2/U103's supply pins; never below 10 kΩ | ≈ 0 = MUTE bridged to LINN or AM2 (both GND) |
 | 1.49 | U101 pin 16 (SYNC) → GND, needle probe on the pin | Open | SYNC bridged to AM0 |
 | 1.50 | TP103 → C120 pad 1 (19–20); TP103 → C117 pad 1 (30–31) | Not a short | PVCC on a bootstrap pin |
 | 1.51 | C117, C118, C119, C120: pad 1 → pad 2 each (bootstrap–output: 29–30, 26–27, 23–24, 20–21) | Not a short | A bootstrap cap shorted or its two pins bridged |
 | 1.52 | C119 pad 1 → GND (24–25); C118 pad 1 → GND (25–26) | Not a short | Bootstrap pin bridged to GND |
-| 1.53 | L101 pad 1 (`OUT_P`) → GND; L102 pad 1 (`OUT_N`) → GND (21–22, 22–23, 27–28, 28–29 and the exposed pad) | Not a short | An output bridged to GND (U101 would latch off when first unmuted) |
-| 1.54 | R110 pad 1 (`AMP_PG`) → GND (U103 pins 1–2); JP105 pin 1 → GND (U103 pins 2–3) | ≈ 17 kΩ ((R110 + R111) ∥ (R109 + the other 5 V loads' 11.0 kΩ)); ≈ 19 kΩ (R113 ∥ 90 kΩ, then the rails' 10.0 kΩ), both less with U1/U2/U103's supply pins | ≈ 0 = RESET or MR bridged to GND (U101 would never start) |
-| 1.55 | D102 and D103 in diode mode: red on TP104 (SDZ), black on TP103 (PVCC); red on C124 pad 1 (MUTE), black on TP103; then each with the leads swapped | ≈ 0.1–0.3 V each (a Schottky at the meter's ≈ 1 mA: 0.32 V at most for a BAT54); swapped: OL, or a value that climbs as C111/C112 charge | ≈ 0.5–0.7 V: no Schottky (D102/D103 missing or open: only U101's own diode conducts). The two readings swapped: the diode fitted backwards, which would pull SDZ or MUTE up to PVCC at first power. **Fix before power** |
+| 1.53 | L101 pad 1 (`OUT_P`) → GND; L102 pad 1 (`OUT_N`) → GND (21–22, 22–23, 27–28, 28–29 and the exposed pad) | Not a short | An output bridged to GND |
+| 1.54 | R110 pad 1 (`AMP_PG`) → GND (U103 pins 1–2); JP105 pin 1 → GND (U103 pins 2–3) | ≈ 17 kΩ ((R110 + R111) ∥ (R109 + 11.0 kΩ)); ≈ 19 kΩ (R113 ∥ 90 kΩ, then the rails' 10.0 kΩ), both less with U1/U2/U103's supply pins | ≈ 0 = RESET or MR bridged to GND |
+| 1.55 | D102 and D103 in diode mode: red on TP104 (SDZ), black on TP103 (PVCC); red on C124 pad 1 (MUTE), black on TP103; then each with the leads swapped | ≈ 0.1–0.3 V each (0.32 V at most for a BAT54 at the meter's ≈ 1 mA); swapped: OL, or a value that climbs as C111/C112 charge | ≈ 0.5–0.7 V: D102/D103 missing or open (only U101's own diode conducts). The two readings swapped: the diode fitted backwards, which would pull SDZ or MUTE up to PVCC at first power. **Fix before power** |
 
 ## Stage 2 — Battery side, DFR0571 disconnected
 
 Left out: the Daisy, the DFR0571 (nothing on J106 or J107), the display (J105, J3), any load on J102, every shunt
 (JP101–JP105). R105 fitted, the panel switch wired to SW101 (or a wire link for "on"). With no 5 V, U103 and the pull-ups
-R107/R109/R112 sit at 0 V, so U101 stays in shutdown with SDZ and MUTE at 0 V, inside its rating. The battery path, Q101, the
-battery divider and PVCC are checked without risking the DFR0571 or anything on 5 V. This is the only stage, with 5.9, that
-runs the amp unpowered: the battery side up, 5 V off. Never the other way round.
+R107/R109/R112 sit at 0 V, so U101 stays in shutdown with SDZ and MUTE at 0 V, inside its rating. Only this stage and 5.9
+run with the battery side up and 5 V off. Never the other way round.
 
-Bench supply on J101 (centre +), set to 12.0 V, current limit **20 mA**. Expected draw is under 1 mA: the battery divider takes
-12.0 V / 110 kΩ = 0.11 mA, U101 in shutdown < 50 µA (SLOS708G, ICC(SD) at 12 V), R101/D101 under 0.1 mA (D101 only conducts
-near its 12 V knee), plus C111/C112 leakage. 20 mA is the lowest limit most supplies hold, and far below anything that heats a
-part. Switch on at SW101, then turn the supply on.
+Bench supply on J101 (centre +), 12.0 V, current limit **20 mA**. Expected draw is under 1 mA: the battery divider
+0.11 mA (12.0 V / 110 kΩ), U101 in shutdown < 50 µA (SLOS708G, ICC(SD) at 12 V), R101/D101 under 0.1 mA, plus C111/C112
+leakage. Switch on at SW101, then turn the supply on.
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
-| 2.1 | Supply current at 12.0 V | < 1 mA (above). Stop if it hits the limit | At the limit: a short on `VBAT_PROTECTED`/PVCC (1.29), C111/C112 reversed. A few mA: U101 not in shutdown (2.6), a lower-voltage zener for D101 |
-| 2.2 | TP101, TP103, C115 pad 1 (AVCC) | All within 10 mV of the supply at J101 | ≈ 0.5 V low: Q101 running on its body diode (D101 reversed, R101 open, gate bridged to source). TP103 at 0 V: R105 missing, **stop** ("Powering rule") |
-| 2.3 | R101 pad 1 → TP101 (Q101's VGS) | −9 to −12 V: R101 pulls the gate to GND, and D101, near its knee, may hold it a few volts short of 12 V | ≈ −0.6 V = D101 reversed; ≈ 0 V = R101 open |
-| 2.4 | A1.25 (`BATT_SENSE`, or C17 pad 1) | 1.071–1.111 V: TP101 / 11 (R103 / (R102 + R103)), ±1.8 % with 1 % parts | ≈ 10.9 V = R102/R103 swapped (never fit the Daisy like this); ≈ 12 V = R103 open; ≈ 3 V = a 30k fitted for R102; 0 V = R102 open or C17 shorted |
+| 2.1 | Supply current at 12.0 V | < 1 mA. Stop if it hits the limit | At the limit: a short on `VBAT_PROTECTED`/PVCC (1.29), C111/C112 reversed. A few mA: U101 not in shutdown (2.6), a lower-voltage zener for D101 |
+| 2.2 | TP101, TP103, C115 pad 1 (AVCC) | All within 10 mV of the supply at J101 | ≈ 0.5 V low: Q101 on its body diode (D101 reversed, R101 open, gate bridged to source). TP103 at 0 V: R105 missing, **stop** ("Powering rule") |
+| 2.3 | R101 pad 1 → TP101 (Q101's VGS) | −9 to −12 V (D101, near its knee, may hold it a few volts short of 12 V) | ≈ −0.6 V = D101 reversed; ≈ 0 V = R101 open |
+| 2.4 | A1.25 (`BATT_SENSE`, or C17 pad 1) | 1.071–1.111 V: TP101 / 11, ±1.8 % | ≈ 10.9 V = R102/R103 swapped (never fit the Daisy like this); ≈ 12 V = R103 open; ≈ 3 V = a 30k fitted for R102; 0 V = R102 open or C17 shorted |
 | 2.5 | TP106 (`+5V_RAW`), J107.1, C5 `+` (`+5V`) | < 50 mV | Higher: something on the battery side feeds the 5 V nets (U101's SDZ, MUTE or FAULTZ pin back through R107–R112). **Stop** |
-| 2.6 | TP104 (SDZ), C124 pad 1 (MUTE), TP109 (FAULTZ) | < 50 mV each: their pull-ups run from `+5V_RAW` (and R114 holds FAULTZ to GND). D102 and D103 stand off 12 V here; their leakage (2 µA at most at 25 °C) stays inside this. U101 in shutdown, MUTE and SDZ inside −0.3 V … PVCC + 0.3 V | Volts on SDZ or MUTE: D102 or D103 fitted backwards (1.55) |
+| 2.6 | TP104 (SDZ), C124 pad 1 (MUTE), TP109 (FAULTZ) | < 50 mV each (D102 and D103 stand off 12 V here) | Volts on SDZ or MUTE: D102 or D103 fitted backwards (1.55) |
 | 2.7 | C110 pad 1 (GVDD); C108 pad 2 and C109 pad 2 (U101's inputs) | Record. SLOS708G doesn't say whether GVDD or the inputs' 3 V bias run in shutdown | |
 | 2.8 | J102.1 and J102.2 → GND, DMM and scope | ≈ 0 V, no switching (outputs Hi-Z in shutdown) | Switching: U101 not in shutdown (2.6) |
 | 2.9 | J106.1 → J106.2 | = TP101, pin 1 positive | J106 joints |
 | 2.10 | Battery range: set 9.0 V, then 12.6 V | A1.25: 0.80–0.84 V, then 1.12–1.17 V (VBAT / 11). TP101 within 10 mV of the supply each time; the divider draws 0.08 mA, then 0.11 mA | TP101 low at 9 V: Q101 not fully on (2.3) |
 | 2.11 | Thermal | Nothing warm to the touch after 2 min | |
-| 2.12 | Switch off at SW101 | Current drops to ≈ 0; TP101 decays over ≈ 2 min (C111/C112 into the divider, τ ≈ 22 s) | Current stays: SW101 wiring |
-| 2.13 | **Reverse polarity at J101:** supply off, swap its two wires (− to the centre pin), limit 20 mA, 12.0 V, switch on | ≈ 0 mA; TP101 ≈ 0 V: Q101's body diode blocks and its gate gets no drive. Restore the polarity and repeat 2.2 and 2.4 | Current flows: Q101 shorted or fitted wrong (1.25) |
+| 2.12 | Switch off at SW101 | Current drops to ≈ 0; TP101 decays over ≈ 2 min (τ ≈ 22 s) | Current stays: SW101 wiring |
+| 2.13 | **Reverse polarity at J101:** supply off, swap its two wires (− to the centre pin), limit 20 mA, 12.0 V, switch on | ≈ 0 mA; TP101 ≈ 0 V. Restore the polarity and repeat 2.2 and 2.4 | Current flows: Q101 shorted or fitted wrong (1.25) |
 | 2.14 | **Reverse 5 V on J107 (Q102):** keep 12.0 V on J101, correct polarity. The second, floating supply at 5.0 V, limit 10 mA: + to J107.2, − to J107.1 | ≈ 0 mA from the second supply; TP106 stays within 50 mV of 0 V; TP104 and C124 pad 1 stay at 0 V. Remove it | Current, or TP106 negative: Q102 shorted or the wrong part. Remove the supply at once |
 
 What 2.14 risks: if Q102 is wrong (1.32 should have caught it), −5 V reaches `+5V_RAW`, and U103 (VDD rated −0.3 V minimum)
-clamps it through its own diode at the 10 mA limit. The 12 V on J101 means that even this supply connected the wrong way round
-(+5 V on J107.1) leaves U101's MUTE and SDZ inside PVCC + 0.3 V. Don't use the DFR0571 for this test: its input and output GND
-are one node, so with J106 wired, J107's wires swapped short its output to GND (3B.1).
+clamps it through its own diode at the 10 mA limit. With 12 V on J101, even this supply the other way round (+5 V on
+J107.1) leaves U101's MUTE and SDZ inside PVCC + 0.3 V. Don't use the DFR0571 for this test: its input and output GND are
+one node, so with J106 wired, J107's wires swapped short its output to GND (3B.1).
 
 ## Stage 3 — The DFR0571 and the 5 V rails, Daisy removed
 
 **3A. The DFR0571 on its own (off the board)**
 
-Before it goes near the board: U1 and U2 are rated 5.5 V, U103 6 V, and the 5 V contract (`power-board/README.md`) is
-4.75–5.25 V. DFRobot's datasheet gives 8–28 V in, 5 V ± 0.1 V out, 0.5 mA
-no-load input current, under 50 mVpp ripple at full load, and no short-circuit or reverse protection.
+U1 and U2 are rated 5.5 V, U103 6 V, and the 5 V contract (`power-board/README.md`) is 4.75–5.25 V. The module has no
+short-circuit or reverse protection (DESIGN.md "5 V supply and distribution" has its datasheet figures).
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
 | 3A.1 | 12.0 V into its VIN+/GND, limit 50 mA, output open | Output 4.90–5.10 V; input current ≈ 0.5 mA. Record both | Above 5.25 V: don't connect it |
 | 3A.2 | Repeat at 9.0 V and 12.6 V in, then with the 47 Ω 1 W resistor on the output (≈ 0.1 A) | 4.90–5.10 V each time | Sags at 9 V: record it (DFRobot: raise the minimum input at high load) |
-| 3A.3 | Make its input cable: cut the ASXHSXH22K305 lead in half, screw the cut ends into the module's VIN+ and GND, and push the contacts into the XHP-2 housing, VIN+ in position 1 (it lines up with J106's triangle and BAT+). Mark the VIN+ wire. Fit and label the two output wires: 5V → J107.1, GND → J107.2. Check the cable unpowered, then the outputs with the module powered as in 3A.1 | Housing position 1 → module VIN+ < 1 Ω, position 2 → module GND < 1 Ω; the 5V wire reads +5 V against either GND wire | Position 1 on GND: the cable is crimped backwards. Fix it before it goes near J106 (the module has no input reverse protection) |
+| 3A.3 | Make its input cable: cut the ASXHSXH22K305 lead in half, screw the cut ends into the module's VIN+ and GND, and push the contacts into the XHP-2 housing, VIN+ in position 1 (J106's triangle, BAT+). Mark the VIN+ wire. Fit and label the two output wires: 5V → J107.1, GND → J107.2. Check the cable unpowered, then the outputs with the module powered as in 3A.1 | Housing position 1 → module VIN+ < 1 Ω, position 2 → module GND < 1 Ω; the 5V wire reads +5 V against either GND wire | Position 1 on GND: the cable is crimped backwards. Fix it before it goes near J106 (the module has no input reverse protection) |
 
 **3B. On the board, U101 held in shutdown**
 
@@ -325,20 +282,20 @@ JP101–JP104): it holds U103's MR low, so SDZ stays low and U101 stays in shutd
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
-| 3B.1 | Supply off. Plug the module's input cable into J106 and wire its output to J107. Then TP101 → GND; J107.1 → GND; TP101 → J107.1 | Not below 1 kΩ (TP101 climbs as in 1.29, with the module's input in parallel); not a short (> 100 Ω); not a short | TP101 → GND ≈ 0: the input cable's two wires swapped (3A.3). The module's two GNDs are one node, so `VBAT_PROTECTED` would reach GND through J107's ground wire, a dead short at power-up. J107.1 → GND ≈ 0: J107's wires swapped (the module's output shorted to GND). TP101 → J107.1 ≈ 0: both swapped |
-| 3B.2 | Supply 12.0 V on J101, limit **50 mA**; switch on | ≈ 2–5 mA. 5 V side ≈ 2.1 mA: U1 ≈ 0.5 mA, the `VREF` and `5V_SENSE` dividers 0.28 mA, R112 + R114 0.18 mA, R109 and R113 into U103 and JP105 1.1 mA; U2 is shut down (R34 holds `HP_SD` low), under 1 µA. Through the buck that is ≈ 1 mA at 12 V, plus its own 0.5 mA, the battery divider's 0.11 mA and U101's shutdown current. Stop if it hits the limit | At the limit: a short on `+5V_RAW` or `+5V` (1.1, 1.35), the DFR0571's wiring (3B.1), C5 reversed, U1/U2 rotated |
+| 3B.1 | Supply off. Plug the module's input cable into J106 and wire its output to J107. Then TP101 → GND; J107.1 → GND; TP101 → J107.1 | Not below 1 kΩ (TP101 climbs as in 1.29, with the module's input in parallel); not a short (> 100 Ω); not a short | TP101 → GND ≈ 0: the input cable's two wires swapped (3A.3), a dead short of `VBAT_PROTECTED` at power-up through J107's ground wire. J107.1 → GND ≈ 0: J107's wires swapped (the module's output shorted to GND). TP101 → J107.1 ≈ 0: both swapped |
+| 3B.2 | Supply 12.0 V on J101, limit **50 mA**; switch on | ≈ 2–5 mA (the 5 V side's ≈ 2.1 mA is ≈ 1 mA at 12 V through the buck, plus the buck's own 0.5 mA). Stop if it hits the limit | At the limit: a short on `+5V_RAW` or `+5V` (1.1, 1.35), the DFR0571's wiring (3B.1), C5 reversed, U1/U2 rotated |
 | 3B.3 | TP106 (`+5V_RAW`) | 4.90–5.10 V, as 3A.1 | |
 | 3B.4 | J107.1 − TP106 (Q102's drop) | < 10 mV | 0.4–0.7 V: Q102's channel is off (gate not at GND, rotated), and `+5V_RAW` sits near U103's 4.65 V threshold |
 | 3B.5 | C105 pad 1 (`+5V`); J105.1 (`+5V_DISPLAY`) | Within 5 mV of TP106 (FB101, FB102) | 0 V: a bead open (1.34) |
-| 3B.6 | `+5V` (C5 `+`) | Within 5 mV of C105 pad 1 (one net, no Q1) | Lower: the `+5V` trace between the sheets (1.2) |
+| 3B.6 | `+5V` (C5 `+`) | Within 5 mV of C105 pad 1 (one net) | Lower: the `+5V` trace between the sheets (1.2) |
 | 3B.6a | `HP_5V` (C21 pad 1 or C12 pad 1) against C5 `+` | Within 2 mV of C5 `+` (U2 shut down: under 1 µA through R29). Record it | 0 V: R29 open (1.2a). More than a few mV: U2 drawing current with `HP_SD` low (a bridge, rotated, R34 missing) |
 | 3B.7 | `VREF` (C7); A1.22 (`5V_SENSE`) | Half of C5 `+` within ±1 %: 2.42–2.58 V for 4.90–5.10 V; the same | R6/R7, R18/R19 values |
 | 3B.8 | U1.1, A1.16 (through R20), U1.3 | ≈ `VREF` | U1 rotated or not powered (U1.5) |
-| 3B.9 | U2 shut down: A1.27 (`HP_SD`) and CPVSS (C14 pad 1) | ≈ 0 V both: R34 holds SD low, so the charge pump is off | CPVSS negative: SD isn't low (R34 missing, 1.8b) |
+| 3B.9 | U2 shut down: A1.27 (`HP_SD`) and CPVSS (C14 pad 1) | ≈ 0 V both (R34 holds SD low, charge pump off) | CPVSS negative: SD isn't low (R34 missing, 1.8b) |
 | 3B.10 | J4 tip and ring (DC) | Within ±10 mV of 0 V (U2 off) | |
 | 3B.11 | C108 pad 1 (`LINE_OUT`), C109 pad 1 (`LINE_REF`) | ≈ 0 V (R12, R21) | |
 | 3B.12 | A1.39; J3.1 and A1.40 | `+5V`; GND | |
-| 3B.13 | R107 pad 2 (`SPK_MUTE`), C124 pad 1 (MUTE) | Within 50 mV of TP106: Q2 off (R17 holds A1.28 low with the Daisy out), U101 muted. Both below PVCC + 0.3 V | Both < 0.1 V: Q2 on (Q2 shorted, A1.28 not low); C124 pad 1 ≈ 0 with R107 pad 2 ≈ 0.9 V (R107/R108): MUTE bridged to GND (1.48) |
+| 3B.13 | R107 pad 2 (`SPK_MUTE`), C124 pad 1 (MUTE) | Within 50 mV of TP106: Q2 off (R17 holds A1.28 low), U101 muted. Both below PVCC + 0.3 V | Both < 0.1 V: Q2 on (Q2 shorted, A1.28 not low); C124 pad 1 ≈ 0 with R107 pad 2 ≈ 0.9 V (R107/R108): MUTE bridged to GND (1.48) |
 | 3B.14 | JP105 pin 1; R110 pad 1 (`AMP_PG`); TP104 (SDZ) | 0 V; < 0.4 V (U103's RESET held low by MR); < 0.4 V: U101 in shutdown | |
 | 3B.15 | TP109 (FAULTZ) | ≈ 0.64 × TP106 (R114 / (R112 + R114)): 3.15–3.28 V for 4.90–5.10 V (no fault); record it | ≈ TP106: R114 open (1.39). ≈ 0: R112 open, or U101 reporting a fault |
 | 3B.16 | TP101, TP103; A1.25 | = the supply; 1.071–1.111 V, as 2.4 | |
@@ -352,14 +309,14 @@ current, 20 mA typical and 35 mA at most at 12 V (SLOS708G, no load or filter), 
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
-| 3C.1 | **Power-on sequence:** scope TP103 (PVCC), TP106 (`+5V_RAW`), TP104 (SDZ) and C124 pad 1 (MUTE). Supply at 12.0 V, trigger on TP106, switch on at SW101 | PVCC rises first. `+5V_RAW` follows once the DFR0571 starts. SDZ stays low until ≈ 20 ms after `+5V_RAW` passes 4.65 V (U103, CT open), then rises with τ ≈ 11 ms ((R109 + R110) ∥ R111 into C125), crossing 2 V ≈ 6.5 ms later. MUTE follows `+5V_RAW` with τ ≈ 12 ms (R107 + R108 into C124). SDZ and MUTE stay below PVCC + 0.3 V throughout and change slower than 10 V/ms (SLOS708G's limit; here ≤ 0.4 V/ms) | SDZ rising with `+5V_RAW`: U103's delay missing (wrong part, CT not open). SDZ or MUTE above PVCC + 0.3 V at any time: **stop** and record it |
+| 3C.1 | **Power-on sequence:** scope TP103 (PVCC), TP106 (`+5V_RAW`), TP104 (SDZ) and C124 pad 1 (MUTE). Supply at 12.0 V, trigger on TP106, switch on at SW101 | PVCC rises first, then `+5V_RAW` once the DFR0571 starts. SDZ stays low until ≈ 20 ms after `+5V_RAW` passes 4.65 V (U103, CT open), then rises with τ ≈ 11 ms (C125), crossing 2 V ≈ 6.5 ms later. MUTE follows `+5V_RAW` with τ ≈ 12 ms (R107 + R108 into C124). SDZ and MUTE stay below PVCC + 0.3 V throughout and change slower than 10 V/ms (SLOS708G's limit; here ≤ 0.4 V/ms) | SDZ rising with `+5V_RAW`: U103's delay missing (wrong part, CT not open). SDZ or MUTE above PVCC + 0.3 V at any time: **stop** and record it |
 | 3C.2 | Supply current at 12.0 V | 3B.2's value, less ≈ 0.5 mA (JP105 open), plus U101's 20 mA typical (35 mA max; muted it may draw less). Record it; < 50 mA | More: U101 switching despite MUTE (3C.7), a fault |
-| 3C.3 | TP104 (SDZ); R110 pad 1 (`AMP_PG`) | 4.0–4.56 V: R111 / (R109 + R110 + R111) × `+5V_RAW` = 4.37–4.55 V for 4.90–5.10 V, less up to 0.5 V from U101's SDZ input current (≤ 50 µA, SLOS708G) through ≈ 11 kΩ. `AMP_PG` ≈ 0.1 V above SDZ | ≈ 0: U103 holding RESET (TP106 below 4.65 V, JP105 still shunted, U103 pins 1–2 or 2–3 bridged) |
-| 3C.4 | TP109 (FAULTZ) | ≈ 0.64 × TP106, ≈ 3.2 V (no fault), as 3B.15 | ≈ TP106: R114 open. < 0.8 V = a latched fault (U101 sinks ≈ 0.5 mA through R112), or R112 open if JP105 doesn't clear it. Over-current: an output shorted (1.41, 1.53). DC detect: C108/C109 or the input pins (3C.6). Over-temperature: the exposed pad. Find it, then clear with JP105 (3C.8) |
+| 3C.3 | TP104 (SDZ); R110 pad 1 (`AMP_PG`) | 4.0–4.56 V: R111 / (R109 + R110 + R111) × `+5V_RAW` = 4.37–4.55 V for 4.90–5.10 V, less up to 0.5 V from U101's SDZ input current (≤ 50 µA, SLOS708G). `AMP_PG` ≈ 0.1 V above SDZ | ≈ 0: U103 holding RESET (TP106 below 4.65 V, JP105 still shunted, U103 pins 1–2 or 2–3 bridged) |
+| 3C.4 | TP109 (FAULTZ) | ≈ 0.64 × TP106, ≈ 3.2 V (no fault), as 3B.15 | ≈ TP106: R114 open. < 0.8 V = a latched fault ("Fault-finding hints"), or R112 open if JP105 doesn't clear it. Find it, then clear with JP105 (3C.8) |
 | 3C.5 | C110 pad 1 (GVDD) | 6.4–7.4 V (SLOS708G) | ≈ 0: U101 not running (SDZ, AVCC at C115) |
-| 3C.6 | C108 pad 2, C109 pad 2 (U101's inputs) | ≈ 3 V each (biased inside U101), within ≈ 0.1 V of each other; record both | One at 0 V: its cap shorted, or the pin bridged (1.44, 1.45) |
-| 3C.7 | J102.1, J102.2 (scope and DMM) | No switching: MUTE is high, so the outputs are Hi-Z. Record the DC | Switching: MUTE not reaching U101 pin 12 (R108, C124 joints) |
-| 3C.8 | **JP105 manual reset:** short JP105 for ≈ 1 s with the shunt, watching TP104 and TP109 | SDZ falls below 0.8 V within ≈ 4 ms (C125 through R110, τ ≈ 2.2 ms) and rises again ≈ 26 ms after the shunt comes off (20 ms + 6.5 ms). TP109 stays high (≈ 3.2 V) | SDZ doesn't move: MR not reaching U103 pin 3 |
+| 3C.6 | C108 pad 2, C109 pad 2 (U101's inputs) | ≈ 3 V each, within ≈ 0.1 V of each other; record both | One at 0 V: its cap shorted, or the pin bridged (1.44, 1.45) |
+| 3C.7 | J102.1, J102.2 (scope and DMM) | No switching (MUTE high: outputs Hi-Z). Record the DC | Switching: MUTE not reaching U101 pin 12 (R108, C124 joints) |
+| 3C.8 | **JP105 manual reset:** short JP105 for ≈ 1 s with the shunt, watching TP104 and TP109 | SDZ falls below 0.8 V within ≈ 4 ms (C125 through R110) and rises again ≈ 26 ms after the shunt comes off. TP109 stays high (≈ 3.2 V) | SDZ doesn't move: MR not reaching U103 pin 3 |
 | 3C.9 | **Power-off sequence:** same probes, trigger on TP103 falling, switch off at SW101 | `+5V_RAW` holds while PVCC falls, then falls with it once the DFR0571 drops out. SDZ goes low within ≈ 4 ms of `+5V_RAW` passing 4.65 V. MUTE (held up by C124) and SDZ (by C125) at most ≈ 0.35 V above PVCC as it falls: D103 and D102 clamp them. Record the times and the largest MUTE − PVCC and SDZ − PVCC | More than ≈ 0.4 V above PVCC: D102 or D103 missing or open (1.55). Record by how much and for how long (DESIGN.md "Power sequence") |
 | 3C.10 | Thermal after 5 min | U101 at most warm (muted); Q101, Q102 and the DFR0571 cool | |
 
@@ -376,35 +333,36 @@ Return the jumpers to the defaults (or to what rev 1's bring-up chose) before go
 
 ## Stage 4 — Analog paths and speaker amp, Daisy removed
 
-With the module out, its sockets (A1) reach the Daisy-side nets, so the analog stages can be tested on their own. Supply
-12.0 V on J101 with the DFR0571, limit **70 mA** for 4A, 4B and 4D (4C sets its own). R17 keeps the speaker muted throughout,
-except in 4C.
+With the module out, its sockets (A1) reach the Daisy-side nets. Supply 12.0 V on J101 with the DFR0571, limit **70 mA**
+for 4A, 4B and 4D (4C sets its own). R17 keeps the speaker muted throughout, except in 4C.
 
 **4A. Guitar input buffer (J1 → AUDIO_IN_1)**
 
-1. Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `A1.16` (AUDIO_IN_1) or U1.1.
-2. | # | Check | Expect |
-   |---|---|---|
-   | 4A.1 | Output level | U1.1: 1 kHz sine riding on ≈ 2.5 V DC, amplitude ≈ input (unity gain). A1.16: the same through R20 (no Daisy load) |
-   | 4A.2 | Input load: add 1 MΩ in series with the generator | Output drops to ≈ half (≈ 1 MΩ input impedance, R1) |
-   | 4A.3 | Unplug J1 | Output goes quiet (tip shorted to GND) |
-   | 4A.4 | Raise amplitude until clipping | Clips symmetrically near the rails: ≈ 4.8 Vpp at U1.1 and A1.16 (no Daisy load); record the input level |
-   | 4A.5 | Sweep 20 Hz – 20 kHz | Flat within about ±1 dB |
+Inject 1 kHz, 1 Vpp sine into J1 (tip/sleeve). Scope on `A1.16` (AUDIO_IN_1) or U1.1.
+
+| # | Check | Expect |
+|---|---|---|
+| 4A.1 | Output level | U1.1: 1 kHz sine riding on ≈ 2.5 V DC, amplitude ≈ input (unity gain). A1.16: the same through R20 (no Daisy load) |
+| 4A.2 | Input load: add 1 MΩ in series with the generator | Output drops to ≈ half (≈ 1 MΩ input impedance, R1) |
+| 4A.3 | Unplug J1 | Output goes quiet (tip shorted to GND) |
+| 4A.4 | Raise amplitude until clipping | Clips symmetrically near the rails: ≈ 4.8 Vpp at U1.1 and A1.16 (no Daisy load); record the input level |
+| 4A.5 | Sweep 20 Hz – 20 kHz | Flat within about ±1 dB |
 
 **4B. Headphone filter + headphone amp (AUDIO_OUT_1 → J4)**
 
-1. Connect the I2C master (Equipment): SCL to A1.12, SDA to A1.13, GND to A1.20, its 3.3 V to A1.38 (the pull-ups). Pull
-   A1.27 (`HP_SD`) to 3.3 V through 1 kΩ. Load J4 tip and ring with 32 Ω each (or headphones at low level).
-2. | # | Check | Expect |
-   |---|---|---|
-   | 4B.1 | CPVSS (C14 pad 1) and the supply current | ≈ −4.6 to −5.0 V, roughly `HP_5V` inverted (the charge pump runs once SD is high); the 12 V supply current rises by ≈ 1 mA (U2's 1.4 mA with its outputs off, through the buck). ≈ 0 V: U2 not starting (A1.27, C13, pins 15–18) |
-   | 4B.2 | I2C: scan the bus, then read register 4 | U2 answers at 0x60; register 4 bits 3:0 read 0010. No answer: SDA/SCL swapped or open (1.8b), A1.38 not at 3.3 V, U2's joints |
-   | 4B.3 | Write register 1 = 0xC0 and register 2 = 0x35. Inject 1 kHz, 1 Vpp sine into `A1.18` (AUDIO_OUT_1), ground at `A1.20`, DC offset 0 V | C9 (`HP_SOURCE`): ≈ 0.75–0.8 Vpp (R10 into U2's inputs, −2 to −2.7 dB). J4 tip and ring: ≈ 0.75–0.8 Vpp centred on 0 V, inverted relative to `HP_SOURCE`, both channels equal within ≈ 0.5 dB. DC at J4 within ±1 mV (0.4 mV maximum offset) |
-   | 4B.4 | Register 2 = 0x2E, then 0xF5 | Output ≈ 3.2 dB lower (−3.1 dB step), then silent (both mute bits set) |
-   | 4B.5 | Register 2 = 0x35; sweep 20 Hz – 20 kHz into 32 Ω | Flat in the audio band; low-end corner ≈ 17 Hz or lower (C10/C22 and C11/C23 with U2's ≥ 37 kΩ inputs); falls off above ≈ 50 kHz (R10/C9) |
-   | 4B.6 | Listening test with headphones | Clean tone, no hum or hiss above the expected level, no oscillation (scope the outputs and CPVSS for HF ringing) |
-   | 4B.7 | Release A1.27 | J4 goes silent within a few ms and CPVSS returns to 0 V. Pull A1.27 up again: register 1 reads 0x00 (the shutdown cleared it) and J4 stays silent until it is written again |
-   | 4B.8 | Power-on/off with headphones in and U2 enabled | Note any pop level (U2 has pop suppression; Stage 8 is the full test) |
+Connect the I2C master: SCL to A1.12, SDA to A1.13, GND to A1.20, its 3.3 V to A1.38 (the pull-ups). Pull A1.27 (`HP_SD`)
+to 3.3 V through 1 kΩ. Load J4 tip and ring with 32 Ω each (or headphones at low level).
+
+| # | Check | Expect |
+|---|---|---|
+| 4B.1 | CPVSS (C14 pad 1) and the supply current | ≈ −4.6 to −5.0 V, roughly `HP_5V` inverted; the 12 V supply current rises by ≈ 1 mA. ≈ 0 V: U2 not starting (A1.27, C13, pins 15–18) |
+| 4B.2 | I2C: scan the bus, then read register 4 | U2 answers at 0x60; register 4 bits 3:0 read 0010. No answer: SDA/SCL swapped or open (1.8b), A1.38 not at 3.3 V, U2's joints |
+| 4B.3 | Write register 1 = 0xC0 and register 2 = 0x35. Inject 1 kHz, 1 Vpp sine into `A1.18` (AUDIO_OUT_1), ground at `A1.20`, DC offset 0 V | C9 (`HP_SOURCE`): ≈ 0.75–0.8 Vpp (R10 into U2's inputs, −2 to −2.7 dB). J4 tip and ring: ≈ 0.75–0.8 Vpp centred on 0 V, inverted relative to `HP_SOURCE`, both channels equal within ≈ 0.5 dB. DC at J4 within ±1 mV (0.4 mV maximum offset) |
+| 4B.4 | Register 2 = 0x2E, then 0xF5 | Output ≈ 3.2 dB lower (−3.1 dB step), then silent (both mute bits set) |
+| 4B.5 | Register 2 = 0x35; sweep 20 Hz – 20 kHz into 32 Ω | Flat in the audio band; low-end corner ≈ 17 Hz or lower (C10/C22 and C11/C23 with U2's ≥ 37 kΩ inputs); falls off above ≈ 50 kHz (R10/C9) |
+| 4B.6 | Listening test with headphones | Clean tone, no hum or hiss above the expected level, no oscillation (scope the outputs and CPVSS for HF ringing) |
+| 4B.7 | Release A1.27 | J4 goes silent within a few ms and CPVSS returns to 0 V. Pull A1.27 up again: register 1 reads 0x00 (the shutdown cleared it) and J4 stays silent until it is written again |
+| 4B.8 | Power-on/off with headphones in and U2 enabled | Note any pop level (Stage 8 is the full test) |
 
 **4C. Speaker send and speaker amp (AUDIO_OUT_2 → U101 → J102)**
 
@@ -412,51 +370,52 @@ Power off and connect the 4 Ω dummy load to J102. Inject 1 kHz into `A1.19` (AU
 offset 0 V. Measure J102 with two scope probes, their grounds on TP105 or TP107 and **never on J102**, CH1 on J102.2 (SPK+),
 CH2 on J102.1 (SPK−), and read CH1 − CH2; or read a true-RMS DMM across the load. Both terminals sit at ≈ 6 V while U101
 plays, so grounding either one shorts an output and latches U101 off. To unmute without the Daisy, pull A1.28 (`SPK_EN`) to
-3.3 V through 1 kΩ from the second supply (limit 10 mA); leave it open to mute. Limit **200 mA** unless an item says otherwise.
+3.3 V through 1 kΩ from the second supply (limit 10 mA); leave it open to mute. Limit **200 mA** unless an item says
+otherwise.
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
 | 4C.1 | Muted (A1.28 open), 0.1 Vrms (0.28 Vpp) in. C108 pad 1 (`LINE_OUT`), C109 pad 1 (`LINE_REF`), J102 | ≈ 0.097 Vrms, in phase (R11 into R12 ∥ U101's 60 kΩ ±20 %: −0.2 dB); ≈ 0; J102 silent, no switching | `LINE_OUT` low: R11, C16 or R12 (1.16, 1.17) |
-| 4C.2 | Unmute: A1.28 to 3.3 V through 1 kΩ | R107 pad 2 and C124 pad 1 < 0.1 V (Q2's channel against R107's 10k). J102 ≈ 0.97 Vrms differential (0.87–1.09 Vrms: 20 dB ± 1 dB, SLOS708G with R104 = 5.6 kΩ), SPK+ in phase with A1.19. Gain = V(J102) / V(C108 pad 1 − C109 pad 1) = 19–21 dB. Record the supply current | No output with MUTE low: SDZ (3C.3), FAULTZ (3C.4), L101/L102. ≈ 26 or 32 dB: R104 wrong. MUTE not low: Q2, the 1 kΩ pull-up |
-| 4C.3 | Generator off, still unmuted | J102.1 and J102.2 each ≈ 6.0 V DC (PVCC / 2, BD modulation) with ≈ 0.3 Vpp of 400 kHz (376–424 kHz) on each, common to both (at idle each 10 µH carries ≈ 0.75 App of ripple, PVCC × 0.25 / (L × 400 kHz), into its 680 nF); the difference within ±15 mV DC (SLOS708G). Record the idle supply current (SLOS708G's 20 mA is without the output filter) | 500 kHz or 1.2 MHz: an AM pin not at GND. One leg off 6 V: a PBTL tie or an output pin open |
-| 4C.4 | Sweep 20 Hz – 20 kHz at 0.1 Vrms | ≈ −0.3 dB at 20 Hz against 1 kHz (C108/C109, 470 nF, into 60 kΩ: corner 5.6 Hz, |H| = 1 / √(1 + (5.6 / 20)²) = −0.33 dB; −0.5 dB if U101's inputs are at their −20 % 48 kΩ, corner 7.1 Hz). −0.4 dB at 10 kHz and ≈ −1.4 dB at 20 kHz (R11/C16 −0.7 dB; L101/C121 and L102/C122 into 4 Ω, 61 kHz, −0.8 dB) | Peaking near the top: a filter cap missing or the wrong value |
-| 4C.5 | Mute timing: scope A1.28, C124 pad 1 and J102; connect and remove the 3.3 V | Unmute ≈ 4 ms after A1.28 rises (C124 falls through R108, τ ≈ 2.2 ms, to 0.8 V); mute ≈ 6 ms after it falls (C124 rises through R107 + R108, τ ≈ 12 ms, to 2 V). Record any click | |
-| 4C.6 | Maximum output: limit **2.5 A**, a few seconds at a time. Raise the input until the output clips | Clips at ≈ 11 V peak (≈ 7.9 Vrms, ≈ 15.5 W into 4 Ω, allowing ≈ 0.3 Ω for the switches and inductors) at ≈ 0.81 Vrms in, drawing ≈ 1.5 A from the supply. Full scale (1 Vrms in) clips: the firmware caps the speaker ≈ 5 dB below it. Record the input, output and current | Clipping much earlier: TP103 sagging (R105, Q101, F101, the supply lead), R104 |
+| 4C.2 | Unmute: A1.28 to 3.3 V through 1 kΩ | R107 pad 2 and C124 pad 1 < 0.1 V. J102 ≈ 0.97 Vrms differential (0.87–1.09 Vrms: 20 dB ± 1 dB, SLOS708G with R104 = 5.6 kΩ), SPK+ in phase with A1.19. Gain = V(J102) / V(C108 pad 1 − C109 pad 1) = 19–21 dB. Record the supply current | No output with MUTE low: SDZ (3C.3), FAULTZ (3C.4), L101/L102. ≈ 26 or 32 dB: R104 wrong. MUTE not low: Q2, the 1 kΩ pull-up |
+| 4C.3 | Generator off, still unmuted | J102.1 and J102.2 each ≈ 6.0 V DC (PVCC / 2) with ≈ 0.3 Vpp of 400 kHz (376–424 kHz) on each, common to both; the difference within ±15 mV DC (SLOS708G). Record the idle supply current (SLOS708G's 20 mA is without the output filter) | 500 kHz or 1.2 MHz: an AM pin not at GND. One leg off 6 V: a PBTL tie or an output pin open |
+| 4C.4 | Sweep 20 Hz – 20 kHz at 0.1 Vrms | ≈ −0.3 dB at 20 Hz against 1 kHz (C108/C109 into 60 kΩ, corner 5.6 Hz; −0.5 dB if U101's inputs are at their −20 % 48 kΩ, corner 7.1 Hz). −0.4 dB at 10 kHz and ≈ −1.4 dB at 20 kHz (R11/C16 −0.7 dB; L101/C121 and L102/C122 into 4 Ω, 61 kHz, −0.8 dB) | Peaking near the top: a filter cap missing or the wrong value |
+| 4C.5 | Mute timing: scope A1.28, C124 pad 1 and J102; connect and remove the 3.3 V | Unmute ≈ 4 ms after A1.28 rises (C124 through R108, to 0.8 V); mute ≈ 6 ms after it falls (C124 through R107 + R108, to 2 V). Record any click | |
+| 4C.6 | Maximum output: limit **2.5 A**, a few seconds at a time. Raise the input until the output clips | Clips at ≈ 11 V peak (≈ 7.9 Vrms, ≈ 15.5 W into 4 Ω) at ≈ 0.81 Vrms in, drawing ≈ 1.5 A from the supply. Full scale (1 Vrms in) clips: the firmware caps the speaker ≈ 5 dB below it. Record the input, output and current | Clipping much earlier: TP103 sagging (R105, Q101, F101, the supply lead), R104 |
 | 4C.7 | **Speaker short:** back to 0.1 Vrms in, limit 500 mA. Short J102.1 to J102.2 with a wire for ≈ 1 s | TP109 drops below 0.8 V and J102 goes silent (outputs Hi-Z, latched). Remove the short: still silent, TP109 still low. Wait 2 s, then short JP105 for ≈ 1 s: the tone returns ≈ 30 ms after release and TP109 goes high (≈ 3.2 V). Repeat, clearing it by switching off at SW101 for 5 s instead | No latch: U101's protection isn't reporting (TP109, R112, R114). The tone returns without JP105: SDZ toggling (TP104) |
 | 4C.8 | Insert and remove a plug in J4 | J102 unchanged (no hardware link; muting the speaker is the firmware's job) | |
 | 4C.9 | Thermal after 5 min at 0.1 Vrms in | U101 at most warm; L101/L102 cool | |
 | 4C.10 | No input, speaker unmuted, then headphones on J4: listen, and take an FFT of J4 and across J102 | Hiss only; no steady tone | A tone that drifts as the board warms = U101 beating with U2's charge pump: power off, cut one of JP106–JP108 (DESIGN.md, "Speaker amp"), repeat, and record the setting |
 
-What 4C.7 risks: it relies on U101's over-current protection (SLOS708G Table 4: latched, outputs Hi-Z), which DESIGN.md "What
-each connector can see" lists as designed-for misuse; the low level and the 500 mA limit keep the energy small.
+4C.7 relies on U101's over-current protection (SLOS708G Table 4: latched, outputs Hi-Z); the low level and the 500 mA limit
+keep the energy small.
 
 Power off before disconnecting the load.
 
 **4D. AUX input (J2 → AUDIO_IN_2)**
 
-With the Daisy out, only R5 loads the summing node, so these levels are slightly higher than in use. 6.17 checks the real level with
-the Daisy fitted.
+With the Daisy out, only R5 loads the summing node, so these levels are slightly higher than in use. 6.17 checks the real
+level with the Daisy fitted.
 
-1. Inject 1 kHz, 2 Vpp sine into J2 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or C3.
-2. | # | Check | Expect |
-   |---|---|---|
-   | 4D.1 | Tip and ring driven together | ≈ 0.17 Vpp centred on 0 V (R3‖R4 into R5, −21.3 dB) |
-   | 4D.2 | Tip only, ring grounded (TS plug) | ≈ 0.09 Vpp |
-   | 4D.3 | Unplug J2 | Output goes quiet (R5 holds the summing node at GND) |
-   | 4D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat (C3's pole is ≈ 370 kHz with no Daisy load, ≈ 400 kHz with the Daisy fitted) |
+Inject 1 kHz, 2 Vpp sine into J2 with a TRS cable, same signal on tip and ring. Scope on `A1.17` (AUDIO_IN_2) or C3.
+
+| # | Check | Expect |
+|---|---|---|
+| 4D.1 | Tip and ring driven together | ≈ 0.17 Vpp centred on 0 V (R3‖R4 into R5, −21.3 dB) |
+| 4D.2 | Tip only, ring grounded (TS plug) | ≈ 0.09 Vpp |
+| 4D.3 | Unplug J2 | Output goes quiet (R5 holds the summing node at GND) |
+| 4D.4 | Sweep 20 Hz – 20 kHz (tip and ring driven) | Flat (C3's pole is ≈ 370 kHz with no Daisy load, ≈ 400 kHz with the Daisy fitted) |
 
 Remove the injected signal and the A1.28 pull-up before going on.
 
 ## Stage 5 — Power-up with Daisy fitted
 
 **5.0 Before fitting it:** power the Daisy on its own from USB, nothing else connected, and measure VIN (pin 39) to GND
-(pin 40). Expect < 0.5 V: USB and VIN each feed the module's regulators through their own diode (Seed3 datasheet, Figure 1.0), so
-the pin shows only the VIN diode's leakage into the meter; on the board, the `+5V` dividers hold it lower. Record it. If it reads
-near 5 V, USB alone would lift `+5V` and, through FB101, `+5V_RAW`, putting U101's SDZ and MUTE above
-PVCC + 0.3 V: then plug in USB on this board only while the battery is on, and skip the battery-off parts of 6.15 and 6.18.
+(pin 40). Expect < 0.5 V (Seed3 datasheet, Figure 1.0: USB doesn't drive VIN). Record it. If it reads near 5 V, USB alone
+would lift `+5V` and, through FB101, `+5V_RAW`, putting U101's SDZ and MUTE above PVCC + 0.3 V: then plug in USB on this
+board only while the battery is on, and skip the battery-off parts of 6.15 and 6.18.
 
-1. **Power off.** Insert the Daisy, checking orientation against the silkscreen
-   and that no pins are offset by one position.
+1. **Power off.** Insert the Daisy, checking orientation against the silkscreen and that no pins are offset by one
+   position.
 2. Supply 12.0 V on J101 with the DFR0571, limit **300 mA**: 3C's < 50 mA plus the Daisy's 100–200 mA at 5 V (≈ 50–100 mA
    at 12 V through the buck), with room for start-up. Keep USB **unplugged** for this stage.
 
@@ -466,14 +425,14 @@ PVCC + 0.3 V: then plug in USB on this board only while the battery is on, and s
 | 5.2 | TP106; `+5V` (C5 `+`) | 4.90–5.10 V; ≥ 4.85 V, within 30 mV of TP106 (FB101 at ≈ 0.2 A) |
 | 5.3 | `3V3_D` (Daisy pin 38, probed on top of the module) | 3.3 V ± 5 % (from the Daisy regulator) |
 | 5.4 | `VREF`, U1 biases, A1.25 | Same as Stage 3 |
-| 5.5 | `HP_DETECT` (TP1) with a plug in J4 | ≈ 0 V. With J4 empty it floats until the firmware enables the internal pull-up, so that case is checked in 6.7 |
+| 5.5 | `HP_DETECT` (TP1) with a plug in J4 | ≈ 0 V. With J4 empty it floats until the firmware enables the internal pull-up: 6.7 checks that case |
 | 5.6 | Hold the Daisy in reset (RESET button held) | J4 quiet (headphones on), A1.27 (`HP_SD`, on R34) ≈ 0 V and CPVSS (C14 pad 1) ≈ 0 V (U2 shut down), Q2 pin 1 (`SPK_EN`) 0 V, R107 pad 2 and C124 pad 1 ≈ TP106 (muted), J102 not switching |
 | 5.7 | Daisy LED / existing firmware | Boots normally |
 | 5.8 | Thermal after 5 min | Nothing hot; Q102, U2 and U101 at most warm |
 | 5.9 | **Back-power, DFR0571 disconnected:** switch off, unplug the DFR0571's input cable from J106 and take its wires out of J107 (nothing on J107), limit 20 mA, 12.6 V, switch on | Current as 2.1 (< 1 mA); A1.25 ≈ 1.15 V (VBAT / 11) into the unpowered Daisy; TP106 and `+5V` < 50 mV; record `3V3_D`, which should stay near 0 V. More current, or `3V3_D` rising, means pin 25 back-powers the Daisy. Switch off, rewire the DFR0571 and repeat 3B.1 |
 
-Then plug in USB with the board powered from J101 and confirm current/voltages don't jump
-unexpectedly. The Seed3 datasheet allows both sources together (a diode from each, Figure 1.0).
+Then plug in USB with the board powered from J101 and confirm current/voltages don't jump unexpectedly. The Seed3 datasheet
+allows both sources together (Figure 1.0).
 
 ## Stage 6 — Functional tests with test firmware
 
@@ -499,21 +458,21 @@ before the display (6.14) or a loud speaker test (6.20, 6.21). Speaker tests go 
 | 6.6 | AUX: phone/laptop into J2 at full volume | Heard on J4 and the speaker output; record the logged peak and whether input 2 clips |
 | 6.7 | `HP_DETECT` | Prints high with J4 empty (internal pull-up), low with a plug in; TP1 ≈ 3.3 V empty, ≈ 0 V with a plug in. No chatter after debounce |
 | 6.8 | Headphones through a reset: 1 kHz into J1, headphones on J4, hold RESET, then release | J4 goes silent while RESET is held (codec clocks stopped) and the tone returns after boot. Note any click at each step |
-| 6.9 | `SPK_EN` toggled high/low | Q2 pin 1 follows. R107 pad 2 < 0.1 V while high (Q2's channel against R107's 10k to `+5V_RAW`), ≈ TP106 while low; C124 pad 1 follows within ≈ 6 ms. Record the high-state reading (Q2's gate drive from 3.3 V) |
+| 6.9 | `SPK_EN` toggled high/low | Q2 pin 1 follows. R107 pad 2 < 0.1 V while high, ≈ TP106 while low; C124 pad 1 follows within ≈ 6 ms. Record the high-state reading (Q2's gate drive from 3.3 V) |
 | 6.9a | Speaker fault seen by the firmware: dummy load, `SPK_EN` high, low level. Short TP109 to TP107 (GND) for ≈ 1 s, then repeat 4C.7's speaker short (firmware playing a low-level tone, limit 500 mA) and clear it with JP105 | No fault: pin 32 reads high (TP109 ≈ 3.2 V). TP109 shorted: the firmware reads pin 32 low and shows "speaker fault"; released: high again (harmless: R112 limits it to 0.5 mA). Speaker short: TP109 < 0.8 V, "speaker fault" shown until JP105 clears the latch, then high again. Record what the firmware shows |
 | 6.10 | Settings survive a hard power cut: change a setting on the display, wait for the debounce, pull the J101 plug, restore it | The setting is kept |
 | 6.11 | Wiring check before connecting the display and the speaker | J3 GND/TX/RX as labelled; J105 (DISP/GND) to the display's supply; J106/J107 as 3A.3; J102: speaker + to pin 2 (SPK+), − to pin 1, neither wire to GND or the chassis; the panel switch on SW101 |
 | 6.12 | `BATT_SENSE`: J101 at 9.0, 11.1 and 12.6 V, measuring TP101 each time | A1.25 and the ADC read TP101 / 11 (0.818, 1.009, 1.145 V) within ±1.8 %; the printed VBAT within ≈ 3 % of TP101 |
 | 6.13 | UART on J3 with a 3.3 V USB-serial adapter (adapter TX → J3.3, RX → J3.2, GND → J3.1) | Heartbeat received; echo works. Unplug the adapter: the firmware reports no display (R24 holds RX low), and recovers when it is plugged back in. **Before connecting the real display**, confirm its TX idles at ≤ 3.3 V |
 | 6.14 | Display on J3, powered from J105 (limit 2.5 A) | Shows data from the Daisy; record its supply current. With a guitar plugged into J1 and its volume up, switch the display's Wi-Fi on and off: no buzz that follows the Wi-Fi. Scope TP106, J105.1 and `+5V` (C5 `+`) with Wi-Fi and the backlight active: the display's current pulses show on J105.1 and TP106, and much less on `+5V`. Record the ripple on each and the noise floor at J4 and across J102 with the beads in (JP101/JP103 open), then bypassed, and, if C104/C106 are fitted, with JP102/JP104 shunted. Power off for each change; record each configuration |
-| 6.15 | USB alone (only if 5.0 read < 0.5 V): battery off at SW101, display unplugged, Daisy on USB, 1 kHz into J1, `SPK_EN` driven high | `+5V` (C5 `+`), TP106 and TP104 ≈ 0 V; `5V_SENSE` prints ≈ 0 V. A1.18 (`AUDIO_OUT_1`, on top of the module), C9 and C108 pad 1 carry no signal: the firmware keeps the outputs silent and `HP_SD` low, which protects U101's inputs (rated −0.3 V…6.3 V); U2's are rated −2.5…3.6 V unpowered. If `+5V` or TP106 rises above 0.5 V, unplug USB at once. Then switch on at SW101: `5V_SENSE` prints ≈ 2.5 V and the tone returns on J4 without a click. Record all of it |
-| 6.16 | Output DC with the codec running: firmware outputs digital silence. Measure DC at A1.18 and A1.19 (on top of the module) and at C108 pad 1 (`LINE_OUT`). Then, speaker unmuted, hold RESET and release, watching C108 pad 1 and J102 | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled. C108 keeps DC at pin 19 out of U101, but R12 carries it: more than a few tens of mV, see DESIGN.md "Speaker send" (a 10 µF cap in series). Record any step on `LINE_OUT` and any thump on J102 at reset and release |
+| 6.15 | USB alone (only if 5.0 read < 0.5 V): battery off at SW101, display unplugged, Daisy on USB, 1 kHz into J1, `SPK_EN` driven high | `+5V` (C5 `+`), TP106 and TP104 ≈ 0 V; `5V_SENSE` prints ≈ 0 V. A1.18 (`AUDIO_OUT_1`, on top of the module), C9 and C108 pad 1 carry no signal: the firmware keeps the outputs silent and `HP_SD` low (DESIGN.md "Running from USB alone"). If `+5V` or TP106 rises above 0.5 V, unplug USB at once. Then switch on at SW101: `5V_SENSE` prints ≈ 2.5 V and the tone returns on J4 without a click. Record all of it |
+| 6.16 | Output DC with the codec running: firmware outputs digital silence. Measure DC at A1.18 and A1.19 (on top of the module) and at C108 pad 1 (`LINE_OUT`). Then, speaker unmuted, hold RESET and release, watching C108 pad 1 and J102 | All three within ±20 mV of 0 V, which confirms the Seed3 outputs are AC-coupled. More than a few tens of mV: see DESIGN.md "Speaker send" (a 10 µF cap in series). Record any step on `LINE_OUT` and any thump on J102 at reset and release |
 | 6.17 | AUX level with the Daisy fitted: 1 kHz, 2 Vpp into J2, same signal on tip and ring, then tip only with ring grounded. Scope A1.17 (on top of the module) and read the firmware's input-2 peak | Tip and ring: 0.155–0.160 Vpp (−22.2 to −21.9 dB, the Daisy's input at 4–6 kΩ). Tip only: ≈ 0.08 Vpp. Record both. ≈ 0.17 Vpp means the module adds almost no load; much lower means its input is well below 4 kΩ (see DESIGN.md "AUX input") |
 | 6.18 | `+5V` transitions on USB (only if 5.0 read < 0.5 V): Daisy on USB, battery on, full-scale 1 kHz to J4 (32 Ω load). Scope `HP_5V` (C21 pad 1), CPVSS (C14 pad 1), A1.27 (`HP_SD`) and U2's LEFTINM (C10 pad 2). Switch off at SW101, then on | Power off: `HP_SD` falls when `5V_SENSE` drops below 2.2 V, and LEFTINM stays within −2.5…+3.6 V (U2's absolute rating, powered or not). Power on: `HP_SD` rises only after `5V_SENSE` is good, and audio returns ≥ 5 ms later with no click on J4. Record the times |
 | 6.19 | Hot passive pickups: the hottest passive guitar available into J1, played as hard as possible | Record the logged peak. It should stay below full scale (≈ 3.9 Vpp at J1). Active pickups are out of scope |
 | 6.20 | Speaker level cap: firmware full-scale 1 kHz to the speaker output, dummy load, at 12.0 V and then 9.0 V on J101 | ≈ 5.5 Vrms (≈ 7.5 W: full scale ≈ 9.7 Vrms, less 5 dB), no clipping at either voltage (at 9.0 V U101 clips at ≈ 8.4 V peak; the capped output peaks at ≈ 7.7 V). Record both |
 | 6.21 | Speaker on J102 (+ tab to pin 2, SPK+) | Guitar through the speaker at a moderate level: clean, no hum or whine at idle, no rattle. Record the speaker used |
-| 6.22 | Low battery: speaker muted (headphones in), display unplugged. Lower J101 from 12.0 V to 6.0 V over about a minute, then back | Record VBAT (TP101) where TP106 falls below 4.9 V (the DFR0571 drops out; DFRobot lists 8 V as its minimum), where SDZ goes low (TP106 < 4.65 V, U103), where the firmware goes silent (`5V_SENSE` < 2.2 V), and the printed VBAT. Back at 12 V: U101 restarts (SDZ ≈ 26 ms after TP106 passes 4.65 V) and the Daisy recovers or resets cleanly. The board has no battery cutoff of its own: the pack's protection and these thresholds are all there is |
+| 6.22 | Low battery: speaker muted (headphones in), display unplugged. Lower J101 from 12.0 V to 6.0 V over about a minute, then back | Record VBAT (TP101) where TP106 falls below 4.9 V (the DFR0571 drops out; DFRobot lists 8 V as its minimum), where SDZ goes low (TP106 < 4.65 V, U103), where the firmware goes silent (`5V_SENSE` < 2.2 V), and the printed VBAT. Back at 12 V: U101 restarts (SDZ ≈ 26 ms after TP106 passes 4.65 V) and the Daisy recovers or resets cleanly. The board has no battery cutoff of its own |
 
 ## Stage 7 — Soak and robustness
 
@@ -521,7 +480,7 @@ before the display (6.14) or a loud speaker test (6.20, 6.21). Speaker tests go 
 |---|---|---|
 | 7.1 | Run passthrough with audio for 30 min from the Talentcell battery (record its voltage at the start and end) | No dropouts, resets, or drift in `VREF`, TP106 or the printed VBAT |
 | 7.2 | Plug/unplug J1, J4, J2 repeatedly while running | No resets, no lasting noise, jacks stay mechanically solid; `HP_DETECT` reports every J4 change |
-| 7.3 | Wiggle the J3, J105, J106, J107 and J102 wires, the switch wires and the J101 plug while running | No crackle, dropouts or resets. A loose DFR0571 wire can only drop the 5 V, never leave it up without the battery, since the module runs from J106 |
+| 7.3 | Wiggle the J3, J105, J106, J107 and J102 wires, the switch wires and the J101 plug while running | No crackle, dropouts or resets |
 | 7.4 | Full-level 1 kHz into 32 Ω on J4 for 10 min | U2 at most warm; no shutdown or distortion change |
 | 7.5 | Light flex/tap test on the board and Daisy, guitar plugged in, listening on J4 and the speaker | No crackle or resets (would point to a cracked joint or loose socket pin). Record any knock heard: every capacitor on the audio path is C0G (C2, C10/C11, C22/C23, C108/C109) and shouldn't make one |
 | 7.6 | Board off, a phone or laptop at full volume into J2. Scope A1.17 (on top of the module) | At most ≈ 0.46 Vpp (±0.23 V) for a 2 Vrms source: the unpowered codec's input stays within its ±0.3 V rating. Record the peak |
@@ -530,21 +489,21 @@ before the display (6.14) or a loud speaker test (6.20, 6.21). Speaker tests go 
 
 ## Stage 8 — Pops, hiss and mute
 
-Needs the product firmware (volume ramps, headphone detect, settings saved on change, `SPK_EN` delay) and an audio interface on
-the laptop. Record J4 (into a 32 Ω load or EarPods) into the interface, and the speaker with a microphone or as J102's
-differential voltage on the scope. **Never connect the interface to J102:** both terminals sit at ≈ 6 V. Look at each
-recording for spikes. Pass means no audible click and no spike more than ~10 dB above the recording's noise floor.
+Needs the product firmware (volume ramps, headphone detect, settings saved on change, `SPK_EN` delay) and an audio interface
+on the laptop. Record J4 (into a 32 Ω load or EarPods) into the interface, and the speaker with a microphone or as J102's
+differential voltage on the scope. **Never connect the interface to J102:** both terminals sit at ≈ 6 V. Pass means no
+audible click and no spike more than ~10 dB above the recording's noise floor.
 
 | # | Check | Expect |
 |---|---|---|
-| 8.1 | Power-on pop: record J4 and the speaker, then switch on at SW101 | No click on either output. U2 stays shut down (R34) until the firmware enables it after the codec has started, so J4 should stay silent through boot |
-| 8.2 | Speaker power-on: scope TP106, TP104 (SDZ), Q2 pin 1 (`SPK_EN`), C124 pad 1 (MUTE) and J102 (differential) at power-on, into the speaker | SDZ rises ≈ 26 ms after TP106 passes 4.65 V while MUTE is still high. C108/C109 charge to U101's 3 V bias through its 60 kΩ inputs (τ ≈ 28 ms, 60 kΩ × 470 nF) while muted. `SPK_EN` goes high after audio starts and MUTE falls ≈ 4 ms later. Record any step on J102 at unmute, and listen for a thump |
-| 8.3 | Power-off pop: record J4 and the speaker, switch off at SW101 | Note the result. The speaker stays unmuted until `+5V_RAW` falls below 4.65 V (U103) or the firmware sees `5V_SENSE` low, which happens only once the DFR0571 drops out, after PVCC has already sagged (3C.9 has the timing) |
+| 8.1 | Power-on pop: record J4 and the speaker, then switch on at SW101 | No click on either output. U2 stays shut down (R34) until the firmware enables it, so J4 should stay silent through boot |
+| 8.2 | Speaker power-on: scope TP106, TP104 (SDZ), Q2 pin 1 (`SPK_EN`), C124 pad 1 (MUTE) and J102 (differential) at power-on, into the speaker | SDZ rises ≈ 26 ms after TP106 passes 4.65 V while MUTE is still high. C108/C109 charge to U101's 3 V bias (τ ≈ 28 ms, 60 kΩ × 470 nF) while muted. `SPK_EN` goes high after audio starts and MUTE falls ≈ 4 ms later. Record any step on J102 at unmute, and listen for a thump |
+| 8.3 | Power-off pop: record J4 and the speaker, switch off at SW101 | Note the result. The speaker stays unmuted until `+5V_RAW` falls below 4.65 V (U103) or the firmware sees `5V_SENSE` low, after PVCC has already sagged (3C.9 has the timing) |
 | 8.4 | Hard power cut: record J4 and the speaker, pull the J101 plug while playing | Note the result. A small click is acceptable here, a loud bang is not |
 | 8.5 | Headphone plug-in and removal while playing a 1 kHz tone | `SPK_EN` goes low while headphones are in and high again when they come out. No click on J4 or the speaker |
 | 8.6 | Watchdog mute: debug build that stops the audio callback on a USB serial command | J4 and the speaker go silent (codec DAC power-down, and A1.27 falls: U2 shuts down), and C124 pad 1 (MUTE) is above 2 V within ~10–20 ms (IWDG ≈ 10 ms, then ≈ 6 ms for C124). The Daisy resets and boots back into silence. Record any click on J4 and the speaker |
 | 8.7 | Hiss with EarPods: J1 unplugged, firmware volume at a quiet listening level, then at max | No hiss audible at a normal listening level. Record U2's volume word at each setting and whether hiss is audible at max |
-| 8.8 | Maximum headphone level: full-scale 1 kHz into a 32 Ω load on J4, volume word 0x35 | ≈ 0.75 Vrms per channel (1 Vrms Daisy full scale, −2 to −2.7 dB at R10, +0.1 dB in U2), no clipping. Then into 16 Ω with both channels driven, raise the word step by step to 0x3F (+4.0 dB) and record the word where the sine starts to clip; set the firmware's cap 3 dB below it (DESIGN.md "Level and volume"). Record `HP_5V` (C21 pad 1) against C5 `+` at that level. Listening check with the intended headphones: loud enough with margin |
+| 8.8 | Maximum headphone level: full-scale 1 kHz into a 32 Ω load on J4, volume word 0x35 | ≈ 0.75 Vrms per channel, no clipping. Then into 16 Ω with both channels driven, raise the word step by step to 0x3F (+4.0 dB) and record the word where the sine starts to clip; set the firmware's cap 3 dB below it (DESIGN.md "Level and volume"). Record `HP_5V` (C21 pad 1) against C5 `+` at that level. Listening check with the intended headphones: loud enough with margin |
 | 8.9 | Speaker hiss: J1 unplugged, speaker level at the cap, ear near the cone | Record whether hiss or whine is audible, and the noise across J102 on the scope (SLOS708G: 65 µV A-weighted at 20 dB) |
 
 ## Fault-finding hints
@@ -558,7 +517,7 @@ recording for spikes. Pass means no audible click and no spike more than ~10 dB 
 | `+5V_RAW` fine, no `+5V` | FB101 (1.34), the `+5V` trace between the sheets (1.2) |
 | `VREF` not ≈ 2.5 V | R6/R7 values, C7 leakage/short |
 | SDZ stays low | `+5V_RAW` below 4.65 V; a shunt left on JP105; U103 pins 1–2 or 2–3 bridged; R109/R110 open |
-| FAULTZ low (TP109 < 0.8 V, "speaker fault" on the display) | A latched fault. Over-current: J102 shorted or a wire to GND, C121/C122, an output pin. DC detect: C108/C109, the input pins. Over-temperature: U101's exposed pad. Clear with JP105 or a power cycle. Low with no fault and JP105 doesn't clear it: R112 open |
+| FAULTZ low (TP109 < 0.8 V, "speaker fault" on the display) | A latched fault. Over-current: J102 shorted or a wire to GND, C121/C122, an output pin (1.41, 1.53). DC detect: C108/C109, the input pins (3C.6). Over-temperature: U101's exposed pad. Clear with JP105 or a power cycle. Low with no fault and JP105 doesn't clear it: R112 open |
 | FAULTZ at 5 V instead of ≈ 3.2 V | R114 open or missing (1.39): Daisy pin 32 sees 5 V |
 | Speaker silent, FAULTZ high (≈ 3.2 V) | MUTE high (Q2, `SPK_EN`, R108/C124); SDZ (TP104); L101/L102; J102 wiring |
 | Speaker level wrong or distorted | R104 (gain), C108/C109, R11/R12; TP103 sagging under load (R105, F101, Q101, the supply lead) |
