@@ -33,7 +33,8 @@ The same applies to anything else that could lift `+5V_RAW` while the battery is
 - **R105** (0 Ω, "amp isolation") stays fitted whenever U101 is. Without it PVCC sits at 0 V while `+5V_RAW` is up.
 - **The Daisy on USB:** `+5V` and `+5V_RAW` are one node at DC (FB101, no Q1 since rev 3), so anything that lifts `+5V`
   lifts `+5V_RAW`.
-  Step 5.0 checks that the Seed3 doesn't drive its VIN pin from USB before USB is ever used with the battery off.
+  The Seed3 doesn't drive its VIN pin from USB (a diode on the module, Seed3 datasheet Figure 1.0); step 5.0 confirms it
+  on this module before USB is used with the battery off.
 - **The display:** if it has a USB port of its own, don't plug it into a computer while it is wired to J105 and the battery
   is off. Its 5 V would reach `+5V_RAW` through FB102.
 - **Jumpers:** change JP101–JP104 only with the power off (JP102/JP104 would connect an uncharged 100 µF to a live rail).
@@ -308,8 +309,8 @@ are one node, so with J106 wired, J107's wires swapped short its output to GND (
 **3A. The DFR0571 on its own (off the board)**
 
 Before it goes near the board: U1 and U2 are rated 5.5 V, U103 6 V, and the 5 V contract (`power-board/README.md`) is
-4.75–5.25 V. DFRobot's figures, as resellers list them (DFRobot's own page doesn't load): 8–28 V in, 5 V ± 0.1 V out, 0.5 mA
-no-load input current, under 50 mVpp ripple at full load.
+4.75–5.25 V. DFRobot's datasheet gives 8–28 V in, 5 V ± 0.1 V out, 0.5 mA
+no-load input current, under 50 mVpp ripple at full load, and no short-circuit or reverse protection.
 
 | # | Measure / do | Expect | A wrong reading means |
 |---|---|---|---|
@@ -449,7 +450,8 @@ Remove the injected signal and the A1.28 pull-up before going on.
 ## Stage 5 — Power-up with Daisy fitted
 
 **5.0 Before fitting it:** power the Daisy on its own from USB, nothing else connected, and measure VIN (pin 39) to GND
-(pin 40). Expect < 0.5 V: USB doesn't drive VIN (the Seed3 datasheet allows USB and VIN together). Record it. If it reads
+(pin 40). Expect < 0.5 V: USB and VIN each feed the module's regulators through their own diode (Seed3 datasheet, Figure 1.0), so
+the pin shows only the VIN diode's leakage into the meter; on the board, the `+5V` dividers hold it lower. Record it. If it reads
 near 5 V, USB alone would lift `+5V` and, through FB101, `+5V_RAW`, putting U101's SDZ and MUTE above
 PVCC + 0.3 V: then plug in USB on this board only while the battery is on, and skip the battery-off parts of 6.15 and 6.18.
 
@@ -471,8 +473,7 @@ PVCC + 0.3 V: then plug in USB on this board only while the battery is on, and s
 | 5.9 | **Back-power, DFR0571 disconnected:** switch off, unplug the DFR0571's input cable from J106 and take its wires out of J107 (nothing on J107), limit 20 mA, 12.6 V, switch on | Current as 2.1 (< 1 mA); A1.25 ≈ 1.15 V (VBAT / 11) into the unpowered Daisy; TP106 and `+5V` < 50 mV; record `3V3_D`, which should stay near 0 V. More current, or `3V3_D` rising, means pin 25 back-powers the Daisy. Switch off, rewire the DFR0571 and repeat 3B.1 |
 
 Then plug in USB with the board powered from J101 and confirm current/voltages don't jump
-unexpectedly. Check the Daisy Seed docs for your revision's VIN/USB power-path
-before relying on both sources together.
+unexpectedly. The Seed3 datasheet allows both sources together (a diode from each, Figure 1.0).
 
 ## Stage 6 — Functional tests with test firmware
 

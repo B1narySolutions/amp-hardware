@@ -168,9 +168,11 @@ C109. Sheet 2's labels use the same two names.
   line-out minimum (see "What the Seed3 outputs are rated for"). With no `VREF` bias or coupling caps before C108,
   `LINE_OUT` doesn't drift at power-on.
 - **No DC-blocking cap on this board's side: this path assumes pin 19 sits at 0 V DC.** The outputs are most likely
-  AC-coupled on the module (see "DC level" under "Headphone output"). C108 blocks DC into U101 anyway, but R12 would carry
-  it. If TEST_PLAN finds more than a few tens of mV at pin 19, the fix is a 10 µF cap in series between C16 and
-  `LINE_OUT`.
+  AC-coupled on the module (see "DC level" under "Headphone output"). The Seed3 datasheet doesn't state the level. A DC level there
+  would damage nothing: C108 blocks it from U101 (as C10/C11 do from U2), and R12 would carry ≈ 16 µA at half of the
+  codec's 3.3 V supply. It could only click when the codec starts or stops, which happens while U101 is muted. If
+  TEST_PLAN 6.16 finds more than a few tens of mV at pin 19 and a click gets through, the fix is a 10 µF cap in series
+  between C16 and `LINE_OUT`.
 - **R11** is the output impedance. With R12 (100k) in parallel with U101's 60 kΩ input (20 dB, ±20 %), it costs ≈ 0.23 dB.
   If `LINE_OUT` is shorted, the Daisy sees R11 alone: 1k, still above its 600 Ω minimum load.
 - **R12** gives the Daisy's output coupling cap a DC return, so `LINE_OUT` sits at 0 V.
@@ -257,11 +259,12 @@ speaker details; this section is the design as it stands on rev 3.
   25 V; D101 limits Q101's gate. The DFR0571's input limit is unknown.
 
 ### 5 V supply and distribution
-- **The DFR0571** buck module is off the board. J106 sends it `VBAT_PROTECTED` and J107 takes its 5 V back as `+5V_DFR`. Its
-  specifications aren't on DFRobot's site (its page for the SKU returns 404). A reseller lists 8–28 V in, 5 V ± 0.1 V out,
-  3 A peak and 0.5 mA with no load, and no input reverse protection; the parts order gives 1.6 A continuous. Unverified:
-  TEST_PLAN measures the module before it is wired to the board. It is a non-isolated buck, so its input and output
-  grounds are one node.
+- **The DFR0571** buck module is off the board. J106 sends it `VBAT_PROTECTED` and J107 takes its 5 V back as `+5V_DFR`.
+  DFRobot's datasheet for it (dated 2018-08-07) gives 8–28 V in, 5 V ± 0.1 V out, 3 A peak ("not 3 A or above for a long
+  time"), under 50 mVpp ripple at full load, 0.5 mA with no load, 0.5 MHz, and no isolation, so its input and output
+  grounds are one node. It asks for more than the minimum input voltage at high load currents. It gives no continuous
+  rating (the parts order lists 1.6 A; the board draws ≈ 0.75 A) and names no short-circuit, overcurrent or input reverse
+  protection, so the design counts on none. TEST_PLAN stage 3A checks the module before it is wired to the board.
 - **Q102 (AO3401A)** sits between `+5V_DFR` and `+5V_RAW`, gate to GND (drain to J107, source to the load). A reversed 5 V source
   on J107 then can't put −5 V on `+5V_RAW`, where U103 (VDD rated −0.3 V minimum) and the display on J105 would take it.
   With the DFR0571 wired normally its reach is narrower: the module's grounds are common, so swapping J107's two wires
@@ -356,8 +359,9 @@ not from here.
   or `+5V`, and they return to J107's ground on the left edge, behind the input buffer (see "Isolation").
 
 ### Running from USB alone
-The Seed3 runs from its own USB port, and the datasheet says USB and VIN can be connected together, so USB doesn't appear
-to drive the VIN pin. With USB plugged in and the battery switched off (flashing or debugging on the bench), the Daisy runs
+The Seed3 runs from its own USB port, and USB doesn't drive the VIN pin: on the module, USB VBUS and VIN each reach the
+regulators' input through their own diode (Seed3 datasheet, Figure 1.0, "Onboard USB Power"), so pin 39 sees only the VIN
+diode's reverse leakage, which the board's dividers (≈ 18 kΩ) hold to a few tenths of a volt at most. With USB plugged in and the battery switched off (flashing or debugging on the bench), the Daisy runs
 while `+5V`, `+5V_RAW` and PVCC are at 0 V. Any Daisy output that is high then pushes current into an unpowered part
 through that part's input protection diodes.
 - **Q102 conducts backwards** if `+5V_RAW` is lifted, because its gate is tied to GND. That would only leak a little
@@ -571,15 +575,18 @@ Accepted during rev 3's design review and layout (2026-11-07), with the reason. 
 - **Bring up audio rev 2 and power rev 1 first,** and fold their results into rev 3 before ordering it: the Daisy outputs'
   DC level (the speaker send has no DC block on this side), the fuse rating and the switch-on surge through F101, beads or bypass, the optional bulk caps, L101/L102's
   value, R105, and headphone clicks at boot. Set the jumpers and parts to match.
-- **The DFR0571's specifications:** confirm the reseller's figures (8–28 V in, 5 V ± 0.1 V, 3 A peak) and its output current
-  limit on the module itself.
+- **The DFR0571's output current limit:** DFRobot's datasheet states no short-circuit or overcurrent protection (see "5 V
+  supply and distribution"). Only the accepted mistakes that short its output depend on one (J107's wires swapped, J105
+  shorted).
 - **No low-battery cutoff on the board.** `power-board/README.md` asks for one, but sheet 2 has none: U103 watches only
   `+5V_RAW`. As the pack runs down, the Talentcell's own protection or the DFR0571's dropout ends it. TEST_PLAN records what
   actually happens; the firmware warns from `BATT_SENSE` first.
 - **Battery:** measure the Talentcell's 12 V output at full charge and near empty (9.0–12.6 V assumed).
 - **Test the watchdog mute:** stall the audio callback in a debug build. Check that J4 and the speaker go silent and
   `SPK_MUTE` mutes within ~10 ms.
-- **2N7002 gate drive:** Q2 is driven from 3.3 V logic. That should be enough for R107's 0.5 mA, but check it on the board.
+- **2N7002 gate drive:** Q2 is driven from 3.3 V logic and sinks only R107's 0.5 mA. The 2N7002NXAK's threshold is 2.1 V
+  at most at 250 µA (a distributor's listing; Nexperia's PDF didn't download), so 3.3 V leaves 1.2 V of overdrive: enough
+  on paper. Its on-resistance is specified only at 4.5 V and 10 V. TEST_PLAN 6.9 records the low level.
 - **Headphone level:** set by U2's volume register. Check the maximum into 16 Ω for clipping (TEST_PLAN 8.8) before raising
   the firmware's cap above word 0x35, and listen for hiss at quiet settings with sensitive headphones.
 - **U2's charge pump against U101:** U2's charge pump runs at 300–500 kHz and U101 at ≈ 400 kHz, so their difference can land
