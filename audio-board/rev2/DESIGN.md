@@ -264,7 +264,7 @@ from the power board)
 - Keep the `BATT_SENSE` divider's source impedance at 10 kΩ or less, and record its ratio and impedance here (rev 1:
   0.25 from 7.5 kΩ, above). The reading is then at least a third of BAT, and the firmware needs both numbers.
 - Switch the `BATT_SENSE` divider off with the 5 V output, so it doesn't drain the battery while the amp is off.
-- Pull `SPK_MUTE` up on the amp side, with 4.7 kΩ or more to at most 5 V, so the amp is muted when this board is
+- Pull `SPK_MUTE` up on the amp side, with 4.7 kΩ or more to at most the 5 V rail (5.25 V), so the amp is muted when this board is
   unpowered or unplugged. Q2 pulls it low through R23 (470 Ω): ≈ 0.24 V against 10k, ≈ 0.5 V against 4.7k. The amp's
   mute input has to read that as low.
 - Provide the power switch and a low-battery cutoff: the audio board has no way to turn the power off.
@@ -299,7 +299,7 @@ USB stays on the Daisy's own connector.
 - **IWDG:** start it early in boot, with a timeout of about 10 ms. Feed it **only** from the audio callback.
 - **Outputs:** speaker mix on output 2, headphones on output 1. Start the codec at digital silence and ramp up: U2 is
   always on, so the headphones hear whatever pin 18 does from boot. End the chain with an output clamp or limiter and a
-  NaN/Inf guard.
+  NaN/Inf guard. Cap the speaker level about 5 dB below full scale (the speaker amp clips on the battery above that).
 - **`SPK_EN` (pin 28):** a low output at start; high after the first audio callback has started; low while headphones
   are in.
 - **`HP_DETECT` (pin 23, PA3):** internal pull-up on, debounced, **low = headphones in**. Going in: ramp `AUDIO_OUT_2`

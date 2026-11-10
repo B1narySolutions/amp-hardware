@@ -46,7 +46,8 @@ display, not a power board connection.
   audio board's ground through 1 kΩ, so the amp rejects any voltage between the two boards' grounds; tied to the amp's
   GND it would close a ground loop through J6 and J5.
 - **Input impedance:** 10 kΩ or more per leg. The audio board drives each leg through 1 kΩ, so full scale arrives at
-  ≈ 0.83 Vrms differential into 10 kΩ (−1.7 dB), and ≈ 3.0 dB lower into 5 kΩ. J5 should sit at ≈ 0 V DC (the audio
+  ≈ 0.91 Vrms into 10 kΩ per leg (−0.8 dB). A 10 kΩ load across the pair (5 kΩ per leg) gives ≈ 0.83 Vrms (−1.7 dB), and
+  5 kΩ across the pair ≈ 3.0 dB lower. J5 should sit at ≈ 0 V DC (the audio
   board's TEST_PLAN 5.16).
 - **Mute (J6.4):** the audio board pulls MUTE to GND through Q2 and 470 Ω to play, and leaves it open to mute. Pull it up
   with 4.7 kΩ or more to at most 5 V, so the amp is muted whenever the audio board is unpowered, booting, reset or

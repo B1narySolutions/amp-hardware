@@ -198,7 +198,7 @@ Pin 25 (PA7) is not 5 V tolerant; even 24 V on J101 puts only 2.2 V there.
   charge pump. If a steady tone shows up with no signal, cut one jumper to move it (TEST_PLAN 4C.10).
 - **Output:** bootstrap caps C117–C120 (220 nF), then L101/L102 (10 µH) with C121/C122 (680 nF), ≈ 61 kHz, into J102
   (pin 2 SPK+, pin 1 SPK−). The output is bridged: neither speaker wire may be grounded.
-- **Levels:** full scale becomes ≈ 9.8 Vrms, which clips on the battery (≈ 1.5 dB below full scale on a full pack,
+- **Levels:** full scale (≈ 0.97 Vrms after R11 into R12 and U101's input) becomes ≈ 9.7 Vrms, which clips on the battery (≈ 1.5 dB below full scale on a full pack,
   ≈ 4.5 dB near 9 V), so the firmware caps the speaker level about 5 dB down. ≈ 17 W into 4 Ω at clipping.
 - **Speakers:** a Jensen MOD10-50 or a Skar FSX10-4, 4 Ω, one at a time.
 

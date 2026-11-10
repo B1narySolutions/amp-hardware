@@ -302,8 +302,8 @@ Fab package: __________  Tested by: __________  Firmware commit: __________
 | 3C Speaker send | | J5 = ____ Vpp |
 | 3D AUX input | | Tip+ring = ____ Vpp |
 | 4 Power-up with Daisy | | I = ____ mA, 3V3_D = ____ V, back-power I = ____ mA |
-| 5 Firmware functional | | SPK_MUTE low = ____ V, AUX peak = ____ |
-| 6 Soak & robustness | | |
+| 5 Firmware functional | | SPK_MUTE low = ____ V; output DC A1.18 / A1.19 / J5.1 = ____ / ____ / ____ mV (5.16); AUX tip+ring / tip only = ____ / ____ Vpp (5.17); 5.18 time outside the rails = ____ ms; hot-pickup peak = ____ (5.19) |
+| 6 Soak & robustness | | Board off, AUX peak at A1.17 = ____ Vpp (6.6) |
 | 7 Pops, hiss and mute | | SPK_EN delay = ____ s, mute time = ____ ms, HP max = ____ Vrms |
 
 Rework performed:
