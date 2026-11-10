@@ -172,7 +172,7 @@
 				)
 			)
 		)
-		(property "Value" "TLV9061IDBVR"
+		(property "Value" "TLV9061QDBVRQ1"
 			(at 0 2.4 270)
 			(layer "F.Fab")
 			(uuid "77a1b3a3-2db2-4f82-a7bf-1a7099ce6cd2")
@@ -15615,7 +15615,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 10V"
+		(property "Value" "100u 25V"
 			(at 1.25 4.4 0)
 			(layer "F.Fab")
 			(uuid "ab32aa66-2956-4fd0-8b20-dc402af400e6")
@@ -28786,7 +28786,7 @@
 				)
 			)
 		)
-		(property "Value" "100u 10V"
+		(property "Value" "100u 25V"
 			(at 1.25 4.4 0)
 			(layer "F.Fab")
 			(uuid "ee27d4d3-a443-44ea-9438-e41101b1a20a")

@@ -64,7 +64,7 @@
 "AMP_SDZ","TP104","TestPoint:TestPoint_Pad_D2.0mm",""
 "+5V_RAW","TP106","TestPoint:TestPoint_Pad_D2.0mm",""
 "AMP_FAULTZ","TP109","TestPoint:TestPoint_Pad_D2.0mm",""
-"TLV9061IDBVR","U1","Package_TO_SOT_SMD:SOT-23-5","C22439604"
+"TLV9061QDBVRQ1","U1","Package_TO_SOT_SMD:SOT-23-5","C22439604"
 "TPA6130A2RTJR","U2","Package_DFN_QFN:WQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm","C130046"
 "TPA3118D2DAPR","U101","Halliquest_Power:TI_DAP0032C_HTSSOP32_P0.65mm_EP3.04x3.74mm","C46497"
 "DFR0571","U102","",""
